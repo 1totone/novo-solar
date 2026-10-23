@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 0, passo F0.3. Estrutura técnica, CI e workflow do Pages integrados; falta confirmar a página no ar e a prévia de PR (fecha F0.2 e F0.3).
+**Você está aqui:** Fase 0, passo F0.4 (especificação v0). Página no ar em 1totone.github.io/novo-solar, com CI e prévia por PR.
 **Última atualização:** 23/10/2026.
 
 ---
@@ -100,17 +100,17 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
   - [x] Idiomas: interface em português primeiro, com estrutura de tradução desde o início; código em inglês; documentação em português.
   - [x] Público e escopo da v1.0: ensino + projeto, conforme seção 3.
   - [x] Origem, nome e créditos: nova versão oficial do SOL-AR, pedida pelo Prof. Roberto Lamberts; créditos originais mantidos; manutenção futura pelo LabEEE. Numeração pública (ex.: "SOL-AR 7") definida no lançamento, com o LabEEE.
-- [ ] **F0.2 Repositório e ambiente.**
+- [x] **F0.2 Repositório e ambiente.**
   - [x] Repositório público `novo-solar` criado na conta 1totone, com README e licença MIT (23/10/2026).
   - [x] Primeira sessão em claude.ai/code conectada ao repositório, rodando um comando de teste (23/10/2026: Node 22, npm, Python 3.13, git e `gh api` funcionando; Chromium do Playwright pré-instalado na sessão).
-  - [ ] Configurações únicas do Anthony (seção 7.2), conferidas em 23/10/2026; falta só confirmar a fonte do GitHub Pages na primeira publicação (F0.3).
+  - [x] Configurações únicas do Anthony (seção 7.2), conferidas em 23/10/2026; a fonte do GitHub Pages foi confirmada pela primeira publicação (F0.3).
 
   Codespaces como complemento (benefícios do GitHub Education liberados por volta de 26/10/2026). Nada é instalado no PC.
-- [ ] **F0.3 Governança e estrutura.**
+- [x] **F0.3 Governança e estrutura.**
   - [x] Governança: `CLAUDE.md`, `docs/ROADMAP.md`, notas de decisão, `docs/ideias.md`, esqueletos de `docs/spec/` e `docs/validacao/`, diagnóstico do SOL-AR 6.2, `README.md`, `CHANGELOG.md` (23/10/2026).
   - [x] Estrutura técnica: Vite + React + TypeScript strict, `src/core/` e `src/ui/`, ESLint e Prettier, Vitest e Playwright; comandos registrados no `CLAUDE.md` (23/10/2026).
   - [x] CI (GitHub Actions): verificação de estilo, testes e build em cada PR e na `main` (23/10/2026).
-  - [ ] Publicação automática no GitHub Pages de uma página "em construção", com prévia de cada PR num endereço próprio.
+  - [x] Publicação automática no GitHub Pages de uma página "em construção", com prévia de cada PR num endereço próprio (23/10/2026; decisão 0008).
   - [x] Build portátil: caminhos relativos, estado na URL (#) e nenhum servidor, para rodar sem mudanças no GitHub Pages, num subdomínio do LabEEE ou numa pasta do servidor deles (ver 7.1). Verificado por teste de ponta a ponta que serve o build numa subpasta arbitrária (23/10/2026).
 
   *Pronto quando:* CI verde e página no ar em 1totone.github.io/novo-solar.
@@ -243,13 +243,13 @@ Cuidados desde já:
 Feitas uma vez, para que o Claude trabalhe sem interrupções:
 
 - [x] **Claude GitHub App com acesso ao repositório:** no GitHub, Settings > Applications > Installed GitHub Apps > Claude > Configure > Repository access: incluir `novo-solar` (necessário para o Claude enviar branches e integrar PRs).
-- [ ] **GitHub Pages:** no repositório, Settings > Pages > Build and deployment > Source: **GitHub Actions**.
+- [x] **GitHub Pages:** no repositório, Settings > Pages > Build and deployment > Source: **GitHub Actions**.
 - [x] **Ambiente próprio na nuvem:** em claude.ai/code, criar um ambiente novo chamado `novo-solar` (não alterar os ambientes de outros projetos), sem script de configuração, com acesso de rede "Custom", a lista padrão de gerenciadores de pacotes marcada e estes domínios: `climate.onebuilding.org`, `labeee.ufsc.br`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`.
 
 **Conferência de 23/10/2026 (primeira sessão):**
 
 - App do Claude: o repositório aparece com permissão de administração para a sessão; push e PR pela API funcionam.
-- GitHub Pages: o repositório responde `has_pages: true`. O proxy da sessão não deixa ler a configuração do Pages (`/pages`), então a fonte "GitHub Actions" só é confirmada pela primeira publicação, no F0.3.
+- GitHub Pages: o repositório responde `has_pages: true`. O proxy da sessão não deixa ler a configuração do Pages (`/pages`); a fonte "GitHub Actions" foi confirmada pela primeira publicação (deployment `github-pages` em `success`, F0.3).
 - Ambiente `novo-solar`: em uso. Respondem `registry.npmjs.org`, `pypi.org`, `labeee.ufsc.br`, `climate.onebuilding.org` (devolve 429 a pedidos sem identificação de navegador e 200 com ela) e os domínios do Playwright; domínios fora da lista são bloqueados, como esperado.
 - Limites do proxy: os caminhos `/actions` e `/pages` da API REST são bloqueados para o `gh api`; o estado do CI é lido pelas ferramentas do GitHub disponíveis na sessão.
 
