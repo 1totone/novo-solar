@@ -1,0 +1,72 @@
+# 2. Tempo e posição solar
+
+**Status:** v0 (F0.4), para aprovação no portão 0. Itens marcados **[proposta]** são recomendações que precisam do aceite do Anthony.
+
+## 2.1 Escalas de tempo
+
+| Nome | Definição | Uso |
+|---|---|---|
+| **Hora legal** (hora padrão local, LST) | UTC + fuso do arquivo climático, sem horário de verão | instantes do EPW; linhas horárias em hora legal (analemas, F4.3) |
+| **UTC** | LST − fuso | entrada do SPA (com ΔT) |
+| **Hora solar verdadeira** (TST) | 12 h + ω/15, com ω o ângulo horário do sol | linhas horárias da carta (padrão) |
+
+- O **fuso** vem sempre do cabeçalho do EPW (campo *Time Zone* da linha `LOCATION`, em horas, positivo a leste de Greenwich). Nunca de um meridiano fixo: o SOL-AR 6.2 usava 45°W para todos os arquivos, o que desloca as sobreposições em 1 h para dados em UTC−4 (Manaus, Concepción) e em 2 h no Acre (diagnóstico, seção 2.3).
+- O EPW não tem horário de verão; o Brasil também não o adota desde 2019. Se o usuário digitar uma hora, ela é hora padrão local.
+- Relação entre hora legal e hora solar verdadeira:
+
+  TST = LST + [4 · (λ − 15 · fuso) + E] / 60 (em horas)
+
+  com λ a longitude em graus (positiva a leste) e E a equação do tempo em minutos. No programa, a TST é obtida do ângulo horário calculado pelo SPA (TST = 12 + ω/15), e não por uma fórmula aproximada da equação do tempo; a expressão acima serve para explicar e para testar.
+
+## 2.2 Convenção de hora do EPW
+
+- A linha da hora h (1 a 24) do dia d descreve o intervalo **[h − 1, h]** em hora legal (valor da hora que termina).
+- **Radiação** (GHI, DNI, DHI, em Wh/m²): energia integrada no intervalo. Ao combinar com a posição do sol (incidência, máscara, sobreposição), usa-se o sol no **meio do intervalo**, h − 0,5.
+- **Temperatura, umidade, pressão, vento:** valores no instante h. Na sobreposição sobre a carta, cada grandeza é desenhada na posição do sol do instante que ela representa (radiação em h − 0,5; temperatura em h).
+- A hora 24 do dia d é o instante 00:00 do dia d + 1.
+
+Fonte: EnergyPlus, *Auxiliary Programs*, formato EPW; Wilcox e Marion (2008), manual do TMY3.
+
+## 2.3 Algoritmo de posição solar
+
+- **NREL SPA** (Reda e Andreas, 2004; revisão de 2008), implementado em TypeScript em `src/core/`. Incerteza declarada pelos autores: ±0,0003° entre os anos −2000 e 6000.
+- Entradas: instante em UTC, ΔT, latitude, longitude e elevação do local (do cabeçalho do EPW). Pressão e temperatura só entram na correção de refração (ver 2.4).
+- Saídas usadas: ângulo zenital topocêntrico, azimute topocêntrico (a partir do Norte, sentido horário, como na seção 1.1), ângulo horário topocêntrico, declinação e equação do tempo.
+- **ΔT = 69 s [proposta]**, fixo. O valor medido pelo IERS ficou perto de 69 s entre 2020 e 2026; 1 s de erro em ΔT muda o ângulo horário em 0,004°, abaixo da tolerância.
+
+### Ano de referência [proposta]
+
+Arquivos climáticos típicos (TMY, TRY) misturam meses de anos diferentes e não têm um ano próprio. A carta e todas as contas usam um **ano de referência fixo, não bissexto: 2026**. Motivo: dentro do ciclo de 4 anos, o instante do equinócio avança cerca de 6 h por ano e recua um dia no ano bissexto, uma oscilação de cerca de 0,75 dia; 2026, segundo ano depois do bissexto de 2024, fica a cerca de 0,1 dia da média do ciclo. Perto dos equinócios a declinação varia cerca de 0,4° por dia, então a escolha do ano muda a declinação em até cerca de 0,3° entre os anos extremos do ciclo e em até cerca de 0,15° em relação à média. Esse efeito é real e independente do algoritmo; fica documentado e não afeta a comparação com o pvlib, que usa os mesmos instantes.
+
+## 2.4 Refração atmosférica [proposta]
+
+- Posições usadas na geometria (carta, transferidor, máscaras, ângulo de incidência, fração ensolarada): **geométricas** (topocêntricas, sem refração).
+- Nascer e pôr do sol: definição do SPA (centro do disco a h = −0,8333°, que inclui refração padrão e semidiâmetro solar).
+- Motivos: a máscara é uma construção geométrica; a refração depende do tempo atmosférico; o efeito é de cerca de 0,1° a 10° de altura e de cerca de 0,5° no horizonte, região onde a radiação direta é desprezível. A comparação com o EnergyPlus (F3.8) também fica mais limpa sem um ajuste a mais.
+
+## 2.5 Grandezas derivadas
+
+- **Nascer e pôr do sol**, em hora legal e em hora solar: SPA, Apêndice A.2.
+- **Trajetórias da carta:** solstícios, equinócios e dia 21 de cada mês do ano de referência. Meses simétricos em relação ao solstício (ex.: 21/jan e 21/nov) têm declinações próximas, mas não iguais; desenhamos cada data com a sua declinação.
+- **Linhas horárias:** em hora solar verdadeira (padrão didático, linhas que cruzam as trajetórias); em hora legal, viram analemas (F4.3).
+
+## 2.6 Validação e tolerâncias
+
+| Grandeza | Referência | Tolerância |
+|---|---|---|
+| Ângulo zenital (geométrico) | pvlib `spa_python`, mesmo ΔT, mesma elevação | 0,01° |
+| Direção do sol | pvlib, separação angular entre os vetores | 0,01° |
+| Azimute | pvlib, só com altura < 89° | 0,01° |
+| Nascer, pôr e passagem meridiana | pvlib `sun_rise_set_transit_spa` | 10 s |
+| Hora solar verdadeira | equação do tempo do pvlib | 1 s |
+
+O azimute é mal condicionado perto do zênite (uma diferença mínima de posição gera uma diferença grande de azimute); por isso a direção é comparada pela separação angular. Locais e fusos de teste: Belém (equatorial), Brasília, Florianópolis e Porto Alegre (UTC−3), Manaus (UTC−4) e Concepción, Chile (UTC−4, o arquivo do 6.2). Os valores de referência são gerados por script Python em `docs/validacao/scripts/` (F0.5).
+
+## Referências
+
+- Reda, I.; Andreas, A. *Solar Position Algorithm for Solar Radiation Applications*. NREL/TP-560-34302, 2004 (revisado em 2008).
+- Holmgren, W. F.; Hansen, C. W.; Mikofski, M. A. pvlib python: a python package for modeling solar energy systems. *Journal of Open Source Software*, 3(29), 884, 2018.
+- U.S. DOE. *EnergyPlus Auxiliary Programs*, capítulo "Weather Converter Program", formato EPW.
+- Wilcox, S.; Marion, W. *Users Manual for TMY3 Data Sets*. NREL/TP-581-43156, 2008.
+- IERS, Bulletin A (valores de ΔT = TT − UT1).
+- Duffie, J. A.; Beckman, W. A. *Solar Engineering of Thermal Processes*, capítulo 1 (hora solar, equação do tempo).
