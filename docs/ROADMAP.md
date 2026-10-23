@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 0, passo F0.4 (especificação v0). Página no ar em 1totone.github.io/novo-solar, com CI e prévia por PR.
+**Você está aqui:** Fase 0, passo F0.5 (dados e casos de referência). Spec v0 escrita em `docs/spec/`, aguardando aprovação no portão 0.
 **Última atualização:** 23/10/2026.
 
 ---
@@ -114,7 +114,7 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
   - [x] Build portátil: caminhos relativos, estado na URL (#) e nenhum servidor, para rodar sem mudanças no GitHub Pages, num subdomínio do LabEEE ou numa pasta do servidor deles (ver 7.1). Verificado por teste de ponta a ponta que serve o build numa subpasta arbitrária (23/10/2026).
 
   *Pronto quando:* CI verde e página no ar em 1totone.github.io/novo-solar.
-- [ ] **F0.4 Especificação v0.** Convenções:
+- [x] **F0.4 Especificação v0.** Escrita em 23/10/2026 ([`docs/spec/`](spec/README.md)); os pontos que dependem do Anthony estão listados no README da spec. Convenções:
   - azimute a partir do Norte, sentido horário; orientação da fachada pela normal externa;
   - definição exata de α1/α2, β1/β2 e γ1/γ2 com figuras, reproduzindo o SOL-AR 6.2 e a literatura (Bittencourt; Frota e Schiffer); referência interna e externa;
   - hora solar e hora legal;
