@@ -6,6 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Posição solar pelo NREL SPA (`src/core/solar/`): ângulo zenital, azimute, ângulo horário, declinação, equação do tempo, nascer, pôr e passagem meridiana; conversão entre hora legal e UTC com o fuso do EPW e instantes das horas do EPW (fim e meio do intervalo). Conferida contra o pvlib e contra o caso publicado do SPA.
 - Leitor de EPW (`src/core/epw/`): cabeçalho, 8760 ou 8784 horas, códigos de ausente, checagens de sequência e de valores, com mensagens de erro em português que indicam linha e campo. Conferido contra o `pvlib.iotools.read_epw` nos 6 EPWs de teste.
 - CI baixa os EPWs de teste (com cache) e roda os testes de referência.
 

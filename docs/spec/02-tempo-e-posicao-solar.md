@@ -60,6 +60,8 @@ Arquivos climáticos típicos (TMY, TRY) misturam meses de anos diferentes e nã
 | Nascer, pôr e passagem meridiana | pvlib `sun_rise_set_transit_spa` | 10 s |
 | Hora solar verdadeira | equação do tempo do pvlib | 1 s |
 
+**Resultado (F1.2):** todas as grandezas dentro da tolerância, com folga de várias ordens de grandeza; detalhes em [`../validacao/relatorios/F1.2-posicao-solar.md`](../validacao/relatorios/F1.2-posicao-solar.md). Implementação: `src/core/solar/` (`spa.ts`, `time.ts`, `constants.ts`).
+
 O azimute é mal condicionado perto do zênite (uma diferença mínima de posição gera uma diferença grande de azimute); por isso a direção é comparada pela separação angular. Locais e fusos de teste: Belém (equatorial), Brasília, Florianópolis e Porto Alegre (UTC−3), Manaus (UTC−4) e Concepción, Chile (UTC−4, o arquivo do 6.2). Os valores de referência são gerados por script Python em `docs/validacao/scripts/` (F0.5).
 
 ## Referências
