@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Portão 0. Fase 0 concluída; aguardando a aprovação do Anthony (spec v0 e pontos listados em `docs/spec/README.md`) para seguir para a Fase 1.
+**Você está aqui:** Fase 1, passo F1.1 (leitor de EPW). Portão 0 aprovado pelo Anthony em 23/10/2026; versão v0.0 publicada.
 **Última atualização:** 23/10/2026.
 
 ---
@@ -124,7 +124,7 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
   Algoritmos e tolerâncias de cada módulo. *Pronto quando:* escrita, com referências; a aprovação do Anthony acontece no portão 0.
 - [x] **F0.5 Dados e casos de referência.** Feito em 23/10/2026 ([`docs/validacao/`](validacao/README.md)): 6 EPWs TMYx 2011 a 2025 por manifesto com SHA-256 (não versionados, decisão 0010); 15 cidades do 6.2 extraídas do instalador oficial; 3456 posições e 72 nasceres e pores do sol com o pvlib, mais o caso publicado do SPA. EPWs de teste (Florianópolis, Brasília, Belém, Porto Alegre, Manaus em UTC-4 e Concepción); CSVs do SOL-AR 6.2; valores de referência de posição solar gerados com pvlib (NREL SPA). *Pronto quando:* arquivos e valores guardados em `docs/validacao/`.
 
-**Portão 0:** decisões registradas; CI verde; página no ar; spec v0 aprovada.
+**Portão 0:** decisões registradas; CI verde; página no ar; spec v0 aprovada. **Aprovado em 23/10/2026** (decisão 0011); release v0.0.
 
 ### Fase 1: Esqueleto funcional (≈1 a 2 semanas) → v0.1
 

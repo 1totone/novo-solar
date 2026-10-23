@@ -1,6 +1,6 @@
 # Especificação técnica
 
-**Status:** v0 (F0.4, 23/10/2026), para aprovação do Anthony no portão 0. Cada módulo ganha detalhe no passo em que é implementado, sempre com referências e tolerâncias. O teste de referência de cada cálculo vem antes da implementação.
+**Status:** v0, aprovada pelo Anthony no portão 0 (23/10/2026, decisão 0011). Cada módulo ganha detalhe no passo em que é implementado, sempre com referências e tolerâncias. O teste de referência de cada cálculo vem antes da implementação.
 
 ## Seções
 
@@ -20,9 +20,9 @@
 - **Projeção estereográfica:** r = R · tan(z/2); carta vista de cima, Norte para cima, Leste à direita.
 - **Unidades:** SI (°C, m/s, W/m², Wh/m²); vírgula decimal na interface em português.
 
-## Pontos para o Anthony decidir no portão 0
+## Decisões do portão 0 (aprovadas em 23/10/2026)
 
-| Ponto | Recomendação | Onde |
+| Ponto | Decisão | Onde |
 |---|---|---|
 | Referência padrão do transferidor ao abrir o programa | **Interna**: coincide com AVS/AHS da INI-C e com a aula do LabEEE; a externa continua a um clique | 01, seção 1.3 |
 | Lado "direito" | à direita de quem está dentro olhando para fora (coincide com a direita do papel com a normal para cima); conferir no 6.2 | 01, seção 1.2 |

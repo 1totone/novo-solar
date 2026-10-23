@@ -4,6 +4,10 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ## [Não lançado]
 
+## [0.0.0] - 2026-10-23 (v0.0, Fundação)
+
+Portão 0 aprovado pelo Anthony (decisão 0011).
+
 ### Adicionado
 
 - Dados e casos de referência (`docs/validacao/`): manifesto e script de download dos 6 EPWs de teste, dados do SOL-AR 6.2 extraídos do instalador, posição solar de referência com o pvlib e o caso publicado do NREL SPA.
