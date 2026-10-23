@@ -32,7 +32,7 @@ body {
 }
 
 .page {
-  max-width: 44rem;
+  max-width: 64rem;
   margin: 0 auto;
   padding: 2rem 1rem 3rem;
 }
@@ -104,12 +104,70 @@ a:focus-visible {
   color: var(--color-muted);
 }
 
-.chart-preview {
-  margin-top: 1.5rem;
+.workspace {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
-.chart-preview h2 {
-  margin-bottom: 0.25rem;
+@media (min-width: 52rem) {
+  .workspace {
+    grid-template-columns: minmax(16rem, 20rem) 1fr;
+    align-items: start;
+  }
+}
+
+.site-panel h2,
+.chart-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field select,
+.field input {
+  min-height: 44px;
+  font: inherit;
+  max-width: 100%;
+}
+
+.site-info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.site-info dt {
+  color: var(--color-muted);
+}
+
+.site-info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  padding: 0.5rem 0.75rem;
+  color: #8a1c1c;
+  background: #fdecec;
+  border: 1px solid #f1b5b5;
+  border-radius: 6px;
+}
+
+.chart-section .sun-chart {
+  margin-top: 0;
 }
 
 .note {

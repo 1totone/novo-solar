@@ -20,4 +20,4 @@ A decisão 0005 pede estrutura de tradução desde o início; a decisão 0004 pe
 ## Consequências
 
 - Nenhum texto de interface fica fixo nos componentes; todos passam por `t('chave')`.
-- Links compartilháveis já funcionam (ex.: `#painel=sobre`); o projeto salvo e o link que reabre o mesmo estado (F4.7) partem daqui.
+- Links compartilháveis já funcionam (ex.: `#painel=sobre`, `#local=manaus`). Para um EPW carregado, o link guarda nome, latitude, longitude, fuso e elevação (`#local=arquivo&nome=...&lat=...&lon=...&fuso=...&alt=...`), que bastam para refazer a carta sem o arquivo; os dados horários nunca vão para a URL; o projeto salvo e o link que reabre o mesmo estado (F4.7) partem daqui.
