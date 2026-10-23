@@ -22,6 +22,15 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'chart.north': 'N',
+  'chart.east': 'L',
+  'chart.south': 'S',
+  'chart.west': 'O',
+  'chart.title':
+    'Carta solar de {place}, latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}',
+  'chart.sampleHeading': 'Prévia da carta solar',
+  'chart.sampleNote':
+    'Local de teste: {place}. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses; linhas horárias em hora solar verdadeira.',
   'epw.error.missingLocation':
     'O arquivo não parece ser um EPW: a primeira linha deveria começar com LOCATION e ter 10 campos.',
   'epw.error.invalidLatitude':

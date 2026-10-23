@@ -1,0 +1,98 @@
+import { useMemo } from 'react';
+import type { Site } from '../../core/chart/sunChart';
+import { useI18n } from '../i18n/useI18n';
+import { chartGeometry, type SvgPoint } from './chartGeometry';
+import './SunChart.css';
+
+const AZIMUTH_LABELS = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+const CARDINAL: Record<number, 'chart.north' | 'chart.east' | 'chart.south' | 'chart.west'> = {
+  0: 'chart.north',
+  90: 'chart.east',
+  180: 'chart.south',
+  270: 'chart.west',
+};
+
+function polyline(points: SvgPoint[]): string {
+  return points.map((p) => `${p.x.toFixed(5)},${p.y.toFixed(5)}`).join(' ');
+}
+
+export function SunChart({ site, title }: { site: Site; title: string }) {
+  const { t, formatNumber } = useI18n();
+  const g = useMemo(() => chartGeometry(site), [site]);
+  // Rótulos de altura no semieixo meridiano oposto ao lado em que o sol passa mais tempo
+  // (sul da carta para latitudes sul): y do SVG cresce para o Sul.
+  const labelSide = site.latitude < 0 ? 1 : -1;
+
+  return (
+    <svg
+      className="sun-chart"
+      viewBox="-1.32 -1.32 2.64 2.64"
+      role="img"
+      aria-labelledby="sun-chart-title"
+      data-testid="sun-chart"
+    >
+      <title id="sun-chart-title">{title}</title>
+      <g className="grid">
+        {g.altitudeCircles.map((c) => (
+          <circle key={c.altitude} r={c.radius} className="altitude" />
+        ))}
+        {AZIMUTH_LABELS.map((a) => {
+          const r = (a * Math.PI) / 180;
+          return (
+            <line key={a} x1={0} y1={0} x2={Math.sin(r)} y2={-Math.cos(r)} className="azimuth" />
+          );
+        })}
+        <circle r={1} className="horizon" />
+      </g>
+      <g className="labels">
+        {AZIMUTH_LABELS.map((a) => {
+          const r = (a * Math.PI) / 180;
+          const key = CARDINAL[a];
+          return (
+            <text
+              key={a}
+              x={1.17 * Math.sin(r)}
+              y={-1.17 * Math.cos(r)}
+              className={key ? 'cardinal' : 'azimuth-label'}
+            >
+              {key ? t(key) : `${a}°`}
+            </text>
+          );
+        })}
+        {g.altitudeCircles.map((c) => (
+          <text
+            key={c.altitude}
+            x={0.015}
+            y={labelSide * (c.radius + 0.01)}
+            className="altitude-label"
+          >
+            {formatNumber(c.altitude)}°
+          </text>
+        ))}
+      </g>
+      <g className="hour-lines" data-testid="hour-lines">
+        {g.hourLines.map((h) => {
+          const label = h.points[Math.floor(h.points.length / 2)]!;
+          return (
+            <g key={h.hour}>
+              <polyline points={polyline(h.points)} className="hour-line" />
+              <text x={label.x} y={label.y + 0.05} className="hour-label">
+                {h.hour}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+      <g className="sun-paths" data-testid="sun-paths">
+        {g.paths.map((p) => (
+          <polyline
+            key={`${p.date.month}-${p.date.day}`}
+            points={polyline(p.points)}
+            className={`sun-path ${p.date.kind}`}
+            data-date={`${p.date.day}/${p.date.month}`}
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
