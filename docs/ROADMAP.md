@@ -61,7 +61,7 @@ Servem para desempatar qualquer decisão. Se uma ideia fere um princípio, ela n
 
 ### 4.2 Fluxo autônomo (sessões do Claude Code na nuvem)
 
-1. **Abrir:** o Anthony abre uma sessão em claude.ai/code no repositório `novo-solar` (modo padrão ou Auto) com o pedido: *"Leia CLAUDE.md e docs/ROADMAP.md e continue o roteiro a partir do 'Você está aqui', no modo autônomo."*
+1. **Abrir:** o Anthony abre uma sessão **na nuvem** (não local) em claude.ai/code, com o repositório `1totone/novo-solar` e o ambiente `novo-solar` selecionados (modo padrão ou Auto), e o pedido: *"Leia CLAUDE.md e docs/ROADMAP.md e continue o roteiro a partir do 'Você está aqui', no modo autônomo."*
 2. **Executar:** o Claude segue os passos em sequência, sem pedir confirmação entre eles. Um passo por branch e por PR; quando há física, o teste de referência vem antes do código.
 3. **Verificar:** verificação de estilo, testes e build passando; capturas de tela quando houver interface; prévia do PR publicada.
 4. **Integrar:** o Claude marca o passo como feito (`[x]`), atualiza o "Você está aqui", o CHANGELOG e as decisões, e faz o merge quando o CI passa. O site se atualiza sozinho.
@@ -242,9 +242,9 @@ Cuidados desde já:
 
 Feitas uma vez, para que o Claude trabalhe sem interrupções:
 
-- [ ] **Claude GitHub App:** ao conectar o GitHub em claude.ai/code, dar acesso ao repositório `novo-solar` (necessário para o Claude enviar branches e integrar PRs).
+- [ ] **Claude GitHub App com acesso ao repositório:** no GitHub, Settings > Applications > Installed GitHub Apps > Claude > Configure > Repository access: incluir `novo-solar` (necessário para o Claude enviar branches e integrar PRs).
 - [ ] **GitHub Pages:** no repositório, Settings > Pages > Build and deployment > Source: **GitHub Actions**.
-- [ ] **Rede do ambiente na nuvem:** em claude.ai/code, nas configurações do ambiente, trocar o acesso de rede para "Custom", manter marcada a lista padrão de gerenciadores de pacotes e adicionar: `climate.onebuilding.org`, `labeee.ufsc.br`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`.
+- [ ] **Ambiente próprio na nuvem:** em claude.ai/code, criar um ambiente novo chamado `novo-solar` (não alterar os ambientes de outros projetos), sem script de configuração, com acesso de rede "Custom", a lista padrão de gerenciadores de pacotes marcada e estes domínios: `climate.onebuilding.org`, `labeee.ufsc.br`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`.
 
 ## 8. Riscos e como evitamos
 
