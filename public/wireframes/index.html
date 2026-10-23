@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOL-AR: wireframes da Fase 2</title>
+    <style>
+      :root {
+        --ink: #1b1f24;
+        --muted: #57606a;
+        --line: #8c959f;
+        --soft: #eaeef2;
+        --paper: #ffffff;
+        --note: #fff8c5;
+        --note-line: #d4a72c;
+        --accent: #1f4e79;
+        --sun: #b5651d;
+        --total: #cf222e;
+        --partial: #e3b341;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: #f6f8fa;
+        line-height: 1.45;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      header.top {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--paper);
+        border-bottom: 1px solid var(--soft);
+        padding: 0.75rem 1rem;
+      }
+      header.top h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+      }
+      nav.screens {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      nav.screens a {
+        padding: 0.35rem 0.65rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.85rem;
+        background: var(--paper);
+      }
+      nav.screens a[aria-current='page'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      main {
+        max-width: 78rem;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      section.screen {
+        display: none;
+      }
+      section.screen.active {
+        display: block;
+      }
+      section.screen > h2 {
+        margin: 0.25rem 0 0.25rem;
+      }
+      .lead {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        max-width: 60rem;
+      }
+      .frame {
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 0.75rem;
+      }
+      .frame .appbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-bottom: 1px dashed var(--line);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .logo {
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .tabs {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .tab {
+        border: 1px solid var(--line);
+        border-radius: 6px 6px 0 0;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.85rem;
+        background: var(--soft);
+      }
+      .tab.on {
+        background: var(--paper);
+        border-bottom-color: var(--paper);
+        font-weight: 600;
+      }
+      .spacer {
+        flex: 1;
+      }
+      .btn {
+        display: inline-block;
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.85rem;
+        background: var(--paper);
+        white-space: nowrap;
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 19rem 1fr;
+        gap: 1rem;
+      }
+      .layout.three {
+        grid-template-columns: 19rem 1fr 15rem;
+      }
+      @media (max-width: 60rem) {
+        .layout,
+        .layout.three {
+          grid-template-columns: 1fr;
+        }
+      }
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+      }
+      .step h3 {
+        margin: 0;
+        font-size: 0.95rem;
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+      }
+      .step .n {
+        display: inline-grid;
+        place-items: center;
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.75rem;
+      }
+      .step.closed {
+        color: var(--muted);
+      }
+      .step.closed h3::after {
+        content: '▸';
+        margin-left: auto;
+      }
+      .step.open h3::after {
+        content: '▾';
+        margin-left: auto;
+      }
+      .summary {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin: 0.15rem 0 0 1.8rem;
+      }
+      .field {
+        margin: 0.45rem 0 0;
+        font-size: 0.85rem;
+      }
+      .field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.15rem;
+      }
+      .input {
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 0.2rem 0.45rem;
+        background: var(--paper);
+        min-height: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+      }
+      .input.small {
+        display: inline-flex;
+        width: 4.5rem;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.35rem 0.6rem;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr;
+        gap: 0.3rem 0.5rem;
+        align-items: center;
+        font-size: 0.82rem;
+      }
+      .seg {
+        display: inline-flex;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        font-size: 0.8rem;
+      }
+      .seg span {
+        padding: 0.15rem 0.5rem;
+      }
+      .seg span.on {
+        background: var(--ink);
+        color: #fff;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .advanced {
+        margin-top: 0.5rem;
+        border-top: 1px dashed var(--line);
+        padding-top: 0.35rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .chartbox {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .chartbox svg {
+        width: 100%;
+        max-width: 30rem;
+        height: auto;
+      }
+      .toolbar {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .legend {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+        font-size: 0.75rem;
+        align-items: center;
+      }
+      .sw {
+        display: inline-block;
+        width: 1.6rem;
+        height: 0.8rem;
+        border: 1px solid var(--line);
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.82rem;
+      }
+      .card h4 {
+        margin: 0 0 0.25rem;
+        font-size: 0.88rem;
+      }
+      .note {
+        background: var(--note);
+        border: 1px solid var(--note-line);
+        border-radius: 6px;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.85rem;
+        margin-top: 0.75rem;
+      }
+      .note ol,
+      .note ul {
+        margin: 0.25rem 0 0;
+        padding-left: 1.2rem;
+      }
+      .pin {
+        display: inline-grid;
+        place-items: center;
+        min-width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 50%;
+        background: var(--note-line);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        margin-right: 0.15rem;
+      }
+      .list {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        font-size: 0.82rem;
+      }
+      .list div {
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid var(--soft);
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .list div:last-child {
+        border-bottom: 0;
+      }
+      .tag {
+        font-size: 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 0 0.3rem;
+        color: var(--muted);
+      }
+      .tag.old {
+        border-color: var(--note-line);
+        color: #7d4e00;
+      }
+      .phone {
+        width: 21rem;
+        max-width: 100%;
+        border: 2px solid var(--ink);
+        border-radius: 22px;
+        padding: 0.6rem;
+        background: var(--paper);
+      }
+      .phones {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .sheet {
+        border: 1px solid var(--line);
+        border-radius: 12px 12px 0 0;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.82rem;
+      }
+      .handle {
+        width: 3rem;
+        height: 0.3rem;
+        border-radius: 3px;
+        background: var(--line);
+        margin: 0 auto 0.4rem;
+      }
+      .twocharts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 50rem) {
+        .twocharts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .dialog {
+        max-width: 26rem;
+        margin: 0 auto;
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 0.75rem;
+        background: var(--paper);
+        font-size: 0.85rem;
+      }
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        align-items: center;
+        font-size: 0.85rem;
+        margin: 0.25rem 0 0.75rem;
+      }
+      .flow span.box {
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        padding: 0.15rem 0.5rem;
+        background: var(--paper);
+      }
+      footer {
+        max-width: 78rem;
+        margin: 0 auto;
+        padding: 0 1rem 2rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="carta" viewBox="-1.25 -1.25 2.5 2.5">
+          <g fill="none" stroke="#c9d1d9" stroke-width="0.006">
+            <circle r="0.84" />
+            <circle r="0.70" />
+            <circle r="0.58" />
+            <circle r="0.47" />
+            <circle r="0.36" />
+            <circle r="0.27" />
+            <circle r="0.18" />
+            <circle r="0.09" />
+            <line x1="0" y1="-1" x2="0" y2="1" />
+            <line x1="-1" y1="0" x2="1" y2="0" />
+            <line x1="-0.71" y1="-0.71" x2="0.71" y2="0.71" />
+            <line x1="-0.71" y1="0.71" x2="0.71" y2="-0.71" />
+          </g>
+          <circle r="1" fill="none" stroke="#1b1f24" stroke-width="0.012" />
+          <g fill="none" stroke="#b5651d" stroke-width="0.012">
+            <path d="M -0.94 -0.33 Q 0 -0.62 0.94 -0.33" />
+            <path d="M -1 0 Q 0 -0.47 1 0" />
+            <path d="M -0.94 0.33 Q 0 -0.08 0.94 0.33" />
+          </g>
+          <g fill="none" stroke="#1f4e79" stroke-width="0.006">
+            <path d="M 0 -0.47 L 0 0.02" />
+            <path d="M 0.3 -0.5 Q 0.26 -0.22 0.24 0.05" />
+            <path d="M -0.3 -0.5 Q -0.26 -0.22 -0.24 0.05" />
+            <path d="M 0.6 -0.42 Q 0.55 -0.15 0.5 0.12" />
+            <path d="M -0.6 -0.42 Q -0.55 -0.15 -0.5 0.12" />
+          </g>
+          <g font-size="0.11" text-anchor="middle" fill="#1b1f24" font-family="system-ui">
+            <text x="0" y="-1.1">N</text>
+            <text x="1.12" y="0.04">L</text>
+            <text x="0" y="1.17">S</text>
+            <text x="-1.12" y="0.04">O</text>
+          </g>
+        </symbol>
+        <symbol id="transferidor" viewBox="-1.25 -1.25 2.5 2.5">
+          <g transform="rotate(30)">
+            <line x1="-1" y1="0" x2="1" y2="0" stroke="#1b1f24" stroke-width="0.014" />
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="-1.08"
+              stroke="#1b1f24"
+              stroke-width="0.01"
+              stroke-dasharray="0.04 0.03"
+            />
+            <path
+              d="M -1 0 A 1.3 1.3 0 0 1 1 0"
+              fill="none"
+              stroke="#8250df"
+              stroke-width="0.008"
+            />
+            <path
+              d="M -1 0 A 1.8 1.8 0 0 1 1 0"
+              fill="none"
+              stroke="#8250df"
+              stroke-width="0.006"
+              stroke-dasharray="0.03 0.02"
+            />
+            <line x1="0" y1="0" x2="0.7" y2="-0.7" stroke="#8250df" stroke-width="0.006" />
+            <line x1="0" y1="0" x2="-0.7" y2="-0.7" stroke="#8250df" stroke-width="0.006" />
+          </g>
+        </symbol>
+        <symbol id="mascara" viewBox="-1.25 -1.25 2.5 2.5">
+          <g transform="rotate(30)">
+            <path
+              d="M -1 0 A 1.3 1.3 0 0 1 1 0 Z"
+              fill="#cf222e"
+              fill-opacity="0.35"
+              stroke="#cf222e"
+              stroke-width="0.01"
+            />
+            <path
+              d="M 0.7 -0.7 A 1 1 0 0 1 1 0 L 0 0 Z"
+              fill="#e3b341"
+              fill-opacity="0.45"
+              stroke="#b08800"
+              stroke-width="0.008"
+            />
+          </g>
+        </symbol>
+        <symbol id="dados" viewBox="-1.25 -1.25 2.5 2.5">
+          <g>
+            <circle cx="-0.62" cy="-0.36" r="0.05" fill="#a5d6ff" />
+            <circle cx="-0.38" cy="-0.47" r="0.05" fill="#ffd8b5" />
+            <circle cx="-0.13" cy="-0.53" r="0.05" fill="#ffb77c" />
+            <circle cx="0.13" cy="-0.53" r="0.05" fill="#ff8182" />
+            <circle cx="0.38" cy="-0.47" r="0.05" fill="#ff8182" />
+            <circle cx="0.62" cy="-0.36" r="0.05" fill="#ffb77c" />
+            <circle cx="-0.62" cy="-0.1" r="0.05" fill="#a5d6ff" />
+            <circle cx="-0.38" cy="-0.22" r="0.05" fill="#ffd8b5" />
+            <circle cx="-0.13" cy="-0.28" r="0.05" fill="#ffb77c" />
+            <circle cx="0.13" cy="-0.28" r="0.05" fill="#ffb77c" />
+            <circle cx="0.38" cy="-0.22" r="0.05" fill="#ffd8b5" />
+            <circle cx="0.62" cy="-0.1" r="0.05" fill="#ffd8b5" />
+          </g>
+        </symbol>
+        <symbol id="rosa" viewBox="-1.25 -1.25 2.5 2.5">
+          <g fill="none" stroke="#c9d1d9" stroke-width="0.008">
+            <circle r="0.33" />
+            <circle r="0.66" />
+            <circle r="1" />
+          </g>
+          <g fill="#1f4e79" fill-opacity="0.75">
+            <path d="M0 0 L -0.12 -0.6 L 0.12 -0.6 Z" />
+            <path d="M0 0 L 0.62 -0.5 L 0.75 -0.33 Z" />
+            <path d="M0 0 L 0.9 -0.12 L 0.9 0.12 Z" />
+            <path d="M0 0 L 0.42 0.3 L 0.3 0.42 Z" />
+            <path d="M0 0 L -0.1 0.4 L 0.1 0.4 Z" />
+            <path d="M0 0 L -0.3 0.22 L -0.22 0.3 Z" />
+            <path d="M0 0 L -0.35 -0.05 L -0.35 0.05 Z" />
+            <path d="M0 0 L -0.3 -0.38 L -0.4 -0.3 Z" />
+          </g>
+          <circle r="0.08" fill="#fff" stroke="#57606a" stroke-width="0.01" />
+          <g font-size="0.12" text-anchor="middle" font-family="system-ui">
+            <text x="0" y="-1.08">N</text>
+            <text x="1.12" y="0.04">L</text>
+            <text x="0" y="1.17">S</text>
+            <text x="-1.12" y="0.04">O</text>
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="top">
+      <h1>SOL-AR: wireframes da Fase 2 (esboço para aprovação, não é a interface final)</h1>
+      <nav class="screens" aria-label="Telas">
+        <a href="#fluxo">0. Fluxo</a>
+        <a href="#principal">1. Tela principal</a>
+        <a href="#local">2. Local e dados</a>
+        <a href="#protecao">3. Fachada e proteção</a>
+        <a href="#sobreposicao">4. Dados sobre a carta</a>
+        <a href="#vento">5. Rosa dos ventos</a>
+        <a href="#saidas">6. Imprimir, exportar, comparar</a>
+        <a href="#celular">7. Celular e tablet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="screen" id="fluxo" aria-labelledby="h-fluxo">
+        <h2 id="h-fluxo">0. Fluxo básico</h2>
+        <p class="lead">
+          O caminho do ensino (local, carta, transferidor, máscara) vira uma coluna de passos
+          numerados ao lado da carta. Cada passo mostra um resumo quando fechado; só um fica aberto
+          por vez. A carta está sempre visível e tudo o que se escolhe aparece nela na hora, sem
+          botão "Atualizar".
+        </p>
+        <div class="flow" aria-label="Sequência">
+          <span class="box">Abrir</span>→<span class="box">1. Local (cidade ou EPW)</span>→<span
+            class="box"
+            >Carta aparece</span
+          >→<span class="box">2. Fachada (orientação)</span>→<span class="box"
+            >Transferidor sobre a carta</span
+          >→<span class="box">3. Proteção (α, β, γ)</span>→<span class="box">Máscara pintada</span
+          >→<span class="box">4. Dados sobre a carta</span>→<span class="box"
+            >5. Imprimir ou exportar</span
+          >
+        </div>
+        <div class="note">
+          <strong>Decisões de fluxo para aprovar</strong>
+          <ol>
+            <li>
+              Uma única tela com passos numerados, em vez das abas e janelas do 6.2. Meta do
+              ROADMAP: da abertura à carta com transferidor em menos de 1 minuto, sem manual.
+            </li>
+            <li>
+              Ao abrir, o programa já mostra uma cidade (a última usada, ou Florianópolis), para que
+              a carta nunca apareça vazia.
+            </li>
+            <li>
+              A máscara é <strong>calculada</strong> a partir dos ângulos (F2.3); o desenho à mão do
+              6.2 fica recolhido em "Desenhar à mão".
+            </li>
+            <li>
+              A rosa dos ventos fica numa aba separada (5), como no 6.2, porque não usa a fachada
+              nem a máscara.
+            </li>
+            <li>
+              O que é avançado (índices 2, referência externa, faixas editáveis, hora legal) fica
+              recolhido em "Mais opções" dentro de cada passo.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="screen" id="principal" aria-labelledby="h-principal">
+        <h2 id="h-principal">1. Tela principal (computador)</h2>
+        <p class="lead">
+          Estado depois do fluxo básico: Florianópolis, fachada a 30°, brise horizontal com α = 45°,
+          máscara pintada e temperatura do primeiro semestre sobre a carta.
+        </p>
+        <div class="frame">
+          <div class="appbar">
+            <span class="logo">SOL-AR</span>
+            <div class="tabs">
+              <span class="tab on">Carta solar</span><span class="tab">Rosa dos ventos</span>
+            </div>
+            <span class="spacer"></span>
+            <span class="btn">Comparar</span><span class="btn">Imprimir</span
+            ><span class="btn">Exportar</span><span class="btn">Ajuda</span>
+          </div>
+          <div class="layout three">
+            <div class="steps">
+              <div class="step closed">
+                <h3><span class="n">1</span>Local</h3>
+                <p class="summary">Florianópolis (SC) · −27,67° · UTC−3 · TMYx 2011 a 2025</p>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">2</span>Fachada</h3>
+                <p class="summary">Orientação 30° (NNE) · transferidor visível</p>
+              </div>
+              <div class="step open">
+                <h3><span class="n">3</span>Proteção</h3>
+                <div class="field">
+                  <label>Referência dos ângulos</label>
+                  <span class="seg"><span class="on">Interna</span><span>Externa</span></span>
+                </div>
+                <div class="grid3" style="margin-top: 0.4rem">
+                  <span></span><span class="muted">Esquerda</span><span class="muted">Direita</span>
+                  <span>α</span><span class="input small">45°</span><span></span> <span>β</span
+                  ><span class="input small">&nbsp;</span><span class="input small">&nbsp;</span>
+                  <span>γ</span><span class="input small">&nbsp;</span
+                  ><span class="input small">&nbsp;</span>
+                </div>
+                <div class="advanced">
+                  + Mais opções: índices 2 (brise afastado), desenhar à mão
+                </div>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">4</span>Dados sobre a carta</h3>
+                <p class="summary">Temperatura (TBS) · até 21 de junho</p>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg
+                viewBox="0 0 250 250"
+                role="img"
+                aria-label="Carta solar com transferidor e máscara"
+              >
+                <use href="#carta" width="250" height="250" />
+                <use href="#dados" width="250" height="250" />
+                <use href="#mascara" width="250" height="250" />
+                <use href="#transferidor" width="250" height="250" />
+              </svg>
+              <div class="legend">
+                <span class="sw" style="background: #a5d6ff"></span>até 14 °C
+                <span class="sw" style="background: #ffd8b5"></span>14 a 20
+                <span class="sw" style="background: #ffb77c"></span>20 a 25
+                <span class="sw" style="background: #ff8182"></span>acima de 25 °C
+                <span class="sw" style="background: rgba(207, 34, 46, 0.35)"></span>sombra total
+                <span class="sw" style="background: rgba(227, 179, 65, 0.45)"></span>parcial
+              </div>
+              <div class="toolbar">
+                <span class="btn">Hora solar | legal (Fase 4)</span><span class="btn">Ampliar</span>
+              </div>
+            </div>
+            <div class="card">
+              <h4>Ponto sob o cursor</h4>
+              <p>21/jan, 15 h (solar) · altura 52° · azimute 281°</p>
+              <p>TBS 27,4 °C · GHI 610 Wh/m²</p>
+              <p class="muted">
+                Sol fora da máscara (fachada ensolarada). Na Fase 3 aparece aqui a fração
+                ensolarada.
+              </p>
+              <h4 style="margin-top: 0.6rem">Origem dos dados</h4>
+              <p>
+                TMYx 2011 a 2025, estação 838990 (aeroporto), a 0 km. Qualidade: sem horas ausentes,
+                calmarias 8%.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>A carta ocupa o centro e cresce até onde a tela permite; o
+          painel da direita (ponto sob o cursor, origem e qualidade dos dados) recolhe abaixo da
+          carta em telas estreitas. <br /><span class="pin">B</span>O transferidor é desenhado sobre
+          a carta, girado para a orientação da fachada, com a linha da fachada e a normal; não há
+          uma folha separada. <br /><span class="pin">C</span>Cores da máscara mantêm o vocabulário
+          do 6.2 (total vermelho, parcial amarelo); na Fase 4 entra uma paleta segura para
+          daltonismo, com hachuras.
+        </div>
+      </section>
+
+      <section class="screen" id="local" aria-labelledby="h-local">
+        <h2 id="h-local">2. Passo 1: local e dados climáticos</h2>
+        <p class="lead">
+          Busca por nome, lista curta das cidades com dados e leitura de arquivo. Origem, período e
+          qualidade sempre visíveis antes de usar os dados.
+        </p>
+        <div class="frame">
+          <div class="layout">
+            <div class="steps">
+              <div class="step open">
+                <h3><span class="n">1</span>Local</h3>
+                <div class="field">
+                  <label>Buscar cidade</label>
+                  <div class="input">
+                    <span class="muted">Ex.: Recife</span><span class="muted">Buscar</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Cidades com dados</label>
+                  <div class="list">
+                    <div><span>Belém (PA)</span><span class="tag">TMYx 2011 a 2025</span></div>
+                    <div><span>Brasília (DF)</span><span class="tag">TMYx 2011 a 2025</span></div>
+                    <div><span>Curitiba (PR)</span><span class="tag">TMYx 2011 a 2025</span></div>
+                    <div>
+                      <span>Florianópolis (SC)</span><span class="tag">TMYx 2011 a 2025</span>
+                    </div>
+                    <div class="muted"><span>… 15 cidades do SOL-AR 6.2</span></div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Ou abra um arquivo</label>
+                  <span class="btn">EPW</span> <span class="btn">CSV do SOL-AR 6.2</span>
+                </div>
+                <div class="advanced">
+                  + Mais opções: dados históricos do 6.2 (TRY 1951 a 1970), latitude manual sem
+                  dados
+                </div>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">2</span>Fachada</h3>
+              </div>
+            </div>
+            <div class="card">
+              <h4>Florianópolis (SC)</h4>
+              <p>Estação: Aeroporto Hercílio Luz (WMO 838990) · −27,670°, −48,547° · 6 m · UTC−3</p>
+              <p>Arquivo: TMYx, período 2011 a 2025 (Climate.OneBuilding.org)</p>
+              <h4 style="margin-top: 0.5rem">Qualidade</h4>
+              <div class="grid2">
+                <span>Horas ausentes</span><span>0</span><span>Calmarias</span><span>8%</span>
+                <span>Velocidade do vento</span><span>decimal</span><span>Direção</span
+                ><span>passos de 10°</span> <span>k_t horário implausível</span
+                ><span>0,3% das horas</span>
+              </div>
+              <h4 style="margin-top: 0.5rem">Comparar com o dado antigo</h4>
+              <p>
+                <span class="tag old">histórico</span> TRY 1963 do SOL-AR 6.2: Tméd 20,7 °C, horas
+                acima de 25 °C 14,4%
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>As 15 cidades do 6.2 aparecem com dados recentes; as TRY antigas
+          ficam acessíveis, marcadas como históricas (F2.7, F4.2). <br /><span class="pin">B</span
+          >Se a licença dos EPWs recentes não permitir redistribuição (decisão 0010), a lista mostra
+          as cidades com um link "Obter o arquivo na fonte", que abre a página de download; o
+          usuário baixa e carrega o EPW. (Baixar direto pelo navegador depende de a fonte permitir
+          acesso de outros sites, o que ainda não foi verificado.)
+        </div>
+      </section>
+
+      <section class="screen" id="protecao" aria-labelledby="h-protecao">
+        <h2 id="h-protecao">3. Passos 2 e 3: fachada, transferidor e proteção</h2>
+        <p class="lead">
+          Os ângulos usam a referência interna por padrão (decisão 0011). A figura ao lado de cada
+          ângulo muda com a referência, como no 6.2.
+        </p>
+        <div class="frame">
+          <div class="layout three">
+            <div class="steps">
+              <div class="step open">
+                <h3><span class="n">2</span>Fachada</h3>
+                <div class="field">
+                  <label>Orientação da fachada (normal externa)</label>
+                  <div class="input"><span>30°</span><span class="muted">NNE</span></div>
+                  <p class="muted" style="margin: 0.2rem 0 0">
+                    Aceita qualquer valor, inclusive negativo (−30° = 330°). Também dá para arrastar
+                    a normal sobre a carta.
+                  </p>
+                </div>
+              </div>
+              <div class="step open">
+                <h3><span class="n">3</span>Proteção</h3>
+                <div class="field">
+                  <label>Referência dos ângulos</label>
+                  <span class="seg"><span class="on">Interna</span><span>Externa</span></span>
+                </div>
+                <div class="grid3" style="margin-top: 0.4rem">
+                  <span></span><span class="muted">Esquerda</span><span class="muted">Direita</span>
+                  <span>α (brise horizontal)</span><span class="input small">45°</span><span></span>
+                  <span>β (aletas)</span><span class="input small">60°</span
+                  ><span class="input small">60°</span> <span>γ (limites laterais)</span
+                  ><span class="input small">&nbsp;</span><span class="input small">&nbsp;</span>
+                </div>
+                <div class="advanced">
+                  − Mais opções
+                  <div class="grid3" style="margin-top: 0.3rem">
+                    <span>α2</span><span class="input small">&nbsp;</span><span></span>
+                    <span>β2</span><span class="input small">&nbsp;</span
+                    ><span class="input small">&nbsp;</span> <span>γ2</span
+                    ><span class="input small">&nbsp;</span><span class="input small">&nbsp;</span>
+                  </div>
+                  <p style="margin: 0.3rem 0 0">
+                    Índice 2: brise afastado da parede. <span class="btn">Desenhar à mão</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg viewBox="0 0 250 250" role="img" aria-label="Carta com transferidor e máscara">
+                <use href="#carta" width="250" height="250" />
+                <use href="#mascara" width="250" height="250" />
+                <use href="#transferidor" width="250" height="250" />
+              </svg>
+              <p class="muted" style="font-size: 0.8rem; margin: 0">
+                Linha da fachada, normal tracejada, curvas α (roxo), radiais β e arcos γ do
+                transferidor; máscara total em vermelho, parcial em amarelo.
+              </p>
+            </div>
+            <div class="card">
+              <h4>O que é α (referência interna)</h4>
+              <svg viewBox="0 0 160 110" width="100%" aria-hidden="true">
+                <line x1="30" y1="10" x2="30" y2="100" stroke="#57606a" stroke-width="4" />
+                <line x1="30" y1="20" x2="110" y2="20" stroke="#1b1f24" stroke-width="4" />
+                <line x1="30" y1="90" x2="125" y2="5" stroke="#1b1f24" stroke-dasharray="3 2" />
+                <path
+                  d="M30,90 L30,60 A30,30 0 0 1 52,70 Z"
+                  fill="#b5651d"
+                  fill-opacity="0.3"
+                  stroke="#b5651d"
+                />
+                <text x="36" y="56" font-size="12" fill="#b5651d">α</text>
+              </svg>
+              <p>
+                Corte perpendicular à fachada: ângulo entre o plano da fachada e a linha que vai da
+                base da janela à ponta do brise. Igual ao AVS da INI-C.
+              </p>
+              <p class="muted">Externa: medido a partir da horizontal (90° − interno).</p>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>A máscara é atualizada a cada número digitado; valores inválidos
+          (fora de 0° a 90°) ficam em vermelho com a faixa aceita. <br /><span class="pin">B</span
+          >"Direita" e "esquerda" são de quem está dentro olhando para fora (decisão 0011), escrito
+          junto dos campos.
+        </div>
+      </section>
+
+      <section class="screen" id="sobreposicao" aria-labelledby="h-sobreposicao">
+        <h2 id="h-sobreposicao">4. Passo 4: dados sobre a carta</h2>
+        <p class="lead">
+          Uma variável por vez sobre as posições do sol, separada em semestres como no 6.2, com
+          faixas editáveis e legenda. O fuso do arquivo coloca cada hora no lugar certo.
+        </p>
+        <div class="frame">
+          <div class="layout">
+            <div class="steps">
+              <div class="step open">
+                <h3><span class="n">4</span>Dados sobre a carta</h3>
+                <div class="field">
+                  <label>Variável</label>
+                  <div class="input"><span>Temperatura de bulbo seco (°C)</span><span>▾</span></div>
+                  <p class="muted" style="margin: 0.2rem 0 0">
+                    Também: umidade relativa, radiação global horizontal, direta normal e difusa.
+                  </p>
+                </div>
+                <div class="field">
+                  <label>Período</label>
+                  <span class="seg"
+                    ><span class="on">Até 21 de junho</span><span>Após 21 de junho</span></span
+                  >
+                </div>
+                <div class="field">
+                  <label>Faixas</label>
+                  <div class="legend">
+                    <span class="sw" style="background: #a5d6ff"></span
+                    ><span class="input small">14</span>
+                    <span class="sw" style="background: #ffd8b5"></span
+                    ><span class="input small">20</span>
+                    <span class="sw" style="background: #ffb77c"></span
+                    ><span class="input small">25</span>
+                    <span class="sw" style="background: #ff8182"></span>
+                  </div>
+                  <p class="muted" style="margin: 0.2rem 0 0">
+                    Padrão: as faixas do 6.2 (10, 14, 20, 25 °C) ou percentis do arquivo (escolha a
+                    definir).
+                  </p>
+                </div>
+                <div class="advanced">
+                  + Mais opções: desligar, mostrar valores numéricos, hora legal
+                </div>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg viewBox="0 0 250 250" role="img" aria-label="Carta com temperatura sobreposta">
+                <use href="#carta" width="250" height="250" />
+                <use href="#dados" width="250" height="250" />
+              </svg>
+              <p class="muted" style="font-size: 0.8rem; margin: 0">
+                Cada marca é uma hora do arquivo na posição do sol (radiação no meio do intervalo;
+                temperatura no fim).
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span><strong>Decisão a tomar:</strong> forma da marca de cada hora.
+          Proposta: célula colorida centrada na posição média do sol da hora em cada mês do semestre
+          (como o 6.2), em vez de 4380 pontos sobrepostos. <br /><span class="pin">B</span
+          ><strong>Decisão a tomar:</strong> faixas padrão. As fixas do 6.2 saturam em climas
+          quentes (85% das horas diurnas de Fortaleza numa só cor); proposta: abrir com as do 6.2 e
+          oferecer "faixas pelo arquivo" (percentis) a um clique.
+        </div>
+      </section>
+
+      <section class="screen" id="vento" aria-labelledby="h-vento">
+        <h2 id="h-vento">5. Rosa dos ventos</h2>
+        <p class="lead">
+          Aba própria, com os mesmos dados do local. Frequência e velocidade, 8 ou 16 setores,
+          calmarias explícitas, filtros por estação e período do dia.
+        </p>
+        <div class="frame">
+          <div class="appbar">
+            <span class="logo">SOL-AR</span>
+            <div class="tabs">
+              <span class="tab">Carta solar</span><span class="tab on">Rosa dos ventos</span>
+            </div>
+          </div>
+          <div class="layout">
+            <div class="steps">
+              <div class="step open">
+                <h3>Rosa dos ventos</h3>
+                <div class="field">
+                  <label>Mostrar</label>
+                  <span class="seg"><span class="on">Frequência</span><span>Velocidade</span></span>
+                </div>
+                <div class="field">
+                  <label>Setores</label>
+                  <span class="seg"><span class="on">8</span><span>16</span></span>
+                </div>
+                <div class="field">
+                  <label>Estação</label>
+                  <span class="seg"
+                    ><span class="on">Ano</span><span>Verão</span><span>Outono</span
+                    ><span>Inverno</span><span>Primavera</span></span
+                  >
+                </div>
+                <div class="field">
+                  <label>Período do dia</label>
+                  <span class="seg"
+                    ><span class="on">Todos</span><span>Madrugada</span><span>Manhã</span
+                    ><span>Tarde</span><span>Noite</span></span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg viewBox="0 0 250 250" role="img" aria-label="Rosa dos ventos">
+                <use href="#rosa" width="250" height="250" />
+              </svg>
+              <p style="font-size: 0.82rem; margin: 0">
+                Calmarias: 8% das horas (no centro). Classes de velocidade: 0,5 a 2, 2 a 4, 4 a 6,
+                acima de 6 m/s.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Aviso fixo abaixo da rosa: vento medido na estação (geralmente
+          aeroporto), não no terreno. <br /><span class="pin">B</span
+          ><strong>Decisão a tomar:</strong> limiar de calmaria (proposta: velocidade abaixo de 0,5
+          m/s) e classes de velocidade; a spec deixa "a definir".
+        </div>
+      </section>
+
+      <section class="screen" id="saidas" aria-labelledby="h-saidas">
+        <h2 id="h-saidas">6. Imprimir, exportar e comparar</h2>
+        <p class="lead">
+          Impressão em escala (raio em centímetros), exportação vetorial e comparação lado a lado de
+          duas configurações.
+        </p>
+        <div class="twocharts">
+          <div class="dialog">
+            <h3 style="margin-top: 0">Imprimir</h3>
+            <div class="field">
+              <label>Raio da carta</label>
+              <div class="input"><span>6,0 cm</span><span class="muted">padrão do 6.2</span></div>
+            </div>
+            <div class="field">
+              <label>Incluir</label>
+              <p style="margin: 0">
+                ☑ transferidor ☑ máscara ☑ dados ☑ legenda e origem dos dados<br />☐ só o
+                transferidor, para imprimir em transparência
+              </p>
+            </div>
+            <p class="muted">
+              Imprima a 100% (sem "ajustar à página"); a régua no canto confere a escala.
+            </p>
+            <span class="btn primary">Imprimir</span> <span class="btn">Salvar PDF</span>
+          </div>
+          <div class="dialog">
+            <h3 style="margin-top: 0">Exportar</h3>
+            <p>
+              <span class="btn">SVG</span> <span class="btn">PNG</span>
+              <span class="btn">CSV dos dados mostrados</span>
+              <span class="btn">Copiar imagem</span>
+            </p>
+            <p class="muted">
+              O CSV tem ponto decimal e cabeçalho com local, arquivo, período e hipóteses (decisão
+              0011).
+            </p>
+          </div>
+        </div>
+        <h3>Comparar lado a lado</h3>
+        <div class="frame">
+          <div class="twocharts">
+            <div class="chartbox">
+              <strong style="font-size: 0.85rem">A: fachada 30°, α = 45°</strong>
+              <svg viewBox="0 0 250 250" role="img" aria-label="Carta A">
+                <use href="#carta" width="250" height="250" />
+                <use href="#mascara" width="250" height="250" />
+              </svg>
+            </div>
+            <div class="chartbox">
+              <strong style="font-size: 0.85rem">B: fachada 30°, α = 30°, β = 60°</strong>
+              <svg viewBox="0 0 250 250" role="img" aria-label="Carta B">
+                <use href="#carta" width="250" height="250" />
+                <use href="#mascara" width="250" height="250" />
+                <use href="#transferidor" width="250" height="250" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>"Comparar" congela a configuração atual como A e abre B como
+          cópia editável; também compara cidades ou arquivos (TRY antigo × recente).
+        </div>
+      </section>
+
+      <section class="screen" id="celular" aria-labelledby="h-celular">
+        <h2 id="h-celular">7. Celular e tablet</h2>
+        <p class="lead">
+          A carta fica no topo, do tamanho da largura da tela; os passos viram uma folha que sobe da
+          parte de baixo. No tablet em pé, igual ao celular; deitado, igual ao computador.
+        </p>
+        <div class="phones">
+          <div class="phone">
+            <div class="appbar" style="border-bottom: 1px dashed #8c959f; padding-bottom: 0.4rem">
+              <span class="logo">SOL-AR</span><span class="spacer"></span
+              ><span class="btn">☰</span>
+            </div>
+            <svg viewBox="0 0 250 250" role="img" aria-label="Carta no celular">
+              <use href="#carta" width="250" height="250" />
+              <use href="#mascara" width="250" height="250" />
+              <use href="#transferidor" width="250" height="250" />
+            </svg>
+            <div class="sheet">
+              <div class="handle"></div>
+              <strong>3 Proteção</strong> · α 45° · β vazio
+              <p class="muted" style="margin: 0.2rem 0 0">
+                Arraste para cima para editar; os passos 1 a 4 aparecem em sequência.
+              </p>
+            </div>
+          </div>
+          <div class="phone">
+            <div class="appbar" style="border-bottom: 1px dashed #8c959f; padding-bottom: 0.4rem">
+              <span class="logo">SOL-AR</span><span class="spacer"></span
+              ><span class="btn">☰</span>
+            </div>
+            <div class="sheet" style="border-radius: 12px">
+              <div class="handle"></div>
+              <div class="step closed">
+                <h3><span class="n">1</span>Local</h3>
+                <p class="summary">Florianópolis · TMYx 2011 a 2025</p>
+              </div>
+              <div class="step closed" style="margin-top: 0.4rem">
+                <h3><span class="n">2</span>Fachada</h3>
+                <p class="summary">30°</p>
+              </div>
+              <div class="step open" style="margin-top: 0.4rem">
+                <h3><span class="n">3</span>Proteção</h3>
+                <div class="grid3">
+                  <span></span><span class="muted">Esq.</span><span class="muted">Dir.</span>
+                  <span>α</span><span class="input small">45°</span><span></span> <span>β</span
+                  ><span class="input small">&nbsp;</span><span class="input small">&nbsp;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Alvos de toque com pelo menos 44 px; teclado numérico nos campos
+          de ângulo. <br /><span class="pin">B</span>No celular, "Ponto sob o cursor" vira toque na
+          carta.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Esboço de baixa fidelidade para aprovação do fluxo (ROADMAP, F2.1). Valores e desenhos são
+      ilustrativos. Voltar para a <a href="../">aplicação</a>.
+    </footer>
+
+    <script>
+      (function () {
+        var ids = [
+          'fluxo',
+          'principal',
+          'local',
+          'protecao',
+          'sobreposicao',
+          'vento',
+          'saidas',
+          'celular',
+        ];
+        function show() {
+          var id = location.hash.slice(1);
+          if (ids.indexOf(id) < 0) id = 'fluxo';
+          ids.forEach(function (s) {
+            document.getElementById(s).classList.toggle('active', s === id);
+          });
+          document.querySelectorAll('nav.screens a').forEach(function (a) {
+            if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+            else a.removeAttribute('aria-current');
+          });
+          window.scrollTo(0, 0);
+        }
+        window.addEventListener('hashchange', show);
+        show();
+      })();
+    </script>
+  </body>
+</html>
