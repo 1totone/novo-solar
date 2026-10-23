@@ -1,6 +1,6 @@
 # 2. Tempo e posição solar
 
-**Status:** v0 (F0.4), para aprovação no portão 0. Itens marcados **[proposta]** são recomendações que precisam do aceite do Anthony.
+**Status:** v0, aprovada pelo Anthony no portão 0 (23/10/2026, decisão 0011).
 
 ## 2.1 Escalas de tempo
 
@@ -32,13 +32,13 @@ Fonte: EnergyPlus, *Auxiliary Programs*, formato EPW; Wilcox e Marion (2008), ma
 - **NREL SPA** (Reda e Andreas, 2004; revisão de 2008), implementado em TypeScript em `src/core/`. Incerteza declarada pelos autores: ±0,0003° entre os anos −2000 e 6000.
 - Entradas: instante em UTC, ΔT, latitude, longitude e elevação do local (do cabeçalho do EPW). Pressão e temperatura só entram na correção de refração (ver 2.4).
 - Saídas usadas: ângulo zenital topocêntrico, azimute topocêntrico (a partir do Norte, sentido horário, como na seção 1.1), ângulo horário topocêntrico, declinação e equação do tempo.
-- **ΔT = 69 s [proposta]**, fixo. O valor medido pelo IERS ficou perto de 69 s entre 2020 e 2026; 1 s de erro em ΔT muda o ângulo horário em 0,004°, abaixo da tolerância.
+- **ΔT = 69 s**, fixo (portão 0). O valor medido pelo IERS ficou perto de 69 s entre 2020 e 2026; 1 s de erro em ΔT muda o ângulo horário em 0,004°, abaixo da tolerância.
 
-### Ano de referência [proposta]
+### Ano de referência (portão 0)
 
 Arquivos climáticos típicos (TMY, TRY) misturam meses de anos diferentes e não têm um ano próprio. A carta e todas as contas usam um **ano de referência fixo, não bissexto: 2026**. Motivo: dentro do ciclo de 4 anos, o instante do equinócio avança cerca de 6 h por ano e recua um dia no ano bissexto, uma oscilação de cerca de 0,75 dia; 2026, segundo ano depois do bissexto de 2024, fica a cerca de 0,1 dia da média do ciclo. Perto dos equinócios a declinação varia cerca de 0,4° por dia, então a escolha do ano muda a declinação em até cerca de 0,3° entre os anos extremos do ciclo e em até cerca de 0,15° em relação à média. Esse efeito é real e independente do algoritmo; fica documentado e não afeta a comparação com o pvlib, que usa os mesmos instantes.
 
-## 2.4 Refração atmosférica [proposta]
+## 2.4 Refração atmosférica (portão 0)
 
 - Posições usadas na geometria (carta, transferidor, máscaras, ângulo de incidência, fração ensolarada): **geométricas** (topocêntricas, sem refração).
 - Nascer e pôr do sol: definição do SPA (centro do disco a h = −0,8333°, que inclui refração padrão e semidiâmetro solar).

@@ -1,6 +1,6 @@
 # 1. Convenções geométricas
 
-**Status:** v0 (F0.4), para aprovação no portão 0. Itens marcados **[confirmar]** dependem de conferência com o SOL-AR 6.2 em execução (F2.2 e F2.8) ou de decisão do Anthony.
+**Status:** v0, aprovada pelo Anthony no portão 0 (23/10/2026, decisão 0011). Itens marcados **[conferir no 6.2]** foram adotados, mas ainda serão conferidos contra o SOL-AR 6.2 em execução (F2.2 e F2.8); se o 6.2 divergir, a diferença é registrada e decidida com o Anthony.
 
 ## 1.1 Direções no céu
 
@@ -32,7 +32,7 @@
 
 - O sol **está diante da fachada** quando s_y > 0 (|ψ| < 90°) e h > 0. Fora disso, a fachada está em sombra própria e nenhuma proteção é necessária.
 
-**Direita e esquerda [confirmar].** Adotamos "à direita de quem está dentro olhando para fora". Na carta (vista de cima, Norte para cima), com o transferidor girado para a normal apontar para cima, esse lado coincide com a direita do papel. O SOL-AR 6.2 rotula "Beta Direita" e "Gama Direita" sem dizer o observador; a convenção dele será conferida na regressão (F2.8).
+**Direita e esquerda [conferir no 6.2].** Adotamos (portão 0) "à direita de quem está dentro olhando para fora". Na carta (vista de cima, Norte para cima), com o transferidor girado para a normal apontar para cima, esse lado coincide com a direita do papel. O SOL-AR 6.2 rotula "Beta Direita" e "Gama Direita" sem dizer o observador; a convenção dele será conferida na regressão (F2.8).
 
 ## 1.3 Ângulos de sombra: α, β e γ
 
@@ -73,6 +73,8 @@ Para comparar o sol com uma proteção, calculamos os ângulos que a própria di
 
 Os valores internos são 90° menos os externos.
 
+**Referência padrão:** o transferidor abre na referência **interna** (portão 0), que coincide com AVS e AHS da INI-C e com o material de aula do LabEEE; a externa fica a um clique.
+
 ### Condições de sombra (sombra de 100%, proteções infinitas ou limitadas)
 
 Com os ângulos em referência **externa**:
@@ -82,13 +84,13 @@ Com os ângulos em referência **externa**:
 | Brise horizontal infinito, ângulo α | α_ext,sol ≥ α_ext |
 | Aleta vertical infinita à direita, ângulo β | ψ > 0 e β_ext,sol ≥ β_ext (idem à esquerda com ψ < 0) |
 | Brise horizontal finito: α limitado por γ à direita | α_ext,sol ≥ α_ext **e**, se ψ > 0, γ_ext,sol ≥ γ_ext,direita (idem à esquerda) |
-| Aleta vertical finita: β limitado por γ | condição de β **e** γ_ext,sol ≤ γ_ext da aresta superior da aleta **[confirmar]** |
+| Aleta vertical finita: β limitado por γ | condição de β **e** γ_ext,sol ≤ γ_ext da aresta superior da aleta **[conferir no 6.2]** |
 
 As três primeiras linhas foram verificadas numericamente contra traçado de raios (ponto na abertura, raio até o sol, interseção com a placa) em 20 000 casos aleatórios cada. A quarta segue da mesma geometria, mas o ponto da abertura que define a sombra de 100% para a aresta superior da aleta e a forma como o 6.2 usa γ nesse caso precisam de conferência (F2.2).
 
-### Índices 1 e 2 [confirmar]
+### Índices 1 e 2 [conferir no 6.2]
 
-O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". Pelo diagnóstico, o "2" representa brises afastados da parede. Interpretação proposta: um brise afastado deixa uma fresta junto à parede, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2); por exemplo, para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2. Essa leitura será conferida contra o 6.2 no F2.2 antes de ser implementada.
+O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". Pelo diagnóstico, o "2" representa brises afastados da parede. Interpretação adotada no portão 0: um brise afastado deixa uma fresta junto à parede, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2); por exemplo, para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2. Essa leitura será conferida contra o 6.2 no F2.2 antes de ser implementada.
 
 ## 1.4 Curvas do transferidor
 
