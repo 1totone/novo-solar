@@ -15,6 +15,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0009](0009-traducao-e-estado-na-url.md) | Tradução sem biblioteca externa e estado da aplicação no # da URL | 2026-10-23 | aceita |
 | [0010](0010-epw-de-terceiros-nao-versionados.md) | EPWs de terceiros não são versionados até a confirmação dos termos | 2026-10-23 | aceita (provisória) |
 | [0011](0011-convencoes-aprovadas-no-portao-0.md) | Convenções da spec v0 aprovadas no portão 0 | 2026-10-23 | aceita |
+| [0012](0012-releases-pelo-changelog.md) | Releases criadas por workflow a partir do CHANGELOG | 2026-10-23 | aceita |
 
 ## Modelo
 
