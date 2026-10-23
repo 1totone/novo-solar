@@ -11,6 +11,8 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0005](0005-idiomas.md) | Interface em português com tradução desde o início; código em inglês | 2026-10-23 | aceita |
 | [0006](0006-publico-e-escopo-v1.md) | Público e escopo da v1.0 | 2026-10-23 | aceita |
 | [0007](0007-origem-creditos-e-manutencao.md) | Origem do projeto, créditos e manutenção | 2026-10-23 | aceita |
+| [0008](0008-publicacao-e-previas.md) | Publicação no GitHub Pages com prévia por PR | 2026-10-23 | aceita |
+| [0009](0009-traducao-e-estado-na-url.md) | Tradução sem biblioteca externa e estado da aplicação no # da URL | 2026-10-23 | aceita |
 
 ## Modelo
 

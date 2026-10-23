@@ -1,0 +1,8 @@
+# Documentação em Markdown fica fora do Prettier para não realinhar tabelas e listas escritas à mão.
+*.md
+docs/
+dist/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
