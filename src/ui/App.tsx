@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { SunChart } from './chart/SunChart';
 import { useI18n } from './i18n/useI18n';
+import { SitePanel, type LoadedFile } from './SitePanel';
+import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
-import { TEST_SITES } from './testSites';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
 
-const PREVIEW_SITE = TEST_SITES[0]!;
-
 export function App() {
   const { t, formatNumber } = useI18n();
   const [hashState, setHashState] = useHashState();
+  const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
   const aboutOpen = hashState.painel === 'sobre';
+  const selected = siteFromHash(hashState);
+  const site = selected.site;
 
   return (
     <div className="page">
@@ -21,6 +24,30 @@ export function App() {
       </header>
 
       <main>
+        <div className="workspace">
+          <SitePanel
+            selected={selected}
+            loadedFile={selected.kind === 'file' ? loadedFile : null}
+            onSelect={(next, file) => {
+              setLoadedFile(file);
+              setHashState(hashForSite(next));
+            }}
+          />
+          <section className="chart-section" aria-labelledby="chart-heading">
+            <h2 id="chart-heading">{t('chart.heading')}</h2>
+            <SunChart
+              site={site}
+              title={t('chart.title', {
+                place: site.name,
+                latitude: formatNumber(site.latitude, 2),
+                longitude: formatNumber(site.longitude, 2),
+                timeZone: formatNumber(site.timeZone),
+              })}
+            />
+            <p className="note">{t('chart.note')}</p>
+          </section>
+        </div>
+
         <section className="status" aria-labelledby="status-title">
           <h2 id="status-title">{t('status.title')}</h2>
           <p>{t('status.body')}</p>
@@ -32,20 +59,6 @@ export function App() {
               <a href={ROADMAP_URL}>{t('status.roadmapLink')}</a>
             </li>
           </ul>
-        </section>
-
-        <section className="chart-preview" aria-labelledby="chart-heading">
-          <h2 id="chart-heading">{t('chart.sampleHeading')}</h2>
-          <p className="note">{t('chart.sampleNote', { place: PREVIEW_SITE.name })}</p>
-          <SunChart
-            site={PREVIEW_SITE}
-            title={t('chart.title', {
-              place: PREVIEW_SITE.name,
-              latitude: formatNumber(PREVIEW_SITE.latitude, 2),
-              longitude: formatNumber(PREVIEW_SITE.longitude, 2),
-              timeZone: formatNumber(PREVIEW_SITE.timeZone),
-            })}
-          />
         </section>
 
         <button

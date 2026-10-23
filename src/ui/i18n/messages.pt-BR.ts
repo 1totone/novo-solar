@@ -28,9 +28,27 @@ export const ptBR = {
   'chart.west': 'O',
   'chart.title':
     'Carta solar de {place}, latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}',
-  'chart.sampleHeading': 'Prévia da carta solar',
-  'chart.sampleNote':
-    'Local de teste: {place}. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses; linhas horárias em hora solar verdadeira.',
+  'chart.heading': 'Carta solar',
+  'chart.note':
+    'Projeção estereográfica, Norte para cima. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses; linhas horárias em hora solar verdadeira.',
+  'site.heading': 'Local',
+  'site.testLabel': 'Cidade de teste',
+  'site.fileOption': 'Arquivo: {name}',
+  'site.fileLabel': 'Ou carregue um arquivo climático EPW',
+  'site.fileHelp': 'O arquivo é lido só no seu navegador; nada é enviado pela internet.',
+  'site.latitude': 'Latitude',
+  'site.longitude': 'Longitude',
+  'site.timeZone': 'Fuso',
+  'site.elevation': 'Elevação',
+  'site.source': 'Origem',
+  'site.sourceTest':
+    'Local de teste: coordenadas, fuso e elevação do arquivo TMYx 2011 a 2025 (Climate.OneBuilding.org).',
+  'site.sourceFile': 'Arquivo {file}: {hours} horas.',
+  'site.sourceFileLeap': 'Arquivo {file}: {hours} horas (inclui 29 de fevereiro).',
+  'site.sourceLink':
+    'Coordenadas, fuso e elevação do link; o arquivo não está carregado nesta sessão.',
+  'site.comments': 'Comentário do arquivo',
+  'site.readError': 'Não foi possível ler o arquivo.',
   'epw.error.missingLocation':
     'O arquivo não parece ser um EPW: a primeira linha deveria começar com LOCATION e ter 10 campos.',
   'epw.error.invalidLatitude':
