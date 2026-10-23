@@ -1,0 +1,7 @@
+# Dependências dos scripts de validação (Python 3.13). Instale num ambiente virtual:
+#   python3 -m venv .venv && .venv/bin/pip install -r docs/validacao/scripts/requirements.txt
+pvlib==0.16.1
+pandas==3.1.0
+numpy==2.5.4
+olefile==0.47
+cabarchive==0.2.5

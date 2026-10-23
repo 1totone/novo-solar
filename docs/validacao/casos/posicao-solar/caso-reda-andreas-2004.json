@@ -1,0 +1,22 @@
+{
+  "descricao": "Caso de exemplo publicado no relatório do NREL SPA (Reda e Andreas, 2004, NREL/TP-560-34302, exemplo de cálculo do relatório). Referência independente do pvlib.",
+  "entrada": {
+    "hora_legal": "2003-10-17T12:30:30-07:00",
+    "latitude": 39.742476,
+    "longitude": -105.1786,
+    "elevacao_m": 1830.14,
+    "pressao_mbar": 820,
+    "temperatura_c": 11,
+    "delta_t_s": 67,
+    "refracao_horizonte_graus": 0.5667
+  },
+  "saida_publicada": {
+    "zenite_topocentrico_com_refracao": 50.11162,
+    "azimute_topocentrico": 194.34024
+  },
+  "pvlib_0_16_1": {
+    "zenite_aparente": 50.111622,
+    "zenite_geometrico": 50.127954,
+    "azimute": 194.340241
+  }
+}
