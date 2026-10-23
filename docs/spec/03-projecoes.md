@@ -15,6 +15,7 @@
 - **Inversa** (para cliques e leitura de pontos): com (X, Y) = P / R e ρ = √(X² + Y²), z = 2 · atan(ρ) e A = atan2(X, Y), reduzido a [0, 360).
 - **Escala angular:** dr/dz = (R/2) · sec²(z/2). Para R = 6 cm (padrão de impressão do 6.2), 1° vale 0,52 mm no zênite e 1,05 mm no horizonte.
 - No SVG, o eixo vertical cresce para baixo: y_svg = centro − Y.
+- Implementação: `src/core/chart/stereographic.ts`; validação em `docs/validacao/relatorios/F1.3-carta-estereografica.md`.
 
 ## 3.2 Propriedade usada nas máscaras
 

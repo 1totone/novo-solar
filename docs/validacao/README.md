@@ -8,8 +8,10 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`casos/epw/`](casos/epw/README.md): manifesto dos 6 EPWs de teste (TMYx 2011 a 2025; os arquivos são baixados por script, não versionados).
   - [`casos/solar-6.2/`](casos/solar-6.2/README.md): as 15 cidades, rosas de vento e lista de latitudes do SOL-AR 6.2, extraídas do instalador oficial, e um exemplo do formato de inclusão de cidade.
   - [`casos/posicao-solar/`](casos/posicao-solar/README.md): posição solar, nascer e pôr do sol com o pvlib (NREL SPA) e o caso publicado no relatório do SPA.
+  - `casos/carta/linhas-horarias.csv`: 852 pontos das linhas horárias (hora solar verdadeira, 5 h a 19 h, dia 21 de cada mês, 6 locais), com o pvlib.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
+  - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -17,6 +19,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/baixar_epw.py` | baixa os EPWs do manifesto para `.cache/epw/` e confere o SHA-256 (só biblioteca padrão) |
 | `scripts/extrair_solar62.py` | extrai os CSVs do instalador do SOL-AR 6.2 |
 | `scripts/gerar_posicao_solar.py` | gera as referências de posição solar com o pvlib |
+| `scripts/gerar_linhas_horarias.py` | gera os pontos das linhas horárias em hora solar verdadeira com o pvlib |
 | `scripts/gerar_referencia_epw.py` | gera a referência do leitor de EPW com o `pvlib.iotools.read_epw` |
 
 ## Referências independentes

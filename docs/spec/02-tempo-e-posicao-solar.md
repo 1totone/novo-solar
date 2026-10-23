@@ -47,8 +47,9 @@ Arquivos climáticos típicos (TMY, TRY) misturam meses de anos diferentes e nã
 ## 2.5 Grandezas derivadas
 
 - **Nascer e pôr do sol**, em hora legal e em hora solar: SPA, Apêndice A.2.
-- **Trajetórias da carta:** solstícios, equinócios e dia 21 de cada mês do ano de referência. Meses simétricos em relação ao solstício (ex.: 21/jan e 21/nov) têm declinações próximas, mas não iguais; desenhamos cada data com a sua declinação.
-- **Linhas horárias:** em hora solar verdadeira (padrão didático, linhas que cruzam as trajetórias); em hora legal, viram analemas (F4.3).
+- **Trajetórias da carta:** 12 datas do ano de referência: os dois solstícios e os dois equinócios, na data civil do fuso do local, e o dia 21 dos outros oito meses. Os instantes de equinócios e solstícios são aqueles em que a ascensão reta aparente do sol vale 0°, 90°, 180° e 270° (coincidem com a longitude eclíptica aparente a menos de segundos, porque a latitude eclíptica do sol é menor que 1"). Em 2026, no fuso −3: 20/03, 21/06, 22/09 e 21/12. Meses simétricos em relação ao solstício (ex.: 21/jan e 21/nov) têm declinações próximas, mas não iguais; desenhamos cada data com a sua declinação.
+- **Trajetória de um dia:** posições a cada 10 min (5 min nos testes) desde 00:00 local, com o sol acima do horizonte geométrico, mais os pontos exatos de cruzamento do horizonte (bisseção até 1 ms).
+- **Linhas horárias:** em hora solar verdadeira (padrão didático, linhas que cruzam as trajetórias): para cada data, o instante em que o ângulo horário do SPA vale 15° · (hora − 12), achado por iteração de Newton; a linha é desenhada com datas a cada 3 dias entre os solstícios de junho e de dezembro, intervalo em que a declinação é monótona. Em hora legal, viram analemas (F4.3).
 
 ## 2.6 Validação e tolerâncias
 
