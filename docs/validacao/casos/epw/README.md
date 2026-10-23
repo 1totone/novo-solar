@@ -12,3 +12,5 @@ Seis arquivos TMYx (período 2011 a 2025) do Climate.OneBuilding.org, escolhidos
 | concepcion | Concepción, Aeroporto Carriel Sur (856820) | −36,778 | −73,063 | −4 | 7,9 |
 
 **Os EPWs não são versionados.** O Climate.OneBuilding.org não publica termos de redistribuição explícitos (o site diz "All Rights Reserved"), então o repositório guarda só o `manifesto.json` (URL, SHA-256 do zip e do EPW, cabeçalho) e o script `docs/validacao/scripts/baixar_epw.py` baixa e confere os arquivos em `.cache/epw/`. Os termos serão confirmados no F4.1, antes de qualquer arquivo ser distribuído com a aplicação.
+
+`referencia-pvlib.json`: para cada EPW, o cabeçalho, o número de horas, a primeira e a última hora e, por campo, ausentes, soma, mínimo e máximo, lidos pelo `pvlib.iotools.read_epw` (pvlib 0.16.1). Gerado por `docs/validacao/scripts/gerar_referencia_epw.py`; usado em `tests/referencia/epw.test.ts`.

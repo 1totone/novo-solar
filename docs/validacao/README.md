@@ -16,6 +16,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/baixar_epw.py` | baixa os EPWs do manifesto para `.cache/epw/` e confere o SHA-256 (só biblioteca padrão) |
 | `scripts/extrair_solar62.py` | extrai os CSVs do instalador do SOL-AR 6.2 |
 | `scripts/gerar_posicao_solar.py` | gera as referências de posição solar com o pvlib |
+| `scripts/gerar_referencia_epw.py` | gera a referência do leitor de EPW com o `pvlib.iotools.read_epw` |
 
 ## Referências independentes
 
