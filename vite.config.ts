@@ -24,7 +24,7 @@ export default defineConfig({
     __BUILD_LABEL__: JSON.stringify(process.env.BUILD_LABEL ?? 'local'),
   },
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
     environment: 'node',
   },
 });
