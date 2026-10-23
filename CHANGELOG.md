@@ -6,6 +6,14 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Releases criadas pelo workflow `release.yml` a partir do CHANGELOG (decisão 0012).
+
+## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
+
+Portão 1 aprovado pelo Anthony.
+
+### Adicionado
+
 - Interface mínima: escolha de uma das 6 cidades de teste ou leitura de um arquivo EPW no navegador (nada é enviado), com latitude, longitude, fuso, elevação e origem visíveis; mensagens de erro para arquivos inválidos; carta do local escolhido; o link reabre o mesmo local.
 - Carta solar estereográfica (`src/core/chart/`, `src/ui/chart/`): horizonte, círculos de altura, azimutes, trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses, linhas horárias em hora solar verdadeira; solstícios e equinócios calculados pelo SPA. Prévia na página inicial, para Florianópolis.
 - Posição solar pelo NREL SPA (`src/core/solar/`): ângulo zenital, azimute, ângulo horário, declinação, equação do tempo, nascer, pôr e passagem meridiana; conversão entre hora legal e UTC com o fuso do EPW e instantes das horas do EPW (fim e meio do intervalo). Conferida contra o pvlib e contra o caso publicado do SPA.

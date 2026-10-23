@@ -1,7 +1,7 @@
 {
   "name": "novo-solar",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "SOL-AR (nova versão): carta solar, transferidor de ângulos e projeto de proteções solares no navegador.",
   "license": "MIT",
   "type": "module",
