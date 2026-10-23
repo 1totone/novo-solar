@@ -1,0 +1,55 @@
+{
+  "gerado_por": "docs/validacao/scripts/gerar_posicao_solar.py",
+  "pvlib": "0.16.1",
+  "pandas": "3.1.0",
+  "numpy": "2.5.4",
+  "ano": 2026,
+  "delta_t_s": 69.0,
+  "pressao_pa": 101325.0,
+  "temperatura_c": 12.0,
+  "refracao_horizonte_graus": 0.5667,
+  "locais": [
+    {
+      "id": "florianopolis",
+      "latitude": -27.67,
+      "longitude": -48.547,
+      "fuso": -3.0,
+      "elevacao": 6.1
+    },
+    {
+      "id": "brasilia",
+      "latitude": -15.863,
+      "longitude": -47.913,
+      "fuso": -3.0,
+      "elevacao": 1060.4
+    },
+    {
+      "id": "belem",
+      "latitude": -1.379,
+      "longitude": -48.476,
+      "fuso": -3.0,
+      "elevacao": 16.5
+    },
+    {
+      "id": "porto-alegre",
+      "latitude": -29.994,
+      "longitude": -51.171,
+      "fuso": -3.0,
+      "elevacao": 3.4
+    },
+    {
+      "id": "manaus",
+      "latitude": -3.039,
+      "longitude": -60.05,
+      "fuso": -4.0,
+      "elevacao": 80.5
+    },
+    {
+      "id": "concepcion",
+      "latitude": -36.7783,
+      "longitude": -73.0625,
+      "fuso": -4.0,
+      "elevacao": 7.9
+    }
+  ]
+}
