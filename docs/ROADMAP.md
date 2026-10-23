@@ -102,8 +102,8 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
   - [x] Origem, nome e créditos: nova versão oficial do SOL-AR, pedida pelo Prof. Roberto Lamberts; créditos originais mantidos; manutenção futura pelo LabEEE. Numeração pública (ex.: "SOL-AR 7") definida no lançamento, com o LabEEE.
 - [ ] **F0.2 Repositório e ambiente.**
   - [x] Repositório público `novo-solar` criado na conta 1totone, com README e licença MIT (23/10/2026).
-  - [ ] Primeira sessão em claude.ai/code conectada ao repositório, rodando um comando de teste.
-  - [ ] Configurações únicas do Anthony (seção 7.2).
+  - [x] Primeira sessão em claude.ai/code conectada ao repositório, rodando um comando de teste (23/10/2026: Node 22, npm, Python 3.13, git e `gh api` funcionando; Chromium do Playwright pré-instalado na sessão).
+  - [ ] Configurações únicas do Anthony (seção 7.2), conferidas em 23/10/2026; falta só confirmar a fonte do GitHub Pages na primeira publicação (F0.3).
 
   Codespaces como complemento (benefícios do GitHub Education liberados por volta de 26/10/2026). Nada é instalado no PC.
 - [ ] **F0.3 Governança e estrutura.**
@@ -242,9 +242,16 @@ Cuidados desde já:
 
 Feitas uma vez, para que o Claude trabalhe sem interrupções:
 
-- [ ] **Claude GitHub App com acesso ao repositório:** no GitHub, Settings > Applications > Installed GitHub Apps > Claude > Configure > Repository access: incluir `novo-solar` (necessário para o Claude enviar branches e integrar PRs).
+- [x] **Claude GitHub App com acesso ao repositório:** no GitHub, Settings > Applications > Installed GitHub Apps > Claude > Configure > Repository access: incluir `novo-solar` (necessário para o Claude enviar branches e integrar PRs).
 - [ ] **GitHub Pages:** no repositório, Settings > Pages > Build and deployment > Source: **GitHub Actions**.
-- [ ] **Ambiente próprio na nuvem:** em claude.ai/code, criar um ambiente novo chamado `novo-solar` (não alterar os ambientes de outros projetos), sem script de configuração, com acesso de rede "Custom", a lista padrão de gerenciadores de pacotes marcada e estes domínios: `climate.onebuilding.org`, `labeee.ufsc.br`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`.
+- [x] **Ambiente próprio na nuvem:** em claude.ai/code, criar um ambiente novo chamado `novo-solar` (não alterar os ambientes de outros projetos), sem script de configuração, com acesso de rede "Custom", a lista padrão de gerenciadores de pacotes marcada e estes domínios: `climate.onebuilding.org`, `labeee.ufsc.br`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`.
+
+**Conferência de 23/10/2026 (primeira sessão):**
+
+- App do Claude: o repositório aparece com permissão de administração para a sessão; push e PR pela API funcionam.
+- GitHub Pages: o repositório responde `has_pages: true`. O proxy da sessão não deixa ler a configuração do Pages (`/pages`), então a fonte "GitHub Actions" só é confirmada pela primeira publicação, no F0.3.
+- Ambiente `novo-solar`: em uso. Respondem `registry.npmjs.org`, `pypi.org`, `labeee.ufsc.br`, `climate.onebuilding.org` (devolve 429 a pedidos sem identificação de navegador e 200 com ela) e os domínios do Playwright; domínios fora da lista são bloqueados, como esperado.
+- Limites do proxy: os caminhos `/actions` e `/pages` da API REST são bloqueados para o `gh api`; o estado do CI é lido pelas ferramentas do GitHub disponíveis na sessão.
 
 ## 8. Riscos e como evitamos
 
