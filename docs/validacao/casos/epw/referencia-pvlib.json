@@ -1,0 +1,570 @@
+{
+  "gerado_por": "docs/validacao/scripts/gerar_referencia_epw.py",
+  "pvlib": "0.16.1",
+  "arquivos": {
+    "florianopolis": {
+      "arquivo": "BRA_SC_Florianopolis-Luz.Intl.AP.838990_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Florianopolis-Luz.Intl.AP",
+        "estado": "SC",
+        "pais": "BRA",
+        "wmo": "838990",
+        "latitude": -27.67,
+        "longitude": -48.547,
+        "fuso": -3.0,
+        "elevacao": 6.1
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 24.0
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 25.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 186181.69999999998,
+          "minimo": 7.0,
+          "maximo": 35.0
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 153266.0,
+          "minimo": -5.0,
+          "maximo": 27.0
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 702473.0,
+          "minimo": 29.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 887599445.0,
+          "minimo": 99870.0,
+          "maximo": 103275.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 3274105.0,
+          "minimo": 0.0,
+          "maximo": 1407.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 1557497.0,
+          "minimo": 0.0,
+          "maximo": 1090.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 1504954.0,
+          "minimo": 0.0,
+          "maximo": 1003.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 559222.0,
+          "minimo": 0.0,
+          "maximo": 447.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1877233.0,
+          "minimo": 0.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 30931.800000000003,
+          "minimo": 0.0,
+          "maximo": 13.4
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 56769.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    },
+    "brasilia": {
+      "arquivo": "BRA_DF_Brasilia-Kubitschek.Intl.AP.833780_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Brasilia-Kubitschek.Intl.AP",
+        "estado": "DF",
+        "pais": "BRA",
+        "wmo": "833780",
+        "latitude": -15.863,
+        "longitude": -47.913,
+        "fuso": -3.0,
+        "elevacao": 1060.4
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 21.7
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 21.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 195881.59999999998,
+          "minimo": 9.0,
+          "maximo": 33.6
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 130810.1,
+          "minimo": -1.8,
+          "maximo": 24.0
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 584007.0,
+          "minimo": 13.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 786347871.0,
+          "minimo": 89251.0,
+          "maximo": 90133.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 3530292.0,
+          "minimo": 0.0,
+          "maximo": 1400.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 2013879.0,
+          "minimo": 0.0,
+          "maximo": 1107.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 2065729.0,
+          "minimo": 0.0,
+          "maximo": 1024.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 565771.0,
+          "minimo": 0.0,
+          "maximo": 430.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1302720.0,
+          "minimo": 0.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 23217.2,
+          "minimo": 0.0,
+          "maximo": 11.8
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 47265.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    },
+    "belem": {
+      "arquivo": "BRA_PA_Belem-Val.de.Cans.Intl.AP.821930_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Belem-Val.de.Cans.Intl.AP",
+        "estado": "PA",
+        "pais": "BRA",
+        "wmo": "821930",
+        "latitude": -1.379,
+        "longitude": -48.476,
+        "fuso": -3.0,
+        "elevacao": 16.5
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 25.0
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 26.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 234001.5,
+          "minimo": 22.0,
+          "maximo": 35.0
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 204027.1,
+          "minimo": 16.8,
+          "maximo": 28.2
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 722930.0,
+          "minimo": 44.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 885535992.0,
+          "minimo": 100382.0,
+          "maximo": 101579.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 3655007.0,
+          "minimo": 0.0,
+          "maximo": 1375.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 1894383.0,
+          "minimo": 0.0,
+          "maximo": 1006.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 1787896.0,
+          "minimo": 0.0,
+          "maximo": 917.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 594066.0,
+          "minimo": 0.0,
+          "maximo": 402.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1013258.0,
+          "minimo": 1.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 27433.7,
+          "minimo": 0.0,
+          "maximo": 11.8
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 58483.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    },
+    "porto-alegre": {
+      "arquivo": "BRA_RS_Porto.Alegre-Salgado.Filho.Intl.AP.839710_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Porto.Alegre-Salgado.Filho.Intl.AP",
+        "estado": "RS",
+        "pais": "BRA",
+        "wmo": "839710",
+        "latitude": -29.994,
+        "longitude": -51.171,
+        "fuso": -3.0,
+        "elevacao": 3.4
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 21.0
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 27.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 176121.5,
+          "minimo": 2.6,
+          "maximo": 38.0
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 135541.0,
+          "minimo": -1.2,
+          "maximo": 28.9
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 674915.0,
+          "minimo": 22.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 887707477.0,
+          "minimo": 99391.0,
+          "maximo": 103237.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 3210092.0,
+          "minimo": 0.0,
+          "maximo": 1398.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 1671449.0,
+          "minimo": 0.0,
+          "maximo": 1096.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 1755599.0,
+          "minimo": 0.0,
+          "maximo": 1006.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 541570.0,
+          "minimo": 0.0,
+          "maximo": 445.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1474434.0,
+          "minimo": 0.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 29830.9,
+          "minimo": 0.0,
+          "maximo": 13.9
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 51759.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    },
+    "manaus": {
+      "arquivo": "BRA_AM_Manaus-Gomes.Intl.AP.821110_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Manaus-Gomes.Intl.AP",
+        "estado": "AM",
+        "pais": "BRA",
+        "wmo": "821110",
+        "latitude": -3.039,
+        "longitude": -60.05,
+        "fuso": -4.0,
+        "elevacao": 80.5
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 25.0
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 24.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 234669.2,
+          "minimo": 21.0,
+          "maximo": 36.0
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 201424.2,
+          "minimo": 15.1,
+          "maximo": 29.1
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 712510.0,
+          "minimo": 34.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 879509986.0,
+          "minimo": 100329.0,
+          "maximo": 100428.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 3643273.0,
+          "minimo": 0.0,
+          "maximo": 1384.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 1756362.0,
+          "minimo": 0.0,
+          "maximo": 1004.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 1544553.0,
+          "minimo": 0.0,
+          "maximo": 888.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 618311.0,
+          "minimo": 0.0,
+          "maximo": 405.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1356409.0,
+          "minimo": 0.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 15913.399999999998,
+          "minimo": 0.0,
+          "maximo": 12.4
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 59154.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    },
+    "concepcion": {
+      "arquivo": "CHL_BI_Concepcion-Carriel.Sur.Intl.AP.856820_TMYx.2011-2025.epw",
+      "local": {
+        "cidade": "Concepcion-Carriel.Sur.Intl.AP",
+        "estado": "BI",
+        "pais": "CHL",
+        "wmo": "856820",
+        "latitude": -36.7783,
+        "longitude": -73.0625,
+        "fuso": -4.0,
+        "elevacao": 7.9
+      },
+      "horas": 8760,
+      "primeira": {
+        "mes": 1,
+        "dia": 1,
+        "hora": 1,
+        "tbs": 12.0
+      },
+      "ultima": {
+        "mes": 12,
+        "dia": 31,
+        "hora": 24,
+        "tbs": 14.0
+      },
+      "campos": {
+        "dryBulb": {
+          "ausentes": 0,
+          "soma": 115565.4,
+          "minimo": 0.2,
+          "maximo": 29.3
+        },
+        "dewPoint": {
+          "ausentes": 0,
+          "soma": 81822.8,
+          "minimo": -6.7,
+          "maximo": 18.0
+        },
+        "relativeHumidity": {
+          "ausentes": 0,
+          "soma": 695564.0,
+          "minimo": 27.0,
+          "maximo": 100.0
+        },
+        "pressure": {
+          "ausentes": 0,
+          "soma": 890091653.0,
+          "minimo": 99976.0,
+          "maximo": 104117.0
+        },
+        "extraterrestrialHorizontal": {
+          "ausentes": 0,
+          "soma": 2998054.0,
+          "minimo": 0.0,
+          "maximo": 1374.0
+        },
+        "globalHorizontal": {
+          "ausentes": 0,
+          "soma": 1906598.0,
+          "minimo": 0.0,
+          "maximo": 1107.0
+        },
+        "directNormal": {
+          "ausentes": 0,
+          "soma": 2474944.0,
+          "minimo": 0.0,
+          "maximo": 1050.0
+        },
+        "diffuseHorizontal": {
+          "ausentes": 0,
+          "soma": 416750.0,
+          "minimo": 0.0,
+          "maximo": 434.0
+        },
+        "windDirection": {
+          "ausentes": 0,
+          "soma": 1609169.0,
+          "minimo": 0.0,
+          "maximo": 360.0
+        },
+        "windSpeed": {
+          "ausentes": 0,
+          "soma": 32189.5,
+          "minimo": 0.0,
+          "maximo": 22.8
+        },
+        "totalSkyCover": {
+          "ausentes": 0,
+          "soma": 46080.0,
+          "minimo": 0.0,
+          "maximo": 10.0
+        }
+      }
+    }
+  }
+}

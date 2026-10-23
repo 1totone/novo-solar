@@ -31,7 +31,14 @@ jobs:
         run: npm run lint
       - name: Tipos (TypeScript)
         run: npm run typecheck
-      - name: Testes de unidade (Vitest)
+      - name: Cache dos EPWs de teste
+        uses: actions/cache@v6
+        with:
+          path: .cache/epw
+          key: epw-${{ hashFiles('docs/validacao/casos/epw/manifesto.json') }}
+      - name: EPWs de teste (decisão 0010)
+        run: python3 docs/validacao/scripts/baixar_epw.py
+      - name: Testes de unidade e de referência (Vitest)
         run: npm test
       - name: Build
         run: npm run build

@@ -36,7 +36,17 @@ As outras linhas do cabeçalho (`DESIGN CONDITIONS`, `TYPICAL/EXTREME PERIODS`, 
 
 O ano do arquivo é ignorado para a posição solar (ano de referência, seção 2.3); mês, dia e hora definem o instante.
 
-**Checagens do leitor (F1.1):** linha `LOCATION` presente e com números válidos; latitude em [−90, 90], longitude em [−180, 180], fuso em [−12, 14]; 8760 linhas (ou 8784 com 29/02, que é aceito e sinalizado); sequência de mês, dia e hora contínua; valores ausentes contados por campo; radiação negativa rejeitada. Cada erro diz a linha e o campo.
+**Leitor (F1.1, `src/core/epw/parseEpw.ts`):**
+
+- Primeira linha `LOCATION` com 10 campos; latitude em [−90, 90], longitude em [−180, 180], fuso em [−12, 14], elevação numérica em [−1000, 9000] m.
+- Os dados começam depois da linha `DATA PERIODS` (ou na linha 9, se ela faltar). Linhas em branco são ignoradas; BOM e CRLF são aceitos.
+- Cada linha horária precisa de pelo menos 23 campos (até a cobertura do céu).
+- Sequência obrigatória de 1/1 hora 1 até 31/12 hora 24, sem falta, repetição ou inversão; 29/02 é aceito quando aparece logo depois de 28/02 hora 24, e o arquivo fica marcado com 8784 horas. Qualquer outro total é rejeitado.
+- Valor maior ou igual ao código de ausente do campo vira NaN e é contado; valor vazio ou não numérico é erro; radiação negativa é erro.
+- O ano do arquivo é lido mas ignorado.
+- Cada erro tem um código estável, a linha e, quando cabe, o campo; a interface traduz o código (`src/ui/epwErrorMessage.ts`).
+
+**Validação:** os 6 EPWs de teste lidos pelo leitor e pelo `pvlib.iotools.read_epw` (referência independente) coincidem em cabeçalho, número de horas, primeira e última hora e, para cada campo, contagem de ausentes, soma (tolerância relativa de 10⁻⁶), mínimo e máximo (`tests/referencia/epw.test.ts`). Arquivos corrompidos são cobertos por testes sintéticos (`src/core/epw/parseEpw.test.ts`).
 
 ## 4.2 CSV legado do SOL-AR 6.2 (F2.7)
 

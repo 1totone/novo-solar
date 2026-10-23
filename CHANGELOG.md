@@ -4,6 +4,11 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ## [Não lançado]
 
+### Adicionado
+
+- Leitor de EPW (`src/core/epw/`): cabeçalho, 8760 ou 8784 horas, códigos de ausente, checagens de sequência e de valores, com mensagens de erro em português que indicam linha e campo. Conferido contra o `pvlib.iotools.read_epw` nos 6 EPWs de teste.
+- CI baixa os EPWs de teste (com cache) e roda os testes de referência.
+
 ## [0.0.0] - 2026-10-23 (v0.0, Fundação)
 
 Portão 0 aprovado pelo Anthony (decisão 0011).

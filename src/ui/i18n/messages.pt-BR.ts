@@ -22,4 +22,31 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'epw.error.missingLocation':
+    'O arquivo não parece ser um EPW: a primeira linha deveria começar com LOCATION e ter 10 campos.',
+  'epw.error.invalidLatitude':
+    'Latitude inválida no cabeçalho (linha 1): deve estar entre −90° e 90°.',
+  'epw.error.invalidLongitude':
+    'Longitude inválida no cabeçalho (linha 1): deve estar entre −180° e 180°.',
+  'epw.error.invalidTimeZone':
+    'Fuso horário inválido no cabeçalho (linha 1): deve estar entre −12 h e +14 h.',
+  'epw.error.invalidElevation': 'Elevação inválida no cabeçalho (linha 1).',
+  'epw.error.tooFewFields': 'Linha {line}: faltam campos; um EPW tem 35 campos por hora.',
+  'epw.error.invalidNumber': 'Linha {line}: valor não numérico no campo "{field}".',
+  'epw.error.invalidSequence':
+    'Linha {line}: a sequência de mês, dia e hora está quebrada (hora faltando, repetida ou fora de ordem).',
+  'epw.error.invalidHourCount':
+    'O arquivo não tem um ano completo: são esperadas 8760 horas (ou 8784 com 29 de fevereiro).',
+  'epw.error.negativeRadiation': 'Linha {line}: radiação negativa no campo "{field}".',
+  'epw.field.dryBulb': 'temperatura de bulbo seco',
+  'epw.field.dewPoint': 'temperatura de ponto de orvalho',
+  'epw.field.relativeHumidity': 'umidade relativa',
+  'epw.field.pressure': 'pressão atmosférica',
+  'epw.field.extraterrestrialHorizontal': 'radiação extraterrestre horizontal',
+  'epw.field.globalHorizontal': 'radiação global horizontal',
+  'epw.field.directNormal': 'radiação direta normal',
+  'epw.field.diffuseHorizontal': 'radiação difusa horizontal',
+  'epw.field.windDirection': 'direção do vento',
+  'epw.field.windSpeed': 'velocidade do vento',
+  'epw.field.totalSkyCover': 'cobertura do céu',
 } as const;
