@@ -6,4 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Estrutura técnica: Vite, React e TypeScript (strict), com `src/core/` (cálculos puros) separado de `src/ui/` e a separação verificada pelo ESLint; Prettier, Vitest e Playwright.
+- Página "em construção" com a tela "Sobre" e os créditos da versão original; textos pela estrutura de tradução (português) e estado da tela no `#` da URL.
+- CI no GitHub Actions (formatação, estilo, tipos, testes de unidade, build e ponta a ponta em computador e celular) e publicação no GitHub Pages com prévia de cada PR.
 - Fundação do projeto: `CLAUDE.md` com as regras de trabalho, roteiro em `docs/ROADMAP.md`, decisões iniciais em `docs/decisoes/`, diagnóstico do SOL-AR 6.2, esqueletos da especificação e da validação, estacionamento de ideias.

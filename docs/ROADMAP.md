@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 0, passo F0.3. A governança já está no repositório; falta a estrutura técnica, o CI e o GitHub Pages.
+**Você está aqui:** Fase 0, passo F0.3. Estrutura técnica, CI e workflow do Pages integrados; falta confirmar a página no ar e a prévia de PR (fecha F0.2 e F0.3).
 **Última atualização:** 23/10/2026.
 
 ---
@@ -108,10 +108,10 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
   Codespaces como complemento (benefícios do GitHub Education liberados por volta de 26/10/2026). Nada é instalado no PC.
 - [ ] **F0.3 Governança e estrutura.**
   - [x] Governança: `CLAUDE.md`, `docs/ROADMAP.md`, notas de decisão, `docs/ideias.md`, esqueletos de `docs/spec/` e `docs/validacao/`, diagnóstico do SOL-AR 6.2, `README.md`, `CHANGELOG.md` (23/10/2026).
-  - [ ] Estrutura técnica: Vite + React + TypeScript strict, `src/core/` e `src/ui/`, ESLint e Prettier, Vitest e Playwright; comandos registrados no `CLAUDE.md`.
-  - [ ] CI (GitHub Actions): verificação de estilo, testes e build em cada PR e na `main`.
+  - [x] Estrutura técnica: Vite + React + TypeScript strict, `src/core/` e `src/ui/`, ESLint e Prettier, Vitest e Playwright; comandos registrados no `CLAUDE.md` (23/10/2026).
+  - [x] CI (GitHub Actions): verificação de estilo, testes e build em cada PR e na `main` (23/10/2026).
   - [ ] Publicação automática no GitHub Pages de uma página "em construção", com prévia de cada PR num endereço próprio.
-  - [ ] Build portátil: caminhos relativos, estado na URL (#) e nenhum servidor, para rodar sem mudanças no GitHub Pages, num subdomínio do LabEEE ou numa pasta do servidor deles (ver 7.1).
+  - [x] Build portátil: caminhos relativos, estado na URL (#) e nenhum servidor, para rodar sem mudanças no GitHub Pages, num subdomínio do LabEEE ou numa pasta do servidor deles (ver 7.1). Verificado por teste de ponta a ponta que serve o build numa subpasta arbitrária (23/10/2026).
 
   *Pronto quando:* CI verde e página no ar em 1totone.github.io/novo-solar.
 - [ ] **F0.4 Especificação v0.** Convenções:

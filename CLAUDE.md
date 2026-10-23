@@ -74,7 +74,23 @@ O Anthony quer que você conduza o projeto sem pedir permissão a cada ação.
 
 ## Comandos
 
-A preencher no passo F0.3 (`dev`, `test`, `lint`, `build`, `test:e2e`).
+| Comando | O que faz |
+|---|---|
+| `npm ci` | Instala as dependências exatas do `package-lock.json`. |
+| `npm run dev` | Servidor de desenvolvimento (Vite). |
+| `npm run check` | Formatação, estilo, tipos e testes de unidade: o que o CI roda antes do build. |
+| `npm run format` / `format:check` | Prettier (Markdown e `docs/` ficam de fora). |
+| `npm run lint` | ESLint, sem avisos tolerados; impede `src/core/` de importar React, `src/ui/` ou APIs do navegador. |
+| `npm run typecheck` | TypeScript (strict) em todos os projetos. |
+| `npm test` | Testes de unidade (Vitest), inclusive os de física. |
+| `npm run build` | Build de produção em `dist/`, com caminhos relativos. |
+| `npm run test:e2e` | Playwright no build de produção (`dist/`), servido numa subpasta (`/qualquer/pasta/`), em computador e celular. Rode `npm run build` antes. |
+
+Notas:
+
+- Versões fixadas: TypeScript 6.0 (o `typescript-eslint` ainda não aceita o 7) e `@playwright/test` 1.63.0, que usa o Chromium pré-instalado nas sessões na nuvem (`/opt/pw-browsers`). Ao atualizar o Playwright, confira se a sessão tem o navegador correspondente; no CI ele é baixado.
+- Publicação: `.github/workflows/pages.yml` (decisão 0008). Site em `https://1totone.github.io/novo-solar/`; prévia de cada PR em `.../pr/<número>/`, com link no status "Prévia" do PR.
+- Na sessão, o `gh api` não acessa `/actions` nem `/pages`; o estado do CI se lê pelas ferramentas `mcp__github__*` (ex.: `actions_list`, `get_job_logs`).
 
 ## Nunca
 
