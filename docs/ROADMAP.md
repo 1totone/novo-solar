@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.1 (fluxo e wireframes). Portão 1 aprovado em 23/10/2026; releases v0.0 e v0.1 criadas pelo workflow do CHANGELOG (decisão 0012). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
+**Você está aqui:** Fase 2, passo F2.1 (fluxo e wireframes), **parada**: wireframes publicados em `.../wireframes/`, aguardando a aprovação do Anthony (propostas em `docs/ux/F2.1-fluxo-e-wireframes.md`). Portão 1 aprovado em 23/10/2026. Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
 **Última atualização:** 23/10/2026.
 
 ---

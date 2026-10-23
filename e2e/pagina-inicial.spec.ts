@@ -65,4 +65,19 @@ test.describe('página inicial', () => {
       );
     }
   });
+
+  test('wireframes da Fase 2 abrem a partir da página, numa subpasta, e navegam entre telas', async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('./');
+    await page.getByRole('link', { name: /wireframes da Fase 2/ }).click();
+    await expect(page).toHaveTitle(/wireframes da Fase 2/);
+    await expect(page.getByRole('heading', { name: '0. Fluxo básico' })).toBeVisible();
+    await page.getByRole('link', { name: '3. Fachada e proteção' }).click();
+    await expect(page.getByRole('heading', { name: /Passos 2 e 3/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '0. Fluxo básico' })).toBeHidden();
+    expect(errors).toEqual([]);
+  });
 });
