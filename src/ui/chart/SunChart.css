@@ -1,0 +1,64 @@
+.sun-chart {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+  margin: 1rem auto 0;
+  background: var(--color-bg);
+}
+
+.sun-chart line,
+.sun-chart circle,
+.sun-chart polyline {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .horizon {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.sun-chart .altitude,
+.sun-chart .azimuth {
+  stroke: var(--color-border);
+  stroke-width: 0.75;
+}
+
+.sun-chart .sun-path {
+  stroke: var(--color-sun);
+  stroke-width: 1;
+}
+
+.sun-chart .sun-path.solstice,
+.sun-chart .sun-path.equinox {
+  stroke-width: 2;
+}
+
+.sun-chart .hour-line {
+  stroke: var(--color-accent);
+  stroke-width: 0.75;
+}
+
+.sun-chart text {
+  font-size: 0.06px;
+  fill: var(--color-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.sun-chart .cardinal {
+  font-size: 0.085px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.sun-chart .altitude-label {
+  text-anchor: start;
+  font-size: 0.05px;
+}
+
+.sun-chart .hour-label {
+  fill: var(--color-accent);
+  font-size: 0.055px;
+}

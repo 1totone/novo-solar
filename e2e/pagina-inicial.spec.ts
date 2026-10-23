@@ -47,4 +47,22 @@ test.describe('página inicial', () => {
     );
     expect(overflow).toBeLessThanOrEqual(0);
   });
+
+  test('mostra a carta solar estereográfica do local de teste', async ({ page }) => {
+    await page.goto('./');
+    const chart = page.getByTestId('sun-chart');
+    await expect(chart).toBeVisible();
+    await expect(chart.locator('title')).toContainText('Florianópolis');
+    // Solstícios, equinócios e dia 21 dos outros oito meses.
+    await expect(chart.locator('.sun-path')).toHaveCount(12);
+    await expect(chart.locator('.sun-path.solstice')).toHaveCount(2);
+    await expect(chart.locator('.sun-path.equinox')).toHaveCount(2);
+    // Linhas horárias de 6 h a 18 h em hora solar verdadeira.
+    await expect(chart.locator('.hour-line')).toHaveCount(13);
+    for (const label of ['N', 'L', 'S', 'O']) {
+      await expect(chart.locator('.cardinal', { hasText: new RegExp(`^${label}$`) })).toHaveCount(
+        1,
+      );
+    }
+  });
 });

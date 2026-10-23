@@ -1,11 +1,15 @@
+import { SunChart } from './chart/SunChart';
 import { useI18n } from './i18n/useI18n';
 import { useHashState } from './state/useHashState';
+import { TEST_SITES } from './testSites';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
 
+const PREVIEW_SITE = TEST_SITES[0]!;
+
 export function App() {
-  const { t } = useI18n();
+  const { t, formatNumber } = useI18n();
   const [hashState, setHashState] = useHashState();
   const aboutOpen = hashState.painel === 'sobre';
 
@@ -28,6 +32,20 @@ export function App() {
               <a href={ROADMAP_URL}>{t('status.roadmapLink')}</a>
             </li>
           </ul>
+        </section>
+
+        <section className="chart-preview" aria-labelledby="chart-heading">
+          <h2 id="chart-heading">{t('chart.sampleHeading')}</h2>
+          <p className="note">{t('chart.sampleNote', { place: PREVIEW_SITE.name })}</p>
+          <SunChart
+            site={PREVIEW_SITE}
+            title={t('chart.title', {
+              place: PREVIEW_SITE.name,
+              latitude: formatNumber(PREVIEW_SITE.latitude, 2),
+              longitude: formatNumber(PREVIEW_SITE.longitude, 2),
+              timeZone: formatNumber(PREVIEW_SITE.timeZone),
+            })}
+          />
         </section>
 
         <button

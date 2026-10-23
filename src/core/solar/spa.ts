@@ -166,6 +166,8 @@ export interface SolarPosition {
   hourAngle: number;
   /** Declinação geocêntrica, graus. */
   declination: number;
+  /** Ascensão reta geocêntrica aparente, graus, [0, 360). */
+  rightAscension: number;
   /** Equação do tempo, minutos. */
   equationOfTime: number;
 }
@@ -239,6 +241,7 @@ export function solarPosition(
     apparentZenith: 90 - eApparent,
     hourAngle: wrap180(h),
     declination: g.delta,
+    rightAscension: g.alpha,
     equationOfTime: g.equationOfTime,
   };
 }

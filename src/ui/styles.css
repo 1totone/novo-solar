@@ -103,3 +103,17 @@ a:focus-visible {
   font-size: 0.85rem;
   color: var(--color-muted);
 }
+
+.chart-preview {
+  margin-top: 1.5rem;
+}
+
+.chart-preview h2 {
+  margin-bottom: 0.25rem;
+}
+
+.note {
+  margin-top: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
