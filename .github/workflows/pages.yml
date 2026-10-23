@@ -1,0 +1,125 @@
+# Publicação no GitHub Pages (decisão 0008).
+#
+# Roda depois de cada CI verde (na main ou em PR) e monta o site inteiro de novo:
+#   /           build da main
+#   /pr/<n>/    prévia de cada PR aberto deste repositório
+# O evento workflow_run executa no contexto da main, o que permite publicar no ambiente
+# github-pages, restrito à branch padrão. PRs de forks não ganham prévia.
+name: Pages
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  montar:
+    name: Montar site e prévias
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      previews: ${{ steps.previews.outputs.list }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Build da main
+        run: |
+          npm ci
+          BUILD_LABEL=main BUILD_COMMIT="$(git rev-parse HEAD)" npm run build
+          mkdir -p _site
+          cp -r dist/. _site/
+
+      - name: Listar PRs abertos
+        id: prs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" \
+            --jq '.[] | select(.head.repo.full_name == env.GITHUB_REPOSITORY) | "\(.number) \(.head.sha)"' \
+            > prs.txt
+          cat prs.txt
+
+      - name: Build das prévias
+        id: previews
+        run: |
+          : > built.txt
+          while read -r n sha <&3; do
+            [ -z "$n" ] && continue
+            echo "::group::PR #$n ($sha)"
+            if git fetch --no-tags --depth=1 origin "+refs/pull/$n/head:refs/remotes/pr/$n" \
+              && git worktree add --detach "_pr/$n" "$sha" \
+              && (cd "_pr/$n" && npm ci && BUILD_LABEL="PR #$n" BUILD_COMMIT="$sha" npm run build); then
+              mkdir -p "_site/pr/$n"
+              cp -r "_pr/$n/dist/." "_site/pr/$n/"
+              echo "$n:$sha" >> built.txt
+            else
+              echo "::warning::Não foi possível montar a prévia do PR #$n."
+            fi
+            echo "::endgroup::"
+          done 3< prs.txt
+          echo "list=$(paste -sd, built.txt)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  publicar:
+    name: Publicar
+    needs: montar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
+
+  avisar:
+    name: Link da prévia nos PRs
+    needs: [montar, publicar]
+    if: needs.montar.outputs.previews != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Status "Prévia" em cada PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEWS: ${{ needs.montar.outputs.previews }}
+          PAGE_URL: ${{ needs.publicar.outputs.page_url }}
+        run: |
+          IFS=',' read -ra items <<< "$PREVIEWS"
+          for item in "${items[@]}"; do
+            n="${item%%:*}"; sha="${item##*:}"
+            gh api "repos/$GITHUB_REPOSITORY/statuses/$sha" \
+              -f state=success -f context="Prévia" \
+              -f description="Prévia publicada no GitHub Pages" \
+              -f target_url="${PAGE_URL%/}/pr/$n/" > /dev/null
+            echo "PR #$n: ${PAGE_URL%/}/pr/$n/"
+          done
