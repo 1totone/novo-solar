@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 1, passo F1.2 (posição solar). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
+**Você está aqui:** Fase 1, passo F1.3 (carta estereográfica). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
 **Última atualização:** 23/10/2026.
 
 ---
@@ -131,7 +131,7 @@ A qualquer momento, o estado do projeto está no "Você está aqui", na lista de
 O objetivo é ter o caminho inteiro funcionando de ponta a ponta, ainda que simples.
 
 - [x] **F1.1 Leitor de EPW.** Feito em 23/10/2026: `src/core/epw/`, conferido contra o pvlib nos 6 EPWs de teste. Cabeçalho (local, latitude, longitude, fuso, elevação), 8760 horas, checagens básicas, mensagens de erro claras. *Pronto quando:* lê os EPWs de teste e rejeita arquivos corrompidos com mensagem útil.
-- [ ] **F1.2 Posição solar.** NREL SPA; conversão entre hora legal e hora solar com o fuso do arquivo; nascer e pôr do sol. *Pronto quando:* erro menor que 0,01° contra pvlib em 3 latitudes e 2 fusos (incluindo UTC-4).
+- [x] **F1.2 Posição solar.** Feito em 23/10/2026: `src/core/solar/`; erro máximo de 10⁻⁸° contra o pvlib em 6 locais (relatório em `docs/validacao/relatorios/`). NREL SPA; conversão entre hora legal e hora solar com o fuso do arquivo; nascer e pôr do sol. *Pronto quando:* erro menor que 0,01° contra pvlib em 3 latitudes e 2 fusos (incluindo UTC-4).
 - [ ] **F1.3 Carta estereográfica.** Horizonte, círculos de altura, azimutes, trajetórias (solstícios, equinócios e dia 21 de cada mês), linhas horárias. *Pronto quando:* coincide com os pontos de referência para latitudes equatorial, tropical e subtropical.
 - [ ] **F1.4 Interface mínima.** Carregar EPW ou escolher cidade de teste e ver a carta na tela, publicada. *Pronto quando:* testes de ponta a ponta passam em navegador de computador e em tela de celular (Playwright); o Anthony confere no portão 1.
 
