@@ -13,6 +13,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0007](0007-origem-creditos-e-manutencao.md) | Origem do projeto, créditos e manutenção | 2026-10-23 | aceita |
 | [0008](0008-publicacao-e-previas.md) | Publicação no GitHub Pages com prévia por PR | 2026-10-23 | aceita |
 | [0009](0009-traducao-e-estado-na-url.md) | Tradução sem biblioteca externa e estado da aplicação no # da URL | 2026-10-23 | aceita |
+| [0010](0010-epw-de-terceiros-nao-versionados.md) | EPWs de terceiros não são versionados até a confirmação dos termos | 2026-10-23 | aceita (provisória) |
 
 ## Modelo
 
