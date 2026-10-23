@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Portão 1. Fase 1 concluída; aguardando a conferência do Anthony (carta correta para os locais de teste, publicada). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
+**Você está aqui:** Fase 2, passo F2.1 (fluxo e wireframes). Portão 1 aprovado em 23/10/2026; releases v0.0 e v0.1 criadas pelo workflow do CHANGELOG (decisão 0012). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
 **Última atualização:** 23/10/2026.
 
 ---
@@ -135,7 +135,7 @@ O objetivo é ter o caminho inteiro funcionando de ponta a ponta, ainda que simp
 - [x] **F1.3 Carta estereográfica.** Feito em 23/10/2026: `src/core/chart/` e `src/ui/chart/`, conferida contra o pvlib em 6 locais (relatório em `docs/validacao/relatorios/`). Horizonte, círculos de altura, azimutes, trajetórias (solstícios, equinócios e dia 21 de cada mês), linhas horárias. *Pronto quando:* coincide com os pontos de referência para latitudes equatorial, tropical e subtropical.
 - [x] **F1.4 Interface mínima.** Feito em 23/10/2026: escolha da cidade de teste ou leitura de EPW no navegador, carta e dados do local, estado no link; testes de ponta a ponta em computador e celular. Carregar EPW ou escolher cidade de teste e ver a carta na tela, publicada. *Pronto quando:* testes de ponta a ponta passam em navegador de computador e em tela de celular (Playwright); o Anthony confere no portão 1.
 
-**Portão 1:** carta correta para 4 locais de teste, publicada.
+**Portão 1:** carta correta para 4 locais de teste, publicada. **Aprovado em 23/10/2026**; release v0.1.
 
 ### Fase 2: Paridade com o SOL-AR 6.2, já corrigido (≈3 a 4 semanas) → v0.5
 
