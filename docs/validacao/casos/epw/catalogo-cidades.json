@@ -1,0 +1,521 @@
+{
+ "gerado_por": "docs/validacao/scripts/catalogo_cidades.py",
+ "cidades": [
+  {
+   "id": "belem",
+   "nome": "Belém (PA)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/PA_Para/BRA_PA_Belem-Val.de.Cans.Intl.AP.821930_TMYx.2011-2025.zip",
+    "arquivo": "BRA_PA_Belem-Val.de.Cans.Intl.AP.821930_TMYx.2011-2025.epw",
+    "sha256_zip": "1ba41c952eec0f7c5db5f5677663a1f94f56eda92858cfc5ca380a66926e80b2",
+    "sha256_epw": "6fd477f248e406161b8cb358f88ab9b93adc539f078ac7bf195dd2f67f687862",
+    "estacao": "Belem-Val.de.Cans.Intl.AP",
+    "wmo": "821930",
+    "latitude": -1.379,
+    "longitude": -48.476,
+    "fuso": -3.0,
+    "elevacao": 16.5
+   },
+   "solar_6_2": {
+    "arquivo": "belem.csv",
+    "latitudes_csv": {
+     "latitude": -1.38,
+     "longitude_oeste": 48.28
+    },
+    "livro_1998": {
+     "latitude": -1.3833,
+     "longitude": -48.4833,
+     "altitude": 16,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "1°23'S 48°29'O",
+     "diferenca_tmyx_graus": 0.0073
+    }
+   }
+  },
+  {
+   "id": "brasilia",
+   "nome": "Brasília (DF)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/DF_Distrito_Federal/BRA_DF_Brasilia-Kubitschek.Intl.AP.833780_TMYx.2011-2025.zip",
+    "arquivo": "BRA_DF_Brasilia-Kubitschek.Intl.AP.833780_TMYx.2011-2025.epw",
+    "sha256_zip": "eccec2f9dd5acae1a9753306b3c0a133ae61a2f4d5c5e43dbcada9a64246e7af",
+    "sha256_epw": "43b8bec3680d9fa7b090133b58006f0b2eb8f57aa428bdee4f005e324b6363e6",
+    "estacao": "Brasilia-Kubitschek.Intl.AP",
+    "wmo": "833780",
+    "latitude": -15.863,
+    "longitude": -47.913,
+    "fuso": -3.0,
+    "elevacao": 1060.4
+   },
+   "solar_6_2": {
+    "arquivo": "brasilia.csv",
+    "latitudes_csv": {
+     "latitude": -15.86,
+     "longitude_oeste": 47.56
+    },
+    "livro_1998": {
+     "latitude": -15.8667,
+     "longitude": -47.9167,
+     "altitude": 1060,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "15°52'S 47°55'O",
+     "diferenca_tmyx_graus": 0.0037
+    }
+   }
+  },
+  {
+   "id": "concepcion",
+   "nome": "Concepción (Chile)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/CHL_Chile/BI_Bio-Bio/CHL_BI_Concepcion-Carriel.Sur.Intl.AP.856820_TMYx.2011-2025.zip",
+    "arquivo": "CHL_BI_Concepcion-Carriel.Sur.Intl.AP.856820_TMYx.2011-2025.epw",
+    "sha256_zip": "a9a1edaebdfbcee99be357fc049f8bed3d8ee1606a9b769a3bb6c765c20858af",
+    "sha256_epw": "78db77bd9f75435381d3a80edca188a1e624341396f5cab6d42b4e5f52a1894a",
+    "estacao": "Concepcion-Carriel.Sur.Intl.AP",
+    "wmo": "856820",
+    "latitude": -36.7783,
+    "longitude": -73.0625,
+    "fuso": -4.0,
+    "elevacao": 7.9
+   },
+   "solar_6_2": {
+    "arquivo": "concepcion.csv",
+    "latitudes_csv": {
+     "latitude": -36.77,
+     "longitude_oeste": 73.05
+    }
+   }
+  },
+  {
+   "id": "curitiba",
+   "nome": "Curitiba (PR)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/PR_Parana/BRA_PR_Curitiba-Pena.Intl.AP.838400_TMYx.2011-2025.zip",
+    "arquivo": "BRA_PR_Curitiba-Pena.Intl.AP.838400_TMYx.2011-2025.epw",
+    "sha256_zip": "cc73531f835faa0ba5f4b4891f80ae3daf25485cee65ce9ef277eae58659ad7d",
+    "sha256_epw": "1f140f8d3908e5c96e6d672af562ab80e10147086ff9608780b7b6fe137e66db",
+    "estacao": "Curitiba-Pena.Intl.AP",
+    "wmo": "838400",
+    "latitude": -25.528,
+    "longitude": -49.176,
+    "fuso": -3.0,
+    "elevacao": 910.7
+   },
+   "solar_6_2": {
+    "arquivo": "curitiba.csv",
+    "latitudes_csv": {
+     "latitude": -25.51,
+     "longitude_oeste": 49.16
+    },
+    "livro_1998": {
+     "latitude": -25.5167,
+     "longitude": -49.1833,
+     "altitude": 910,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "25°31'S 49°11'O",
+     "diferenca_tmyx_graus": 0.0113
+    }
+   }
+  },
+  {
+   "id": "florianopolis",
+   "nome": "Florianópolis (SC)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/SC_Santa_Catarina/BRA_SC_Florianopolis-Luz.Intl.AP.838990_TMYx.2011-2025.zip",
+    "arquivo": "BRA_SC_Florianopolis-Luz.Intl.AP.838990_TMYx.2011-2025.epw",
+    "sha256_zip": "9ad92984e57aa74ccd0b10ffabe9fe569a52748133294759f8bbb89a96e75bef",
+    "sha256_epw": "59b63065871a97dceb2add7f8bf3cf185bc18cd48e26552a3cb244ee586a2fff",
+    "estacao": "Florianopolis-Luz.Intl.AP",
+    "wmo": "838990",
+    "latitude": -27.67,
+    "longitude": -48.547,
+    "fuso": -3.0,
+    "elevacao": 6.1
+   },
+   "solar_6_2": {
+    "arquivo": "florianopolis.csv",
+    "latitudes_csv": {
+     "latitude": -27.66,
+     "longitude_oeste": 48.34
+    },
+    "livro_1998": {
+     "latitude": -27.6667,
+     "longitude": -48.55,
+     "altitude": 7,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "27°40'S 48°33'O",
+     "diferenca_tmyx_graus": 0.0033
+    }
+   }
+  },
+  {
+   "id": "fortaleza",
+   "nome": "Fortaleza (CE)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/CE_Ceara/BRA_CE_Fortaleza-Pinto.Martins.Intl.AP.823980_TMYx.2011-2025.zip",
+    "arquivo": "BRA_CE_Fortaleza-Pinto.Martins.Intl.AP.823980_TMYx.2011-2025.epw",
+    "sha256_zip": "0e575e5fa1ef92ee68322f3b2ba31c520025129af3ca9b34ae41a68666d1fb5d",
+    "sha256_epw": "13f2f47e95f7a7c06b15b7706fe7efcc7eb95c18fcec33ca0303a56f4938e4a2",
+    "estacao": "Fortaleza-Pinto.Martins.Intl.AP",
+    "wmo": "823980",
+    "latitude": -3.776,
+    "longitude": -38.533,
+    "fuso": -3.0,
+    "elevacao": 25.0
+   },
+   "solar_6_2": {
+    "arquivo": "fortaleza.csv",
+    "latitudes_csv": {
+     "latitude": -3.78,
+     "longitude_oeste": 38.36
+    },
+    "livro_1998": {
+     "latitude": -3.7833,
+     "longitude": -38.5333,
+     "altitude": 25,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "3°47'S 38°32'O",
+     "diferenca_tmyx_graus": 0.0073
+    }
+   }
+  },
+  {
+   "id": "maceio",
+   "nome": "Maceió (AL)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/AL_Alagoas/BRA_AL_Maceio-Palmares.Intl.AP.829930_TMYx.2011-2025.zip",
+    "arquivo": "BRA_AL_Maceio-Palmares.Intl.AP.829930_TMYx.2011-2025.epw",
+    "sha256_zip": "1973a75f9f6ca5e01e63ff7f19ccbd9fdc9749500443c66e73bac8870c77cd4c",
+    "sha256_epw": "cb441bf535d78123d0799eac00b303eab6206f61d776e7310f4f22243f8dd846",
+    "estacao": "Maceio-Palmares.Intl.AP",
+    "wmo": "829930",
+    "latitude": -9.511,
+    "longitude": -35.792,
+    "fuso": -3.0,
+    "elevacao": 118.0
+   },
+   "solar_6_2": {
+    "arquivo": "maceio.csv",
+    "latitudes_csv": {
+     "latitude": -9.51,
+     "longitude_oeste": 35.12
+    },
+    "livro_1998": {
+     "latitude": -9.5167,
+     "longitude": -35.7833,
+     "altitude": 115,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "9°31'S 35°47'O",
+     "diferenca_tmyx_graus": 0.0087
+    }
+   }
+  },
+  {
+   "id": "manaus",
+   "nome": "Manaus (AM)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/AM_Amazonas/BRA_AM_Manaus-Gomes.Intl.AP.821110_TMYx.2011-2025.zip",
+    "arquivo": "BRA_AM_Manaus-Gomes.Intl.AP.821110_TMYx.2011-2025.epw",
+    "sha256_zip": "4c6d384758167683d7fbdc21d655e4736f83dcc8ec5bfb9fafd8cf61c68580d8",
+    "sha256_epw": "460b16f4c370a44e80cde95887cbc11fb72d5cb4c85a4e6a61beef9e2111c639",
+    "estacao": "Manaus-Gomes.Intl.AP",
+    "wmo": "821110",
+    "latitude": -3.039,
+    "longitude": -60.05,
+    "fuso": -4.0,
+    "elevacao": 80.5
+   },
+   "solar_6_2": null
+  },
+  {
+   "id": "natal",
+   "nome": "Natal (RN)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/RN_Rio_Grande_do_Norte/BRA_RN_Natal.Intl.AP.825990_TMYx.2011-2025.zip",
+    "arquivo": "BRA_RN_Natal.Intl.AP.825990_TMYx.2011-2025.epw",
+    "sha256_zip": "01c4f4bcf26e2321189b0bf17bd44aeb2c9746f6ea65be786b32c5ba8478eb6e",
+    "sha256_epw": "25afea36b6274a8d5419d3ffcfb3bc0171a384bac15308de88a3e37a12189ec4",
+    "estacao": "Natal.Intl.AP",
+    "wmo": "825990",
+    "latitude": -5.911,
+    "longitude": -35.248,
+    "fuso": -3.0,
+    "elevacao": 51.5
+   },
+   "solar_6_2": {
+    "arquivo": "natal.csv",
+    "latitudes_csv": {
+     "latitude": -5.91,
+     "longitude_oeste": 35.18
+    },
+    "livro_1998": {
+     "latitude": -5.9167,
+     "longitude": -35.25,
+     "altitude": 49,
+     "periodo_registros": [
+      1951,
+      1970
+     ],
+     "texto": "5°55'S 35°15'O",
+     "diferenca_tmyx_graus": 0.0057
+    }
+   }
+  },
+  {
+   "id": "porto-alegre",
+   "nome": "Porto Alegre (RS)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/RS_Rio_Grande_do_Sul/BRA_RS_Porto.Alegre-Salgado.Filho.Intl.AP.839710_TMYx.2011-2025.zip",
+    "arquivo": "BRA_RS_Porto.Alegre-Salgado.Filho.Intl.AP.839710_TMYx.2011-2025.epw",
+    "sha256_zip": "3332a593875b51212c0d6047af085adb9e309b8a7dd846b21dd358cd0b43b173",
+    "sha256_epw": "b5cf50cfb6fa42412b99cb20f009fd958675ae21601049ec11b8c4b26fed9b2f",
+    "estacao": "Porto.Alegre-Salgado.Filho.Intl.AP",
+    "wmo": "839710",
+    "latitude": -29.994,
+    "longitude": -51.171,
+    "fuso": -3.0,
+    "elevacao": 3.4
+   },
+   "solar_6_2": {
+    "arquivo": "porto_alegre.csv",
+    "latitudes_csv": {
+     "latitude": -30.0,
+     "longitude_oeste": 51.13
+    },
+    "livro_1998": {
+     "latitude": -30.0,
+     "longitude": -51.1833,
+     "altitude": 4,
+     "periodo_registros": [
+      1951,
+      1970
+     ],
+     "texto": "30°00'S 51°11'O",
+     "diferenca_tmyx_graus": 0.0123
+    }
+   }
+  },
+  {
+   "id": "recife",
+   "nome": "Recife (PE)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/PE_Pernambuco/BRA_PE_Recife-Guararapes-Freyre.Intl.AP.828990_TMYx.2011-2025.zip",
+    "arquivo": "BRA_PE_Recife-Guararapes-Freyre.Intl.AP.828990_TMYx.2011-2025.epw",
+    "sha256_zip": "f62cb14972a962ec6e85d263ef3bf367b6cfb5874a527da3ca02b314a5dabb5b",
+    "sha256_epw": "d5d5f81756dd9d24eb084c6967c02b8f06980539e3c093974976e177ce754576",
+    "estacao": "Recife-Guararapes-Freyre.Intl.AP",
+    "wmo": "828990",
+    "latitude": -8.126,
+    "longitude": -34.924,
+    "fuso": -3.0,
+    "elevacao": 10.1
+   },
+   "solar_6_2": {
+    "arquivo": "recife.csv",
+    "latitudes_csv": {
+     "latitude": -8.01,
+     "longitude_oeste": 34.55
+    },
+    "livro_1998": {
+     "latitude": -8.1333,
+     "longitude": -34.9167,
+     "altitude": 11,
+     "periodo_registros": [
+      1951,
+      1970
+     ],
+     "texto": "8°08'S 34°55'O",
+     "diferenca_tmyx_graus": 0.0073
+    }
+   }
+  },
+  {
+   "id": "rio-de-janeiro",
+   "nome": "Rio de Janeiro (RJ)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/RJ_Rio_de_Janeiro/BRA_RJ_Rio.de.Janeiro-Galeao-Jobim.Intl.AP.837460_TMYx.2011-2025.zip",
+    "arquivo": "BRA_RJ_Rio.de.Janeiro-Galeao-Jobim.Intl.AP.837460_TMYx.2011-2025.epw",
+    "sha256_zip": "5d4000fdca9f95f5d3f1d6a5d00286406b403862b923f0d49a202fcd37198d33",
+    "sha256_epw": "a30448776c98e0dab3fb7814bc3a59985b40b2a230261ddaaf1aee8d8e9f7644",
+    "estacao": "Rio.de.Janeiro-Galeao-Jobim.Intl.AP",
+    "wmo": "837460",
+    "latitude": -22.809,
+    "longitude": -43.244,
+    "fuso": -3.0,
+    "elevacao": 8.5
+   },
+   "solar_6_2": {
+    "arquivo": "rio_de_janeiro.csv",
+    "latitudes_csv": {
+     "latitude": -22.83,
+     "longitude_oeste": 43.1
+    },
+    "livro_1998": {
+     "latitude": -22.8333,
+     "longitude": -43.25,
+     "altitude": 5,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "22°50'S 43°15'O",
+     "diferenca_tmyx_graus": 0.0243
+    }
+   }
+  },
+  {
+   "id": "salvador",
+   "nome": "Salvador (BA)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/BA_Bahia/BRA_BA_Salvador-Magalhaes.Intl.AP.832480_TMYx.2011-2025.zip",
+    "arquivo": "BRA_BA_Salvador-Magalhaes.Intl.AP.832480_TMYx.2011-2025.epw",
+    "sha256_zip": "ddaff7a67e9f30b2defb47321338be6f8ef107441adb3090e5c663e3f2f67b32",
+    "sha256_epw": "30e013812d144125fbbb4ad3395d1b7baf05b2f7cc311db8276d6779cd8cc103",
+    "estacao": "Salvador-Magalhaes.Intl.AP",
+    "wmo": "832480",
+    "latitude": -12.911,
+    "longitude": -38.331,
+    "fuso": -3.0,
+    "elevacao": 19.5
+   },
+   "solar_6_2": {
+    "arquivo": "salvador.csv",
+    "latitudes_csv": {
+     "latitude": -12.9,
+     "longitude_oeste": 38.31
+    },
+    "livro_1998": {
+     "latitude": -12.9,
+     "longitude": -38.3333,
+     "altitude": 13,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "12°54'S 38°20'O",
+     "diferenca_tmyx_graus": 0.011
+    }
+   }
+  },
+  {
+   "id": "sao-luis",
+   "nome": "São Luís (MA)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/MA_Maranhao/BRA_MA_Sao.Luis-Machado.Intl.AP.822810_TMYx.2011-2025.zip",
+    "arquivo": "BRA_MA_Sao.Luis-Machado.Intl.AP.822810_TMYx.2011-2025.epw",
+    "sha256_zip": "2dcdbb456f28ce864f9d193b7c6df46136ed758d3f3a8863c5f7a121ed737fc7",
+    "sha256_epw": "23b6b2e37c8afb4cbdc8fbc3da259e7e3a341d1021d598562080ca1966e094cd",
+    "estacao": "Sao.Luis-Machado.Intl.AP",
+    "wmo": "822810",
+    "latitude": -2.585,
+    "longitude": -44.234,
+    "fuso": -3.0,
+    "elevacao": 54.3
+   },
+   "solar_6_2": {
+    "arquivo": "sao_luis.csv",
+    "latitudes_csv": {
+     "latitude": -2.58,
+     "longitude_oeste": 44.18
+    },
+    "livro_1998": {
+     "latitude": -2.5833,
+     "longitude": -44.2333,
+     "altitude": 53,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "2°35'S 44°14'O",
+     "diferenca_tmyx_graus": 0.0017
+    }
+   }
+  },
+  {
+   "id": "sao-paulo",
+   "nome": "São Paulo (SP)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/SP_Sao_Paulo/BRA_SP_Sao.Paulo-Congonhas.AP.837800_TMYx.2011-2025.zip",
+    "arquivo": "BRA_SP_Sao.Paulo-Congonhas.AP.837800_TMYx.2011-2025.epw",
+    "sha256_zip": "78ff773c63739fa7034468c2b43dbcf60d5671110d9833b106ef168850b7fd99",
+    "sha256_epw": "e3fc5a807387948e1b69145df8677c2a51bbc2556b00ab98ca6da69ecb4208b5",
+    "estacao": "Sao.Paulo-Congonhas.AP",
+    "wmo": "837800",
+    "latitude": -23.627,
+    "longitude": -46.655,
+    "fuso": -3.0,
+    "elevacao": 801.9
+   },
+   "solar_6_2": {
+    "arquivo": "sao_paulo.csv",
+    "latitudes_csv": {
+     "latitude": -23.61,
+     "longitude_oeste": 46.37
+    },
+    "livro_1998": {
+     "latitude": -23.6167,
+     "longitude": -46.65,
+     "altitude": 802,
+     "periodo_registros": [
+      1951,
+      1970
+     ],
+     "texto": "23°37'S 46°39'O",
+     "diferenca_tmyx_graus": 0.0103
+    }
+   }
+  },
+  {
+   "id": "vitoria",
+   "nome": "Vitória (ES)",
+   "tmyx": {
+    "url": "https://climate.onebuilding.org/WMO_Region_3_South_America/BRA_Brazil/ES_Espirito_Santo/BRA_ES_Vitoria-Aguiar.Salles.AP.836490_TMYx.2011-2025.zip",
+    "arquivo": "BRA_ES_Vitoria-Aguiar.Salles.AP.836490_TMYx.2011-2025.epw",
+    "sha256_zip": "22cdddc2d27cdc7e2c3f2a8be92633aa91935d335fd0b9d33e07ffffa45efe97",
+    "sha256_epw": "b0aa7560c3242f2b402c45a66d5a5252441ead51e8c94660cbadbd73e8bdcee6",
+    "estacao": "Vitoria-Aguiar.Salles.AP",
+    "wmo": "836490",
+    "latitude": -20.258,
+    "longitude": -40.286,
+    "fuso": -3.0,
+    "elevacao": 3.4
+   },
+   "solar_6_2": {
+    "arquivo": "vitoria.csv",
+    "latitudes_csv": {
+     "latitude": -20.26,
+     "longitude_oeste": 40.2
+    },
+    "livro_1998": {
+     "latitude": -20.2667,
+     "longitude": -40.2833,
+     "altitude": 5,
+     "periodo_registros": [
+      1961,
+      1970
+     ],
+     "texto": "20°16'S 40°17'O",
+     "diferenca_tmyx_graus": 0.0087
+    }
+   }
+  }
+ ]
+}

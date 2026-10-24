@@ -5,13 +5,15 @@ import { syntheticEpw } from './fixtures/epw';
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
 
 test.describe('rosa dos ventos', () => {
-  test('sem arquivo carregado, a aba pede o EPW', async ({ page }) => {
+  test('sem dados abertos, a aba pede os dados', async ({ page }) => {
     await page.goto('./#aba=rosa&local=porto-alegre');
     await expect(page.getByRole('tab', { name: 'Rosa dos ventos' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
-    await expect(page.getByTestId('wind-need-file')).toContainText('carregue no passo 1');
+    await expect(page.getByTestId('wind-need-file')).toContainText(
+      'abra no passo 1 os dados da cidade',
+    );
     await expect(page.getByTestId('wind-need-file').getByRole('link')).toHaveAttribute(
       'href',
       /Porto.Alegre.*TMYx/,
@@ -22,7 +24,7 @@ test.describe('rosa dos ventos', () => {
     page,
   }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'floripa.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(FLORIPA)),

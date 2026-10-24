@@ -9,4 +9,11 @@ Arquivos climáticos embarcados no Analysis SOL-AR 6.2 (LabEEE/UFSC, 2009), usad
 
 `formato-inclusao/CHL_Concepcion_NormaIWEC_SOlAr.csv`: exemplo do formato "Incluir Nova Cidade", do pacote `entradaDadoSolar.zip` do site do LabEEE (SHA-256 do zip `a67df98fe85cf37930e12852ccbdceeb3dc4387129a02d50f2d1dba93a62475e`; do CSV original `e25aedee02ad23904fd5b1cc0f705958e93f93bcb18205a11ef85789a5eff22c`). Traz cabeçalho com local, latitude, longitude (leste positiva), fuso (−4) e elevação. As 8760 linhas de dados são idênticas às de `concepcion.csv`.
 
+Uso na aplicação (F2.7, decisão 0017): os 15 arquivos horários são publicados junto com o build e abertos como "dados históricos" no passo 1, com o local do catálogo de cidades.
+
+Referências geradas a partir destes arquivos:
+
+- `referencia-csv.json`: por arquivo, horas, primeira e última hora e, por campo, ausentes, soma, mínimo e máximo, lidos com o módulo `csv` do Python (`docs/validacao/scripts/gerar_referencia_csv62.py`); usado em `tests/referencia/csvSolar62.test.ts`.
+- `radiacao-csv.json`: convenção de tempo e coerência da radiação (deslocamento do sol do modelo, longitude equivalente, horas de global incoerente), por `docs/validacao/scripts/analisar_radiacao_csv62.py`; resultados no relatório `docs/validacao/relatorios/F2.7-dados.md`.
+
 Créditos: dados TRY de Goulart, Lamberts e Firmino (1998); programa de Roberto Lamberts, Alexandra Albuquerque Maciel e Edson T. Ono.

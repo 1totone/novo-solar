@@ -3,7 +3,9 @@ import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { windRose } from '../core/wind/windRose';
 import { ChartView } from './chart/ChartView';
+import type { City } from './cities';
 import { describeConfig } from './compare/describe';
+import { useHistorical } from './data/historical';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
 import { OutputsPanel } from './export/OutputsPanel';
@@ -17,7 +19,7 @@ import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
-import { hashForSite, siteFromHash } from './state/siteHash';
+import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { windFromHash } from './state/windHash';
 import { WindPanel } from './wind/WindPanel';
@@ -60,11 +62,18 @@ export function App() {
   const aboutOpen = hashState.painel === 'sobre';
   const selected = siteFromHash(hashState);
   const site = selected.site;
+  const city: City | null = selected.kind === 'city' ? selected.site : null;
+  const historical = useHistorical(city, selected.kind === 'city' && selected.historical);
   const protractor = protractorFromHash(hashState);
-  const epw = selected.kind === 'file' ? (loadedFile?.data ?? null) : null;
+  const epw =
+    selected.kind === 'file'
+      ? (loadedFile?.data ?? null)
+      : historical.status === 'ready'
+        ? historical.data
+        : null;
   const ov = useOverlay(epw, hashState);
   const wind = windFromHash(hashState);
-  const sourceUrl = selected.kind === 'test' ? selected.site.sourceUrl : undefined;
+  const sourceUrl = city?.sourceUrl;
   const rose = useMemo(
     () =>
       epw && wind.tab === 'rose'
@@ -74,12 +83,17 @@ export function App() {
   );
   // Comparação: a configuração A fica no link (cmp) e o arquivo dela, na memória.
   const hashA: HashState | null = hashState.cmp ? parseHash(hashState.cmp) : null;
-  const epwA = hashA && siteFromHash(hashA).kind === 'file' ? compareEpw : null;
+  const epwA = hashA && hasHourlyData(siteFromHash(hashA)) ? compareEpw : null;
   const words = {
     orientation: (degrees: string) => t('compare.orientation', { degrees }),
     none: t('compare.none'),
   };
   const fmt = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
+  // Origem dos dados históricos em poucas palavras (impressão e CSV).
+  const historicalWhat = (c: City) =>
+    c.historical?.period
+      ? `TRY, ${t('site.periodTry', { start: c.historical.period[0], end: c.historical.period[1] })}`
+      : 'IWEC';
 
   const csvAvailable =
     wind.tab === 'rose' ? rose !== null : Boolean(ov.cells && ov.stats && ov.quantity);
@@ -94,8 +108,16 @@ export function App() {
         timeZone: `${site.timeZone < 0 ? '-' : '+'}${Math.abs(site.timeZone)}`,
       }),
     ];
-    if (epw && loadedFile) {
+    if (epw && selected.kind === 'file' && loadedFile) {
       lines.push(t('csv.file', { file: loadedFile.fileName, hours: String(loadedFile.hours) }));
+    } else if (epw && city?.historical) {
+      lines.push(
+        t('csv.historical', {
+          file: city.historical.file,
+          hours: String(epw.hours),
+          what: historicalWhat(city),
+        }),
+      );
     }
     return lines;
   };
@@ -206,10 +228,14 @@ export function App() {
     .filter(Boolean)
     .join(' ');
   const printStyle = { '--print-radius': String(print.radiusCm) } as CSSProperties;
-  const source =
-    epw && loadedFile
-      ? t('print.sourceFile', { file: loadedFile.fileName })
-      : t('print.sourceTest');
+  let source: string;
+  if (epw && selected.kind === 'file' && loadedFile) {
+    source = t('print.sourceFile', { file: loadedFile.fileName });
+  } else if (epw && city?.historical) {
+    source = t('print.sourceHistorical', { what: historicalWhat(city) });
+  } else if (city) {
+    source = t('print.sourceCity', { station: city.station });
+  } else source = '';
 
   const live =
     wind.tab === 'rose' ? (
@@ -244,6 +270,7 @@ export function App() {
             <SitePanel
               selected={selected}
               loadedFile={selected.kind === 'file' ? loadedFile : null}
+              historical={historical}
               onSelect={(next, file) => {
                 setLoadedFile(file);
                 setHashState(hashForSite(next));

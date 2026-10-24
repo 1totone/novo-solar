@@ -4,11 +4,12 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.7 (dados). Saídas feitas: impressão em escala conferida no PDF (falta a medida com régua, no portão 2), exportações e comparação lado a lado.
+**Você está aqui:** Fase 2, passo F2.8 (regressão contra o SOL-AR 6.2). Dados feitos: as 16 cidades com link para o TMYx, dados históricos do 6.2 com origem, período e avisos, importação do CSV antigo. Achado: a radiação das TRY foi gerada com o sol na longitude de Florianópolis (até 54 min de atraso em Recife; relatório `docs/validacao/relatorios/F2.7-dados.md`).
 
 **Pendências do Anthony:**
 
-- Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (afeta o F2.7; decisões 0010 e 0013).
+- Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (decisões 0010, 0013 e 0017) e se o LabEEE sabe quem gerou as colunas de radiação dos CSV do 6.2.
+- Confirmar no portão 2 o tratamento da radiação dos dados históricos: mostrada como está, com avisos (decisão 0017).
 - Enviar fotos das p. 13 a 15 do tutorial do SOL-AR da UFU (Bortoli e Saramago): o PDF não foi encontrado (site do LabEEE com erro 500). Servem para a conferência quantitativa do caso do F2.3 (relatório `docs/validacao/relatorios/F2.3-mascara.md`).
 - Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
 **Última atualização:** 24/10/2026.
@@ -153,7 +154,7 @@ Ao fim desta fase, o novo já substitui o antigo.
 - [x] **F2.4 Sobreposição de dados.** Feito em 24/10/2026: células por quinzena e hora do arquivo, média ou frequência acima de um limiar, faixas padrão, digitadas ou pelos percentis do arquivo, e leiaute do celular com a carta fixa no topo (decisões 0013 e 0015); todas as horas com sol de Florianópolis e Manaus caem na célula certa, e nenhuma com o fuso deslocado 1 h (relatório em `docs/validacao/relatorios/`). TBS, UR, GHI, DNI e DHI na carta, por semestre, com faixas editáveis e legenda; fuso correto. *Pronto quando:* cores no lugar certo para Florianópolis e Manaus (teste do fuso).
 - [x] **F2.5 Rosa dos ventos.** Feito em 24/10/2026: aba própria, com frequência por classe de velocidade ou velocidade média por setor, calmaria no centro, filtros e tabela (decisão 0016); 150 rosas iguais às de um cálculo independente em Python (relatório em `docs/validacao/relatorios/`). 8 ou 16 setores, frequência e velocidade com classes, calmarias, por estação e período do dia. *Pronto quando:* estatísticas iguais às de um cálculo independente em Python.
 - [x] **F2.6 Saídas.** Feito em 24/10/2026: passo 5 com raio em cm, régua de 5 cm, exportações SVG, PNG e CSV, copiar imagem, tabela das células e comparação lado a lado; raio conferido no navegador e num PDF rasterizado a 600 dpi (diferença de até 0,1 mm); a medida com régua numa impressão em papel fica para o Anthony no portão 2 (relatório em `docs/validacao/relatorios/`). Comparar lado a lado; imprimir em escala; exportar SVG, PNG e CSV dos dados mostrados; copiar. Inclui a tabela dos valores das células, acessível sem o mouse (decisão 0015). *Pronto quando:* carta impressa a 100% tem o raio pedido com até 1 mm de diferença (medido com régua).
-- [ ] **F2.7 Dados.** Importar EPW e o CSV antigo do SOL-AR; as 15 cidades do programa antigo com dados recentes; as TRY antigas marcadas como históricas. *Pronto quando:* as 15 cidades abrem com origem e período visíveis.
+- [x] **F2.7 Dados.** Importar EPW e o CSV antigo do SOL-AR; as 15 cidades do programa antigo com dados recentes; as TRY antigas marcadas como históricas. *Pronto quando:* as 15 cidades abrem com origem e período visíveis.
 - [ ] **F2.8 Regressão contra o SOL-AR 6.2.** Mesmas entradas nos dois programas; diferenças documentadas e justificadas (ex.: fuso, dados). Fontes de comparação: o modelo de cálculo do 6.2 reconstruído no diagnóstico e capturas de tela do 6.2 (rodado sob Wine na sessão, se possível, ou fornecidas pelo Anthony). *Pronto quando:* relatório em `docs/validacao/`.
 - [ ] **F2.9 Primeiro teste com usuários.** 3 a 5 pessoas (alunos e um professor), observação de uso e ajustes. **Parada:** o Claude prepara o roteiro do teste e um formulário de registro; o Anthony aplica e traz os resultados. *Pronto quando:* problemas encontrados resolvidos ou estacionados.
 

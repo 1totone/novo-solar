@@ -1,0 +1,335 @@
+{
+ "gerado_por": "docs/validacao/scripts/analisar_radiacao_csv62.py",
+ "arquivos": {
+  "belem.csv": {
+   "estacao": {
+    "latitude": -1.379,
+    "longitude": -48.476,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 14.0,
+    "melhor_d_min": 0.5,
+    "rmse_melhor": 13.99,
+    "escala_melhor": 0.9888,
+    "longitude_equivalente": -48.34,
+    "rmse_latitude_de_sinal_trocado": 2.41
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.0,
+    "ultima_hora_com_sol_menos_extra_h": -0.01
+   },
+   "atraso_radiacao_min": -0.5
+  },
+  "brasilia.csv": {
+   "estacao": {
+    "latitude": -15.863,
+    "longitude": -47.913,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 5.15,
+    "melhor_d_min": -1.7,
+    "rmse_melhor": 2.55,
+    "escala_melhor": 0.992,
+    "longitude_equivalente": -48.35,
+    "rmse_latitude_de_sinal_trocado": 143.68
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.01,
+    "ultima_hora_com_sol_menos_extra_h": -0.02
+   },
+   "atraso_radiacao_min": 1.7
+  },
+  "concepcion.csv": {
+   "estacao": {
+    "latitude": -36.7783,
+    "longitude": -73.0625,
+    "fuso": -4.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 3.93,
+    "melhor_d_min": 0.1,
+    "rmse_melhor": 3.93,
+    "escala_melhor": 1.0008,
+    "longitude_equivalente": -73.05,
+    "rmse_latitude_de_sinal_trocado": 303.45
+   },
+   "global": {
+    "horas_com_global_sem_sol": 259,
+    "horas_com_global_maior_que_extra": 461,
+    "primeira_hora_com_sol_menos_extra_h": -0.71,
+    "ultima_hora_com_sol_menos_extra_h": -1.01
+   },
+   "atraso_radiacao_min": -0.1
+  },
+  "curitiba.csv": {
+   "estacao": {
+    "latitude": -25.528,
+    "longitude": -49.176,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 8.89,
+    "melhor_d_min": 3.3,
+    "rmse_melhor": 3.23,
+    "escala_melhor": 0.9938,
+    "longitude_equivalente": -48.35,
+    "rmse_latitude_de_sinal_trocado": 223.57
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.03,
+    "ultima_hora_com_sol_menos_extra_h": -0.07
+   },
+   "atraso_radiacao_min": -3.3
+  },
+  "florianopolis.csv": {
+   "estacao": {
+    "latitude": -27.67,
+    "longitude": -48.547,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 5.05,
+    "melhor_d_min": 0.8,
+    "rmse_melhor": 4.63,
+    "escala_melhor": 0.998,
+    "longitude_equivalente": -48.34,
+    "rmse_latitude_de_sinal_trocado": 238.26
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.03,
+    "ultima_hora_com_sol_menos_extra_h": -0.04
+   },
+   "atraso_radiacao_min": -0.8
+  },
+  "fortaleza.csv": {
+   "estacao": {
+    "latitude": -3.776,
+    "longitude": -38.533,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 106.88,
+    "melhor_d_min": -39.2,
+    "rmse_melhor": 2.08,
+    "escala_melhor": 0.9902,
+    "longitude_equivalente": -48.33,
+    "rmse_latitude_de_sinal_trocado": 34.15
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.02,
+    "ultima_hora_com_sol_menos_extra_h": -0.05
+   },
+   "atraso_radiacao_min": 39.2
+  },
+  "maceio.csv": {
+   "estacao": {
+    "latitude": -9.511,
+    "longitude": -35.792,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 134.03,
+    "melhor_d_min": -50.2,
+    "rmse_melhor": 2.18,
+    "escala_melhor": 0.991,
+    "longitude_equivalente": -48.33,
+    "rmse_latitude_de_sinal_trocado": 86.95
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.01,
+    "ultima_hora_com_sol_menos_extra_h": -0.01
+   },
+   "atraso_radiacao_min": 50.2
+  },
+  "natal.csv": {
+   "estacao": {
+    "latitude": -5.911,
+    "longitude": -35.248,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 140.75,
+    "melhor_d_min": -52.3,
+    "rmse_melhor": 2.26,
+    "escala_melhor": 0.9905,
+    "longitude_equivalente": -48.33,
+    "rmse_latitude_de_sinal_trocado": 53.93
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.02,
+    "ultima_hora_com_sol_menos_extra_h": -0.06
+   },
+   "atraso_radiacao_min": 52.3
+  },
+  "porto_alegre.csv": {
+   "estacao": {
+    "latitude": -29.994,
+    "longitude": -51.171,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 27.26,
+    "melhor_d_min": 11.3,
+    "rmse_melhor": 3.53,
+    "escala_melhor": 0.9946,
+    "longitude_equivalente": -48.35,
+    "rmse_latitude_de_sinal_trocado": 256.94
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.01,
+    "ultima_hora_com_sol_menos_extra_h": -0.03
+   },
+   "atraso_radiacao_min": -11.3
+  },
+  "recife.csv": {
+   "estacao": {
+    "latitude": -8.126,
+    "longitude": -34.924,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 143.45,
+    "melhor_d_min": -53.7,
+    "rmse_melhor": 2.26,
+    "escala_melhor": 0.9908,
+    "longitude_equivalente": -48.35,
+    "rmse_latitude_de_sinal_trocado": 74.27
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.02,
+    "ultima_hora_com_sol_menos_extra_h": -0.03
+   },
+   "atraso_radiacao_min": 53.7
+  },
+  "rio_de_janeiro.csv": {
+   "estacao": {
+    "latitude": -22.809,
+    "longitude": -43.244,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 51.66,
+    "melhor_d_min": -20.4,
+    "rmse_melhor": 3.06,
+    "escala_melhor": 0.9931,
+    "longitude_equivalente": -48.34,
+    "rmse_latitude_de_sinal_trocado": 202.14
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.04,
+    "ultima_hora_com_sol_menos_extra_h": -0.02
+   },
+   "atraso_radiacao_min": 20.4
+  },
+  "salvador.csv": {
+   "estacao": {
+    "latitude": -12.911,
+    "longitude": -38.331,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 106.32,
+    "melhor_d_min": -40.0,
+    "rmse_melhor": 2.3,
+    "escala_melhor": 0.9916,
+    "longitude_equivalente": -48.34,
+    "rmse_latitude_de_sinal_trocado": 117.52
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.01,
+    "ultima_hora_com_sol_menos_extra_h": -0.01
+   },
+   "atraso_radiacao_min": 40.0
+  },
+  "sao_luis.csv": {
+   "estacao": {
+    "latitude": -2.585,
+    "longitude": -44.234,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 45.38,
+    "melhor_d_min": -16.4,
+    "rmse_melhor": 2.33,
+    "escala_melhor": 0.99,
+    "longitude_equivalente": -48.34,
+    "rmse_latitude_de_sinal_trocado": 23.1
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.02,
+    "ultima_hora_com_sol_menos_extra_h": -0.01
+   },
+   "atraso_radiacao_min": 16.4
+  },
+  "sao_paulo.csv": {
+   "estacao": {
+    "latitude": -23.627,
+    "longitude": -46.655,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 17.29,
+    "melhor_d_min": -6.8,
+    "rmse_melhor": 3.04,
+    "escala_melhor": 0.9934,
+    "longitude_equivalente": -48.35,
+    "rmse_latitude_de_sinal_trocado": 208.61
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.04,
+    "ultima_hora_com_sol_menos_extra_h": -0.02
+   },
+   "atraso_radiacao_min": 6.8
+  },
+  "vitoria.csv": {
+   "estacao": {
+    "latitude": -20.258,
+    "longitude": -40.286,
+    "fuso": -3.0
+   },
+   "extraterrestre": {
+    "rmse_d0": 82.62,
+    "melhor_d_min": -32.2,
+    "rmse_melhor": 2.78,
+    "escala_melhor": 0.9927,
+    "longitude_equivalente": -48.33,
+    "rmse_latitude_de_sinal_trocado": 181.16
+   },
+   "global": {
+    "horas_com_global_sem_sol": 0,
+    "horas_com_global_maior_que_extra": 0,
+    "primeira_hora_com_sol_menos_extra_h": 0.01,
+    "ultima_hora_com_sol_menos_extra_h": -0.03
+   },
+   "atraso_radiacao_min": 32.2
+  }
+ }
+}

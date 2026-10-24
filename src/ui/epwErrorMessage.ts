@@ -4,6 +4,8 @@ import type { MessageKey } from './i18n/i18n';
 
 const ERROR_KEYS: Record<EpwErrorCode, MessageKey> = {
   missingLocation: 'epw.error.missingLocation',
+  missingCsvLocation: 'epw.error.missingCsvLocation',
+  invalidCsvHeader: 'epw.error.invalidCsvHeader',
   invalidLatitude: 'epw.error.invalidLatitude',
   invalidLongitude: 'epw.error.invalidLongitude',
   invalidTimeZone: 'epw.error.invalidTimeZone',
@@ -32,11 +34,22 @@ const FIELD_KEYS: Record<EpwFieldName, MessageKey> = {
 type Translate = (key: MessageKey, params?: Record<string, string | number>) => string;
 
 function isFieldName(name: string | undefined): name is EpwFieldName {
-  return name !== undefined && (EPW_FIELD_NAMES as string[]).includes(name);
+  return name !== undefined && (EPW_FIELD_NAMES as readonly string[]).includes(name);
 }
 
-/** Mensagem para o usuário, no idioma da interface, a partir do erro do leitor de EPW. */
-export function epwErrorMessage(err: EpwParseError, t: Translate): string {
+/**
+ * Mensagem para o usuário, no idioma da interface, a partir do erro do leitor de EPW ou do CSV do
+ * SOL-AR 6.2 (`format`), que só diferem no número de campos esperado por linha.
+ */
+export function epwErrorMessage(
+  err: EpwParseError,
+  t: Translate,
+  format: 'epw' | 'csv' = 'epw',
+): string {
   const field = isFieldName(err.field) ? t(FIELD_KEYS[err.field]) : (err.field ?? '');
-  return t(ERROR_KEYS[err.code], { line: err.line ?? '', field });
+  const key =
+    format === 'csv' && err.code === 'tooFewFields'
+      ? 'csv.error.tooFewFields'
+      : ERROR_KEYS[err.code];
+  return t(key, { line: err.line ?? '', field });
 }

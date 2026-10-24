@@ -1,0 +1,1358 @@
+{
+ "gerado_por": "docs/validacao/scripts/gerar_referencia_csv62.py",
+ "arquivos": {
+  "belem.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 24.3
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 23.8
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 228067.6,
+     "minimo": 20.0,
+     "maximo": 34.9
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 199967.0,
+     "minimo": 17.0,
+     "maximo": 27.5
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 884697.1,
+     "minimo": 100.2,
+     "maximo": 101.5
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 748582.0,
+     "minimo": 43.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 13918.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 578090.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 55517.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3614464.0,
+     "minimo": 0.0,
+     "maximo": 1358.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1959784.0,
+     "minimo": 0.0,
+     "maximo": 1020.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1282048.0,
+     "minimo": 0.0,
+     "maximo": 989.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 1005175.0,
+     "minimo": 0.0,
+     "maximo": 462.0
+    }
+   }
+  },
+  "brasilia.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 19.0
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 20.2
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 181209.9,
+     "minimo": 6.1,
+     "maximo": 33.0
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 134376.3,
+     "minimo": 2.2,
+     "maximo": 23.2
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 786316.8,
+     "minimo": 89.0,
+     "maximo": 90.5
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 659151.0,
+     "minimo": 15.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 14996.0,
+     "minimo": 0.0,
+     "maximo": 15.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 660620.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 53102.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3501517.0,
+     "minimo": 0.0,
+     "maximo": 1387.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 2091994.0,
+     "minimo": 0.0,
+     "maximo": 1286.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1469246.0,
+     "minimo": 0.0,
+     "maximo": 1135.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 883523.0,
+     "minimo": 0.0,
+     "maximo": 465.0
+    }
+   }
+  },
+  "concepcion.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 12.2
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 10.8
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 105309.6,
+     "minimo": -0.5,
+     "maximo": 28.6
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 69051.2,
+     "minimo": -3.6,
+     "maximo": 20.1
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 890230.0,
+     "minimo": 100.0,
+     "maximo": 103.0
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 695037.9,
+     "minimo": 24.7,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 33612.6,
+     "minimo": 0.0,
+     "maximo": 20.6
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1619342.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 42100.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3001136.0,
+     "minimo": 0.0,
+     "maximo": 1369.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1505585.0,
+     "minimo": 0.0,
+     "maximo": 1092.0
+    },
+    "directNormal": {
+     "ausentes": 8760,
+     "soma": 0,
+     "minimo": null,
+     "maximo": null
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 868030.8,
+     "minimo": 0.0,
+     "maximo": 911.82
+    }
+   }
+  },
+  "curitiba.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 19.8
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 17.0
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 143119.3,
+     "minimo": -2.1,
+     "maximo": 31.0
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 117634.4,
+     "minimo": -3.3,
+     "maximo": 22.7
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 799282.2,
+     "minimo": 90.0,
+     "maximo": 92.4
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 756164.0,
+     "minimo": 27.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 29522.0,
+     "minimo": 0.0,
+     "maximo": 13.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 999030.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 60503.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3313450.0,
+     "minimo": 0.0,
+     "maximo": 1391.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1705756.0,
+     "minimo": 0.0,
+     "maximo": 1237.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1126744.0,
+     "minimo": 0.0,
+     "maximo": 1053.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 875930.0,
+     "minimo": 0.0,
+     "maximo": 474.0
+    }
+   }
+  },
+  "florianopolis.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 24.4
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 23.0
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 181006.5,
+     "minimo": 2.0,
+     "maximo": 36.0
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 153976.4,
+     "minimo": -2.0,
+     "maximo": 30.6
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 888861.3,
+     "minimo": 99.8,
+     "maximo": 102.9
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 744884.0,
+     "minimo": 25.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 25731.0,
+     "minimo": 0.0,
+     "maximo": 13.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1150340.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 56201.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3274676.0,
+     "minimo": 0.0,
+     "maximo": 1389.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1516808.0,
+     "minimo": 0.0,
+     "maximo": 1062.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 900007.0,
+     "minimo": 0.0,
+     "maximo": 980.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 816325.0,
+     "minimo": 0.0,
+     "maximo": 472.0
+    }
+   }
+  },
+  "fortaleza.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 1,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 25.4
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 26.4
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 232465.8,
+     "minimo": 19.7,
+     "maximo": 32.2
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 204221.67,
+     "minimo": 17.19,
+     "maximo": 28.25
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 884378.4,
+     "minimo": 100.4,
+     "maximo": 101.6
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 742428.0,
+     "minimo": 55.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 25447.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 788670.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 41896.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3611720.0,
+     "minimo": 0.0,
+     "maximo": 1368.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 2085790.0,
+     "minimo": 0.0,
+     "maximo": 1114.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1580992.0,
+     "minimo": 0.0,
+     "maximo": 1023.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 879467.0,
+     "minimo": 0.0,
+     "maximo": 465.0
+    }
+   }
+  },
+  "maceio.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 24.1
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 23.5
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 212409.2,
+     "minimo": 15.8,
+     "maximo": 34.8
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 178981.6,
+     "minimo": 13.0,
+     "maximo": 24.1
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 875983.8,
+     "minimo": 99.2,
+     "maximo": 100.8
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 720591.0,
+     "minimo": 42.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 17948.0,
+     "minimo": 0.0,
+     "maximo": 9.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 530660.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 43412.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3577419.0,
+     "minimo": 0.0,
+     "maximo": 1378.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 2090255.0,
+     "minimo": 0.0,
+     "maximo": 1152.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1610108.0,
+     "minimo": 0.0,
+     "maximo": 1016.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 863759.0,
+     "minimo": 0.0,
+     "maximo": 468.0
+    }
+   }
+  },
+  "natal.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 24.3
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 25.6
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 225050.1,
+     "minimo": 18.7,
+     "maximo": 32.6
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 188405.1,
+     "minimo": 15.5,
+     "maximo": 25.1
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 882272.7,
+     "minimo": 100.1,
+     "maximo": 101.4
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 702910.0,
+     "minimo": 44.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 32064.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1147340.0,
+     "minimo": 0.0,
+     "maximo": 340.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 54696.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3602775.0,
+     "minimo": 0.0,
+     "maximo": 1371.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 2009589.0,
+     "minimo": 0.0,
+     "maximo": 1143.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1419948.0,
+     "minimo": 0.0,
+     "maximo": 1016.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 948508.0,
+     "minimo": 0.0,
+     "maximo": 465.0
+    }
+   }
+  },
+  "porto_alegre.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 22.5
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 23.8
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 168484.3,
+     "minimo": 1.3,
+     "maximo": 36.5
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 134982.0,
+     "minimo": -0.4,
+     "maximo": 25.6
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 887186.7,
+     "minimo": 99.5,
+     "maximo": 103.2
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 718279.0,
+     "minimo": 20.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 25865.0,
+     "minimo": 0.0,
+     "maximo": 13.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1141620.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 44996.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3197962.0,
+     "minimo": 0.0,
+     "maximo": 1382.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1733500.0,
+     "minimo": 0.0,
+     "maximo": 1106.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1289807.0,
+     "minimo": 0.0,
+     "maximo": 1011.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 780161.0,
+     "minimo": 0.0,
+     "maximo": 469.0
+    }
+   }
+  },
+  "recife.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 25.8
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 24.5
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 225413.8,
+     "minimo": 19.6,
+     "maximo": 31.4
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 188883.02,
+     "minimo": 16.67,
+     "maximo": 25.5
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 886841.3,
+     "minimo": 100.5,
+     "maximo": 102.0
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 699112.0,
+     "minimo": 54.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 35029.0,
+     "minimo": 0.0,
+     "maximo": 13.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1141490.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 51066.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3588741.0,
+     "minimo": 0.0,
+     "maximo": 1375.0
+    },
+    "globalHorizontal": {
+     "ausentes": 1,
+     "soma": 1988386.0,
+     "minimo": 0.0,
+     "maximo": 1105.0
+    },
+    "directNormal": {
+     "ausentes": 1,
+     "soma": 1450732.0,
+     "minimo": 0.0,
+     "maximo": 1002.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 1,
+     "soma": 898957.0,
+     "minimo": 0.0,
+     "maximo": 466.0
+    }
+   }
+  },
+  "rio_de_janeiro.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 26.0
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 25.8
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 206550.5,
+     "minimo": 13.0,
+     "maximo": 38.2
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 174486.3,
+     "minimo": 9.0,
+     "maximo": 28.7
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 888894.9,
+     "minimo": 100.0,
+     "maximo": 102.8
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 721942.0,
+     "minimo": 33.0,
+     "maximo": 123.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 24298.0,
+     "minimo": 0.0,
+     "maximo": 17.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1173210.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 39015.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3374421.0,
+     "minimo": 0.0,
+     "maximo": 1392.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1837281.0,
+     "minimo": 0.0,
+     "maximo": 1088.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1368785.0,
+     "minimo": 0.0,
+     "maximo": 992.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 814187.0,
+     "minimo": 0.0,
+     "maximo": 472.0
+    }
+   }
+  },
+  "salvador.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 25.4
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 25.3
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 221614.3,
+     "minimo": 14.2,
+     "maximo": 33.6
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 179472.5,
+     "minimo": 13.3,
+     "maximo": 25.1
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 888698.8,
+     "minimo": 100.8,
+     "maximo": 102.2
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 674358.0,
+     "minimo": 48.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 31750.0,
+     "minimo": 0.0,
+     "maximo": 13.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1097200.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 48193.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3541940.0,
+     "minimo": 0.0,
+     "maximo": 1383.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1988950.0,
+     "minimo": 0.0,
+     "maximo": 1198.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1469685.0,
+     "minimo": 0.0,
+     "maximo": 1045.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 880355.0,
+     "minimo": 0.0,
+     "maximo": 471.0
+    }
+   }
+  },
+  "sao_luis.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 25.2
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 25.3
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 234292.5,
+     "minimo": 20.3,
+     "maximo": 35.0
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 199795.6,
+     "minimo": 19.3,
+     "maximo": 26.8
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 880183.2,
+     "minimo": 99.8,
+     "maximo": 101.1
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 717174.0,
+     "minimo": 45.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 28061.0,
+     "minimo": 0.0,
+     "maximo": 15.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 521650.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 45868.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3614748.0,
+     "minimo": 0.0,
+     "maximo": 1365.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 2010184.0,
+     "minimo": 0.0,
+     "maximo": 1099.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1400874.0,
+     "minimo": 0.0,
+     "maximo": 1018.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 979475.0,
+     "minimo": 0.0,
+     "maximo": 463.0
+    }
+   }
+  },
+  "sao_paulo.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 17.4
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 17.5
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 164802.5,
+     "minimo": 7.5,
+     "maximo": 32.8
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 131085.9,
+     "minimo": 2.0,
+     "maximo": 23.9
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 809746.7,
+     "minimo": 91.1,
+     "maximo": 93.7
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 719626.0,
+     "minimo": 21.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 34867.0,
+     "minimo": 0.0,
+     "maximo": 18.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1327950.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 60156.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3357180.0,
+     "minimo": 0.0,
+     "maximo": 1392.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1870542.0,
+     "minimo": 0.0,
+     "maximo": 1245.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1342910.0,
+     "minimo": 0.0,
+     "maximo": 1063.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 847005.0,
+     "minimo": 0.0,
+     "maximo": 474.0
+    }
+   }
+  },
+  "vitoria.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 21.5
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 23.6
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 203309.8,
+     "minimo": 11.2,
+     "maximo": 35.6
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 174329.6,
+     "minimo": 7.6,
+     "maximo": 27.6
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 889494.2,
+     "minimo": 100.2,
+     "maximo": 102.7
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 737212.0,
+     "minimo": 32.0,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 37733.0,
+     "minimo": 0.0,
+     "maximo": 15.0
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1101480.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 52513.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3426447.0,
+     "minimo": 0.0,
+     "maximo": 1392.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1852277.0,
+     "minimo": 0.0,
+     "maximo": 1237.0
+    },
+    "directNormal": {
+     "ausentes": 0,
+     "soma": 1303984.0,
+     "minimo": 0.0,
+     "maximo": 1059.0
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 875636.0,
+     "minimo": 0.0,
+     "maximo": 474.0
+    }
+   }
+  },
+  "formato-inclusao/CHL_Concepcion_NormaIWEC_SOlAr.csv": {
+   "linhas": 8760,
+   "linhas_vazias": 0,
+   "primeira": {
+    "mes": 1,
+    "dia": 1,
+    "hora": 1,
+    "tbs": 12.2
+   },
+   "ultima": {
+    "mes": 12,
+    "dia": 31,
+    "hora": 24,
+    "tbs": 10.8
+   },
+   "campos": {
+    "dryBulb": {
+     "ausentes": 0,
+     "soma": 105309.6,
+     "minimo": -0.5,
+     "maximo": 28.6
+    },
+    "dewPoint": {
+     "ausentes": 0,
+     "soma": 69051.2,
+     "minimo": -3.6,
+     "maximo": 20.1
+    },
+    "pressure": {
+     "ausentes": 0,
+     "soma": 890230.0,
+     "minimo": 100.0,
+     "maximo": 103.0
+    },
+    "relativeHumidity": {
+     "ausentes": 0,
+     "soma": 695037.9,
+     "minimo": 24.7,
+     "maximo": 100.0
+    },
+    "windSpeed": {
+     "ausentes": 0,
+     "soma": 33612.6,
+     "minimo": 0.0,
+     "maximo": 20.6
+    },
+    "windDirection": {
+     "ausentes": 0,
+     "soma": 1619342.0,
+     "minimo": 0.0,
+     "maximo": 360.0
+    },
+    "totalSkyCover": {
+     "ausentes": 0,
+     "soma": 42100.0,
+     "minimo": 0.0,
+     "maximo": 10.0
+    },
+    "extraterrestrialHorizontal": {
+     "ausentes": 0,
+     "soma": 3001136.0,
+     "minimo": 0.0,
+     "maximo": 1369.0
+    },
+    "globalHorizontal": {
+     "ausentes": 0,
+     "soma": 1505585.0,
+     "minimo": 0.0,
+     "maximo": 1092.0
+    },
+    "directNormal": {
+     "ausentes": 8760,
+     "soma": 0,
+     "minimo": null,
+     "maximo": null
+    },
+    "diffuseHorizontal": {
+     "ausentes": 0,
+     "soma": 868030.8,
+     "minimo": 0.0,
+     "maximo": 911.82
+    }
+   },
+   "local": {
+    "nome": "Concepcion",
+    "latitude": -36.77,
+    "longitude": -73.05,
+    "fuso": -4.0,
+    "elevacao": 16.0
+   },
+   "primeira_linha_de_dados": 5,
+   "dados_identicos_a_concepcion_csv": true
+  }
+ }
+}

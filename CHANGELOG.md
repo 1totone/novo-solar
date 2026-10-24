@@ -6,6 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Cidades e dados (decisão 0017): catálogo com as 15 cidades do SOL-AR 6.2 e Manaus, com coordenadas da estação do aeroporto e link para o arquivo recente (TMYx 2011 a 2025); dados históricos do 6.2 (TRY de 1961 a 1970 ou 1951 a 1970, IWEC em Concepción) publicados com a aplicação e abertos com um clique, com selo, origem, período e avisos sobre a radiação; importação do CSV antigo do SOL-AR, com ou sem cabeçalho de local (sem presumir o fuso), em UTF-8 ou Latin-1; período de registro do EPW quando o arquivo informa; valores ausentes por campo. Leitor do CSV conferido contra o módulo `csv` do Python nos 15 arquivos do 6.2.
 - Passo 5, "Imprimir e exportar": impressão em escala (raio em cm, padrão 6) com régua de 5 cm e opções do que incluir, inclusive só o transferidor para transparência; exportação em SVG (com o tamanho da impressão), PNG e CSV dos dados mostrados; copiar imagem; comparação lado a lado de duas configurações.
 - Tabela dos valores das células da carta, legível sem mouse.
 - Rosa dos ventos (`src/core/wind/`, `src/ui/wind/`), numa aba ao lado da carta: frequência por setor e classe de velocidade com a calmaria no centro, ou velocidade média por setor; 8 ou 16 setores; filtros por estação e período do dia; resolução da velocidade com aviso de viés; tabela (decisão 0016). Conferida contra um cálculo independente em Python.
@@ -19,6 +20,8 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Alterado
 
+- As 6 cidades de teste dão lugar ao catálogo de cidades; os links antigos continuam abrindo o mesmo local.
+- As mensagens de erro do cabeçalho de arquivos climáticos indicam a linha.
 - O estado no `#` da URL passa a ser atualizado sem criar uma entrada no histórico a cada mudança.
 - O transferidor mantém os índices 1 e 2 na ordem digitada (aresta externa e interna), em vez de ordená-los como o 6.2.
 - Os campos avançados do passo "Proteção" ficam em "Mais opções", que não se fecha mais ao apagar um campo.

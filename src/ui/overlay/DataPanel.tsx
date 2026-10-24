@@ -91,7 +91,7 @@ export function DataPanel({
   overlay: OverlayState;
   /** Há um EPW carregado para o local escolhido. */
   hasData: boolean;
-  /** Página de onde baixar o arquivo da cidade de teste, se houver. */
+  /** Página de onde baixar o arquivo recente da cidade (TMYx), se houver. */
   sourceUrl?: string;
   /** Limites das faixas em uso (padrão, digitados ou do arquivo). */
   limits: readonly number[] | null;
