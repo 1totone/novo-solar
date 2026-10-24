@@ -7,7 +7,7 @@ const MADRID = 'LOCATION,Madrid,M,ESP,SRC-Teste,082210,40.41700,-3.70000,1.0,667
 test.describe('carta solar', () => {
   test('troca a cidade de teste e guarda a escolha no link', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Cidade de teste').selectOption('manaus');
+    await page.getByLabel('Cidade', { exact: true }).selectOption('manaus');
     const chart = page.getByTestId('sun-chart');
     await expect(chart.locator('title')).toContainText('Manaus');
     await expect(page.getByTestId('site-info')).toContainText('UTC−4');
@@ -21,7 +21,7 @@ test.describe('carta solar', () => {
 
   test('carrega um EPW e desenha a carta do local do arquivo', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'recife.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(RECIFE)),
@@ -41,7 +41,7 @@ test.describe('carta solar', () => {
 
   test('desenha a carta de um local no hemisfério Norte', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'madrid.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(MADRID)),
@@ -57,7 +57,7 @@ test.describe('carta solar', () => {
   }) => {
     await page.goto('./#local=belem');
     const broken = syntheticEpw(RECIFE).split('\n').slice(0, 5000).join('\n');
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'quebrado.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(broken),
@@ -65,11 +65,11 @@ test.describe('carta solar', () => {
     await expect(page.getByRole('alert')).toContainText('não tem um ano completo');
     await expect(page.getByTestId('sun-chart').locator('title')).toContainText('Belém');
 
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'planilha.csv',
       mimeType: 'text/plain',
       buffer: Buffer.from('mes,dia,hora\n1,1,1\n'),
     });
-    await expect(page.getByRole('alert')).toContainText('não parece ser um EPW');
+    await expect(page.getByRole('alert')).toContainText('não parece ser um CSV do SOL-AR');
   });
 });

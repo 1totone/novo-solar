@@ -1,10 +1,11 @@
 /**
  * EPW sintético e válido (8760 horas) para os testes de ponta a ponta. A temperatura de bulbo
- * seco é 20 °C, ou a função dada (mês, dia, hora do arquivo).
+ * seco é 20 °C, ou a função dada (mês, dia, hora do arquivo); `comment` vai na linha COMMENTS 1.
  */
 export function syntheticEpw(
   location: string,
   dryBulb: (month: number, day: number, hour: number) => number = () => 20,
+  comment = 'Arquivo sintético dos testes de ponta a ponta',
 ): string {
   const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const lines = [
@@ -13,7 +14,7 @@ export function syntheticEpw(
     'TYPICAL/EXTREME PERIODS,0',
     'GROUND TEMPERATURES,0',
     'HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0',
-    'COMMENTS 1,"Arquivo sintético dos testes de ponta a ponta"',
+    `COMMENTS 1,"${comment}"`,
     'COMMENTS 2,""',
     'DATA PERIODS,1,1,Data,Sunday,1/ 1,12/31',
   ];

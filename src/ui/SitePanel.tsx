@@ -1,13 +1,25 @@
-import { useId, useState, type ChangeEvent } from 'react';
-import { EpwParseError, parseEpw, type EpwData } from '../core/epw/parseEpw';
+import { useId, useState, type ChangeEvent, type ReactNode } from 'react';
+import {
+  EPW_FIELD_NAMES,
+  epwPeriodOfRecord,
+  EpwParseError,
+  parseEpw,
+  type EpwData,
+} from '../core/epw/parseEpw';
+import { parseSolar62, solar62Header, type Solar62Location } from '../core/epw/parseSolar62';
+import { CITIES, type City } from './cities';
+import type { HistoricalState } from './data/historical';
+import { LocationForm } from './data/LocationForm';
+import { decodeText } from './data/readText';
 import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import type { SelectedSite } from './state/siteHash';
-import { TEST_SITES } from './testSites';
 
 /** Informações do arquivo carregado nesta sessão (não vão para a URL). */
 export interface LoadedFile {
   fileName: string;
+  /** EPW, ou CSV do SOL-AR 6.2 importado pelo usuário. */
+  format: 'epw' | 'csv';
   hours: number;
   hasLeapDay: boolean;
   comments: string[];
@@ -18,6 +30,7 @@ export interface LoadedFile {
 interface Props {
   selected: SelectedSite;
   loadedFile: LoadedFile | null;
+  historical: HistoricalState;
   onSelect: (selected: SelectedSite, file: LoadedFile | null) => void;
 }
 
@@ -26,61 +39,151 @@ function formatTimeZone(tz: number, format: (n: number) => string): string {
   return `UTC${tz < 0 ? '−' : '+'}${format(Math.abs(tz))}`;
 }
 
-export function SitePanel({ selected, loadedFile, onSelect }: Props) {
+const placeOf = (city: City): Solar62Location => ({
+  name: city.name,
+  latitude: city.latitude,
+  longitude: city.longitude,
+  timeZone: city.timeZone,
+  elevation: city.elevation,
+});
+
+export function SitePanel({ selected, loadedFile, historical, onSelect }: Props) {
   const { t, formatNumber } = useI18n();
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState<{ fileName: string; text: string } | null>(null);
   const selectId = useId();
   const fileId = useId();
   const site = selected.site;
+  const city = selected.kind === 'city' ? selected.site : null;
   const fmt = (n: number, digits: number) => formatNumber(n, digits);
 
-  const onTestChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const test = TEST_SITES.find((s) => s.id === e.target.value);
-    if (!test) return;
+  const openFile = (fileName: string, format: 'epw' | 'csv', data: EpwData) => {
+    const loc = data.location;
     setError(null);
-    onSelect({ kind: 'test', site: test }, null);
+    setPending(null);
+    onSelect(
+      {
+        kind: 'file',
+        site: {
+          name: [loc.city, loc.state, loc.country].filter(Boolean).join(', '),
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          timeZone: loc.timeZone,
+          elevation: loc.elevation,
+        },
+      },
+      {
+        fileName,
+        format,
+        hours: data.hours,
+        hasLeapDay: data.hasLeapDay,
+        comments: data.comments,
+        data,
+      },
+    );
+  };
+
+  const onCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const next = CITIES.find((s) => s.id === e.target.value);
+    if (!next) return;
+    setError(null);
+    setPending(null);
+    onSelect({ kind: 'city', site: next, historical: false }, null);
   };
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
+    setPending(null);
+    let format: 'epw' | 'csv' = 'epw';
     try {
-      const epw = parseEpw(await file.text());
-      const loc = epw.location;
+      const text = decodeText(await file.arrayBuffer());
+      if (/^\uFEFF?\s*LOCATION/i.test(text) || /\.epw$/i.test(file.name)) {
+        openFile(file.name, 'epw', parseEpw(text));
+        return;
+      }
+      if (!/\.csv$/i.test(file.name)) {
+        setError(t('site.unknownFormat'));
+        return;
+      }
+      format = 'csv';
+      if (solar62Header(text)) {
+        openFile(file.name, 'csv', parseSolar62(text));
+        return;
+      }
+      // Sem cabeçalho: confere os dados antes de pedir o local (qualquer local válido serve).
+      parseSolar62(text, { name: '', latitude: 0, longitude: 0, timeZone: 0, elevation: 0 });
       setError(null);
-      onSelect(
-        {
-          kind: 'file',
-          site: {
-            name: [loc.city, loc.state, loc.country].filter(Boolean).join(', '),
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-            timeZone: loc.timeZone,
-            elevation: loc.elevation,
-          },
-        },
-        {
-          fileName: file.name,
-          hours: epw.hours,
-          hasLeapDay: epw.hasLeapDay,
-          comments: epw.comments,
-          data: epw,
-        },
-      );
+      setPending({ fileName: file.name, text });
     } catch (err) {
-      setError(err instanceof EpwParseError ? epwErrorMessage(err, t) : t('site.readError'));
+      setError(
+        err instanceof EpwParseError ? epwErrorMessage(err, t, format) : t('site.readError'),
+      );
     }
   };
 
-  let source: string;
-  if (selected.kind === 'test') source = t('site.sourceTest');
-  else if (loadedFile) {
-    source = t(loadedFile.hasLeapDay ? 'site.sourceFileLeap' : 'site.sourceFile', {
-      file: loadedFile.fileName,
-      hours: formatNumber(loadedFile.hours),
-    });
+  let source: ReactNode;
+  let period: string | null = null;
+  const notices: string[] = [];
+  const data =
+    selected.kind === 'file'
+      ? loadedFile?.data
+      : historical.status === 'ready'
+        ? historical.data
+        : undefined;
+  if (city && selected.kind === 'city' && selected.historical && city.historical) {
+    const h = city.historical;
+    source = (
+      <>
+        <span className="badge">{t('site.historicalBadge')}</span>{' '}
+        {t(h.kind === 'try' ? 'site.sourceTry' : 'site.sourceIwec')}
+      </>
+    );
+    period = h.period
+      ? t('site.periodTry', { start: h.period[0], end: h.period[1] })
+      : t('site.periodUnknown');
+    if (h.kind === 'try') notices.push(t('site.noticeModelled'));
+    if (Math.abs(h.radiationLagMin) >= 5) {
+      notices.push(
+        t(h.radiationLagMin > 0 ? 'site.noticeLag' : 'site.noticeLead', {
+          minutes: Math.abs(h.radiationLagMin),
+        }),
+      );
+    }
+    if (h.inconsistentGlobalHours > 0) {
+      notices.push(
+        t('site.noticeInconsistent', { hours: formatNumber(h.inconsistentGlobalHours) }),
+      );
+    }
+  } else if (city) {
+    source = t('site.sourceCity', { station: city.station, wmo: city.wmo });
+  } else if (loadedFile) {
+    const hours = formatNumber(loadedFile.hours);
+    if (loadedFile.format === 'csv') {
+      source = t('site.sourceCsv', { file: loadedFile.fileName, hours });
+      period = t('site.periodUnknown');
+    } else {
+      source = t(loadedFile.hasLeapDay ? 'site.sourceFileLeap' : 'site.sourceFile', {
+        file: loadedFile.fileName,
+        hours,
+      });
+      const record = epwPeriodOfRecord(loadedFile.comments);
+      period = record
+        ? t('site.periodRecord', { start: record[0], end: record[1] })
+        : t('site.periodUnknown');
+    }
   } else source = t('site.sourceLink');
+
+  if (data) {
+    const missing = EPW_FIELD_NAMES.filter((f) => data.missing[f] > 0).map((f) =>
+      t('site.missingField', {
+        field: t(`epw.field.${f}`),
+        hours: formatNumber(data.missing[f]),
+      }),
+    );
+    if (missing.length > 0) notices.push(t('site.noticeMissing', { fields: missing.join('; ') }));
+  }
 
   return (
     <section className="site-panel step-panel" aria-labelledby="site-heading">
@@ -89,27 +192,79 @@ export function SitePanel({ selected, loadedFile, onSelect }: Props) {
         {t('site.heading')}
       </h2>
       <div className="field">
-        <label htmlFor={selectId}>{t('site.testLabel')}</label>
-        <select
-          id={selectId}
-          value={selected.kind === 'test' ? selected.site.id : 'arquivo'}
-          onChange={onTestChange}
-        >
+        <label htmlFor={selectId}>{t('site.cityLabel')}</label>
+        <select id={selectId} value={city ? city.id : 'arquivo'} onChange={onCityChange}>
           {selected.kind === 'file' && (
             <option value="arquivo">{t('site.fileOption', { name: selected.site.name })}</option>
           )}
-          {TEST_SITES.map((s) => (
+          {CITIES.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
             </option>
           ))}
         </select>
       </div>
+      {city && (
+        <div className="field" data-testid="city-data">
+          <span className="field-label">{t('site.cityData')}</span>
+          {city.historical && (
+            <button
+              type="button"
+              className="btn"
+              aria-pressed={selected.kind === 'city' && selected.historical}
+              onClick={() =>
+                onSelect(
+                  {
+                    kind: 'city',
+                    site: city,
+                    historical: !(selected.kind === 'city' && selected.historical),
+                  },
+                  null,
+                )
+              }
+            >
+              {selected.kind === 'city' && selected.historical
+                ? t('site.closeHistorical')
+                : t('site.openHistorical')}
+            </button>
+          )}
+          {historical.status === 'loading' && (
+            <p className="note" role="status">
+              {t('site.loadingHistorical')}
+            </p>
+          )}
+          {historical.status === 'error' && (
+            <p className="error" role="alert">
+              {t('site.historicalError')}
+            </p>
+          )}
+          <p className="note">
+            <a href={city.sourceUrl}>{t('site.recentLink')}</a>. {t('site.recentHelp')}
+          </p>
+        </div>
+      )}
       <div className="field">
         <label htmlFor={fileId}>{t('site.fileLabel')}</label>
-        <input id={fileId} type="file" accept=".epw" onChange={onFileChange} />
+        <input id={fileId} type="file" accept=".epw,.csv" onChange={onFileChange} />
         <p className="note">{t('site.fileHelp')}</p>
       </div>
+      {pending && (
+        <LocationForm
+          key={pending.fileName}
+          fileName={pending.fileName}
+          suggestion={city ? placeOf(city) : undefined}
+          onCancel={() => setPending(null)}
+          onSubmit={(location) => {
+            try {
+              openFile(pending.fileName, 'csv', parseSolar62(pending.text, location));
+            } catch (err) {
+              setError(
+                err instanceof EpwParseError ? epwErrorMessage(err, t, 'csv') : t('site.readError'),
+              );
+            }
+          }}
+        />
+      )}
       {error && (
         <p className="error" role="alert">
           {error}
@@ -127,7 +282,25 @@ export function SitePanel({ selected, loadedFile, onSelect }: Props) {
         <dt>{t('site.elevation')}</dt>
         <dd>{fmt(site.elevation, 1)} m</dd>
         <dt>{t('site.source')}</dt>
-        <dd>{source}</dd>
+        <dd data-testid="site-source">{source}</dd>
+        {period && (
+          <>
+            <dt>{t('site.period')}</dt>
+            <dd data-testid="site-period">{period}</dd>
+          </>
+        )}
+        {notices.length > 0 && (
+          <>
+            <dt>{t('site.notices')}</dt>
+            <dd data-testid="site-notices">
+              <ul className="notices">
+                {notices.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            </dd>
+          </>
+        )}
         {selected.kind === 'file' && loadedFile?.comments[0] && (
           <>
             <dt>{t('site.comments')}</dt>

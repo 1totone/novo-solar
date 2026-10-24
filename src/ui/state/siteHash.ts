@@ -1,18 +1,19 @@
 import type { Site } from '../../core/chart/sunChart';
-import { TEST_SITES, type TestSite } from '../testSites';
+import { CITIES, DEFAULT_CITY, type City } from '../cities';
 import type { HashState } from './hashState';
 
 /**
  * Local escolhido, guardado no '#' da URL (decisão 0009):
- * - local de teste: `local=<id>`;
- * - local lido de um EPW: `local=arquivo&nome=...&lat=...&lon=...&fuso=...&alt=...`.
- * A carta só precisa de coordenadas, fuso e elevação, então o link reabre a mesma carta
- * mesmo sem o arquivo.
+ * - cidade do catálogo: `local=<id>`; com os dados históricos do SOL-AR 6.2 abertos, `hist=1`;
+ * - local lido de um arquivo (EPW ou CSV): `local=arquivo&nome=...&lat=...&lon=...&fuso=...&alt=...`.
+ * A carta só precisa de coordenadas, fuso e elevação, então o link reabre a mesma carta mesmo sem
+ * o arquivo; os dados históricos fazem parte da aplicação e reabrem pelo link.
  */
 export type SelectedSite =
-  { kind: 'test'; site: TestSite } | { kind: 'file'; site: Site & { name: string } };
+  | { kind: 'city'; site: City; historical: boolean }
+  | { kind: 'file'; site: Site & { name: string } };
 
-export const DEFAULT_SITE = TEST_SITES[0]!;
+export const DEFAULT_SITE = DEFAULT_CITY;
 
 function num(v: string | undefined, min: number, max: number): number | undefined {
   if (v === undefined || v.trim() === '') return undefined;
@@ -38,24 +39,34 @@ export function siteFromHash(state: HashState): SelectedSite {
       };
     }
   }
-  const test = TEST_SITES.find((s) => s.id === state.local);
-  return { kind: 'test', site: test ?? DEFAULT_SITE };
+  const city = CITIES.find((s) => s.id === state.local) ?? DEFAULT_SITE;
+  return { kind: 'city', site: city, historical: state.hist === '1' && Boolean(city.historical) };
 }
 
 const FILE_KEYS = ['nome', 'lat', 'lon', 'fuso', 'alt'] as const;
 
 /** Patch do estado na URL para o local dado (limpa as chaves do outro tipo). */
 export function hashForSite(selected: SelectedSite): HashState {
-  if (selected.kind === 'test') {
-    return { local: selected.site.id, ...Object.fromEntries(FILE_KEYS.map((k) => [k, ''])) };
+  if (selected.kind === 'city') {
+    return {
+      local: selected.site.id,
+      hist: selected.historical ? '1' : '',
+      ...Object.fromEntries(FILE_KEYS.map((k) => [k, ''])),
+    };
   }
   const s = selected.site;
   return {
     local: 'arquivo',
+    hist: '',
     nome: s.name,
     lat: String(s.latitude),
     lon: String(s.longitude),
     fuso: String(s.timeZone),
     alt: String(s.elevation),
   };
+}
+
+/** O estado tem dados horários associados (arquivo carregado ou dados históricos)? */
+export function hasHourlyData(selected: SelectedSite): boolean {
+  return selected.kind === 'file' || selected.historical;
 }

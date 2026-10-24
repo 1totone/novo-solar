@@ -37,9 +37,15 @@ const manifest = json<{
     url: string;
   }[];
 }>('docs/validacao/casos/epw/manifesto.json');
-const radiation = json<{ arquivos: Record<string, { atraso_radiacao_min: number }> }>(
-  'docs/validacao/casos/solar-6.2/radiacao-csv.json',
-);
+const radiation = json<{
+  arquivos: Record<
+    string,
+    {
+      atraso_radiacao_min: number;
+      global: { horas_com_global_sem_sol: number; horas_com_global_maior_que_extra: number };
+    }
+  >;
+}>('docs/validacao/casos/solar-6.2/radiacao-csv.json');
 
 describe('catálogo de cidades', () => {
   it('tem as 15 cidades do SOL-AR 6.2 e Manaus, na ordem do catálogo, com Florianópolis por padrão', () => {
@@ -82,8 +88,11 @@ describe('catálogo de cidades', () => {
         expect(historical.kind).toBe('iwec');
         expect(historical.period).toBeUndefined();
       }
-      expect(historical.radiationLagMin).toBe(
-        Math.round(radiation.arquivos[historical.file]!.atraso_radiacao_min),
+      const analysis = radiation.arquivos[historical.file]!;
+      // "+ 0" troca -0 por 0 (Math.round(-0,5) é -0).
+      expect(historical.radiationLagMin).toBe(Math.round(analysis.atraso_radiacao_min) + 0);
+      expect(historical.inconsistentGlobalHours).toBe(
+        analysis.global.horas_com_global_sem_sol + analysis.global.horas_com_global_maior_que_extra,
       );
     },
   );

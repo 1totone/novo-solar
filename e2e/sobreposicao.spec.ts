@@ -5,7 +5,7 @@ const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,
 
 /** Carrega um EPW sintético em que a temperatura de cada hora do arquivo é o número da hora. */
 async function loadHourlyEpw(page: Page) {
-  await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
     name: 'floripa.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(syntheticEpw(FLORIPA, (_m, _d, h) => h)),
@@ -14,12 +14,12 @@ async function loadHourlyEpw(page: Page) {
 }
 
 test.describe('dados sobre a carta', () => {
-  test('sem arquivo carregado, o passo 4 pede o EPW e aponta a fonte da cidade de teste', async ({
+  test('sem dados abertos, o passo 4 pede os dados e aponta a fonte recente da cidade', async ({
     page,
   }) => {
     await page.goto('./#local=manaus');
     const need = page.getByTestId('data-need-file');
-    await expect(need).toContainText('carregue no passo 1 o arquivo EPW');
+    await expect(need).toContainText('abra no passo 1 os dados da cidade');
     await expect(need.getByRole('link')).toHaveAttribute('href', /Manaus.*TMYx/);
     await expect(page.getByTestId('overlay')).toHaveCount(0);
   });

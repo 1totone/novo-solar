@@ -87,8 +87,8 @@ export const ptBR = {
   'draw.clear': 'Apagar os desenhos',
   'data.heading': 'Dados sobre a carta',
   'data.needFile':
-    'Para colorir a carta com os dados horários, carregue no passo 1 o arquivo EPW deste local; o link guarda só as coordenadas.',
-  'data.sourceLink': 'Baixar o arquivo desta cidade de teste (Climate.OneBuilding.org)',
+    'Para colorir a carta com os dados horários, abra no passo 1 os dados da cidade ou carregue um arquivo climático; o link guarda só as coordenadas de um arquivo.',
+  'data.sourceLink': 'Baixar o arquivo recente desta cidade (TMYx, Climate.OneBuilding.org)',
   'data.variable': 'Variável',
   'data.none': 'Nenhuma',
   'data.tbs': 'Temperatura de bulbo seco (°C)',
@@ -139,7 +139,7 @@ export const ptBR = {
   'tabs.chart': 'Carta solar',
   'tabs.rose': 'Rosa dos ventos',
   'wind.needFile':
-    'Para ver a rosa dos ventos, carregue no passo 1 o arquivo EPW deste local; o link guarda só as coordenadas.',
+    'Para ver a rosa dos ventos, abra no passo 1 os dados da cidade ou carregue um arquivo climático; o link guarda só as coordenadas de um arquivo.',
   'wind.show': 'Mostrar',
   'wind.frequency': 'Frequência',
   'wind.speed': 'Velocidade',
@@ -214,8 +214,10 @@ export const ptBR = {
   'print.title': 'SOL-AR: {place}',
   'print.details':
     'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. Raio da carta: {radius} cm.',
-  'print.sourceTest': 'Coordenadas do arquivo TMYx 2011 a 2025 (Climate.OneBuilding.org).',
+  'print.sourceCity':
+    'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
   'print.sourceFile': 'Dados do arquivo {file}.',
+  'print.sourceHistorical': 'Dados históricos do SOL-AR 6.2 ({what}).',
   'print.ruler': 'Régua de 5 cm',
   'compare.a': 'A',
   'compare.b': 'B (editável)',
@@ -226,6 +228,7 @@ export const ptBR = {
   'csv.rose': 'rosa dos ventos',
   'csv.site': 'Local: {place}; latitude {latitude}; longitude {longitude}; fuso UTC{timeZone}',
   'csv.file': 'Arquivo: {file} ({hours} horas)',
+  'csv.historical': 'Dados históricos do SOL-AR 6.2: {file} ({hours} horas); {what}',
   'csv.quantity': 'Variável: {quantity} ({unit}); valor de cada célula: {what}',
   'csv.semester':
     'Semestre: {semester}; células: quinzena x hora do arquivo; {interval}; hora legal do fuso do arquivo',
@@ -237,39 +240,83 @@ export const ptBR = {
   'mask.total': 'sombra total (100%)',
   'mask.partial': 'sombra parcial (50%)',
   'site.heading': 'Local',
-  'site.testLabel': 'Cidade de teste',
+  'site.cityLabel': 'Cidade',
   'site.fileOption': 'Arquivo: {name}',
-  'site.fileLabel': 'Ou carregue um arquivo climático EPW',
+  'site.cityData': 'Dados climáticos da cidade',
+  'site.openHistorical': 'Abrir dados históricos (SOL-AR 6.2)',
+  'site.closeHistorical': 'Fechar dados históricos',
+  'site.recentLink': 'Baixar dados recentes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
+  'site.recentHelp': 'Descompacte o arquivo baixado e carregue o .epw abaixo.',
+  'site.loadingHistorical': 'Abrindo os dados históricos…',
+  'site.historicalError':
+    'Não foi possível abrir os dados históricos. Confira a conexão e tente de novo.',
+  'site.fileLabel': 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)',
   'site.fileHelp': 'O arquivo é lido só no seu navegador; nada é enviado pela internet.',
+  'site.unknownFormat':
+    'Formato não reconhecido: carregue um arquivo EPW ou um CSV do SOL-AR (extensão .csv).',
   'site.latitude': 'Latitude',
   'site.longitude': 'Longitude',
   'site.timeZone': 'Fuso',
   'site.elevation': 'Elevação',
   'site.source': 'Origem',
-  'site.sourceTest':
-    'Local de teste: coordenadas, fuso e elevação do arquivo TMYx 2011 a 2025 (Climate.OneBuilding.org).',
+  'site.sourceCity':
+    'Coordenadas, fuso e elevação da estação {station} (WMO {wmo}), do arquivo TMYx 2011 a 2025; nenhum dado horário aberto.',
+  'site.historicalBadge': 'dados históricos',
+  'site.sourceTry':
+    'SOL-AR 6.2: ano climático de referência (TRY) da estação do aeroporto, de Goulart, Lamberts e Firmino (1998).',
+  'site.sourceIwec': 'SOL-AR 6.2: arquivo IWEC (ASHRAE) da estação do aeroporto.',
   'site.sourceFile': 'Arquivo {file}: {hours} horas.',
   'site.sourceFileLeap': 'Arquivo {file}: {hours} horas (inclui 29 de fevereiro).',
+  'site.sourceCsv': 'Arquivo {file}, no formato do SOL-AR 6.2: {hours} horas.',
+  'site.period': 'Período',
+  'site.periodTry': 'ano de referência escolhido entre {start} e {end}',
+  'site.periodRecord': '{start} a {end} (período de registro informado no arquivo)',
+  'site.periodUnknown': 'não informado no arquivo',
+  'site.notices': 'Avisos',
+  'site.noticeModelled': 'Radiação estimada por modelo: os registros de origem não têm radiação.',
+  'site.noticeLag':
+    'O modelo da radiação pôs o sol na longitude de Florianópolis: aqui a radiação vem cerca de {minutes} min depois do sol real.',
+  'site.noticeLead':
+    'O modelo da radiação pôs o sol na longitude de Florianópolis: aqui a radiação vem cerca de {minutes} min antes do sol real.',
+  'site.noticeInconsistent':
+    'A radiação global contradiz a extraterrestre do próprio arquivo em {hours} horas (radiação sem sol ou maior que a extraterrestre).',
+  'site.noticeMissing': 'Valores ausentes: {fields}.',
+  'site.missingField': '{field} ({hours} h)',
   'site.sourceLink':
     'Coordenadas, fuso e elevação do link; o arquivo não está carregado nesta sessão.',
   'site.comments': 'Comentário do arquivo',
   'site.readError': 'Não foi possível ler o arquivo.',
   'epw.error.missingLocation':
     'O arquivo não parece ser um EPW: a primeira linha deveria começar com LOCATION e ter 10 campos.',
+  'epw.error.missingCsvLocation': 'O arquivo CSV não tem cabeçalho de local; informe o local.',
+  'epw.error.invalidCsvHeader':
+    'O arquivo não parece ser um CSV do SOL-AR: a linha {line} deveria trazer o local (nome, latitude, longitude, fuso e elevação).',
   'epw.error.invalidLatitude':
-    'Latitude inválida no cabeçalho (linha 1): deve estar entre −90° e 90°.',
+    'Latitude inválida no cabeçalho (linha {line}): deve estar entre −90° e 90°.',
   'epw.error.invalidLongitude':
-    'Longitude inválida no cabeçalho (linha 1): deve estar entre −180° e 180°.',
+    'Longitude inválida no cabeçalho (linha {line}): deve estar entre −180° e 180°.',
   'epw.error.invalidTimeZone':
-    'Fuso horário inválido no cabeçalho (linha 1): deve estar entre −12 h e +14 h.',
-  'epw.error.invalidElevation': 'Elevação inválida no cabeçalho (linha 1).',
+    'Fuso horário inválido no cabeçalho (linha {line}): deve estar entre −12 h e +14 h.',
+  'epw.error.invalidElevation': 'Elevação inválida no cabeçalho (linha {line}).',
   'epw.error.tooFewFields': 'Linha {line}: faltam campos; um EPW tem 35 campos por hora.',
+  'csv.error.tooFewFields': 'Linha {line}: faltam campos; um CSV do SOL-AR tem 19 campos por hora.',
   'epw.error.invalidNumber': 'Linha {line}: valor não numérico no campo "{field}".',
   'epw.error.invalidSequence':
     'Linha {line}: a sequência de mês, dia e hora está quebrada (hora faltando, repetida ou fora de ordem).',
   'epw.error.invalidHourCount':
     'O arquivo não tem um ano completo: são esperadas 8760 horas (ou 8784 com 29 de fevereiro).',
   'epw.error.negativeRadiation': 'Linha {line}: radiação negativa no campo "{field}".',
+  'locationForm.intro':
+    'O arquivo {file} não tem cabeçalho de local (como os arquivos que vinham com o SOL-AR 6.2). Informe o local dos dados; o fuso é necessário para pôr cada hora na carta.',
+  'locationForm.useCity': 'Usar o local de {city}',
+  'locationForm.name': 'Nome do local',
+  'locationForm.latitude': 'Latitude (°, negativa ao Sul)',
+  'locationForm.longitude': 'Longitude (°, negativa a Oeste)',
+  'locationForm.timeZone': 'Fuso dos dados (h em relação ao UTC, ex.: −3)',
+  'locationForm.elevation': 'Elevação (m)',
+  'locationForm.invalid': 'Digite um número entre {min} e {max}.',
+  'locationForm.open': 'Abrir os dados',
+  'locationForm.cancel': 'Cancelar',
   'epw.field.dryBulb': 'temperatura de bulbo seco',
   'epw.field.dewPoint': 'temperatura de ponto de orvalho',
   'epw.field.relativeHumidity': 'umidade relativa',

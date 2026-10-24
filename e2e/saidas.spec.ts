@@ -62,7 +62,7 @@ test.describe('imprimir e exportar', () => {
 
   test('CSV dos dados mostrados e tabela das células', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático EPW').setInputFiles({
+    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
       name: 'floripa.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(FLORIPA, (_m, _d, h) => h)),

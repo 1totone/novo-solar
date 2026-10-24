@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EpwParseError, parseEpw } from './parseEpw';
+import { epwPeriodOfRecord, EpwParseError, parseEpw } from './parseEpw';
 
 const HEADER = [
   'LOCATION,Florianopolis-Luz.Intl.AP,SC,BRA,SRC-TMYx,838990,-27.67000,-48.54700,-3.0,6.1',
@@ -220,5 +220,21 @@ describe('parseEpw: dados horários', () => {
       9 + 300,
     );
     expect(e.field).toBe('directNormal');
+  });
+});
+
+describe('epwPeriodOfRecord', () => {
+  it('lê o período do comentário do TMYx', () => {
+    expect(
+      epwPeriodOfRecord([
+        'NCEI ISD/ERA5 - #years=[15] Period of Record=2011-2025; Jan=2017; Feb=2023',
+        'Downloaded from Climate.Onebuilding.org',
+      ]),
+    ).toEqual([2011, 2025]);
+  });
+
+  it('null quando o arquivo não informa', () => {
+    expect(epwPeriodOfRecord(['Arquivo sintético para testes'])).toBeNull();
+    expect(epwPeriodOfRecord([])).toBeNull();
   });
 });
