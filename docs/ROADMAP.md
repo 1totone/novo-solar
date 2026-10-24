@@ -4,12 +4,14 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.3 (máscara pelos ângulos). Transferidor feito e conferido contra o código do SOL-AR 6.2.
+**Você está aqui:** Fase 2, passo F2.4 (sobreposição de dados). Máscara pelos ângulos feita e conferida por traçado de raios e pelo exemplo do tutorial da UFU.
 
 **Pendências do Anthony:**
 
-- Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (afeta o F2.7; decisões 0010 e 0013). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
-**Última atualização:** 23/10/2026.
+- Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (afeta o F2.7; decisões 0010 e 0013).
+- Enviar fotos das p. 13 a 15 do tutorial do SOL-AR da UFU (Bortoli e Saramago): o PDF não foi encontrado (site do LabEEE com erro 500). Servem para a conferência quantitativa do caso do F2.3 (relatório `docs/validacao/relatorios/F2.3-mascara.md`).
+- Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
+**Última atualização:** 24/10/2026.
 
 ---
 
@@ -147,8 +149,8 @@ Ao fim desta fase, o novo já substitui o antigo.
 
 - [x] **F2.1 Fluxo e wireframes.** Aprovados em 24/10/2026 com ajustes na sobreposição, nas faixas e no vento (`docs/ux/F2.1-fluxo-e-wireframes.md`, decisão 0013). Esboço da tela principal e do fluxo básico, publicado como página navegável. **Parada:** o Claude apresenta os wireframes e espera a aprovação do Anthony (que pode mostrar a 1 ou 2 alunos) antes de codar a interface. *Pronto quando:* wireframes aprovados.
 - [x] **F2.2 Transferidor.** Feito em 24/10/2026: curvas iguais às do 6.2 (reconstruídas do executável) em 8 casos e 64 curvas; lado direito e índices 1 e 2 confirmados (relatório em `docs/validacao/relatorios/`). Qualquer orientação (inclusive negativa), referência interna e externa, α1/α2, β e γ (direita/esquerda, 1 e 2). *Pronto quando:* curvas iguais às do SOL-AR 6.2 nos casos de regressão.
-- [ ] **F2.3 Máscara pelos ângulos.** Regiões total e parcial calculadas a partir de α, β e γ (o antigo exigia desenho à mão); desenho manual mantido como opção. *Pronto quando:* casos-teste da literatura reproduzidos.
-- [ ] **F2.4 Sobreposição de dados.** TBS, UR, GHI, DNI e DHI na carta, por semestre, com faixas editáveis e legenda; fuso correto. *Pronto quando:* cores no lugar certo para Florianópolis e Manaus (teste do fuso).
+- [x] **F2.3 Máscara pelos ângulos.** Feito em 24/10/2026: sombra total (100%) e parcial (50%, do centro da janela), índices 2 (brise afastado), γ das aletas e desenho à mão (decisão 0014); conferida por traçado de raios em 9 casos e pelo exemplo do tutorial do SOL-AR da UFU em Brasília (relatório em `docs/validacao/relatorios/`). Regiões total e parcial calculadas a partir de α, β e γ (o antigo exigia desenho à mão); desenho manual mantido como opção. *Pronto quando:* casos-teste da literatura reproduzidos.
+- [ ] **F2.4 Sobreposição de dados.** TBS, UR, GHI, DNI e DHI na carta, por semestre, com faixas editáveis e legenda; fuso correto. Inclui o leiaute do celular com a carta no topo e os passos numa folha (decisão 0013), que ainda não foi feito. *Pronto quando:* cores no lugar certo para Florianópolis e Manaus (teste do fuso).
 - [ ] **F2.5 Rosa dos ventos.** 8 ou 16 setores, frequência e velocidade com classes, calmarias, por estação e período do dia. *Pronto quando:* estatísticas iguais às de um cálculo independente em Python.
 - [ ] **F2.6 Saídas.** Comparar lado a lado; imprimir em escala; exportar SVG, PNG e CSV dos dados mostrados; copiar. *Pronto quando:* carta impressa a 100% tem o raio pedido com até 1 mm de diferença (medido com régua).
 - [ ] **F2.7 Dados.** Importar EPW e o CSV antigo do SOL-AR; as 15 cidades do programa antigo com dados recentes; as TRY antigas marcadas como históricas. *Pronto quando:* as 15 cidades abrem com origem e período visíveis.

@@ -6,6 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Máscara pelos ângulos (`src/core/mask/`, `src/ui/mask/`): sombra total (100%, vermelha) e parcial (50%, amarela, ângulos medidos do centro da janela) calculadas a partir de α, β e γ, com índices 2 (brise afastado), γ das aletas e desenho à mão em "Mais opções" (decisão 0014). Conferida por traçado de raios em 9 casos e pelo exemplo do tutorial do SOL-AR da UFU em Brasília.
 - Transferidor sobre a carta (`src/core/protractor/`, `src/ui/protractor/`): orientação da fachada (qualquer valor, inclusive negativo), referência interna e externa, α, β e γ à direita e à esquerda, índices 1 e 2, grade como a do SOL-AR 6.2. Passos "Fachada" e "Proteção" na tela, com o estado no link. Curvas conferidas contra o código do 6.2.
 - Releases criadas pelo workflow `release.yml` a partir do CHANGELOG (decisão 0012).
 - Wireframes navegáveis da Fase 2 (`.../wireframes/`), aprovados com ajustes (decisão 0013): fluxo em passos, sobreposição por células quinzenais, faixas do 6.2 e classes de vento.
@@ -14,6 +15,8 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 ### Alterado
 
 - O estado no `#` da URL passa a ser atualizado sem criar uma entrada no histórico a cada mudança.
+- O transferidor mantém os índices 1 e 2 na ordem digitada (aresta externa e interna), em vez de ordená-los como o 6.2.
+- Os campos avançados do passo "Proteção" ficam em "Mais opções", que não se fecha mais ao apagar um campo.
 
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
 

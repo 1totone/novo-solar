@@ -10,10 +10,12 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`casos/posicao-solar/`](casos/posicao-solar/README.md): posição solar, nascer e pôr do sol com o pvlib (NREL SPA) e o caso publicado no relatório do SPA.
   - `casos/transferidor/solar62.csv`: 64 curvas do transferidor do 6.2 em 8 casos.
   - `casos/carta/linhas-horarias.csv`: 852 pontos das linhas horárias (hora solar verdadeira, 5 h a 19 h, dia 21 de cada mês, 6 locais), com o pvlib.
+  - `casos/mascara/tracado-raios.json`: 9 casos de janela com brise, aletas e grelha, 1500 direções do sol cada, classificadas por traçado de raios (sombra total, centro à sombra e fração sombreada).
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
   - [`relatorios/F2.2-transferidor.md`](relatorios/F2.2-transferidor.md): transferidor contra o código do SOL-AR 6.2.
+  - [`relatorios/F2.3-mascara.md`](relatorios/F2.3-mascara.md): máscara pelos ângulos contra traçado de raios e o exemplo do tutorial do SOL-AR da UFU.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -24,13 +26,14 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/gerar_linhas_horarias.py` | gera os pontos das linhas horárias em hora solar verdadeira com o pvlib |
 | `scripts/transferidor_solar62.py` | reimplementa o desenho do transferidor do SOL-AR 6.2 (desmontado) e gera os casos de regressão |
 | `scripts/gerar_referencia_epw.py` | gera a referência do leitor de EPW com o `pvlib.iotools.read_epw` |
+| `scripts/mascara_tracado_raios.py` | traçado de raios com janela e placas reais para a máscara pelos ângulos (só biblioteca padrão) |
 
 ## Referências independentes
 
 | Módulo | Referência |
 |---|---|
 | Posição solar | pvlib (NREL SPA) e caso publicado no relatório do SPA |
-| Máscaras | casos analíticos (ex.: brise horizontal infinito reproduz exatamente a curva α) |
+| Máscaras | traçado de raios com janela e placas reais (máscara pelos ângulos, F2.3) e casos analíticos (ex.: brise horizontal infinito reproduz exatamente a curva α) |
 | Fração ensolarada | EnergyPlus (Surface Outside Face Sunlit Fraction), com ShadowCalculation atualizado a cada passo de tempo |
 | Radiação incidente | EnergyPlus (Surface Outside Face Incident Solar Radiation Rate per Area), explicitando o modelo de céu |
 | Vento | estatísticas calculadas de forma independente em Python |

@@ -65,11 +65,11 @@ export const ptBR = {
   'protection.finTopHelp':
     'Topo de uma aleta de altura limitada, medido do canto superior oposto da janela; acima dessa curva o sol passa por cima da aleta.',
   'protection.combinedHelp':
-    'Grelha (brise encostado nas aletas, mesma profundidade): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
+    'Grelha (brise encostado nas aletas, mesma profundidade, junto à parede): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
   'protection.partialSet': 'Sombra parcial (50%)',
   'protection.partialShort': 'parcial',
   'protection.partialHelp':
-    'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos; em peças curtas é uma aproximação.',
+    'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos e sem fresta; nos outros casos, é uma aproximação.',
   'protection.invalid': 'Use um valor de 0° a 90°.',
   'protection.fieldLabel': '{angle} {side} {index}',
   'draw.heading': 'Desenhar à mão',
