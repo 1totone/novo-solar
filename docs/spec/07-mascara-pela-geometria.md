@@ -11,7 +11,7 @@ Referencial da fachada (seção 1.2): x à direita de quem está dentro olhando 
 - **Janela:** retângulo no plano y = 0 (o plano do vidro), x de 0 a W (largura) e z de 0 (peitoril) a H (altura).
 - **Recuo** (opcional, padrão 0): distância d entre o vidro e o plano externo da fachada (parede espessa). O recuo gera quatro placas nas bordas da janela, de y = 0 a y = d (verga, peitoril e ombreiras), e as proteções passam a ser medidas a partir do plano externo da fachada, y = d.
 - **Placas:** polígonos planos e convexos, de espessura nula, com todos os vértices em y ≥ 0 (diante do vidro). É o mesmo modelo das superfícies de sombreamento do EnergyPlus; se a espessura de uma peça importar, ela é modelada com mais placas.
-- **Infinito:** um prolongamento infinito vale 10⁶ m. A sombra de uma placa se desloca y · tan ψ na horizontal; com profundidades de até 10 m, o resultado só difere do de uma placa realmente infinita para |ψ| > 89,999°, onde o sol está praticamente no plano da fachada.
+- **Infinito:** um prolongamento infinito vale 10⁶ m. A sombra de um ponto da placa se desloca y · tan ψ na horizontal e y · tan α_sol na vertical, no máximo y / cos θ ≤ y · 10⁵ com o sol na janela (seção 7.2); com placas a até 9 m do vidro, o deslocamento fica abaixo de 10⁶ m e o resultado é o de uma placa realmente infinita.
 
 ### Dispositivos
 
@@ -23,7 +23,7 @@ Referencial da fachada (seção 1.2): x à direita de quem está dentro olhando 
 | Lâminas horizontais | número n; largura (corda) c; passo vertical p; inclinação θ, de −90° a 90°, positiva com a borda externa para baixo; afastamento g da borda interna; altura da borda interna da primeira lâmina acima da verga e (pode ser negativa); prolongamentos P_e e P_d | lâmina k (k = 0 a n − 1): borda interna em y = d + g, z_k = H + e − k · p; borda externa em y = d + g + c · cos θ, z = z_k − c · sen θ; x de −P_e a W + P_d |
 | Lâminas verticais | número n; corda c; passo horizontal p; rotação θ, de −90° a 90°, positiva com a borda externa para a direita; afastamento g; posição da borda interna da primeira lâmina x_0, a partir da lateral esquerda da janela; prolongamentos P_a e P_b | lâmina k: borda interna em x_k = x_0 + k · p, y = d + g; borda externa em x = x_k + c · sen θ, y = d + g + c · cos θ; z de −P_b a H + P_a |
 | Recuo | d | verga: z = H, x de 0 a W, y de 0 a d; peitoril: z = 0; ombreiras: x = 0 e x = W, z de 0 a H |
-| Placa livre | vértices (x, y, z) | a própria |
+| Placa livre | vértices (x, y, z), em ordem ao longo do contorno | a própria; o núcleo recusa placa não plana, côncava ou sem área |
 
 A **grelha** (brise misto) é um brise com aletas encostadas, das mesmas profundidades; não precisa de tipo próprio, porque a união das sombras (seção 7.3) fecha as junções sem regra especial. Lâminas giram em torno da borda interna, então mudar a inclinação não muda o afastamento.
 
@@ -69,13 +69,13 @@ Na carta, cada semiespaço é a imagem de um hemisfério limitado por um círcul
 
 - m_U > 0: o disco de centro (m_E, m_N) / m_U e raio 1 / |m_U|;
 - m_U < 0: o exterior desse disco;
-- m_U = 0 (|m_U| < 10⁻¹²): o semiplano dos pontos p com p · (m_E, m_N) ≥ 0.
+- m_U = 0 (na prática, |m_U| < 10⁻⁸): o semiplano dos pontos p com p · (m_E, m_N) ≥ 0. O limite equilibra o erro de trocar o círculo enorme pela reta e o arredondamento do teste de ponto no disco: os dois ficam perto de 10⁻⁸ na carta de raio 1.
 
 A máscara do ponto é, portanto, uma região exata da carta, do mesmo tipo das regiões da seção 1.6 (interseções e uniões de discos e semiplanos), limitada ao horizonte e ao semiplano da fachada. Com Q no centro da janela, é exatamente o critério de 50% da seção 1.6, agora para qualquer combinação de peças.
 
 ## 7.5 Curvas de percentual
 
-As curvas de 0, 25, 50, 75 e 100% são as bordas das regiões {f_s > 0}, {f_s ≥ 0,25}, {f_s ≥ 0,5}, {f_s ≥ 0,75} e {f_s = 1}, dentro do quarto de esfera em que o sol está na janela. As de 0 e 100% usam os limiares 10⁻⁹ e 1 − 10⁻⁹, para separar o valor exato do ruído de arredondamento; a diferença em ângulo é menor que 0,01°.
+As curvas de 0, 25, 50, 75 e 100% são as bordas das regiões {f_s > 0}, {f_s ≥ 0,25}, {f_s ≥ 0,5}, {f_s ≥ 0,75} e {f_s = 1}, dentro do quarto de esfera em que o sol está na janela. As de 0 e 100% usam os limiares 10⁻⁹ e 1 − 10⁻⁹, para separar o valor exato do ruído de arredondamento. Onde o percentual cresce linearmente a partir de 0 (uma borda de sombra entrando na janela), o efeito do limiar em ângulo é desprezível (10⁻⁷ grau no brise infinito); onde cresce com o quadrado (o canto de uma sombra entrando pelo canto da janela, f ≈ L² · ψ · α_sol / (2 · A)), o desvio é de √(2 · A · 10⁻⁹) / L radianos: cerca de 0,003° para uma janela de 1 m² e uma peça de 1 m, maior em janelas muito grandes com peças pequenas.
 
 **Algoritmo.** Fora dos casos analíticos, as curvas não são circunferências, e o cálculo é numérico:
 
@@ -114,7 +114,7 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 
 **Mapa mês × hora** (12 × 24): para cada mês e hora, a média sobre os dias do mês de F_e e de E, e o **percentual sombreado pela proteção com sol na janela**, S = 1 − F̄_e / Ē, definido só onde Ē > 0. O mapa separa as datas que a carta sobrepõe (meses simétricos em relação aos solstícios, que têm trajetórias quase iguais) e é em hora legal, como o EPW. Horas com Ē = 0 são de noite ou de sol atrás da fachada.
 
-**Precisão da média horária.** Com amostras no meio dos subintervalos, a média é de segunda ordem onde f_e varia suavemente. Onde f_e salta (nascer e pôr do sol, sol cruzando o plano da fachada), o erro de uma hora pode chegar a 1/(2N) = 0,083; esses saltos acontecem com o sol rasante, quando a radiação direta na janela é pequena, e na média do mês os erros de dias diferentes se compensam em parte.
+**Precisão da média horária.** Com amostras no meio dos subintervalos, a média é de segunda ordem onde f_e varia suavemente. Onde f_e salta (nascer e pôr do sol, sol cruzando o plano da fachada), o erro de uma hora pode chegar a 1/(2N) = 0,083 por salto; esses saltos acontecem com o sol rasante, quando a radiação direta na janela é pequena, e na média do mês os erros de dias diferentes se compensam em parte.
 
 **Custo.** O sol depende só do local; as 52 560 posições do ano (N = 6) são calculadas uma vez por local, e a sombra é recalculada a cada mudança de geometria.
 
@@ -137,10 +137,10 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 | Percentual sombreado | traçado de raios, sem projeção: 400 × 400 células da janela com um ponto sorteado em cada (amostragem estratificada), raio até o sol e interseção com as placas; 20 direções por cena | 0,002 (erro de amostragem; o maior encontrado foi 0,0004) |
 | Percentual sombreado do F2.3 | traçado de raios do F2.3 (grade de 41 × 41 com os pontos das bordas), 1500 direções × 9 casos; sombra total como "todos os pontos da grade à sombra" | 0,05 na fração (uma linha ou coluna da grade, 1/41, por borda de sombra); sombra total sem nenhuma direção diferente |
 | Casos analíticos (brise e aleta infinitos, com e sem afastamento) | fórmulas da seção 7.5 | 10⁻¹² no percentual; 10⁻⁶ grau nos vértices das curvas; 0,01° no meio dos segmentos |
-| Máscara de um ponto | traçado de raios do F2.3, critério do centro (1500 direções × 9 casos) | nenhuma direção classificada errada |
+| Máscara de um ponto | traçado de raios: critério do centro do F2.3 (1500 direções × 9 casos) e dois pontos de cada uma das 15 cenas (254 direções) | nenhuma direção classificada errada |
 | Sombra total (100%) | máscara pelos ângulos (seção 1.6) nos casos em que a união é exata; nos demais, a máscara pelos ângulos não pode ter direção fora da sombra total | nenhuma direção classificada errada |
 | Fração ensolarada horária e mapa mês × hora | pvlib (SPA) e shapely, ano inteiro, 3 locais × 3 cenas | 10⁻⁶ |
-| Coerência com a máscara | em todas as amostras do ano: f_s = 1 implica o centro à sombra (máscara de um ponto), f_s = 0 implica o centro ao sol | nenhuma exceção |
+| Coerência com a máscara | em todas as amostras do ano com o sol na janela (Florianópolis, 3 cenas): f_s = 1 implica o centro à sombra (máscara de um ponto), f_s = 0 implica o centro ao sol | nenhuma exceção |
 | Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* (F3.8) | RMSE ≤ 0,02 |
 
 ## 7.9 Escolhas propostas (decisão 0018)
