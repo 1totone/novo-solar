@@ -38,6 +38,7 @@ export function SunChart({
   // Rótulos de altura no semieixo meridiano oposto ao lado em que o sol passa mais tempo
   // (sul da carta para latitudes sul): y do SVG cresce para o Sul.
   const labelSide = site.latitude < 0 ? 1 : -1;
+  const months = t('chart.monthsShort').split(',');
 
   return (
     <svg
@@ -65,11 +66,14 @@ export function SunChart({
         {AZIMUTH_LABELS.map((a) => {
           const r = (a * Math.PI) / 180;
           const key = CARDINAL[a];
+          // Os pontos cardeais ficam mais afastados que os graus: assim não encostam nos rótulos
+          // das datas, que no equinócio ficam exatamente no Leste e no Oeste.
+          const radius = key ? 1.25 : 1.17;
           return (
             <text
               key={a}
-              x={1.17 * Math.sin(r)}
-              y={-1.17 * Math.cos(r)}
+              x={radius * Math.sin(r)}
+              y={-radius * Math.cos(r)}
               className={key ? 'cardinal' : 'azimuth-label'}
             >
               {key ? t(key) : `${a}°`}
@@ -101,6 +105,13 @@ export function SunChart({
         })}
       </g>
       {overlay}
+      <g className="date-labels" data-testid="date-labels">
+        {g.pathLabels.map((l) => (
+          <text key={l.months.join('-')} x={l.x} y={l.y} className="date-label">
+            {l.months.map((m) => months[m - 1]).join('/')}
+          </text>
+        ))}
+      </g>
       <g className="sun-paths" data-testid="sun-paths">
         {g.paths.map((p) => (
           <polyline

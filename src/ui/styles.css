@@ -3,6 +3,8 @@
   --color-muted: #57606a;
   --color-accent: #1f4e79;
   --color-sun: #b5651d;
+  /* a cor das trajetórias, escurecida para texto pequeno (5,5:1 sobre o branco) */
+  --color-sun-text: #9c5719;
   --color-surface: #f6f8fa;
   --color-border: #d0d7de;
   --color-bg: #ffffff;

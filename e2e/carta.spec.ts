@@ -19,6 +19,29 @@ test.describe('carta solar', () => {
     await expect(chart.locator('.sun-path')).toHaveCount(12);
   });
 
+  test('cada trajetória tem o mês no poente, do lado oeste da carta', async ({ page }) => {
+    await page.goto('./#local=recife');
+    const labels = page.getByTestId('date-labels').locator('text');
+    await expect(labels).toHaveText([
+      'jan/nov',
+      'fev/out',
+      'mar/set',
+      'abr/ago',
+      'mai/jul',
+      'jun',
+      'dez',
+    ]);
+    const chart = await page.getByTestId('sun-chart').boundingBox();
+    const centerX = chart!.x + chart!.width / 2;
+    for (const box of await Promise.all((await labels.all()).map((l) => l.boundingBox()))) {
+      expect(box!.x + box!.width).toBeLessThan(centerX);
+    }
+    // Recife (8° S): o rótulo de junho fica ao norte (acima) do de dezembro.
+    const june = await labels.nth(5).boundingBox();
+    const december = await labels.nth(6).boundingBox();
+    expect(june!.y).toBeLessThan(december!.y);
+  });
+
   test('carrega um EPW e desenha a carta do local do arquivo', async ({ page }) => {
     await page.goto('./');
     await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
