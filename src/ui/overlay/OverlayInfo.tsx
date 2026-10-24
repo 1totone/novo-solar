@@ -69,7 +69,8 @@ export function CellInfo({
   if (!view) {
     return (
       <p className="note cell-info" data-testid="cell-info">
-        {t('cell.hint')}
+        <span className="hint-hover">{t('cell.hint')}</span>
+        <span className="hint-touch">{t('cell.hintTouch')}</span>
       </p>
     );
   }

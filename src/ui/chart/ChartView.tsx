@@ -115,16 +115,21 @@ export function ChartView({
       {hasMask && (
         <p
           className={`legend mask-legend${showOverlay ? ' hatched' : ''}`}
+          role="group"
           aria-label={t('mask.legend')}
         >
-          <span className="legend-item">
-            <span className="swatch total" aria-hidden="true" />
-            {t('mask.total')}
-          </span>
-          <span className="legend-item">
-            <span className="swatch partial" aria-hidden="true" />
-            {t('mask.partial')}
-          </span>
+          {regions.total.kind !== 'empty' && (
+            <span className="legend-item">
+              <span className="swatch total" aria-hidden="true" />
+              {t('mask.total')}
+            </span>
+          )}
+          {regions.partial.kind !== 'empty' && (
+            <span className="legend-item">
+              <span className="swatch partial" aria-hidden="true" />
+              {t('mask.partial')}
+            </span>
+          )}
         </p>
       )}
       {showOverlay && (
