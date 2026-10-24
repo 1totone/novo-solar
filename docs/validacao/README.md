@@ -16,6 +16,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
   - [`relatorios/F2.2-transferidor.md`](relatorios/F2.2-transferidor.md): transferidor contra o código do SOL-AR 6.2.
   - [`relatorios/F2.3-mascara.md`](relatorios/F2.3-mascara.md): máscara pelos ângulos contra traçado de raios e o exemplo do tutorial do SOL-AR da UFU.
+  - [`relatorios/F2.4-sobreposicao.md`](relatorios/F2.4-sobreposicao.md): cada hora dos EPWs de Florianópolis e Manaus na célula certa, com teste negativo de fuso.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
