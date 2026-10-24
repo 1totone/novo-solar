@@ -7,7 +7,9 @@ function expectPlates(actual: readonly Plate[], expected: number[][][]) {
   actual.forEach((plate, i) => {
     expect(plate).toHaveLength(expected[i]!.length);
     plate.forEach((v, j) => {
-      v.forEach((c, k) => expect(c, `placa ${i}, vértice ${j}`).toBeCloseTo(expected[i]![j]![k]!, 12));
+      v.forEach((c, k) =>
+        expect(c, `placa ${i}, vértice ${j}`).toBeCloseTo(expected[i]![j]![k]!, 12),
+      );
     });
   });
 }
@@ -106,8 +108,24 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
 
   it('lâminas com θ = 90° ficam paralelas à fachada', () => {
     const scene = buildScene({ width: 1, height: 1 }, [
-      { kind: 'horizontalLouvers', count: 1, chord: 0.3, pitch: 0.3, angle: 90, gap: 0.2, above: 0 },
-      { kind: 'verticalLouvers', count: 1, chord: 0.3, pitch: 0.3, angle: -90, gap: 0.2, start: 0.5 },
+      {
+        kind: 'horizontalLouvers',
+        count: 1,
+        chord: 0.3,
+        pitch: 0.3,
+        angle: 90,
+        gap: 0.2,
+        above: 0,
+      },
+      {
+        kind: 'verticalLouvers',
+        count: 1,
+        chord: 0.3,
+        pitch: 0.3,
+        angle: -90,
+        gap: 0.2,
+        start: 0.5,
+      },
     ]);
     for (const plate of scene.plates) {
       for (const v of plate) expect(v[1]).toBeCloseTo(0.2, 12);
@@ -116,7 +134,15 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
 
   it('lâminas verticais: borda interna em x_0 + k·p; θ > 0 leva a borda externa para a direita', () => {
     const scene = buildScene({ width: 1.5, height: 1.2 }, [
-      { kind: 'verticalLouvers', count: 2, chord: 0.3, pitch: 0.4, angle: 25, gap: 0.1, start: 0.2 },
+      {
+        kind: 'verticalLouvers',
+        count: 2,
+        chord: 0.3,
+        pitch: 0.4,
+        angle: 25,
+        gap: 0.1,
+        start: 0.2,
+      },
     ]);
     scene.plates.forEach((plate, k) => {
       const inner = plate.filter((v) => Math.abs(v[1] - 0.1) < 1e-12);
@@ -135,10 +161,14 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
       ['largura', () => buildScene({ width: 0, height: 1 }, [])],
       ['altura', () => buildScene({ width: 1, height: Number.NaN }, [])],
       ['recuo', () => buildScene({ width: 1, height: 1, setback: -0.1 }, [])],
-      ['profundidade', () => buildScene({ width: 1, height: 1 }, [{ kind: 'overhang', depth: 0, above: 0 }])],
+      [
+        'profundidade',
+        () => buildScene({ width: 1, height: 1 }, [{ kind: 'overhang', depth: 0, above: 0 }]),
+      ],
       [
         'afastamento',
-        () => buildScene({ width: 1, height: 1 }, [{ kind: 'overhang', depth: 1, above: 0, gap: -1 }]),
+        () =>
+          buildScene({ width: 1, height: 1 }, [{ kind: 'overhang', depth: 1, above: 0, gap: -1 }]),
       ],
       [
         'prolongamento',
@@ -165,12 +195,28 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
         'placa atrás do vidro',
         () =>
           buildScene({ width: 1, height: 1 }, [
-            { kind: 'plate', vertices: [[0, -0.1, 1], [1, 0.2, 1], [1, 0.2, 2]] },
+            {
+              kind: 'plate',
+              vertices: [
+                [0, -0.1, 1],
+                [1, 0.2, 1],
+                [1, 0.2, 2],
+              ],
+            },
           ]),
       ],
       [
         'placa com menos de 3 vértices',
-        () => buildScene({ width: 1, height: 1 }, [{ kind: 'plate', vertices: [[0, 0.1, 1], [1, 0.2, 1]] }]),
+        () =>
+          buildScene({ width: 1, height: 1 }, [
+            {
+              kind: 'plate',
+              vertices: [
+                [0, 0.1, 1],
+                [1, 0.2, 1],
+              ],
+            },
+          ]),
       ],
     ];
     for (const [what, f] of bad) expect(f, what).toThrow(RangeError);

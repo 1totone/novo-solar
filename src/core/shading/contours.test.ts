@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { CONTOUR_LEVELS, contourThreshold, shadingContours } from './contours';
+import { project, unproject } from '../chart/stereographic';
+import { CONTOUR_LEVELS, contourThreshold, isolines, shadingContours } from './contours';
 import { buildScene } from './geometry';
 import { facadeVector, shadedFraction } from './shadedFraction';
 
@@ -48,12 +49,44 @@ describe('curvas de percentual (spec 07, seção 7.5)', () => {
     }
   });
 
+  it('brise infinito: os segmentos desenhados na carta ficam a menos de 0,01° da curva α', () => {
+    const H = 1.2;
+    const e = 0.1;
+    const D = 0.8;
+    const scene = buildScene({ width: 1.5, height: H }, [
+      { kind: 'overhang', depth: D, above: e, extendLeft: Infinity, extendRight: Infinity },
+    ]);
+    let max = 0;
+    for (const line of shadingContours(scene, 0)) {
+      // Plano da curva α: polo (0, −sen α, cos α) no referencial da fachada (spec 01, seção 1.4).
+      const alpha = Math.atan((e + contourThreshold(line.level) * H) / D);
+      for (let i = 1; i < line.points.length; i++) {
+        const a = line.points[i - 1]!;
+        const b = line.points[i]!;
+        const pa = project(90 - a.altitude, a.azimuth);
+        const pb = project(90 - b.altitude, b.azimuth);
+        const mid = unproject((pa.x + pb.x) / 2, (pa.y + pb.y) / 2);
+        const d = facadeVector(90 - mid.zenith, mid.azimuth, 0);
+        const distance = Math.abs(Math.asin(-Math.sin(alpha) * d.y + Math.cos(alpha) * d.z)) / RAD;
+        max = Math.max(max, distance);
+      }
+    }
+    expect(max).toBeLessThan(0.01);
+  });
+
   it('aleta infinita à direita: a curva do nível p é a reta β com tan β = (s + p·W) / D', () => {
     const W = 1;
     const s = 0.1;
     const D = 0.6;
     const scene = buildScene({ width: W, height: 1.4 }, [
-      { kind: 'fin', side: 'right', depth: D, offset: s, extendAbove: Infinity, extendBelow: Infinity },
+      {
+        kind: 'fin',
+        side: 'right',
+        depth: D,
+        offset: s,
+        extendAbove: Infinity,
+        extendBelow: Infinity,
+      },
     ]);
     const contours = shadingContours(scene, 180);
     for (const level of CONTOUR_LEVELS) {
@@ -95,6 +128,33 @@ describe('curvas de percentual (spec 07, seção 7.5)', () => {
         expect(Math.abs(f - target), `nível ${line.level}`).toBeLessThan(1e-6);
       }
     }
+  });
+
+  it('quadrados marchantes: a sela é resolvida pelo centro da célula (campo analítico)', () => {
+    // f = (x − 0,5)·(y − 0,5): cada isolinha f = ±0,001 tem dois ramos de hipérbole, um em cada
+    // par de quadrantes opostos. Com 11 células, o ponto de sela fica no centro de uma célula
+    // cujos cantos alternam dentro e fora; ligar os cantos errados juntaria ramos de quadrantes
+    // diferentes numa linha só.
+    const f = (x: number, y: number) => (x - 0.5) * (y - 0.5);
+    for (const threshold of [0.001, -0.001]) {
+      const lines = isolines(f, 1, 1, 11, 11, [threshold]);
+      expect(lines, `limiar ${threshold}`).toHaveLength(2);
+      for (const line of lines) {
+        const quadrants = new Set(
+          line.points.map(([x, y]) => `${Math.sign(x - 0.5)},${Math.sign(y - 0.5)}`),
+        );
+        expect(quadrants.size, `limiar ${threshold}`).toBe(1);
+        for (const [x, y] of line.points) expect(f(x, y)).toBeCloseTo(threshold, 9);
+      }
+    }
+  });
+
+  it('quadrados marchantes: curva fechada repete o primeiro ponto no fim', () => {
+    const f = (x: number, y: number) => 1 - Math.hypot(x - 0.5, y - 0.5);
+    const [circle, ...rest] = isolines(f, 1, 1, 20, 20, [0.7]);
+    expect(rest).toEqual([]);
+    expect(circle!.points[0]).toEqual(circle!.points.at(-1));
+    for (const [x, y] of circle!.points) expect(Math.hypot(x - 0.5, y - 0.5)).toBeCloseTo(0.3, 9);
   });
 
   it('sem proteção não há curvas', () => {

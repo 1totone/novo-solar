@@ -96,10 +96,24 @@ describe('percentual sombreado: casos analíticos (spec 07, seção 7.5)', () =>
 
   it('aleta infinita à esquerda é o espelho da direita', () => {
     const right = buildScene({ width: 1.1, height: 1 }, [
-      { kind: 'fin', side: 'right', depth: 0.7, offset: 0.05, extendAbove: Infinity, extendBelow: Infinity },
+      {
+        kind: 'fin',
+        side: 'right',
+        depth: 0.7,
+        offset: 0.05,
+        extendAbove: Infinity,
+        extendBelow: Infinity,
+      },
     ]);
     const left = buildScene({ width: 1.1, height: 1 }, [
-      { kind: 'fin', side: 'left', depth: 0.7, offset: 0.05, extendAbove: Infinity, extendBelow: Infinity },
+      {
+        kind: 'fin',
+        side: 'left',
+        depth: 0.7,
+        offset: 0.05,
+        extendAbove: Infinity,
+        extendBelow: Infinity,
+      },
     ]);
     for (const [h, psi] of directions(500, 3)) {
       expect(shadedFraction(left, facadeVector(h, -psi, 0))).toBeCloseTo(

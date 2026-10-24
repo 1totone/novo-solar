@@ -99,7 +99,11 @@ describe('coerência com a máscara em todas as amostras do ano', () => {
     '%s, em Florianópolis: 100% põe o centro à sombra e 0% o deixa ao sol',
     (id, ref) => {
       const scene = sceneOf(id);
-      const samples = samplesFor({ local: 'florianopolis', amostras_por_hora: 6, posicao: 'middle' } as Combination);
+      const samples = samplesFor({
+        local: 'florianopolis',
+        amostras_por_hora: 6,
+        posicao: 'middle',
+      } as Combination);
       const center = pointMask(scene, { x: scene.width / 2, z: scene.height / 2 }, ref.orientacao);
       let full = 0;
       let none = 0;
@@ -110,7 +114,10 @@ describe('coerência com a máscara em todas as amostras do ano', () => {
         const s = facadeFromEnu(e, n, u, ref.orientacao);
         if (!sunOnWindow(s)) continue;
         const f = shadedFraction(scene, s);
-        const p = project((Math.acos(Math.min(1, u)) * 180) / Math.PI, (Math.atan2(e, n) * 180) / Math.PI);
+        const p = project(
+          (Math.acos(Math.min(1, u)) * 180) / Math.PI,
+          (Math.atan2(e, n) * 180) / Math.PI,
+        );
         const shaded = regionContains(center, p.x, p.y);
         if (f >= 1 - 1e-9) {
           full++;

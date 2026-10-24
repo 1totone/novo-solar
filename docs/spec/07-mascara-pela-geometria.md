@@ -57,7 +57,7 @@ e a **fração ensolarada** é f_e = 1 − f_s. Com o sol fora da janela, f_e = 
 2. recortar cada sombra pela janela (algoritmo de Sutherland e Hodgman: polígono convexo contra um retângulo, resultado convexo);
 3. calcular a área da união pelo **método das faixas verticais**. As abscissas dos vértices das sombras recortadas e das interseções entre arestas de sombras diferentes dividem a janela em faixas. Dentro de uma faixa, cada sombra corta a reta vertical x = constante num intervalo cujos extremos variam linearmente com x, e a ordem dos extremos não muda (nenhuma aresta cruza outra dentro da faixa). Então o comprimento da união dos intervalos é linear em x, e a área da faixa é **exatamente** o comprimento no meio da faixa vezes a largura.
 
-Com uma sombra só, ou com sombras que não se sobrepõem, a área é a soma das áreas (fórmula do polígono). O erro é só de arredondamento (da ordem de 10⁻¹⁵ em f_s). O EnergyPlus usa o mesmo princípio (projeção das superfícies que fazem sombra sobre o plano da superfície que recebe o sol e recorte de polígonos; *Engineering Reference*, módulo de sombreamento), com outro algoritmo para as sobreposições.
+Com uma sombra só, ou com sombras que não se sobrepõem, a área é a soma das áreas (fórmula do polígono). O erro é só de arredondamento: contra o shapely, a diferença ficou no arredondamento do arquivo de referência (5 × 10⁻¹³). O EnergyPlus usa o mesmo princípio (projeção das superfícies que fazem sombra sobre o plano da superfície que recebe o sol e recorte de polígonos; *Engineering Reference*, módulo de sombreamento), com outro algoritmo para as sobreposições.
 
 A versão v0 da spec (README) previa amostrar a janela numa grade; a área exata é mais precisa e mais rápida, e a grade passa a ser só uma referência de teste (seção 7.8).
 
@@ -80,10 +80,10 @@ As curvas de 0, 25, 50, 75 e 100% são as bordas das regiões {f_s > 0}, {f_s �
 **Algoritmo.** Fora dos casos analíticos, as curvas não são circunferências, e o cálculo é numérico:
 
 1. **Grade no disco da fachada.** As direções diante da fachada são mapeadas num disco pela projeção estereográfica centrada na normal: ρ = tan(θ/2), com θ o ângulo de incidência, e φ o ângulo no plano da fachada, de 0° (à direita, no horizonte) a 180° (à esquerda, no horizonte), passando por 90° (para cima). O quarto de esfera vira o retângulo φ de 0° a 180° e ρ de 0 a ρ_máx (cos θ_máx = 10⁻⁵, seção 7.2); as bordas do retângulo são o horizonte (φ = 0° e 180°) e o plano da fachada (ρ = ρ_máx), e as curvas terminam exatamente nelas. Grade padrão: 1° em φ e ρ_máx/120 em ρ (181 × 121 pontos; células de até 1° no céu).
-2. **Quadrados marchantes** (*marching squares*) em cada nível. O ponto em que a curva cruza a aresta de uma célula é refinado por bisseção até 10⁻⁹ do comprimento da aresta, com o percentual exato da seção 7.3; células ambíguas (sela) são resolvidas pelo percentual no centro da célula. Os segmentos são ligados em linhas.
+2. **Quadrados marchantes** (*marching squares*) em cada nível. O ponto em que a curva cruza a aresta de uma célula é refinado por bisseção (34 passos, menos de 10⁻¹⁰ do comprimento da aresta), com o percentual exato da seção 7.3; células ambíguas (sela) são resolvidas pelo percentual no centro da célula. Os segmentos são ligados em linhas.
 3. Cada vértice volta para uma direção (altura e azimute) e é desenhado na carta como qualquer direção.
 
-**Precisão.** Os vértices estão sobre a curva exata (|f_s − nível| ≤ 10⁻⁶); entre dois vértices vizinhos, a curva é aproximada por um segmento na carta, com afastamento menor que 0,01° nos casos de teste. Regiões menores que uma célula podem não aparecer.
+**Precisão.** Os vértices estão sobre a curva exata (|f_s − nível| ≤ 10⁻⁶; no brise infinito, a menos de 10⁻⁸ grau da curva α). Entre dois vértices vizinhos (até cerca de 1° de distância no céu), a curva é aproximada por um segmento reto na carta; no brise infinito, o meio dos segmentos fica a até 0,002° da curva exata (distância angular na esfera; o erro cai com o quadrado do passo da grade). Regiões menores que uma célula podem não aparecer.
 
 **Casos analíticos.** Brise horizontal infinito, sem afastamento (g = 0), a uma altura e acima da verga: a sombra cobre a faixa da janela abaixo da verga de altura D · tan α_sol − e, então
 
@@ -133,10 +133,10 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 | Grandeza | Referência independente | Tolerância |
 |---|---|---|
 | Placas de cada dispositivo | construção em Python a partir dos mesmos parâmetros | 10⁻¹² m |
-| Percentual sombreado | área da união com shapely (GEOS), em direções aleatórias, para 15 cenas (as 9 do F2.3, lâminas, recuo e combinações) | 10⁻⁹ |
-| Percentual sombreado | traçado de raios: grade de 400 × 400 pontos da janela, raio até o sol e interseção com as placas, sem projeção | 0,01 (resolução da grade) |
-| Percentual sombreado do F2.3 | traçado de raios do F2.3 (grade de 41 × 41) | 0,05 (resolução da grade) |
-| Casos analíticos (brise e aleta infinitos, com e sem afastamento) | fórmulas da seção 7.5 | 10⁻⁹ no percentual; 0,01° nos vértices das curvas |
+| Percentual sombreado | área da união com shapely (GEOS), em 254 direções por cena, 15 cenas (as 8 geometrias do F2.3, lâminas horizontais e verticais, recuo, placa livre e combinações) | 10⁻⁹ |
+| Percentual sombreado | traçado de raios, sem projeção: 400 × 400 células da janela com um ponto sorteado em cada (amostragem estratificada), raio até o sol e interseção com as placas; 20 direções por cena | 0,002 (erro de amostragem; o maior encontrado foi 0,0004) |
+| Percentual sombreado do F2.3 | traçado de raios do F2.3 (grade de 41 × 41 com os pontos das bordas), 1500 direções × 9 casos; sombra total como "todos os pontos da grade à sombra" | 0,05 na fração (uma linha ou coluna da grade, 1/41, por borda de sombra); sombra total sem nenhuma direção diferente |
+| Casos analíticos (brise e aleta infinitos, com e sem afastamento) | fórmulas da seção 7.5 | 10⁻¹² no percentual; 10⁻⁶ grau nos vértices das curvas; 0,01° no meio dos segmentos |
 | Máscara de um ponto | traçado de raios do F2.3, critério do centro (1500 direções × 9 casos) | nenhuma direção classificada errada |
 | Sombra total (100%) | máscara pelos ângulos (seção 1.6) nos casos em que a união é exata; nos demais, a máscara pelos ângulos não pode ter direção fora da sombra total | nenhuma direção classificada errada |
 | Fração ensolarada horária e mapa mês × hora | pvlib (SPA) e shapely, ano inteiro, 3 locais × 3 cenas | 10⁻⁶ |

@@ -9,7 +9,12 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { project } from '../../src/core/chart/stereographic';
 import { maskRegions, regionContains, type ShadingSet } from '../../src/core/mask/mask';
-import { buildScene, type Device, type Plate, type WindowGeometry } from '../../src/core/shading/geometry';
+import {
+  buildScene,
+  type Device,
+  type Plate,
+  type WindowGeometry,
+} from '../../src/core/shading/geometry';
 import { pointMask } from '../../src/core/shading/pointMask';
 import { facadeVector, shadedFraction } from '../../src/core/shading/shadedFraction';
 
@@ -66,7 +71,9 @@ describe('máscara pela geometria contra shapely e traçado de raios', () => {
       a.forEach((v, j) =>
         v.forEach((c, k) => {
           const e = b[j]![k]!;
-          expect(Math.abs(c - e), `placa ${i}`).toBeLessThanOrEqual(1e-12 * Math.max(1, Math.abs(e)));
+          expect(Math.abs(c - e), `placa ${i}`).toBeLessThanOrEqual(
+            1e-12 * Math.max(1, Math.abs(e)),
+          );
         }),
       );
     });

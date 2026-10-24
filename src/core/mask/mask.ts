@@ -59,31 +59,35 @@ export interface MaskRegions {
   partial: Region;
 }
 
-const EMPTY: Region = { kind: 'empty' };
-const HORIZON: Region = { kind: 'disc', cx: 0, cy: 0, r: 1 };
+export const EMPTY: Region = { kind: 'empty' };
+/** Direções acima do horizonte: o disco da carta. */
+export const HORIZON: Region = { kind: 'disc', cx: 0, cy: 0, r: 1 };
 
-function and(...regions: Region[]): Region {
+/** Interseção de regiões (simplifica vazio e tudo). */
+export function and(...regions: Region[]): Region {
   if (regions.some((r) => r.kind === 'empty')) return EMPTY;
   const rest = regions.filter((r) => r.kind !== 'all');
   if (rest.length === 0) return { kind: 'all' };
   return rest.length === 1 ? rest[0]! : { kind: 'and', regions: rest };
 }
 
-function or(...regions: Region[]): Region {
+/** União de regiões (simplifica vazio e tudo). */
+export function or(...regions: Region[]): Region {
   if (regions.some((r) => r.kind === 'all')) return { kind: 'all' };
   const rest = regions.filter((r) => r.kind !== 'empty');
   if (rest.length === 0) return EMPTY;
   return rest.length === 1 ? rest[0]! : { kind: 'or', regions: rest };
 }
 
-function not(region: Region): Region {
+/** Complemento de uma região. */
+export function not(region: Region): Region {
   if (region.kind === 'empty') return { kind: 'all' };
   if (region.kind === 'all') return EMPTY;
   return { kind: 'not', region };
 }
 
 /** Semiplano dos pontos à frente de um vetor do referencial da fachada (x à direita, y na normal). */
-function facadeHalfPlane(orientation: number, x: number, y: number): Region {
+export function facadeHalfPlane(orientation: number, x: number, y: number): Region {
   const c = Math.cos(orientation * RAD);
   const s = Math.sin(orientation * RAD);
   return { kind: 'halfPlane', nx: x * c + y * s, ny: -x * s + y * c };

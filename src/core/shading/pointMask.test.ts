@@ -43,21 +43,32 @@ describe('máscara de um ponto (spec 07, seção 7.4)', () => {
     const s = 0.1;
     const D = 0.5;
     const scene = buildScene({ width: W, height: 1.4 }, [
-      { kind: 'fin', side: 'right', depth: D, offset: s, extendAbove: Infinity, extendBelow: Infinity },
+      {
+        kind: 'fin',
+        side: 'right',
+        depth: D,
+        offset: s,
+        extendAbove: Infinity,
+        extendBelow: Infinity,
+      },
     ]);
     const region = pointMask(scene, { x: W / 2, z: 0.7 }, 0);
     const beta = Math.atan((W / 2 + s) / D) / RAD;
     for (const [h, psi] of directions(3000, 9)) {
       if (Math.abs(Math.abs(psi) - beta) < 1e-7) continue;
       const p = project(90 - h, psi);
-      expect(regionContains(region, p.x, p.y), `h = ${h}, ψ = ${psi}`).toBe(psi >= beta && psi < 90);
+      expect(regionContains(region, p.x, p.y), `h = ${h}, ψ = ${psi}`).toBe(
+        psi >= beta && psi < 90,
+      );
     }
   });
 
   it('sem proteção, a máscara é vazia; placa vista de perfil não entra', () => {
     const empty = buildScene({ width: 1, height: 1 }, []);
     // Aleta rente à lateral direita (s = 0): o plano dela contém os pontos da lateral x = W.
-    const edgeOn = buildScene({ width: 1, height: 1 }, [{ kind: 'fin', side: 'right', depth: 0.5 }]);
+    const edgeOn = buildScene({ width: 1, height: 1 }, [
+      { kind: 'fin', side: 'right', depth: 0.5 },
+    ]);
     for (const [h, psi] of directions(300, 4)) {
       const p = project(90 - h, psi);
       expect(regionContains(pointMask(empty, { x: 0.5, z: 0.5 }, 0), p.x, p.y)).toBe(false);
