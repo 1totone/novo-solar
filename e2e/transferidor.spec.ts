@@ -48,11 +48,18 @@ test.describe('transferidor', () => {
     await expect(page.getByTestId('curve-alpha--1')).toHaveCount(0);
   });
 
-  test('índices 2 ficam recolhidos e desenham a segunda curva', async ({ page }) => {
+  test('índices 2 ficam recolhidos em "Mais opções" e desenham a segunda curva', async ({
+    page,
+  }) => {
     await page.goto('./#a1=40');
-    await page.getByText('Índices 2 (brise afastado da parede)').click();
+    await expect(page.getByTestId('angle-a2')).toBeHidden();
+    await page.getByText('Mais opções').click();
+    await expect(page.getByText('Índices 2 (brise afastado da parede)')).toBeVisible();
     await page.getByTestId('angle-a2').fill('15');
     await expect(page.getByTestId('curve-alpha--2')).toHaveCount(1);
+    // Apagar o campo não recolhe o painel.
+    await page.getByTestId('angle-a2').fill('');
+    await expect(page.getByTestId('angle-a2')).toBeVisible();
   });
 
   test('ocultar o transferidor', async ({ page }) => {

@@ -81,3 +81,37 @@ describe('limites laterais e aletas', () => {
     expect(at(r.partial, 30, 0)).toBe(false);
   });
 });
+
+describe('desenho à mão', () => {
+  // Triângulo em torno do zênite e outro baixo, a leste; vértices em (altura, azimute).
+  const zenith = [
+    { altitude: 70, azimuth: 0 },
+    { altitude: 70, azimuth: 120 },
+    { altitude: 70, azimuth: 240 },
+  ];
+  const east = [
+    { altitude: 5, azimuth: 80 },
+    { altitude: 30, azimuth: 90 },
+    { altitude: 5, azimuth: 100 },
+  ];
+
+  it('soma-se à máscara calculada e entra na sombra total ou na parcial', () => {
+    const r = maskRegions(0, 'external', { alpha: [45] }, {}, { total: [east], partial: [zenith] });
+    expect(at(r.total, 60, 0)).toBe(false); // perfil 30°: fora do α e do desenho
+    expect(at(r.total, 75, 90)).toBe(true); // dentro do triângulo a leste
+    expect(at(r.total, 1, 0)).toBe(true); // zênite: dentro do α
+    // a parcial desconta a total: o zênite está nos dois, logo não é parcial
+    expect(at(r.partial, 1, 0)).toBe(false);
+  });
+
+  it('a parcial desenhada aparece onde não há sombra total', () => {
+    const r = maskRegions(0, 'external', {}, {}, { total: [], partial: [zenith] });
+    expect(at(r.partial, 1, 0)).toBe(true);
+    expect(at(r.partial, 40, 0)).toBe(false);
+  });
+
+  it('polígono com menos de 3 vértices é ignorado', () => {
+    const r = maskRegions(0, 'external', {}, {}, { total: [east.slice(0, 2)], partial: [] });
+    expect(r.total.kind).toBe('empty');
+  });
+});

@@ -12,44 +12,42 @@
  * analíticos (mask.test.ts).
  */
 
+import { project } from '../chart/stereographic';
 import {
   alphaCircle,
   gammaCircle,
   toExternal,
   type AngleReference,
   type AngleValues,
+  type ProtractorAngles,
   type Side,
 } from '../protractor/protractor';
 
 const RAD = Math.PI / 180;
 
-/** Região da carta, como árvore de operações sobre semiplanos e discos. */
+/** Região da carta, como árvore de operações sobre semiplanos, discos e polígonos. */
 export type Region =
   | { kind: 'empty' }
   | { kind: 'all' }
   /** Semiplano pelo centro da carta: pontos p com p · (nx, ny) ≥ 0. */
   | { kind: 'halfPlane'; nx: number; ny: number }
   | { kind: 'disc'; cx: number; cy: number; r: number }
+  /** Polígono desenhado à mão (vértices na carta de raio 1). */
+  | { kind: 'polygon'; points: { x: number; y: number }[] }
   | { kind: 'not'; region: Region }
   | { kind: 'and'; regions: Region[] }
   | { kind: 'or'; regions: Region[] };
 
-/**
- * Ângulos de um conjunto de sombra (total ou parcial), na referência escolhida. Cada campo tem o
- * índice 1 e, opcionalmente, o 2 (brise afastado da parede).
- */
-export interface ShadingSet {
-  /** Brise horizontal: 1 = aresta externa (a partir da base), 2 = aresta interna (da verga). */
-  alpha?: AngleValues;
-  /** Aleta à direita: 1 = aresta externa (da aresta oposta), 2 = aresta interna (do mesmo lado). */
-  betaRight?: AngleValues;
-  betaLeft?: AngleValues;
-  /** Limites laterais do brise horizontal. O índice 2 não altera a máscara (seção 1.6). */
-  gammaRight?: AngleValues;
-  gammaLeft?: AngleValues;
-  /** Topo das aletas ("γ das aletas"), medido do canto superior oposto. */
-  finTopRight?: AngleValues;
-  finTopLeft?: AngleValues;
+/** Ângulos de um conjunto de sombra (total ou parcial): os mesmos campos do transferidor. */
+export type ShadingSet = ProtractorAngles;
+
+/** Polígono desenhado à mão: vértices como direções do céu, em graus. */
+export type SkyPolygon = { altitude: number; azimuth: number }[];
+
+/** Máscara desenhada à mão (o modo do SOL-AR 6.2), somada à calculada. */
+export interface DrawnMask {
+  total: SkyPolygon[];
+  partial: SkyPolygon[];
 }
 
 export interface MaskRegions {
@@ -190,16 +188,44 @@ export function shadingRegion(
   return and(HORIZON, facadeHalfPlane(orientation, 0, 1), devices);
 }
 
-/** Regiões de sombra total e parcial (decisão 0014). */
+/** Região de polígonos desenhados à mão, acima do horizonte. */
+function drawnRegion(polygons: SkyPolygon[]): Region {
+  const valid = polygons.filter((p) => p.length >= 3);
+  if (valid.length === 0) return EMPTY;
+  const regions: Region[] = valid.map((p) => ({
+    kind: 'polygon',
+    points: p.map((v) => project(90 - v.altitude, v.azimuth)),
+  }));
+  return and(HORIZON, or(...regions));
+}
+
+/**
+ * Regiões de sombra total e parcial (decisão 0014): cada conjunto é a união da máscara calculada
+ * pelos ângulos com a desenhada à mão; a parcial desconta a total.
+ */
 export function maskRegions(
   orientation: number,
   reference: AngleReference,
   total: ShadingSet,
   partial: ShadingSet = {},
+  drawn: DrawnMask = { total: [], partial: [] },
 ): MaskRegions {
-  const totalRegion = shadingRegion(orientation, reference, total);
-  const partialSet = shadingRegion(orientation, reference, partial);
+  const totalRegion = or(shadingRegion(orientation, reference, total), drawnRegion(drawn.total));
+  const partialSet = or(shadingRegion(orientation, reference, partial), drawnRegion(drawn.partial));
   return { total: totalRegion, partialSet, partial: and(partialSet, not(totalRegion)) };
+}
+
+/** Ponto dentro do polígono (regra par-ímpar). */
+function insidePolygon(points: { x: number; y: number }[], x: number, y: number): boolean {
+  let inside = false;
+  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+    const a = points[i]!;
+    const b = points[j]!;
+    if (a.y > y !== b.y > y && x < ((b.x - a.x) * (y - a.y)) / (b.y - a.y) + a.x) {
+      inside = !inside;
+    }
+  }
+  return inside;
 }
 
 /** O ponto (x para Leste, y para Norte, carta de raio 1) está na região? Bordas incluídas. */
@@ -213,6 +239,8 @@ export function regionContains(region: Region, x: number, y: number): boolean {
       return x * region.nx + y * region.ny >= 0;
     case 'disc':
       return (x - region.cx) ** 2 + (y - region.cy) ** 2 <= region.r ** 2;
+    case 'polygon':
+      return insidePolygon(region.points, x, y);
     case 'not':
       return !regionContains(region.region, x, y);
     case 'and':

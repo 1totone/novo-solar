@@ -102,6 +102,12 @@ describe('protractorCurves', () => {
     const curves = protractorCurves(0, 'external', { alpha: [45], gammaLeft: [30] });
     expect(curves.map((c) => `${c.family}${c.index}`)).toEqual(['alpha1', 'gamma1']);
   });
+
+  it('γ das aletas usa a família de curvas de γ, do lado da aleta', () => {
+    const [top] = protractorCurves(200, 'internal', { finTopRight: [50] });
+    expect(top).toMatchObject({ family: 'finTop', side: 'right', index: 1, externalAngle: 40 });
+    expect(top!.geometry).toEqual(gammaCircle(200, 'right', 40));
+  });
 });
 
 describe('grade do transferidor', () => {

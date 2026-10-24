@@ -54,11 +54,40 @@ export const ptBR = {
   'protection.alpha': 'α (brise horizontal)',
   'protection.beta': 'β (brises verticais)',
   'protection.gamma': 'γ (limites laterais)',
+  'protection.totalSet': 'Sombra total (100%)',
+  'protection.totalHelp':
+    'α medido da base da janela, β da aresta oposta à aleta, γ do canto inferior do mesmo lado. Na região vermelha, a janela inteira fica à sombra.',
+  'protection.more': 'Mais opções',
   'protection.index2': 'Índices 2 (brise afastado da parede)',
   'protection.index2Help':
-    'O índice 2 desenha uma segunda curva; a sombra fica entre as duas (brise afastado da parede).',
+    'A sombra fica entre a curva 1 (aresta externa) e a 2 (aresta interna); a fresta junto à parede deixa passar o sol. Na sombra total, α2 é medido da verga e β2 da aresta da janela do mesmo lado. γ2 é desenhado como no SOL-AR 6.2, mas não muda a máscara: as duas pontas da aresta lateral dão o mesmo γ.',
+  'protection.finTop': 'γ das aletas',
+  'protection.finTopHelp':
+    'Topo de uma aleta de altura limitada, medido do canto superior oposto da janela; acima dessa curva o sol passa por cima da aleta.',
+  'protection.combinedHelp':
+    'Grelha (brise encostado nas aletas, mesma profundidade): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
+  'protection.partialSet': 'Sombra parcial (50%)',
+  'protection.partialShort': 'parcial',
+  'protection.partialHelp':
+    'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos; em peças curtas é uma aproximação.',
   'protection.invalid': 'Use um valor de 0° a 90°.',
   'protection.fieldLabel': '{angle} {side} {index}',
+  'draw.heading': 'Desenhar à mão',
+  'draw.help':
+    'Como no SOL-AR 6.2: marque na carta os vértices de uma região de sombra. O desenho se soma à máscara calculada e fica guardado no link.',
+  'draw.start': 'Começar a desenhar',
+  'draw.kind': 'Tipo de sombra do desenho',
+  'draw.total': 'Total',
+  'draw.partial': 'Parcial',
+  'draw.helpActive':
+    'Clique na carta para marcar os vértices ({count} até agora) e conclua com 3 ou mais.',
+  'draw.undo': 'Desfazer ponto',
+  'draw.finish': 'Concluir polígono',
+  'draw.stop': 'Parar de desenhar',
+  'draw.clear': 'Apagar os desenhos',
+  'mask.legend': 'Legenda da máscara',
+  'mask.total': 'sombra total (100%)',
+  'mask.partial': 'sombra parcial (50%)',
   'site.heading': 'Local',
   'site.testLabel': 'Cidade de teste',
   'site.fileOption': 'Arquivo: {name}',

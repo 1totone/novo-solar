@@ -5,6 +5,7 @@ import {
   type AngleReference,
   type Circle,
   type ProtractorAngles,
+  type ProtractorCurve,
 } from '../../core/protractor/protractor';
 
 const RAD = Math.PI / 180;
@@ -25,24 +26,41 @@ function circleOnRay(c: Circle, az: number): { x: number; y: number } | null {
   return { x: t * u.e, y: -t * u.n };
 }
 
-const FAMILY_SYMBOL = { alpha: 'α', beta: 'β', gamma: 'γ' } as const;
+const FAMILY_SYMBOL = { alpha: 'α', beta: 'β', gamma: 'γ', finTop: 'γa' } as const;
+
+interface DrawnCurve extends ProtractorCurve {
+  /** Chave única e test id: "p-" na frente para as curvas da sombra parcial. */
+  key: string;
+  partial: boolean;
+}
 
 export function ProtractorOverlay({
   orientation,
   reference,
   angles,
+  partial,
   sideLabels,
 }: {
   orientation: number;
   reference: AngleReference;
   angles: ProtractorAngles;
+  /** Ângulos da sombra parcial (50%): curvas tracejadas. */
+  partial: ProtractorAngles;
   sideLabels: { right: string; left: string };
 }) {
   const grid = useMemo(() => protractorGrid(orientation), [orientation]);
-  const curves = useMemo(
-    () => protractorCurves(orientation, reference, angles),
-    [orientation, reference, angles],
-  );
+  const curves = useMemo((): DrawnCurve[] => {
+    const tag = (list: ProtractorCurve[], isPartial: boolean) =>
+      list.map((c) => ({
+        ...c,
+        partial: isPartial,
+        key: `${isPartial ? 'p-' : ''}${c.family}-${c.side ?? ''}-${c.index}`,
+      }));
+    return [
+      ...tag(protractorCurves(orientation, reference, angles), false),
+      ...tag(protractorCurves(orientation, reference, partial), true),
+    ];
+  }, [orientation, reference, angles, partial]);
   const [f1, f2] = grid.facadeAzimuths.map((a) => atAzimuth(a)) as [
     { x: number; y: number },
     { x: number; y: number },
@@ -82,37 +100,37 @@ export function ProtractorOverlay({
       <line x1={0} y1={0} x2={normal.x} y2={normal.y} className="pt-normal" />
       <g clipPath="url(#horizon-clip)">
         {curves.map((c) => {
-          const key = `${c.family}-${c.side ?? ''}-${c.index}`;
+          const className = `pt-curve ${c.family}${c.partial ? ' partial' : ''}`;
           if (c.geometry.kind === 'ray') {
             const p = atAzimuth(c.geometry.azimuth);
             return (
               <line
-                key={key}
+                key={c.key}
                 x1={0}
                 y1={0}
                 x2={p.x}
                 y2={p.y}
-                className={`pt-curve ${c.family}`}
-                data-testid={`curve-${key}`}
+                className={className}
+                data-testid={`curve-${c.key}`}
               />
             );
           }
           const g = c.geometry;
           return (
             <circle
-              key={key}
+              key={c.key}
               cx={g.centerE}
               cy={-g.centerN}
               r={g.radius}
-              className={`pt-curve ${c.family}`}
-              data-testid={`curve-${key}`}
+              className={className}
+              data-testid={`curve-${c.key}`}
             />
           );
         })}
       </g>
       <g className="pt-labels">
         {curves.map((c) => {
-          const key = `${c.family}-${c.side ?? ''}-${c.index}`;
+          const key = c.key;
           let p: { x: number; y: number } | null;
           if (c.geometry.kind === 'ray') {
             if (c.externalAngle >= 90) return null;
@@ -120,12 +138,19 @@ export function ProtractorOverlay({
           } else if (c.family === 'alpha') {
             p = circleOnRay(c.geometry, grid.normalAzimuth);
           } else {
-            p = circleOnRay(c.geometry, orientation + (c.side === 'right' ? 45 : -45));
+            // γ das aletas mais perto da fachada, onde fica a sombra da aleta.
+            const offset = c.family === 'finTop' ? 70 : 45;
+            p = circleOnRay(c.geometry, orientation + (c.side === 'right' ? offset : -offset));
           }
           if (!p) return null;
           const side = c.side ? sideLabels[c.side] : '';
           return (
-            <text key={key} x={p.x} y={p.y - 0.02} className={`pt-label ${c.family}`}>
+            <text
+              key={key}
+              x={p.x}
+              y={p.y - 0.02}
+              className={`pt-label ${c.family}${c.partial ? ' partial' : ''}`}
+            >
               {`${FAMILY_SYMBOL[c.family]}${c.index === 2 ? '2' : ''}${side}`}
             </text>
           );

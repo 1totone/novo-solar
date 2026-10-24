@@ -309,3 +309,122 @@ details.more summary {
   font-size: 0.06px;
   font-weight: 600;
 }
+
+.sun-chart .pt-curve.partial {
+  stroke: #9a6700;
+  stroke-width: 1.75;
+  stroke-dasharray: 6 4;
+}
+
+.sun-chart .pt-curve.finTop {
+  stroke-dasharray: 2 3;
+}
+
+.sun-chart .pt-curve.finTop.partial {
+  stroke-dasharray: 2 5;
+}
+
+.sun-chart .pt-label.partial {
+  fill: #7d4e00;
+}
+
+/* Máscara: total vermelha, parcial amarela (decisão 0013; paleta para daltonismo na Fase 4). */
+.sun-chart .mask-total {
+  fill: rgb(207 34 46 / 35%);
+}
+
+.sun-chart .mask-partial {
+  fill: rgb(227 179 65 / 45%);
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.1rem;
+  border: 1px solid var(--color-border);
+}
+
+.swatch.total {
+  background: rgb(207 34 46 / 35%);
+}
+
+.swatch.partial {
+  background: rgb(227 179 65 / 45%);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.legend-item {
+  white-space: nowrap;
+}
+
+.set-heading,
+.sub-heading {
+  margin: 0.75rem 0 0.4rem;
+  font-size: 1rem;
+}
+
+.sub-heading {
+  font-size: 0.95rem;
+}
+
+.btn {
+  min-height: 40px;
+  padding: 0.25rem 0.75rem;
+  font: inherit;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  color: var(--color-muted);
+  border-color: var(--color-border);
+  cursor: default;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.draw-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.draw-controls .note {
+  margin-bottom: 0;
+}
+
+.sun-chart .drawing-capture {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.sun-chart .drawing-path {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.sun-chart .drawing-vertex {
+  fill: var(--color-text);
+  stroke: var(--color-bg);
+  stroke-width: 1;
+}
