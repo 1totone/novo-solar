@@ -132,6 +132,7 @@ export const ptBR = {
   'legend.noData': 'sem dados',
   'legend.frequencyTitle': 'Horas acima de {threshold} {unit}',
   'cell.hint': 'Passe o cursor sobre uma célula, ou toque nela, para ver os valores.',
+  'cell.hintTouch': 'Toque numa célula para ver os valores.',
   'cell.where': '{period}, hora {hour} do arquivo ({start} a {end}):',
   'cell.mean': 'média {mean} {unit} (mínima {min}, máxima {max}; {n} horas).',
   'cell.above': '{count} de {n} horas acima de {threshold} {unit} ({percent}%).',

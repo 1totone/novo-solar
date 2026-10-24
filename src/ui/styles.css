@@ -554,6 +554,16 @@ details.more summary {
     z-index: 2;
   }
 
+  /* Com a tabela das células aberta, a área fixa ficaria mais alta que a tela e esconderia as
+     linhas de baixo e os passos: a carta volta a rolar com a página. */
+  .chart-section.sticky:has(.cell-table[open]) {
+    position: static;
+  }
+
+  .chart-section .overlay-legend .legend-title {
+    width: auto;
+  }
+
   .chart-section .sun-chart {
     width: auto;
     max-width: 100%;
@@ -572,6 +582,10 @@ details.more summary {
     font-size: 0.8rem;
   }
 
+  .chart-section .legend {
+    gap: 0.1rem 0.6rem;
+  }
+
   .steps {
     padding: 0.75rem 0.5rem 1rem;
     background: var(--color-surface);
@@ -581,6 +595,28 @@ details.more summary {
 
   .step-panel {
     background: var(--color-bg);
+  }
+}
+
+/* Celular deitado ou tela baixa: a carta fixa ocuparia quase toda a altura; tudo rola junto. */
+@media (max-width: 51.99rem) and (max-height: 37.5rem) {
+  .chart-section.sticky {
+    position: static;
+  }
+}
+
+/* Dica da célula: "passe o cursor" com mouse, "toque" na tela de toque. */
+.hint-touch {
+  display: none;
+}
+
+@media (hover: none) {
+  .hint-hover {
+    display: none;
+  }
+
+  .hint-touch {
+    display: inline;
   }
 }
 
