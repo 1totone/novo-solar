@@ -14,6 +14,8 @@ Uso na aplicação (F2.7, decisão 0017): os 15 arquivos horários são publicad
 Referências geradas a partir destes arquivos:
 
 - `referencia-csv.json`: por arquivo, horas, primeira e última hora e, por campo, ausentes, soma, mínimo e máximo, lidos com o módulo `csv` do Python (`docs/validacao/scripts/gerar_referencia_csv62.py`); usado em `tests/referencia/csvSolar62.test.ts`.
+- `regressao.json`: regressão contra o 6.2 (carta, hora dos dados na sobreposição e rosa dos ventos), por `docs/validacao/scripts/regressao_solar62.py` com o modelo reconstruído `modelo_solar62.py`; relatório `docs/validacao/relatorios/F2.8-regressao.md`, teste `tests/referencia/regressao62.test.ts`.
+- `teste-hora.csv`: arquivo no formato de inclusão (Florianópolis, temperatura igual ao número da hora, Latin-1 e CRLF como o original) para conferir na tela do 6.2 a hora em que os dados são desenhados (relatório do F2.8, seção 6).
 - `radiacao-csv.json`: convenção de tempo e coerência da radiação (deslocamento do sol do modelo, longitude equivalente, horas de global incoerente), por `docs/validacao/scripts/analisar_radiacao_csv62.py`; resultados no relatório `docs/validacao/relatorios/F2.7-dados.md`.
 
 Créditos: dados TRY de Goulart, Lamberts e Firmino (1998); programa de Roberto Lamberts, Alexandra Albuquerque Maciel e Edson T. Ono.

@@ -1,0 +1,1483 @@
+{
+ "gerado_por": "docs/validacao/scripts/regressao_solar62.py",
+ "equacao_do_tempo_6_2_min": -2.9044,
+ "carta": {
+  "trajetorias": [
+   {
+    "declinacao_62_rad": -0.41,
+    "declinacao_62_graus": -23.491,
+    "datas_nova_versao": [
+     "2026-12-21"
+    ],
+    "declinacao_spa_graus": [
+     -23.437
+    ],
+    "diferenca_max_graus": 0.054
+   },
+   {
+    "declinacao_62_rad": -0.35,
+    "declinacao_62_graus": -20.054,
+    "datas_nova_versao": [
+     "2026-01-21",
+     "2026-11-21"
+    ],
+    "declinacao_spa_graus": [
+     -19.807,
+     -20.001
+    ],
+    "diferenca_max_graus": 0.246
+   },
+   {
+    "declinacao_62_rad": -0.18,
+    "declinacao_62_graus": -10.313,
+    "datas_nova_versao": [
+     "2026-02-21",
+     "2026-10-21"
+    ],
+    "declinacao_spa_graus": [
+     -10.407,
+     -10.846
+    ],
+    "diferenca_max_graus": 0.532
+   },
+   {
+    "declinacao_62_rad": 0.0,
+    "declinacao_62_graus": 0.0,
+    "datas_nova_versao": [
+     "2026-03-20",
+     "2026-09-23"
+    ],
+    "declinacao_spa_graus": [
+     0.004,
+     -0.242
+    ],
+    "diferenca_max_graus": 0.242
+   },
+   {
+    "declinacao_62_rad": 0.18,
+    "declinacao_62_graus": 10.313,
+    "datas_nova_versao": [
+     "2026-04-21",
+     "2026-08-21"
+    ],
+    "declinacao_spa_graus": [
+     12.002,
+     11.966
+    ],
+    "diferenca_max_graus": 1.689
+   },
+   {
+    "declinacao_62_rad": 0.35,
+    "declinacao_62_graus": 20.054,
+    "datas_nova_versao": [
+     "2026-05-21",
+     "2026-07-21"
+    ],
+    "declinacao_spa_graus": [
+     20.271,
+     20.383
+    ],
+    "diferenca_max_graus": 0.33
+   },
+   {
+    "declinacao_62_rad": 0.41,
+    "declinacao_62_graus": 23.491,
+    "datas_nova_versao": [
+     "2026-06-21"
+    ],
+    "declinacao_spa_graus": [
+     23.438
+    ],
+    "diferenca_max_graus": 0.054
+   }
+  ],
+  "cooper_menos_spa_graus": {
+   "max_abs": 0.914,
+   "rms": 0.51
+  }
+ },
+ "sobreposicao": {
+  "belem": {
+   "longitude_oeste_6_2": 48.28,
+   "longitude_estacao": -48.476,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.78,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.1,
+    "min": -78.6,
+    "max": -47.9
+   },
+   "radiacao_min": {
+    "media": -32.1,
+    "min": -48.6,
+    "max": -17.9
+   }
+  },
+  "brasilia": {
+   "longitude_oeste_6_2": 47.56,
+   "longitude_estacao": -47.913,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 1.41,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -61.5,
+    "min": -77.9,
+    "max": -47.3
+   },
+   "radiacao_min": {
+    "media": -31.5,
+    "min": -47.9,
+    "max": -17.3
+   }
+  },
+  "concepcion": {
+   "longitude_oeste_6_2": 73.05,
+   "longitude_estacao": -73.0625,
+   "fuso": -4.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.05,
+    "meridiano_min": -60.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -122.9,
+    "min": -139.3,
+    "max": -108.7
+   },
+   "radiacao_min": {
+    "media": -92.9,
+    "min": -109.3,
+    "max": -78.7
+   }
+  },
+  "curitiba": {
+   "longitude_oeste_6_2": 49.16,
+   "longitude_estacao": -49.176,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.06,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.9,
+    "min": -79.3,
+    "max": -48.7
+   },
+   "radiacao_min": {
+    "media": -32.9,
+    "min": -49.3,
+    "max": -18.7
+   }
+  },
+  "florianopolis": {
+   "longitude_oeste_6_2": 48.34,
+   "longitude_estacao": -48.547,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.83,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.1,
+    "min": -78.5,
+    "max": -47.9
+   },
+   "radiacao_min": {
+    "media": -32.1,
+    "min": -48.5,
+    "max": -17.9
+   }
+  },
+  "fortaleza": {
+   "longitude_oeste_6_2": 38.36,
+   "longitude_estacao": -38.533,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.69,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.2,
+    "min": -78.7,
+    "max": -48.0
+   },
+   "radiacao_min": {
+    "media": -32.2,
+    "min": -48.7,
+    "max": -18.0
+   }
+  },
+  "maceio": {
+   "longitude_oeste_6_2": 35.12,
+   "longitude_estacao": -35.792,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 2.69,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -60.2,
+    "min": -76.7,
+    "max": -46.0
+   },
+   "radiacao_min": {
+    "media": -30.2,
+    "min": -46.7,
+    "max": -16.0
+   }
+  },
+  "natal": {
+   "longitude_oeste_6_2": 35.18,
+   "longitude_estacao": -35.248,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.27,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.6,
+    "min": -79.1,
+    "max": -48.5
+   },
+   "radiacao_min": {
+    "media": -32.6,
+    "min": -49.1,
+    "max": -18.5
+   }
+  },
+  "porto-alegre": {
+   "longitude_oeste_6_2": 51.13,
+   "longitude_estacao": -51.171,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.16,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.8,
+    "min": -79.2,
+    "max": -48.6
+   },
+   "radiacao_min": {
+    "media": -32.8,
+    "min": -49.2,
+    "max": -18.6
+   }
+  },
+  "recife": {
+   "longitude_oeste_6_2": 34.55,
+   "longitude_estacao": -34.924,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 1.5,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -61.4,
+    "min": -77.9,
+    "max": -47.2
+   },
+   "radiacao_min": {
+    "media": -31.4,
+    "min": -47.9,
+    "max": -17.2
+   }
+  },
+  "rio-de-janeiro": {
+   "longitude_oeste_6_2": 43.1,
+   "longitude_estacao": -43.244,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.58,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.3,
+    "min": -78.8,
+    "max": -48.2
+   },
+   "radiacao_min": {
+    "media": -32.3,
+    "min": -48.8,
+    "max": -18.2
+   }
+  },
+  "salvador": {
+   "longitude_oeste_6_2": 38.31,
+   "longitude_estacao": -38.331,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.08,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.8,
+    "min": -79.3,
+    "max": -48.6
+   },
+   "radiacao_min": {
+    "media": -32.8,
+    "min": -49.3,
+    "max": -18.6
+   }
+  },
+  "sao-luis": {
+   "longitude_oeste_6_2": 44.18,
+   "longitude_estacao": -44.234,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.22,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.7,
+    "min": -79.1,
+    "max": -48.5
+   },
+   "radiacao_min": {
+    "media": -32.7,
+    "min": -49.1,
+    "max": -18.5
+   }
+  },
+  "sao-paulo": {
+   "longitude_oeste_6_2": 46.37,
+   "longitude_estacao": -46.655,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 1.14,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -61.8,
+    "min": -78.2,
+    "max": -47.6
+   },
+   "radiacao_min": {
+    "media": -31.8,
+    "min": -48.2,
+    "max": -17.6
+   }
+  },
+  "vitoria": {
+   "longitude_oeste_6_2": 40.2,
+   "longitude_estacao": -40.286,
+   "fuso": -3.0,
+   "componentes": {
+    "indice_da_hora_min": -60,
+    "longitude_min": 0.34,
+    "meridiano_min": 0.0,
+    "equacao_do_tempo_min": {
+     "media": -2.92,
+     "min": -19.35,
+     "max": 11.27
+    }
+   },
+   "temperatura_min": {
+    "media": -62.6,
+    "min": -79.0,
+    "max": -48.4
+   },
+   "radiacao_min": {
+    "media": -32.6,
+    "min": -49.0,
+    "max": -18.4
+   }
+  }
+ },
+ "rosa": {
+  "belem": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.1,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 1.4,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      9.935897,
+      6.944444,
+      5.027174,
+      3.577899
+     ],
+     [
+      11.126374,
+      14.537037,
+      8.378623,
+      4.347826
+     ],
+     [
+      22.710623,
+      15.37037,
+      8.152174,
+      21.240942
+     ],
+     [
+      3.342491,
+      2.731481,
+      4.211957,
+      16.983696
+     ],
+     [
+      0.595238,
+      0.555556,
+      2.128623,
+      2.038043
+     ],
+     [
+      0.549451,
+      0.277778,
+      1.811594,
+      0.317029
+     ],
+     [
+      0.549451,
+      0.694444,
+      2.626812,
+      0.543478
+     ],
+     [
+      2.152015,
+      4.166667,
+      5.932971,
+      2.536232
+     ]
+    ],
+    "calmaria_pct": [
+     49.038462,
+     54.722222,
+     61.730072,
+     48.414855
+    ],
+    "dif_max_frequencia_pp": 2.84,
+    "dif_max_calmaria_pp": 3.23
+   }
+  },
+  "brasilia": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.83,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      3.159341,
+      9.907407,
+      2.581522,
+      0.498188
+     ],
+     [
+      8.791209,
+      3.611111,
+      6.25,
+      7.110507
+     ],
+     [
+      19.093407,
+      3.842593,
+      21.105072,
+      26.041667
+     ],
+     [
+      3.663004,
+      0.787037,
+      4.891304,
+      4.936594
+     ],
+     [
+      5.40293,
+      2.592593,
+      5.389493,
+      5.117754
+     ],
+     [
+      1.556777,
+      1.666667,
+      1.132246,
+      0.951087
+     ],
+     [
+      3.708791,
+      6.574074,
+      2.672101,
+      1.358696
+     ],
+     [
+      3.159341,
+      18.935185,
+      1.675725,
+      0.317029
+     ]
+    ],
+    "calmaria_pct": [
+     51.465201,
+     52.083333,
+     54.302536,
+     53.668478
+    ],
+    "dif_max_frequencia_pp": 7.19,
+    "dif_max_calmaria_pp": 2.42
+   }
+  },
+  "concepcion": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 8.5,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 11.69,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      14.789377,
+      8.148148,
+      18.568841,
+      18.65942
+     ],
+     [
+      3.113553,
+      1.481481,
+      3.306159,
+      10.280797
+     ],
+     [
+      3.113553,
+      1.111111,
+      3.487319,
+      8.559783
+     ],
+     [
+      8.379121,
+      3.981481,
+      11.141304,
+      16.711957
+     ],
+     [
+      15.247253,
+      11.342593,
+      17.074275,
+      20.606884
+     ],
+     [
+      36.858974,
+      58.888889,
+      28.17029,
+      12.36413
+     ],
+     [
+      5.815018,
+      5.972222,
+      2.717391,
+      2.762681
+     ],
+     [
+      6.181319,
+      2.638889,
+      4.528986,
+      4.166667
+     ]
+    ],
+    "calmaria_pct": [
+     6.501832,
+     6.435185,
+     11.005435,
+     5.887681
+    ],
+    "dif_max_frequencia_pp": 11.05,
+    "dif_max_calmaria_pp": 2.56
+   }
+  },
+  "curitiba": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.4,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 2.17,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      5.631868,
+      6.25,
+      5.434783,
+      9.601449
+     ],
+     [
+      11.080586,
+      9.907407,
+      8.740942,
+      13.586957
+     ],
+     [
+      40.47619,
+      39.212963,
+      32.155797,
+      25.860507
+     ],
+     [
+      15.29304,
+      14.768519,
+      14.175725,
+      6.20471
+     ],
+     [
+      2.24359,
+      1.157407,
+      2.536232,
+      1.222826
+     ],
+     [
+      2.655678,
+      3.888889,
+      3.985507,
+      4.121377
+     ],
+     [
+      5.265568,
+      5.787037,
+      6.793478,
+      8.695652
+     ],
+     [
+      4.990842,
+      6.62037,
+      4.257246,
+      6.567029
+     ]
+    ],
+    "calmaria_pct": [
+     12.362637,
+     12.407407,
+     21.92029,
+     24.139493
+    ],
+    "dif_max_frequencia_pp": 5.11,
+    "dif_max_calmaria_pp": 3.22
+   }
+  },
+  "florianopolis": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.2,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 7.03,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      22.710623,
+      12.824074,
+      17.346014,
+      30.117754
+     ],
+     [
+      15.613553,
+      17.731481,
+      16.757246,
+      14.402174
+     ],
+     [
+      4.395604,
+      10.37037,
+      3.125,
+      2.128623
+     ],
+     [
+      7.188645,
+      7.638889,
+      6.431159,
+      3.940217
+     ],
+     [
+      10.989011,
+      11.62037,
+      8.423913,
+      5.253623
+     ],
+     [
+      14.789377,
+      14.027778,
+      12.45471,
+      12.36413
+     ],
+     [
+      2.380952,
+      4.537037,
+      5.480072,
+      4.030797
+     ],
+     [
+      1.465201,
+      3.194444,
+      5.389493,
+      4.710145
+     ]
+    ],
+    "calmaria_pct": [
+     20.467033,
+     18.055556,
+     24.592391,
+     23.052536
+    ],
+    "dif_max_frequencia_pp": 4.11,
+    "dif_max_calmaria_pp": 2.64
+   }
+  },
+  "fortaleza": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.56,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      0.0,
+      0.185185,
+      0.226449,
+      0.0
+     ],
+     [
+      0.274725,
+      3.611111,
+      1.132246,
+      0.13587
+     ],
+     [
+      24.6337,
+      35.833333,
+      10.280797,
+      8.469203
+     ],
+     [
+      58.150183,
+      32.916667,
+      23.867754,
+      36.050725
+     ],
+     [
+      6.822344,
+      3.564815,
+      14.175725,
+      18.931159
+     ],
+     [
+      0.18315,
+      0.648148,
+      0.498188,
+      1.041667
+     ],
+     [
+      0.045788,
+      0.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.092593,
+      0.09058,
+      0.0
+     ]
+    ],
+    "calmaria_pct": [
+     9.89011,
+     23.148148,
+     49.728261,
+     35.371377
+    ],
+    "dif_max_frequencia_pp": 9.05,
+    "dif_max_calmaria_pp": 8.12
+   }
+  },
+  "maceio": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.71,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      0.137363,
+      0.925926,
+      0.0,
+      0.09058
+     ],
+     [
+      5.173993,
+      7.87037,
+      1.539855,
+      0.769928
+     ],
+     [
+      17.71978,
+      29.351852,
+      8.695652,
+      3.442029
+     ],
+     [
+      23.717949,
+      18.518519,
+      18.478261,
+      20.878623
+     ],
+     [
+      4.578755,
+      0.648148,
+      11.367754,
+      17.889493
+     ],
+     [
+      0.18315,
+      0.0,
+      0.815217,
+      1.313406
+     ],
+     [
+      0.0,
+      0.0,
+      0.769928,
+      0.679348
+     ],
+     [
+      0.0,
+      0.0,
+      0.04529,
+      0.09058
+     ]
+    ],
+    "calmaria_pct": [
+     48.489011,
+     42.685185,
+     58.288043,
+     54.846014
+    ],
+    "dif_max_frequencia_pp": 5.28,
+    "dif_max_calmaria_pp": 1.09
+   }
+  },
+  "natal": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.1,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.73,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      0.0,
+      0.092593,
+      0.0,
+      0.0
+     ],
+     [
+      1.007326,
+      1.018519,
+      0.452899,
+      0.996377
+     ],
+     [
+      38.141026,
+      57.222222,
+      12.092391,
+      8.152174
+     ],
+     [
+      34.432234,
+      20.87963,
+      27.445652,
+      25.317029
+     ],
+     [
+      20.970696,
+      9.259259,
+      45.878623,
+      55.389493
+     ],
+     [
+      0.274725,
+      1.064815,
+      6.793478,
+      4.030797
+     ],
+     [
+      0.0,
+      0.0,
+      0.362319,
+      0.09058
+     ],
+     [
+      0.0,
+      0.092593,
+      0.09058,
+      0.0
+     ]
+    ],
+    "calmaria_pct": [
+     5.173993,
+     10.37037,
+     6.884058,
+     6.023551
+    ],
+    "dif_max_frequencia_pp": 13.56,
+    "dif_max_calmaria_pp": 1.63
+   }
+  },
+  "porto-alegre": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.55,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      1.190476,
+      2.638889,
+      1.358696,
+      2.173913
+     ],
+     [
+      1.968864,
+      3.101852,
+      4.438406,
+      3.306159
+     ],
+     [
+      22.20696,
+      24.768519,
+      29.891304,
+      21.78442
+     ],
+     [
+      28.571429,
+      20.694444,
+      16.711957,
+      19.293478
+     ],
+     [
+      11.217949,
+      4.953704,
+      5.344203,
+      10.733696
+     ],
+     [
+      5.40293,
+      3.240741,
+      3.532609,
+      4.211957
+     ],
+     [
+      10.164835,
+      9.675926,
+      10.960145,
+      10.552536
+     ],
+     [
+      3.800366,
+      10.416667,
+      6.974638,
+      5.480072
+     ]
+    ],
+    "calmaria_pct": [
+     15.47619,
+     20.509259,
+     20.788043,
+     22.463768
+    ],
+    "dif_max_frequencia_pp": 2.63,
+    "dif_max_calmaria_pp": 1.84
+   }
+  },
+  "recife": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.5,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 1.56,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      3.296703,
+      4.537037,
+      0.905797,
+      0.452899
+     ],
+     [
+      10.07326,
+      17.314815,
+      2.445652,
+      0.452899
+     ],
+     [
+      32.509158,
+      37.638889,
+      14.855072,
+      6.38587
+     ],
+     [
+      33.516484,
+      23.287037,
+      28.759058,
+      29.664855
+     ],
+     [
+      14.331502,
+      4.444444,
+      32.382246,
+      45.833333
+     ],
+     [
+      1.694139,
+      0.555556,
+      12.59058,
+      11.594203
+     ],
+     [
+      0.0,
+      0.416667,
+      1.358696,
+      0.452899
+     ],
+     [
+      0.732601,
+      2.546296,
+      0.407609,
+      0.407609
+     ]
+    ],
+    "calmaria_pct": [
+     3.846154,
+     9.259259,
+     6.29529,
+     4.755435
+    ],
+    "dif_max_frequencia_pp": 9.32,
+    "dif_max_calmaria_pp": 2.15
+   }
+  },
+  "rio-de-janeiro": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.2,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.87,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      4.212454,
+      5.37037,
+      8.967391,
+      11.503623
+     ],
+     [
+      2.79304,
+      4.537037,
+      2.309783,
+      3.17029
+     ],
+     [
+      9.340659,
+      8.796296,
+      5.978261,
+      8.695652
+     ],
+     [
+      26.190476,
+      28.240741,
+      22.871377,
+      21.96558
+     ],
+     [
+      17.994505,
+      20.416667,
+      15.851449,
+      9.963768
+     ],
+     [
+      3.983516,
+      2.314815,
+      3.442029,
+      2.853261
+     ],
+     [
+      6.639194,
+      4.814815,
+      4.076087,
+      7.291667
+     ],
+     [
+      6.043956,
+      5.601852,
+      6.068841,
+      4.891304
+     ]
+    ],
+    "calmaria_pct": [
+     22.802198,
+     19.907407,
+     30.434783,
+     29.664855
+    ],
+    "dif_max_frequencia_pp": 3.91,
+    "dif_max_calmaria_pp": 4.54
+   }
+  },
+  "salvador": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.5,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.7,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      0.0,
+      0.324074,
+      0.09058,
+      0.0
+     ],
+     [
+      0.457875,
+      0.833333,
+      0.452899,
+      0.09058
+     ],
+     [
+      8.653846,
+      22.685185,
+      3.894928,
+      0.634058
+     ],
+     [
+      53.846154,
+      44.768519,
+      26.856884,
+      21.512681
+     ],
+     [
+      26.694139,
+      13.611111,
+      39.538043,
+      56.838768
+     ],
+     [
+      0.228938,
+      0.462963,
+      5.344203,
+      1.585145
+     ],
+     [
+      0.045788,
+      0.092593,
+      0.905797,
+      0.588768
+     ],
+     [
+      0.0,
+      0.37037,
+      0.181159,
+      0.04529
+     ]
+    ],
+    "calmaria_pct": [
+     10.07326,
+     16.851852,
+     22.735507,
+     18.70471
+    ],
+    "dif_max_frequencia_pp": 8.96,
+    "dif_max_calmaria_pp": 1.95
+   }
+  },
+  "sao-luis": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.2,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 0.85,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      0.457875,
+      0.740741,
+      2.219203,
+      1.358696
+     ],
+     [
+      31.822344,
+      15.833333,
+      11.231884,
+      12.137681
+     ],
+     [
+      49.313187,
+      43.888889,
+      27.219203,
+      32.155797
+     ],
+     [
+      1.465201,
+      3.333333,
+      7.518116,
+      9.193841
+     ],
+     [
+      0.137363,
+      1.018519,
+      6.702899,
+      5.797101
+     ],
+     [
+      0.0,
+      0.0,
+      0.996377,
+      0.452899
+     ],
+     [
+      0.045788,
+      0.37037,
+      0.679348,
+      0.181159
+     ],
+     [
+      0.091575,
+      0.046296,
+      0.317029,
+      0.588768
+     ]
+    ],
+    "calmaria_pct": [
+     16.666667,
+     34.768519,
+     43.115942,
+     38.134058
+    ],
+    "dif_max_frequencia_pp": 9.14,
+    "dif_max_calmaria_pp": 10.46
+   }
+  },
+  "sao-paulo": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 2.58,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      6.089744,
+      14.768519,
+      8.061594,
+      12.63587
+     ],
+     [
+      11.675824,
+      14.398148,
+      13.586957,
+      22.01087
+     ],
+     [
+      12.042125,
+      11.527778,
+      14.402174,
+      9.873188
+     ],
+     [
+      28.983516,
+      17.916667,
+      23.097826,
+      16.168478
+     ],
+     [
+      22.115385,
+      14.722222,
+      18.206522,
+      13.903986
+     ],
+     [
+      1.236264,
+      1.527778,
+      3.03442,
+      1.177536
+     ],
+     [
+      5.21978,
+      4.62963,
+      4.347826,
+      4.438406
+     ],
+     [
+      7.46337,
+      11.990741,
+      8.967391,
+      11.639493
+     ]
+    ],
+    "calmaria_pct": [
+     5.173993,
+     8.518519,
+     6.29529,
+     8.152174
+    ],
+    "dif_max_frequencia_pp": 2.72,
+    "dif_max_calmaria_pp": 1.08
+   }
+  },
+  "vitoria": {
+   "melhor_ajuste_dif_max_pp": {
+    "frequencia": 0.3,
+    "calmaria_por_periodo": 0.0
+   },
+   "algoritmo_inclusao_dif_max_pp": 9.39,
+   "nova_versao": {
+    "frequencia_pct": [
+     [
+      16.346154,
+      20.416667,
+      11.050725,
+      11.141304
+     ],
+     [
+      28.296703,
+      34.768519,
+      13.541667,
+      12.998188
+     ],
+     [
+      5.357143,
+      5.231481,
+      4.800725,
+      5.072464
+     ],
+     [
+      3.021978,
+      2.916667,
+      5.117754,
+      3.306159
+     ],
+     [
+      12.591575,
+      10.277778,
+      15.217391,
+      12.998188
+     ],
+     [
+      13.782051,
+      6.759259,
+      12.182971,
+      16.123188
+     ],
+     [
+      3.159341,
+      3.055556,
+      5.434783,
+      7.246377
+     ],
+     [
+      4.029304,
+      3.657407,
+      9.375,
+      11.050725
+     ]
+    ],
+    "calmaria_pct": [
+     13.415751,
+     12.916667,
+     23.278986,
+     20.063406
+    ],
+    "dif_max_frequencia_pp": 5.7,
+    "dif_max_calmaria_pp": 3.78
+   }
+  }
+ }
+}
