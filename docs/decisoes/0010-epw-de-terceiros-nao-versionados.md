@@ -20,5 +20,7 @@ O F0.5 pede EPWs de teste guardados em `docs/validacao/`. Os arquivos TMYx do Cl
 
 ## Consequências
 
+- Verificação de 24/10/2026: o Climate.OneBuilding.org não envia cabeçalhos CORS (o navegador não pode baixar os arquivos pela aplicação) e não publica termos de redistribuição. Na v0.5, as cidades terão link para a fonte e o carregamento pelo usuário (decisão 0013). Pendência do Anthony: consultar o Prof. Lamberts sobre embutir os EPWs do LabEEE (INMET).
+
 - Testes com EPW real dependem do Climate.OneBuilding.org estar no ar; o SHA-256 garante que o arquivo é o mesmo.
 - O F2.7 ("as 15 cidades com dados recentes") e o F4.1 (catálogo) dependem de confirmar os termos com os mantenedores do Climate.OneBuilding.org (Lawrie e Crawley) ou de usar outra fonte.

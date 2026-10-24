@@ -7,7 +7,8 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 ### Adicionado
 
 - Releases criadas pelo workflow `release.yml` a partir do CHANGELOG (decisão 0012).
-- Wireframes navegáveis da Fase 2 (`.../wireframes/`), com o fluxo básico e as propostas de interface para aprovação (`docs/ux/F2.1-fluxo-e-wireframes.md`).
+- Wireframes navegáveis da Fase 2 (`.../wireframes/`), aprovados com ajustes (decisão 0013): fluxo em passos, sobreposição por células quinzenais, faixas do 6.2 e classes de vento.
+- Spec 05: sobreposição de dados na carta (células como áreas, quinzenas, semestres pelos solstícios).
 
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
 
