@@ -29,6 +29,10 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 - Os campos avançados do passo "Proteção" ficam em "Mais opções", que não se fecha mais ao apagar um campo.
 - Com dados sobre a carta, a máscara de sombra é desenhada em hachura.
 
+### Corrigido
+
+- Rosa dos ventos em branco: o contorno dos rótulos dos anéis tinha a largura em unidades do desenho e cobria as cunhas desde o F2.5. Um teste de ponta a ponta passa a conferir as cores da rosa na tela, e não só a presença do desenho.
+
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
 
 Portão 1 aprovado pelo Anthony.
