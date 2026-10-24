@@ -15,6 +15,8 @@ import { DIGITS, useOverlay } from './overlay/useOverlay';
 import { protractorFromHash } from './state/protractorHash';
 import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
+import { windFromHash } from './state/windHash';
+import { WindPanel } from './wind/WindPanel';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
@@ -38,6 +40,8 @@ export function App() {
   const formatValue = (v: number) => formatNumber(v, ov.quantity ? DIGITS[ov.quantity] : 0);
   // Limites e limiar como digitados: sem casas decimais quando inteiros.
   const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
+  const wind = windFromHash(hashState);
+  const sourceUrl = selected.kind === 'test' ? selected.site.sourceUrl : undefined;
   const hasNoData = showOverlay && ov.cells!.some((c) => !ov.stats!.has(`${c.period}-${c.hour}`));
 
   return (
@@ -73,98 +77,133 @@ export function App() {
             <DataPanel
               overlay={ov.overlay}
               hasData={epw !== null}
-              sourceUrl={selected.kind === 'test' ? selected.site.sourceUrl : undefined}
+              sourceUrl={sourceUrl}
               limits={ov.quantityLimits}
               timeZone={site.timeZone}
               onChange={setHashState}
             />
           </div>
-          <section className="chart-section" aria-labelledby="chart-heading">
-            <h2 id="chart-heading">{t('chart.heading')}</h2>
-            <SunChart
-              site={site}
-              title={t('chart.title', {
-                place: site.name,
-                latitude: formatNumber(site.latitude, 2),
-                longitude: formatNumber(site.longitude, 2),
-                timeZone: formatNumber(site.timeZone),
-              })}
-              underlay={
-                showOverlay ? (
-                  <OverlayLayer
-                    cells={ov.cells!}
-                    stats={ov.stats!}
-                    limits={ov.limits!}
-                    colors={ov.colors}
-                    mode={ov.overlay.mode}
-                    onHover={setHovered}
-                  />
-                ) : undefined
-              }
-              overlay={
-                <>
-                  <MaskLayer regions={regions} hatched={showOverlay} />
-                  {protractor.show && (
-                    <ProtractorOverlay
-                      orientation={orientation}
-                      reference={reference}
-                      angles={angles}
-                      partial={partial}
-                      sideLabels={{ right: 'd', left: 'e' }}
+          <section
+            className={`chart-section${wind.tab === 'chart' ? ' sticky' : ''}`}
+            aria-labelledby="chart-heading"
+          >
+            <h2 id="chart-heading" className="visually-hidden">
+              {t('tabs.label')}
+            </h2>
+            <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
+              {(['chart', 'rose'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  id={`tab-${tab}`}
+                  aria-selected={wind.tab === tab}
+                  aria-controls={`panel-${tab}`}
+                  onClick={() => setHashState({ aba: tab === 'rose' ? 'rosa' : '' })}
+                >
+                  {t(tab === 'chart' ? 'tabs.chart' : 'tabs.rose')}
+                </button>
+              ))}
+            </div>
+            {wind.tab === 'rose' ? (
+              <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
+                <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+              </div>
+            ) : (
+              <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
+                <SunChart
+                  site={site}
+                  title={t('chart.title', {
+                    place: site.name,
+                    latitude: formatNumber(site.latitude, 2),
+                    longitude: formatNumber(site.longitude, 2),
+                    timeZone: formatNumber(site.timeZone),
+                  })}
+                  underlay={
+                    showOverlay ? (
+                      <OverlayLayer
+                        cells={ov.cells!}
+                        stats={ov.stats!}
+                        limits={ov.limits!}
+                        colors={ov.colors}
+                        mode={ov.overlay.mode}
+                        onHover={setHovered}
+                      />
+                    ) : undefined
+                  }
+                  overlay={
+                    <>
+                      <MaskLayer regions={regions} hatched={showOverlay} />
+                      {protractor.show && (
+                        <ProtractorOverlay
+                          orientation={orientation}
+                          reference={reference}
+                          angles={angles}
+                          partial={partial}
+                          sideLabels={{ right: 'd', left: 'e' }}
+                        />
+                      )}
+                    </>
+                  }
+                  top={
+                    drawing ? (
+                      <DrawingLayer
+                        drawing={drawing}
+                        onAdd={(v) =>
+                          setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
+                        }
+                      />
+                    ) : undefined
+                  }
+                />
+                {showOverlay && (
+                  <>
+                    <OverlayLegend
+                      limits={
+                        ov.overlay.mode === 'frequency'
+                          ? ov.limits!.map((v) => v * 100)
+                          : ov.limits!
+                      }
+                      colors={ov.colors}
+                      unit={ov.overlay.mode === 'frequency' ? '%' : ov.unit}
+                      title={
+                        ov.overlay.mode === 'frequency'
+                          ? t('legend.frequencyTitle', {
+                              threshold: formatLimit(ov.overlay.threshold),
+                              unit: ov.unit,
+                            })
+                          : t(`data.short.${ov.overlay.key!}`)
+                      }
+                      hasNoData={hasNoData}
+                      format={formatLimit}
                     />
-                  )}
-                </>
-              }
-              top={
-                drawing ? (
-                  <DrawingLayer
-                    drawing={drawing}
-                    onAdd={(v) => setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })}
-                  />
-                ) : undefined
-              }
-            />
-            {showOverlay && (
-              <>
-                <OverlayLegend
-                  limits={
-                    ov.overlay.mode === 'frequency' ? ov.limits!.map((v) => v * 100) : ov.limits!
-                  }
-                  colors={ov.colors}
-                  unit={ov.overlay.mode === 'frequency' ? '%' : ov.unit}
-                  title={
-                    ov.overlay.mode === 'frequency'
-                      ? t('legend.frequencyTitle', {
-                          threshold: formatLimit(ov.overlay.threshold),
-                          unit: ov.unit,
-                        })
-                      : t(`data.short.${ov.overlay.key!}`)
-                  }
-                  hasNoData={hasNoData}
-                  format={formatLimit}
-                />
-                <CellInfo
-                  view={hovered}
-                  unit={ov.unit}
-                  mode={ov.overlay.mode}
-                  threshold={ov.overlay.threshold}
-                  format={formatValue}
-                />
-              </>
+                    <CellInfo
+                      view={hovered}
+                      unit={ov.unit}
+                      mode={ov.overlay.mode}
+                      threshold={ov.overlay.threshold}
+                      format={formatValue}
+                    />
+                  </>
+                )}
+                {hasMask && (
+                  <p
+                    className={`legend${showOverlay ? ' hatched' : ''}`}
+                    aria-label={t('mask.legend')}
+                  >
+                    <span className="legend-item">
+                      <span className="swatch total" aria-hidden="true" />
+                      {t('mask.total')}
+                    </span>
+                    <span className="legend-item">
+                      <span className="swatch partial" aria-hidden="true" />
+                      {t('mask.partial')}
+                    </span>
+                  </p>
+                )}
+                <p className="note">{t('chart.note')}</p>
+              </div>
             )}
-            {hasMask && (
-              <p className={`legend${showOverlay ? ' hatched' : ''}`} aria-label={t('mask.legend')}>
-                <span className="legend-item">
-                  <span className="swatch total" aria-hidden="true" />
-                  {t('mask.total')}
-                </span>
-                <span className="legend-item">
-                  <span className="swatch partial" aria-hidden="true" />
-                  {t('mask.partial')}
-                </span>
-              </p>
-            )}
-            <p className="note">{t('chart.note')}</p>
           </section>
         </div>
 

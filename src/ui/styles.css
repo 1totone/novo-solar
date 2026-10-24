@@ -512,20 +512,16 @@ details.more summary {
 
   .chart-section {
     order: -1;
-    position: sticky;
-    top: 0;
-    z-index: 2;
     padding-bottom: 0.25rem;
     background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .chart-section h2 {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
+  /* Só a carta fica fixa no topo; a rosa, com controles e tabela, rola normalmente. */
+  .chart-section.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
 
   .chart-section .sun-chart {
@@ -536,7 +532,7 @@ details.more summary {
     margin-top: 0.25rem;
   }
 
-  .chart-section > .note:last-child {
+  #panel-chart > .note:last-child {
     display: none;
   }
 
@@ -556,4 +552,144 @@ details.more summary {
   .step-panel {
     background: var(--color-bg);
   }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Abas Carta solar e Rosa dos ventos */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabs button {
+  min-height: 40px;
+  padding: 0.25rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected='true'] {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* Rosa dos ventos (F2.5) */
+.segmented.wrap {
+  flex-wrap: wrap;
+}
+
+.wind-controls {
+  display: grid;
+  gap: 0 1rem;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 40rem) {
+  .wind-controls {
+    grid-template-columns: auto auto;
+    justify-content: start;
+  }
+}
+
+.wind-controls .field {
+  margin-bottom: 0.5rem;
+}
+
+.wind-rose {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
+  margin: 0.5rem auto 0;
+}
+
+.wind-rose .rose-grid circle,
+.wind-rose .rose-grid line {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.wind-rose path {
+  stroke: var(--color-bg);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.wind-rose .calm {
+  fill: var(--color-bg);
+  stroke: var(--color-text);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.wind-rose text {
+  font-size: 0.065px;
+  fill: var(--color-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.wind-rose .cardinal {
+  font-size: 0.09px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.wind-rose .ring-label {
+  text-anchor: start;
+  font-size: 0.055px;
+  /* contorno da cor do fundo: legível também sobre as cunhas */
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.wind-rose .calm-label {
+  font-size: 0.07px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.wind-table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.wind-table caption {
+  text-align: left;
+  color: var(--color-muted);
+  padding-bottom: 0.25rem;
+}
+
+.wind-table th,
+.wind-table td {
+  padding: 0.2rem 0.5rem;
+  text-align: right;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wind-table th[scope='row'] {
+  text-align: left;
 }
