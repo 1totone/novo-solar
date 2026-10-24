@@ -4,18 +4,20 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.9 (primeiro teste com usuários). Roteiro, folha de registro e planilha de consolidação prontos em `docs/ux/` (F2.9-*); revisão antes do teste feita em 24/10/2026 (`docs/ux/F2.9-revisao-antes-do-teste.md`), com os 3 problemas de gravidade 3 e 4 corrigidos; material da demonstração do portão 2 pronto em `docs/apresentacoes/portao-2-labeee.md`; **parada:** aguardando o Anthony aplicar o teste e trazer os resultados. Depois: resolver ou estacionar os problemas encontrados (inclusive os de gravidade 2 da revisão) e apresentar o portão 2.
+**Você está aqui:** Fase 2, passo F2.9 (primeiro teste com usuários). Roteiro, folha de registro e planilha de consolidação prontos em `docs/ux/` (F2.9-*); revisão antes do teste feita em 24/10/2026 (`docs/ux/F2.9-revisao-antes-do-teste.md`), com os 3 problemas de gravidade 3 e 4 corrigidos; material da demonstração do portão 2 pronto em `docs/apresentacoes/portao-2-labeee.md`; núcleo de cálculo do F3.1 ao F3.3 e arranjo de verificação do F3.8 contra o EnergyPlus 26.2 adiantados na branch `claude/f3.2-f3.3-nucleo`, atualizada com a `main` e sem integrar até o portão 2 (relatórios `docs/validacao/relatorios/F3.2-F3.3-nucleo.md` e `F3.8-energyplus.md` na branch); **parada:** aguardando o Anthony aplicar o teste e trazer os resultados. Depois: resolver ou estacionar os problemas encontrados (inclusive os de gravidade 2 da revisão) e apresentar o portão 2.
 
 **Pendências do Anthony:**
 
 - Aplicar o teste com usuários (F2.9) com `docs/ux/F2.9-teste-com-usuarios.md` e trazer as folhas de registro (ou `docs/ux/F2.9-registro.csv` preenchido).
 - Conduzir a demonstração do portão 2 com `docs/apresentacoes/portao-2-labeee.md` (roteiro na seção 10, retorno a registrar na seção 11, proposta de subdomínio na seção 8).
+- Revisar as decisões de física da Fase 3 adiantada, ambas propostas, na branch `claude/f3.2-f3.3-nucleo`: 0018 (máscara pela geometria e fração ensolarada hora a hora) e 0019 (critérios da verificação contra o EnergyPlus: a geometria com o mesmo sol e a comparação ponta a ponta com RMSE ≤ 0,03, no lugar de RMSE ≤ 0,02, porque o sol do EnergyPlus difere do SPA em até 0,59°).
 - Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (decisões 0010, 0013 e 0017) e se o LabEEE sabe quem gerou as colunas de radiação dos CSV do 6.2.
 - Confirmar no portão 2 o tratamento da radiação dos dados históricos: mostrada como está, com avisos (decisão 0017).
 - Decidir no portão 2 as estações da rosa dos ventos: pelos meses (decisão 0016) ou astronômicas, como as rosas do 6.2 (diferença de até 13,6 pontos percentuais; relatório do F2.8).
 - Opcional: conferir no 6.2 real, com `docs/validacao/casos/solar-6.2/teste-hora.csv`, a hora em que ele desenha os dados (relatório do F2.8, seção 6).
 - Enviar fotos das p. 13 a 15 do tutorial do SOL-AR da UFU (Bortoli e Saramago): o PDF não foi encontrado (site do LabEEE com erro 500). Servem para a conferência quantitativa do caso do F2.3 (relatório `docs/validacao/relatorios/F2.3-mascara.md`).
 - Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
+
 **Última atualização:** 24/10/2026.
 
 ---
