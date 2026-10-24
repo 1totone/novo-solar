@@ -4,7 +4,11 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.1 (fluxo e wireframes). Portão 1 aprovado em 23/10/2026; releases v0.0 e v0.1 criadas pelo workflow do CHANGELOG (decisão 0012). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
+**Você está aqui:** Fase 2, passo F2.2 (transferidor). Wireframes aprovados em 24/10/2026 com ajustes (decisão 0013).
+
+**Pendências do Anthony:**
+
+- Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (afeta o F2.7; decisões 0010 e 0013). Portão 0 aprovado em 23/10/2026; a release v0.0 depende de uma ação do Anthony (criação de releases bloqueada nas sessões na nuvem).
 **Última atualização:** 23/10/2026.
 
 ---
@@ -141,7 +145,7 @@ O objetivo é ter o caminho inteiro funcionando de ponta a ponta, ainda que simp
 
 Ao fim desta fase, o novo já substitui o antigo.
 
-- [ ] **F2.1 Fluxo e wireframes.** Esboço da tela principal e do fluxo básico, publicado como página navegável. **Parada:** o Claude apresenta os wireframes e espera a aprovação do Anthony (que pode mostrar a 1 ou 2 alunos) antes de codar a interface. *Pronto quando:* wireframes aprovados.
+- [x] **F2.1 Fluxo e wireframes.** Aprovados em 24/10/2026 com ajustes na sobreposição, nas faixas e no vento (`docs/ux/F2.1-fluxo-e-wireframes.md`, decisão 0013). Esboço da tela principal e do fluxo básico, publicado como página navegável. **Parada:** o Claude apresenta os wireframes e espera a aprovação do Anthony (que pode mostrar a 1 ou 2 alunos) antes de codar a interface. *Pronto quando:* wireframes aprovados.
 - [ ] **F2.2 Transferidor.** Qualquer orientação (inclusive negativa), referência interna e externa, α1/α2, β e γ (direita/esquerda, 1 e 2). *Pronto quando:* curvas iguais às do SOL-AR 6.2 nos casos de regressão.
 - [ ] **F2.3 Máscara pelos ângulos.** Regiões total e parcial calculadas a partir de α, β e γ (o antigo exigia desenho à mão); desenho manual mantido como opção. *Pronto quando:* casos-teste da literatura reproduzidos.
 - [ ] **F2.4 Sobreposição de dados.** TBS, UR, GHI, DNI e DHI na carta, por semestre, com faixas editáveis e legenda; fuso correto. *Pronto quando:* cores no lugar certo para Florianópolis e Manaus (teste do fuso).

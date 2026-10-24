@@ -58,6 +58,9 @@ export function App() {
             <li>
               <a href={ROADMAP_URL}>{t('status.roadmapLink')}</a>
             </li>
+            <li>
+              <a href="./wireframes/">{t('status.wireframesLink')}</a>
+            </li>
           </ul>
         </section>
 

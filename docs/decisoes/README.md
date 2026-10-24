@@ -16,6 +16,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0010](0010-epw-de-terceiros-nao-versionados.md) | EPWs de terceiros não são versionados até a confirmação dos termos | 2026-10-23 | aceita (provisória) |
 | [0011](0011-convencoes-aprovadas-no-portao-0.md) | Convenções da spec v0 aprovadas no portão 0 | 2026-10-23 | aceita |
 | [0012](0012-releases-pelo-changelog.md) | Releases criadas por workflow a partir do CHANGELOG | 2026-10-23 | aceita |
+| [0013](0013-interface-da-fase-2.md) | Interface da Fase 2 (wireframes do F2.1) | 2026-10-24 | aceita |
 
 ## Modelo
 

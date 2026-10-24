@@ -9,6 +9,7 @@ export const ptBR = {
     'Esta é a prévia da nova versão do Analysis SOL-AR, do LabEEE/UFSC. Enquanto ela não é lançada, use a versão 6.2, disponível no site do LabEEE.',
   'status.oldVersionLink': 'SOL-AR 6.2 no site do LabEEE',
   'status.roadmapLink': 'Acompanhe o desenvolvimento',
+  'status.wireframesLink': 'Esboço das próximas telas (wireframes da Fase 2)',
   'about.toggleOpen': 'Sobre',
   'about.toggleClose': 'Fechar "Sobre"',
   'about.title': 'Sobre',
