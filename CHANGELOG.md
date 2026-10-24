@@ -6,6 +6,8 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Material da demonstração do portão 2 (`docs/apresentacoes/portao-2-labeee.md`): o que a v0.5 faz, links de exemplo prontos (Recife, Florianópolis e Manaus), o que foi validado e contra quê, diferenças conhecidas em relação ao 6.2, limitações, próximos passos, proposta de subdomínio e pendências que dependem do LabEEE.
+- Revisão antes do teste com usuários (`docs/ux/F2.9-revisao-antes-do-teste.md`): avaliação pelas heurísticas de Nielsen nas 9 tarefas do roteiro, acessibilidade (axe-core, teclado, contraste), robustez com 21 arquivos (inválidos, incompletos e com fusos de −5 a +5,5) e desempenho no celular com CPU e rede limitadas; 20 achados com gravidade e destino.
 - Roteiro do primeiro teste com usuários (`docs/ux/F2.9-teste-com-usuarios.md`): 9 tarefas com respostas de referência, questionário SUS, folha de registro por participante e planilha de consolidação.
 - Regressão contra o SOL-AR 6.2 (`docs/validacao/relatorios/F2.8-regressao.md`): modelo de cálculo do 6.2 reconstruído por desmontagem (`docs/validacao/scripts/modelo_solar62.py`) e comparado com a nova versão nas 15 cidades. Achados no 6.2: dados desenhados 1 h antes (temperatura) ou 30 min antes (radiação), equação do tempo constante, trajetórias com declinação aproximada (até 1,7°), rosas pré-calculadas com estações astronômicas e setor Norte estreito no cálculo de cidade incluída. Teste automatizado da rosa contra os arquivos do 6.2.
 - Cidades e dados (decisão 0017): catálogo com as 15 cidades do SOL-AR 6.2 e Manaus, com coordenadas da estação do aeroporto e link para o arquivo recente (TMYx 2011 a 2025); dados históricos do 6.2 (TRY de 1961 a 1970 ou 1951 a 1970, IWEC em Concepción) publicados com a aplicação e abertos com um clique, com selo, origem, período e avisos sobre a radiação; importação do CSV antigo do SOL-AR, com ou sem cabeçalho de local (sem presumir o fuso), em UTF-8 ou Latin-1; período de registro do EPW quando o arquivo informa; valores ausentes por campo. Leitor do CSV conferido contra o módulo `csv` do Python nos 15 arquivos do 6.2.
@@ -28,6 +30,12 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 - O transferidor mantém os índices 1 e 2 na ordem digitada (aresta externa e interna), em vez de ordená-los como o 6.2.
 - Os campos avançados do passo "Proteção" ficam em "Mais opções", que não se fecha mais ao apagar um campo.
 - Com dados sobre a carta, a máscara de sombra é desenhada em hachura.
+
+### Corrigido
+
+- Celular: a carta fixa no topo não toma mais a tela. Com a tabela das células aberta, ou numa tela de até 600 px de altura (celular deitado ou pequeno), a carta rola com a página; antes, a área fixa passava de 85% da tela e escondia os passos e as linhas de baixo da tabela. Legendas mais compactas, dica curta na tela de toque e legenda da máscara só com os tipos de sombra presentes.
+- Trajetórias da carta sem identificação: cada uma ganha o mês no poente, logo fora do horizonte (jan/nov, fev/out, mar/set, abr/ago, mai/jul, jun e dez; datas simétricas em relação ao solstício de junho têm quase a mesma trajetória e dividem o rótulo). Os pontos cardeais ficam um pouco mais afastados para não encostar nos rótulos. Achado da revisão antes do teste com usuários (as tarefas 1 e 3 do roteiro dependem de achar 21/6 e 21/12).
+- Rosa dos ventos em branco: o contorno dos rótulos dos anéis tinha a largura em unidades do desenho e cobria as cunhas desde o F2.5. Um teste de ponta a ponta passa a conferir as cores da rosa na tela, e não só a presença do desenho.
 
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
 

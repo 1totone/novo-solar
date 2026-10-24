@@ -31,7 +31,8 @@ export const ptBR = {
     'Carta solar de {place}, latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}',
   'chart.heading': 'Carta solar',
   'chart.note':
-    'Projeção estereográfica, Norte para cima. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses; linhas horárias em hora solar verdadeira.',
+    'Projeção estereográfica, Norte para cima. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses, com o mês no poente (jan/nov: 21 de janeiro e 21 de novembro, quase a mesma trajetória); linhas horárias em hora solar verdadeira.',
+  'chart.monthsShort': 'jan,fev,mar,abr,mai,jun,jul,ago,set,out,nov,dez',
   'compass.points': 'N,NNE,NE,ENE,L,ESE,SE,SSE,S,SSO,SO,OSO,O,ONO,NO,NNO',
   'facade.heading': 'Fachada',
   'facade.orientation': 'Orientação da fachada (azimute da normal externa)',
@@ -131,6 +132,7 @@ export const ptBR = {
   'legend.noData': 'sem dados',
   'legend.frequencyTitle': 'Horas acima de {threshold} {unit}',
   'cell.hint': 'Passe o cursor sobre uma célula, ou toque nela, para ver os valores.',
+  'cell.hintTouch': 'Toque numa célula para ver os valores.',
   'cell.where': '{period}, hora {hour} do arquivo ({start} a {end}):',
   'cell.mean': 'média {mean} {unit} (mínima {min}, máxima {max}; {n} horas).',
   'cell.above': '{count} de {n} horas acima de {threshold} {unit} ({percent}%).',

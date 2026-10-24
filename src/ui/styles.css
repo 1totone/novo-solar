@@ -3,6 +3,8 @@
   --color-muted: #57606a;
   --color-accent: #1f4e79;
   --color-sun: #b5651d;
+  /* a cor das trajetórias, escurecida para texto pequeno (5,5:1 sobre o branco) */
+  --color-sun-text: #9c5719;
   --color-surface: #f6f8fa;
   --color-border: #d0d7de;
   --color-bg: #ffffff;
@@ -552,6 +554,16 @@ details.more summary {
     z-index: 2;
   }
 
+  /* Com a tabela das células aberta, a área fixa ficaria mais alta que a tela e esconderia as
+     linhas de baixo e os passos: a carta volta a rolar com a página. */
+  .chart-section.sticky:has(.cell-table[open]) {
+    position: static;
+  }
+
+  .chart-section .overlay-legend .legend-title {
+    width: auto;
+  }
+
   .chart-section .sun-chart {
     width: auto;
     max-width: 100%;
@@ -570,6 +582,10 @@ details.more summary {
     font-size: 0.8rem;
   }
 
+  .chart-section .legend {
+    gap: 0.1rem 0.6rem;
+  }
+
   .steps {
     padding: 0.75rem 0.5rem 1rem;
     background: var(--color-surface);
@@ -579,6 +595,28 @@ details.more summary {
 
   .step-panel {
     background: var(--color-bg);
+  }
+}
+
+/* Celular deitado ou tela baixa: a carta fixa ocuparia quase toda a altura; tudo rola junto. */
+@media (max-width: 51.99rem) and (max-height: 37.5rem) {
+  .chart-section.sticky {
+    position: static;
+  }
+}
+
+/* Dica da célula: "passe o cursor" com mouse, "toque" na tela de toque. */
+.hint-touch {
+  display: none;
+}
+
+@media (hover: none) {
+  .hint-hover {
+    display: none;
+  }
+
+  .hint-touch {
+    display: inline;
   }
 }
 
@@ -682,10 +720,12 @@ details.more summary {
 .wind-rose .ring-label {
   text-anchor: start;
   font-size: 0.055px;
-  /* contorno da cor do fundo: legível também sobre as cunhas */
+  /* contorno da cor do fundo: legível também sobre as cunhas. A largura está em unidades do
+     viewBox (2,6 de lado), como o tamanho da fonte: 0,012 dá cerca de 2 px na tela. Em "3px", o
+     contorno tinha 3 unidades e cobria a rosa inteira de branco. */
   paint-order: stroke;
   stroke: var(--color-bg);
-  stroke-width: 3px;
+  stroke-width: 0.012px;
   stroke-linejoin: round;
 }
 

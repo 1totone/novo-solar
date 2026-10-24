@@ -1,5 +1,5 @@
 import { inflateSync } from 'node:zlib';
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 /**
  * Leitura de cores da carta nos testes de ponta a ponta: decodifica o PNG da captura de tela
@@ -116,4 +116,40 @@ export async function maskTints(
   return points.map((p) =>
     classify(shot, Math.round((p.x - box.x) * scale), Math.round((p.y - box.y) * scale), scale),
   );
+}
+
+/**
+ * Cor mediana (RGB) de um bloco de 7 × 7 px (CSS) em pontos de um SVG qualquer, dados em
+ * coordenadas do próprio SVG (as do viewBox). Serve para conferir que um desenho aparece de fato,
+ * e não só que o elemento existe.
+ */
+export async function svgColors(
+  svg: Locator,
+  points: { x: number; y: number }[],
+): Promise<[number, number, number][]> {
+  await svg.scrollIntoViewIfNeeded();
+  const box = await svg.boundingBox();
+  if (!box) throw new Error('SVG não visível');
+  const screen = await svg.evaluate((el, pts) => {
+    const m = (el as SVGSVGElement).getScreenCTM()!;
+    return pts.map(({ x, y }) => {
+      const q = new DOMPoint(x, y).matrixTransform(m);
+      return { x: q.x, y: q.y };
+    });
+  }, points);
+  const img = decodePng(await svg.screenshot());
+  const scale = img.width / box.width;
+  const half = Math.round(3.5 * scale);
+  return screen.map((p) => {
+    const cx = Math.round((p.x - box.x) * scale);
+    const cy = Math.round((p.y - box.y) * scale);
+    const channels: number[][] = [[], [], []];
+    for (let y = cy - half; y <= cy + half; y++) {
+      for (let x = cx - half; x <= cx + half; x++) {
+        const i = (y * img.width + x) * img.channels;
+        for (let k = 0; k < 3; k++) channels[k]!.push(img.data[i + k]!);
+      }
+    }
+    return channels.map((c) => c.sort((u, v) => u - v)[c.length >> 1]!) as [number, number, number];
+  });
 }

@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { svgColors } from './fixtures/pixels';
 
 // No EPW sintético, todas as horas têm vento de 180° (Sul) a 2,0 m/s.
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
@@ -36,6 +37,21 @@ test.describe('rosa dos ventos', () => {
     await expect(page.getByTestId('wind-info')).toContainText('8.760 horas válidas de 8.760');
     // Velocidades em m/s inteiros: 2,0 cai na fronteira e vai para a classe de cima.
     await expect(page.getByTestId('wind-bias')).toContainText('passos de 1 m/s');
+    // A rosa aparece de fato: a cunha do Sul (y > 0 no SVG) tem a cor da classe de 2 a 4 m/s
+    // (#3987e5) e o setor Norte, vazio, fica com o fundo branco. Antes desta conferência, o
+    // contorno dos rótulos dos anéis cobria a rosa inteira de branco sem que nenhum teste visse.
+    const [southWedge, northSector, southRing] = await svgColors(page.getByTestId('wind-rose'), [
+      { x: 0, y: 0.55 },
+      { x: 0, y: -0.55 },
+      { x: 0, y: 0.95 },
+    ]);
+    for (const [c, expected] of [
+      [southWedge!, [57, 135, 229]],
+      [southRing!, [57, 135, 229]],
+    ] as const) {
+      c.forEach((v, k) => expect(Math.abs(v - expected[k]!)).toBeLessThan(25));
+    }
+    expect(Math.min(...northSector!)).toBeGreaterThan(235);
 
     await page.getByText('Tabela da rosa').click();
     const south = page.getByTestId('wind-table').getByRole('row', { name: /^S / });
