@@ -112,7 +112,7 @@ As fórmulas do centro e do raio de cada arco estão na seção 3.3.
 
 - Ângulos em graus na interface e nos arquivos; radianos só dentro dos cálculos.
 - Unidades SI na interface: °C, %, m/s, W/m² (irradiância), Wh/m² (irradiação horária), m, cm (raio da carta impressa).
-- Português: vírgula decimal e ponto de milhar (1.234,5). Os arquivos exportados (CSV) usam ponto decimal e vírgula como separador, para abrir em qualquer programa; a escolha fica registrada no cabeçalho do arquivo.
+- Português: vírgula decimal e ponto de milhar (1.234,5). Os arquivos exportados (CSV) usam ponto decimal e vírgula como separador, para abrir em qualquer programa; a escolha fica registrada no cabeçalho do arquivo (linhas iniciadas por #, com local, arquivo, variável, convenção de tempo e hipóteses), em UTF-8 com BOM para os acentos abrirem certos no Excel. Valores com até 6 casas decimais; célula sem dado fica vazia.
 
 ## 1.6 Máscara pelos ângulos (F2.3)
 

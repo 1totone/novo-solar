@@ -6,6 +6,8 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Passo 5, "Imprimir e exportar": impressão em escala (raio em cm, padrão 6) com régua de 5 cm e opções do que incluir, inclusive só o transferidor para transparência; exportação em SVG (com o tamanho da impressão), PNG e CSV dos dados mostrados; copiar imagem; comparação lado a lado de duas configurações.
+- Tabela dos valores das células da carta, legível sem mouse.
 - Rosa dos ventos (`src/core/wind/`, `src/ui/wind/`), numa aba ao lado da carta: frequência por setor e classe de velocidade com a calmaria no centro, ou velocidade média por setor; 8 ou 16 setores; filtros por estação e período do dia; resolução da velocidade com aviso de viés; tabela (decisão 0016). Conferida contra um cálculo independente em Python.
 - Dados sobre a carta (`src/core/overlay/`, `src/ui/overlay/`): temperatura, umidade e radiação global, direta e difusa em células por quinzena e hora do arquivo, no fuso do arquivo; média ou frequência acima de um limiar; faixas padrão (as do 6.2 onde existiam), digitadas ou pelos percentis do arquivo; legenda e valores da célula sob o cursor (decisões 0013 e 0015). Conferido hora a hora contra os EPWs de Florianópolis e Manaus.
 - Celular e tablet em pé: carta fixa no topo e passos rolando por baixo.

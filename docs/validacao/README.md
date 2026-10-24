@@ -19,6 +19,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F2.3-mascara.md`](relatorios/F2.3-mascara.md): máscara pelos ângulos contra traçado de raios e o exemplo do tutorial do SOL-AR da UFU.
   - [`relatorios/F2.4-sobreposicao.md`](relatorios/F2.4-sobreposicao.md): cada hora dos EPWs de Florianópolis e Manaus na célula certa, com teste negativo de fuso.
   - [`relatorios/F2.5-rosa-dos-ventos.md`](relatorios/F2.5-rosa-dos-ventos.md): 150 rosas contra um cálculo independente em Python.
+  - [`relatorios/F2.6-saidas.md`](relatorios/F2.6-saidas.md): escala da carta impressa (navegador e PDF rasterizado a 600 dpi) e exportações.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
