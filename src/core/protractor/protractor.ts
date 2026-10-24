@@ -84,8 +84,10 @@ export function betaRayAzimuth(orientation: number, side: Side, betaExt: number)
 }
 
 /**
- * Valores externos dos índices 1 e 2, do menor para o maior, como o SOL-AR 6.2 os desenha.
- * Sem índice 2, β ganha a linha da fachada (90°) como segundo limite; α e γ ficam com uma curva.
+ * Valores externos dos índices 1 e 2, na ordem digitada: índice 1 = aresta externa, índice 2 =
+ * aresta interna (brise afastado da parede; decisão 0011). Não se ordena: na máscara, um índice 2
+ * menor que o 1 significa que não há sombra total (spec 01, seção 1.3). Sem índice 2, β ganha a
+ * linha da fachada (90°) como segundo limite; α e γ ficam com uma curva.
  */
 function externalPair(
   values: AngleValues,
@@ -95,7 +97,7 @@ function externalPair(
   const [v1, v2] = values;
   const a = toExternal(v1, reference);
   if (v2 === undefined) return closeWithFacade ? [a, 90] : [a];
-  return [a, toExternal(v2, reference)].sort((x, y) => x - y);
+  return [a, toExternal(v2, reference)];
 }
 
 /** Todas as curvas do transferidor para uma fachada e os ângulos digitados. */

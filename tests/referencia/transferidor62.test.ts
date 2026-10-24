@@ -90,19 +90,23 @@ describe('transferidor igual ao do SOL-AR 6.2', () => {
       (k) => k.geometry.kind === 'ray' || k.externalAngle < 89,
     );
     expect(ours.length).toBe(ref.length);
+    // O 6.2 ordena os índices 1 e 2 para desenhar; o novo mantém a ordem digitada. A regressão
+    // compara o conjunto de curvas de cada família e lado, sem depender do índice.
     for (const r of ref) {
-      const k = ours.find(
+      const candidates = ours.filter(
         (x) =>
-          x.family === FAMILY[r.curva!] && x.side === SIDE[r.lado!] && x.index === Number(r.indice),
+          x.family === FAMILY[r.curva!] &&
+          x.side === SIDE[r.lado!] &&
+          Math.abs(x.externalAngle - Number(r.angulo_externo)) < 1e-9,
       );
-      expect(k, `${id} ${r.curva} ${r.lado} ${r.indice}`).toBeDefined();
-      expect(k!.externalAngle).toBeCloseTo(Number(r.angulo_externo), 9);
-      if (k!.geometry.kind === 'circle') {
-        expect(k!.geometry.centerE).toBeCloseTo(Number(r.centro_leste), 9);
-        expect(k!.geometry.centerN).toBeCloseTo(Number(r.centro_norte), 9);
-        expect(k!.geometry.radius).toBeCloseTo(Number(r.raio), 9);
+      expect(candidates.length, `${id} ${r.curva} ${r.lado} ${r.angulo_externo}`).toBe(1);
+      const k = candidates[0]!;
+      if (k.geometry.kind === 'circle') {
+        expect(k.geometry.centerE).toBeCloseTo(Number(r.centro_leste), 9);
+        expect(k.geometry.centerN).toBeCloseTo(Number(r.centro_norte), 9);
+        expect(k.geometry.radius).toBeCloseTo(Number(r.raio), 9);
       } else {
-        const d = Math.abs(((k!.geometry.azimuth - Number(r.azimute_reta) + 540) % 360) - 180);
+        const d = Math.abs(((k.geometry.azimuth - Number(r.azimute_reta) + 540) % 360) - 180);
         expect(d).toBeLessThan(1e-9);
       }
     }

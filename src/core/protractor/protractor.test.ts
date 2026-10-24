@@ -79,15 +79,23 @@ describe('curvas do transferidor contra a geometria da spec (casos analíticos)'
 });
 
 describe('protractorCurves', () => {
-  it('ordena os índices 1 e 2 pelo valor externo e completa β sem índice 2 com a linha da fachada', () => {
+  it('mantém os índices 1 e 2 na ordem digitada e completa β sem índice 2 com a linha da fachada', () => {
     const curves = protractorCurves(30, 'internal', {
       alpha: [40, 15],
       betaRight: [20],
     });
-    const alpha = curves.filter((c) => c.family === 'alpha').map((c) => c.externalAngle);
-    expect(alpha).toEqual([50, 75]);
+    const alpha = curves.filter((c) => c.family === 'alpha').map((c) => [c.index, c.externalAngle]);
+    expect(alpha).toEqual([
+      [1, 50],
+      [2, 75],
+    ]);
     const beta = curves.filter((c) => c.family === 'beta').map((c) => c.externalAngle);
     expect(beta).toEqual([70, 90]);
+    const swapped = protractorCurves(0, 'external', { alpha: [60, 30] });
+    expect(swapped.map((c) => [c.index, c.externalAngle])).toEqual([
+      [1, 60],
+      [2, 30],
+    ]);
   });
 
   it('α e γ sem índice 2 não ganham segunda curva', () => {
