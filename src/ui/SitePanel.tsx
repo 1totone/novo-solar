@@ -80,8 +80,11 @@ export function SitePanel({ selected, loadedFile, onSelect }: Props) {
   } else source = t('site.sourceLink');
 
   return (
-    <section className="site-panel" aria-labelledby="site-heading">
-      <h2 id="site-heading">{t('site.heading')}</h2>
+    <section className="site-panel step-panel" aria-labelledby="site-heading">
+      <h2 id="site-heading">
+        <span className="step-n">1</span>
+        {t('site.heading')}
+      </h2>
       <div className="field">
         <label htmlFor={selectId}>{t('site.testLabel')}</label>
         <select

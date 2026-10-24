@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { SunChart } from './chart/SunChart';
 import { useI18n } from './i18n/useI18n';
 import { SitePanel, type LoadedFile } from './SitePanel';
+import { FacadePanel } from './protractor/FacadePanel';
+import { ProtectionPanel } from './protractor/ProtectionPanel';
+import { ProtractorOverlay } from './protractor/ProtractorOverlay';
+import { protractorFromHash } from './state/protractorHash';
 import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 
@@ -15,6 +19,7 @@ export function App() {
   const aboutOpen = hashState.painel === 'sobre';
   const selected = siteFromHash(hashState);
   const site = selected.site;
+  const protractor = protractorFromHash(hashState);
 
   return (
     <div className="page">
@@ -25,14 +30,22 @@ export function App() {
 
       <main>
         <div className="workspace">
-          <SitePanel
-            selected={selected}
-            loadedFile={selected.kind === 'file' ? loadedFile : null}
-            onSelect={(next, file) => {
-              setLoadedFile(file);
-              setHashState(hashForSite(next));
-            }}
-          />
+          <div className="steps">
+            <SitePanel
+              selected={selected}
+              loadedFile={selected.kind === 'file' ? loadedFile : null}
+              onSelect={(next, file) => {
+                setLoadedFile(file);
+                setHashState(hashForSite(next));
+              }}
+            />
+            <FacadePanel
+              state={protractor}
+              rawOrientation={hashState.o ?? ''}
+              onChange={setHashState}
+            />
+            <ProtectionPanel state={protractor} hash={hashState} onChange={setHashState} />
+          </div>
           <section className="chart-section" aria-labelledby="chart-heading">
             <h2 id="chart-heading">{t('chart.heading')}</h2>
             <SunChart
@@ -43,6 +56,16 @@ export function App() {
                 longitude: formatNumber(site.longitude, 2),
                 timeZone: formatNumber(site.timeZone),
               })}
+              overlay={
+                protractor.show ? (
+                  <ProtractorOverlay
+                    orientation={protractor.orientation}
+                    reference={protractor.reference}
+                    angles={protractor.angles}
+                    sideLabels={{ right: 'd', left: 'e' }}
+                  />
+                ) : undefined
+              }
             />
             <p className="note">{t('chart.note')}</p>
           </section>
