@@ -6,6 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Material da demonstração do portão 2 (`docs/apresentacoes/portao-2-labeee.md`): o que a v0.5 faz, links de exemplo prontos (Recife, Florianópolis e Manaus), o que foi validado e contra quê, diferenças conhecidas em relação ao 6.2, limitações, próximos passos, proposta de subdomínio e pendências que dependem do LabEEE.
 - Revisão antes do teste com usuários (`docs/ux/F2.9-revisao-antes-do-teste.md`): avaliação pelas heurísticas de Nielsen nas 9 tarefas do roteiro, acessibilidade (axe-core, teclado, contraste), robustez com 21 arquivos (inválidos, incompletos e com fusos de −5 a +5,5) e desempenho no celular com CPU e rede limitadas; 20 achados com gravidade e destino.
 - Roteiro do primeiro teste com usuários (`docs/ux/F2.9-teste-com-usuarios.md`): 9 tarefas com respostas de referência, questionário SUS, folha de registro por participante e planilha de consolidação.
 - Regressão contra o SOL-AR 6.2 (`docs/validacao/relatorios/F2.8-regressao.md`): modelo de cálculo do 6.2 reconstruído por desmontagem (`docs/validacao/scripts/modelo_solar62.py`) e comparado com a nova versão nas 15 cidades. Achados no 6.2: dados desenhados 1 h antes (temperatura) ou 30 min antes (radiação), equação do tempo constante, trajetórias com declinação aproximada (até 1,7°), rosas pré-calculadas com estações astronômicas e setor Norte estreito no cálculo de cidade incluída. Teste automatizado da rosa contra os arquivos do 6.2.

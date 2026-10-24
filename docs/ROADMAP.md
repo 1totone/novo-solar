@@ -4,11 +4,12 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.9 (primeiro teste com usuários). Roteiro, folha de registro e planilha de consolidação prontos em `docs/ux/` (F2.9-*); revisão antes do teste feita em 24/10/2026 (`docs/ux/F2.9-revisao-antes-do-teste.md`), com os 3 problemas de gravidade 3 e 4 corrigidos; **parada:** aguardando o Anthony aplicar o teste e trazer os resultados. Depois: resolver ou estacionar os problemas encontrados (inclusive os de gravidade 2 da revisão) e apresentar o portão 2.
+**Você está aqui:** Fase 2, passo F2.9 (primeiro teste com usuários). Roteiro, folha de registro e planilha de consolidação prontos em `docs/ux/` (F2.9-*); revisão antes do teste feita em 24/10/2026 (`docs/ux/F2.9-revisao-antes-do-teste.md`), com os 3 problemas de gravidade 3 e 4 corrigidos; material da demonstração do portão 2 pronto em `docs/apresentacoes/portao-2-labeee.md`; **parada:** aguardando o Anthony aplicar o teste e trazer os resultados. Depois: resolver ou estacionar os problemas encontrados (inclusive os de gravidade 2 da revisão) e apresentar o portão 2.
 
 **Pendências do Anthony:**
 
 - Aplicar o teste com usuários (F2.9) com `docs/ux/F2.9-teste-com-usuarios.md` e trazer as folhas de registro (ou `docs/ux/F2.9-registro.csv` preenchido).
+- Conduzir a demonstração do portão 2 com `docs/apresentacoes/portao-2-labeee.md` (roteiro na seção 10, retorno a registrar na seção 11, proposta de subdomínio na seção 8).
 - Perguntar ao Prof. Lamberts se os EPWs do LabEEE (INMET) podem ser embutidos na aplicação (decisões 0010, 0013 e 0017) e se o LabEEE sabe quem gerou as colunas de radiação dos CSV do 6.2.
 - Confirmar no portão 2 o tratamento da radiação dos dados históricos: mostrada como está, com avisos (decisão 0017).
 - Decidir no portão 2 as estações da rosa dos ventos: pelos meses (decisão 0016) ou astronômicas, como as rosas do 6.2 (diferença de até 13,6 pontos percentuais; relatório do F2.8).
