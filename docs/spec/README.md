@@ -8,7 +8,7 @@
 2. [Tempo e posição solar](02-tempo-e-posicao-solar.md): hora legal, UTC e hora solar; convenção de hora do EPW; NREL SPA, ΔT, ano de referência, refração; tolerâncias contra o pvlib.
 3. [Projeções e transferidor](03-projecoes.md): projeção estereográfica, inversa, imagem de círculos máximos, fórmulas das curvas do transferidor, impressão em escala.
 4. [Dados climáticos](04-dados-climaticos.md): EPW (campos, unidades, códigos de ausente, checagens), CSV legado do SOL-AR 6.2, indicadores de qualidade.
-5. [Sobreposição de dados](05-sobreposicao-de-dados.md): células como áreas (quinzenas, semestres pelos solstícios, intervalos de radiação e temperatura), cor pela média ou pela frequência acima de um limiar, faixas.
+5. [Sobreposição de dados](05-sobreposicao-de-dados.md): células como áreas (quinzenas, semestres pelos solstícios, intervalos de radiação e temperatura, bordas entre quinzenas), cor pela média ou pela frequência acima de um limiar, faixas padrão e pelo arquivo.
 
 ## Resumo do que está fixado
 
@@ -51,6 +51,7 @@ Serão escritos no passo de cada módulo, com referências e testes:
 | Nascer, pôr e passagem meridiana | pvlib (SPA) | 10 s |
 | Curvas do transferidor e de máscara em casos analíticos | solução analítica | 0,1° |
 | Máscara pelos ângulos (sombra total e centro da janela) | traçado de raios com janela e placas | nenhuma direção classificada errada (1500 por caso); onde a união das peças não é exata, nenhum falso positivo |
+| Sobreposição: hora do EPW na sua célula | posição do sol no instante da convenção do EPW (Florianópolis e Manaus) | todas dentro da sua célula e fora das outras, com 10⁻⁴ na carta de raio 1 |
 | Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* | RMSE ≤ 0,02 |
 | Estatísticas de vento | cálculo independente em Python | 0,1 ponto percentual |
 | Escala de impressão | régua | ±1 mm no raio |

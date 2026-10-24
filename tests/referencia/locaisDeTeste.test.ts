@@ -16,6 +16,7 @@ describe('locais de teste', () => {
         longitude: number;
         elevacao: number;
         fuso: number;
+        url: string;
       }[];
     };
     expect(TEST_SITES.map((s) => s.id)).toEqual(manifest.arquivos.map((a) => a.id));
@@ -27,6 +28,7 @@ describe('locais de teste', () => {
         a.elevacao,
         a.fuso,
       ]);
+      expect(s.sourceUrl).toBe(a.url);
     }
   });
 });
