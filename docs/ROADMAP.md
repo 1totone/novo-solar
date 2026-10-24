@@ -4,7 +4,7 @@
 >
 > Diagnóstico do programa atual e justificativa das funções: [`docs/referencias/diagnostico-solar-6.2.md`](referencias/diagnostico-solar-6.2.md). Regras de trabalho do Claude: [`CLAUDE.md`](../CLAUDE.md).
 
-**Você está aqui:** Fase 2, passo F2.2 (transferidor). Wireframes aprovados em 24/10/2026 com ajustes (decisão 0013).
+**Você está aqui:** Fase 2, passo F2.3 (máscara pelos ângulos). Transferidor feito e conferido contra o código do SOL-AR 6.2.
 
 **Pendências do Anthony:**
 
@@ -146,7 +146,7 @@ O objetivo é ter o caminho inteiro funcionando de ponta a ponta, ainda que simp
 Ao fim desta fase, o novo já substitui o antigo.
 
 - [x] **F2.1 Fluxo e wireframes.** Aprovados em 24/10/2026 com ajustes na sobreposição, nas faixas e no vento (`docs/ux/F2.1-fluxo-e-wireframes.md`, decisão 0013). Esboço da tela principal e do fluxo básico, publicado como página navegável. **Parada:** o Claude apresenta os wireframes e espera a aprovação do Anthony (que pode mostrar a 1 ou 2 alunos) antes de codar a interface. *Pronto quando:* wireframes aprovados.
-- [ ] **F2.2 Transferidor.** Qualquer orientação (inclusive negativa), referência interna e externa, α1/α2, β e γ (direita/esquerda, 1 e 2). *Pronto quando:* curvas iguais às do SOL-AR 6.2 nos casos de regressão.
+- [x] **F2.2 Transferidor.** Feito em 24/10/2026: curvas iguais às do 6.2 (reconstruídas do executável) em 8 casos e 64 curvas; lado direito e índices 1 e 2 confirmados (relatório em `docs/validacao/relatorios/`). Qualquer orientação (inclusive negativa), referência interna e externa, α1/α2, β e γ (direita/esquerda, 1 e 2). *Pronto quando:* curvas iguais às do SOL-AR 6.2 nos casos de regressão.
 - [ ] **F2.3 Máscara pelos ângulos.** Regiões total e parcial calculadas a partir de α, β e γ (o antigo exigia desenho à mão); desenho manual mantido como opção. *Pronto quando:* casos-teste da literatura reproduzidos.
 - [ ] **F2.4 Sobreposição de dados.** TBS, UR, GHI, DNI e DHI na carta, por semestre, com faixas editáveis e legenda; fuso correto. *Pronto quando:* cores no lugar certo para Florianópolis e Manaus (teste do fuso).
 - [ ] **F2.5 Rosa dos ventos.** 8 ou 16 setores, frequência e velocidade com classes, calmarias, por estação e período do dia. *Pronto quando:* estatísticas iguais às de um cálculo independente em Python.

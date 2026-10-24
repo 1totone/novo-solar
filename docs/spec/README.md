@@ -26,8 +26,8 @@
 | Ponto | Decisão | Onde |
 |---|---|---|
 | Referência padrão do transferidor ao abrir o programa | **Interna**: coincide com AVS/AHS da INI-C e com a aula do LabEEE; a externa continua a um clique | 01, seção 1.3 |
-| Lado "direito" | à direita de quem está dentro olhando para fora (coincide com a direita do papel com a normal para cima); conferir no 6.2 | 01, seção 1.2 |
-| Índices 1 e 2 de α, β, γ | brise afastado da parede: sombra entre a curva da aresta externa (1) e a da aresta interna (2); conferir no 6.2 antes de implementar | 01, seção 1.3 |
+| Lado "direito" | à direita de quem está dentro olhando para fora (coincide com a direita do papel com a normal para cima); confirmado no código do 6.2 (F2.2) | 01, seção 1.2 |
+| Índices 1 e 2 de α, β, γ | brise afastado da parede: sombra entre a curva da aresta externa (1) e a da aresta interna (2); o 6.2 desenha as duas curvas ordenadas (F2.2) | 01, seção 1.3 |
 | ΔT | 69 s, fixo | 02, seção 2.3 |
 | Ano de referência | 2026, não bissexto | 02, seção 2.3 |
 | Refração | posições geométricas em toda a geometria; refração só no nascer e pôr do sol (h = −0,8333°) | 02, seção 2.4 |

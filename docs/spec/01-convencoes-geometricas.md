@@ -32,7 +32,7 @@
 
 - O sol **está diante da fachada** quando s_y > 0 (|ψ| < 90°) e h > 0. Fora disso, a fachada está em sombra própria e nenhuma proteção é necessária.
 
-**Direita e esquerda [conferir no 6.2].** Adotamos (portão 0) "à direita de quem está dentro olhando para fora". Na carta (vista de cima, Norte para cima), com o transferidor girado para a normal apontar para cima, esse lado coincide com a direita do papel. O SOL-AR 6.2 rotula "Beta Direita" e "Gama Direita" sem dizer o observador; a convenção dele será conferida na regressão (F2.8).
+**Direita e esquerda.** "À direita de quem está dentro olhando para fora" (portão 0). Na carta (vista de cima, Norte para cima), com o transferidor girado para a normal apontar para cima, esse lado coincide com a direita do papel. **Confirmado no código do SOL-AR 6.2** (F2.2): a reta de "Beta Direita" fica no azimute orientação + β_ext, no sentido horário a partir da normal, e o círculo de "Gama Direita" fica do lado direito; ver `docs/validacao/relatorios/F2.2-transferidor.md`.
 
 ## 1.3 Ângulos de sombra: α, β e γ
 
@@ -84,13 +84,15 @@ Com os ângulos em referência **externa**:
 | Brise horizontal infinito, ângulo α | α_ext,sol ≥ α_ext |
 | Aleta vertical infinita à direita, ângulo β | ψ > 0 e β_ext,sol ≥ β_ext (idem à esquerda com ψ < 0) |
 | Brise horizontal finito: α limitado por γ à direita | α_ext,sol ≥ α_ext **e**, se ψ > 0, γ_ext,sol ≥ γ_ext,direita (idem à esquerda) |
-| Aleta vertical finita: β limitado por γ | condição de β **e** γ_ext,sol ≤ γ_ext da aresta superior da aleta **[conferir no 6.2]** |
+| Aleta vertical finita: β limitado por γ | condição de β **e** γ_ext,sol ≤ γ_ext da aresta superior da aleta **[a verificar no F2.3]** |
 
-As três primeiras linhas foram verificadas numericamente contra traçado de raios (ponto na abertura, raio até o sol, interseção com a placa) em 20 000 casos aleatórios cada. A quarta segue da mesma geometria, mas o ponto da abertura que define a sombra de 100% para a aresta superior da aleta e a forma como o 6.2 usa γ nesse caso precisam de conferência (F2.2).
+As três primeiras linhas foram verificadas numericamente contra traçado de raios (ponto na abertura, raio até o sol, interseção com a placa) em 20 000 casos aleatórios cada. A quarta segue da mesma geometria, mas o ponto da abertura que define a sombra de 100% para a aresta superior da aleta ainda precisa de verificação por traçado de raios (F2.3). O 6.2 não ajuda aqui: ele só desenha as curvas de γ, e a região da máscara era pintada à mão.
 
-### Índices 1 e 2 [conferir no 6.2]
+### Índices 1 e 2
 
-O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". Pelo diagnóstico, o "2" representa brises afastados da parede. Interpretação adotada no portão 0: um brise afastado deixa uma fresta junto à parede, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2); por exemplo, para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2. Essa leitura será conferida contra o 6.2 no F2.2 antes de ser implementada.
+O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". Pelo diagnóstico, o "2" representa brises afastados da parede. Interpretação adotada no portão 0: um brise afastado deixa uma fresta junto à parede, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2); por exemplo, para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2.
+
+**O que o código do 6.2 faz** (F2.2): ordena os dois valores, desenha as duas curvas e, sem o índice 2, usa 90° externo como segundo limite (para α e γ, a linha da fachada, que não é desenhada como curva; para β, a linha da fachada do lado). Isso é compatível com a interpretação acima: o índice 1 fica com o menor ângulo externo (aresta externa) e a sombra fica entre as duas curvas. A região em si não existia no 6.2 (era pintada à mão); no novo ela é calculada no F2.3.
 
 ## 1.4 Curvas do transferidor
 

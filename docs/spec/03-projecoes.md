@@ -39,7 +39,7 @@ Se m_U = 0, o plano é vertical e a imagem é a reta radial na direção perpend
 | γ à esquerda (γ_ext) | (+R · tan γ_ext, 0) | R / cos γ_ext |
 | β (β_ext, de cada lado) | reta radial no azimute relativo ±β_ext | |
 
-Só o trecho dentro do círculo do horizonte e do lado da normal (y > 0) interessa. Para α_ext → 90° (ou α interno → 0°), o arco tende à reta da fachada.
+Só o trecho dentro do círculo do horizonte e do lado da normal (y > 0) interessa. Implementação: `src/core/protractor/protractor.ts`; grade de fundo como a do 6.2 (curvas de α de 5° em 5°, de 5° a 85°, e retas de β de 10° em 10°). Para α_ext → 90° (ou α interno → 0°), o arco tende à reta da fachada.
 
 **Passagem para a carta** (azimute da normal A_f): um vetor (x, y) do referencial da fachada vai para
 

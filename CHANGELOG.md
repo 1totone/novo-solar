@@ -6,9 +6,14 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Transferidor sobre a carta (`src/core/protractor/`, `src/ui/protractor/`): orientação da fachada (qualquer valor, inclusive negativo), referência interna e externa, α, β e γ à direita e à esquerda, índices 1 e 2, grade como a do SOL-AR 6.2. Passos "Fachada" e "Proteção" na tela, com o estado no link. Curvas conferidas contra o código do 6.2.
 - Releases criadas pelo workflow `release.yml` a partir do CHANGELOG (decisão 0012).
 - Wireframes navegáveis da Fase 2 (`.../wireframes/`), aprovados com ajustes (decisão 0013): fluxo em passos, sobreposição por células quinzenais, faixas do 6.2 e classes de vento.
 - Spec 05: sobreposição de dados na carta (células como áreas, quinzenas, semestres pelos solstícios).
+
+### Alterado
+
+- O estado no `#` da URL passa a ser atualizado sem criar uma entrada no histórico a cada mudança.
 
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)
 
