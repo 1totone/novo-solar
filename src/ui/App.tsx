@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { maskRegions } from '../core/mask/mask';
 import { SunChart } from './chart/SunChart';
 import { useI18n } from './i18n/useI18n';
+import { DrawingLayer, type Drawing } from './mask/DrawingLayer';
+import { MaskLayer } from './mask/MaskLayer';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
@@ -20,6 +23,10 @@ export function App() {
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const protractor = protractorFromHash(hashState);
+  const [drawing, setDrawing] = useState<Drawing | null>(null);
+  const { orientation, reference, angles, partial, drawn } = protractor;
+  const regions = maskRegions(orientation, reference, angles, partial, drawn);
+  const hasMask = regions.total.kind !== 'empty' || regions.partial.kind !== 'empty';
 
   return (
     <div className="page">
@@ -44,7 +51,13 @@ export function App() {
               rawOrientation={hashState.o ?? ''}
               onChange={setHashState}
             />
-            <ProtectionPanel state={protractor} hash={hashState} onChange={setHashState} />
+            <ProtectionPanel
+              state={protractor}
+              hash={hashState}
+              onChange={setHashState}
+              drawing={drawing}
+              onDrawingChange={setDrawing}
+            />
           </div>
           <section className="chart-section" aria-labelledby="chart-heading">
             <h2 id="chart-heading">{t('chart.heading')}</h2>
@@ -57,16 +70,40 @@ export function App() {
                 timeZone: formatNumber(site.timeZone),
               })}
               overlay={
-                protractor.show ? (
-                  <ProtractorOverlay
-                    orientation={protractor.orientation}
-                    reference={protractor.reference}
-                    angles={protractor.angles}
-                    sideLabels={{ right: 'd', left: 'e' }}
+                <>
+                  <MaskLayer regions={regions} />
+                  {protractor.show && (
+                    <ProtractorOverlay
+                      orientation={orientation}
+                      reference={reference}
+                      angles={angles}
+                      partial={partial}
+                      sideLabels={{ right: 'd', left: 'e' }}
+                    />
+                  )}
+                </>
+              }
+              top={
+                drawing ? (
+                  <DrawingLayer
+                    drawing={drawing}
+                    onAdd={(v) => setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })}
                   />
                 ) : undefined
               }
             />
+            {hasMask && (
+              <p className="legend" aria-label={t('mask.legend')}>
+                <span className="legend-item">
+                  <span className="swatch total" aria-hidden="true" />
+                  {t('mask.total')}
+                </span>
+                <span className="legend-item">
+                  <span className="swatch partial" aria-hidden="true" />
+                  {t('mask.partial')}
+                </span>
+              </p>
+            )}
             <p className="note">{t('chart.note')}</p>
           </section>
         </div>

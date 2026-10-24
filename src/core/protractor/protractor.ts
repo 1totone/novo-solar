@@ -17,12 +17,22 @@ export type Side = 'right' | 'left';
 /** Valores digitados para cada ângulo: [índice 1, índice 2 opcional]. */
 export type AngleValues = readonly [number, number?];
 
+/**
+ * Ângulos de um conjunto de sombra, na referência escolhida. Pontos da janela de onde cada ângulo é
+ * medido: spec 01, seção 1.6 (sombra total a partir das arestas e cantos; parcial, do centro).
+ */
 export interface ProtractorAngles {
+  /** Brise horizontal: 1 = aresta externa, 2 = aresta interna (brise afastado da parede). */
   alpha?: AngleValues;
+  /** Aleta à direita: 1 = aresta externa, 2 = aresta interna (aleta afastada da parede). */
   betaRight?: AngleValues;
   betaLeft?: AngleValues;
+  /** Limites laterais do brise horizontal; o índice 2 é desenhado, mas não muda a máscara. */
   gammaRight?: AngleValues;
   gammaLeft?: AngleValues;
+  /** Topo das aletas ("γ das aletas"): curva da mesma família de γ. */
+  finTopRight?: AngleValues;
+  finTopLeft?: AngleValues;
 }
 
 export interface Circle {
@@ -39,7 +49,7 @@ export interface Ray {
 }
 
 export interface ProtractorCurve {
-  family: 'alpha' | 'beta' | 'gamma';
+  family: 'alpha' | 'beta' | 'gamma' | 'finTop';
   side?: Side;
   index: 1 | 2;
   /** Ângulo na referência externa (α a partir da horizontal, β da normal, γ da horizontal). */
@@ -84,8 +94,10 @@ export function betaRayAzimuth(orientation: number, side: Side, betaExt: number)
 }
 
 /**
- * Valores externos dos índices 1 e 2, do menor para o maior, como o SOL-AR 6.2 os desenha.
- * Sem índice 2, β ganha a linha da fachada (90°) como segundo limite; α e γ ficam com uma curva.
+ * Valores externos dos índices 1 e 2, na ordem digitada: índice 1 = aresta externa, índice 2 =
+ * aresta interna (brise afastado da parede; decisão 0011). Não se ordena: na máscara, um índice 2
+ * menor que o 1 significa que não há sombra total (spec 01, seção 1.3). Sem índice 2, β ganha a
+ * linha da fachada (90°) como segundo limite; α e γ ficam com uma curva.
  */
 function externalPair(
   values: AngleValues,
@@ -95,7 +107,7 @@ function externalPair(
   const [v1, v2] = values;
   const a = toExternal(v1, reference);
   if (v2 === undefined) return closeWithFacade ? [a, 90] : [a];
-  return [a, toExternal(v2, reference)].sort((x, y) => x - y);
+  return [a, toExternal(v2, reference)];
 }
 
 /** Todas as curvas do transferidor para uma fachada e os ângulos digitados. */
@@ -131,14 +143,16 @@ export function protractorCurves(
       }),
     );
   }
-  for (const [side, values] of [
-    ['right', angles.gammaRight],
-    ['left', angles.gammaLeft],
+  for (const [family, side, values] of [
+    ['gamma', 'right', angles.gammaRight],
+    ['gamma', 'left', angles.gammaLeft],
+    ['finTop', 'right', angles.finTopRight],
+    ['finTop', 'left', angles.finTopLeft],
   ] as const) {
     if (!values) continue;
     externalPair(values, reference, false).forEach((g, k) =>
       out.push({
-        family: 'gamma',
+        family,
         side,
         index: index(k),
         externalAngle: g,

@@ -4,7 +4,7 @@
 
 ## Seções
 
-1. [Convenções geométricas](01-convencoes-geometricas.md): azimute, orientação da fachada, referencial da fachada, α, β e γ nas referências interna e externa (com figuras), condições de sombra, curvas do transferidor, unidades.
+1. [Convenções geométricas](01-convencoes-geometricas.md): azimute, orientação da fachada, referencial da fachada, α, β e γ nas referências interna e externa (com figuras), condições de sombra, curvas do transferidor, unidades, máscara pelos ângulos (sombra total e parcial).
 2. [Tempo e posição solar](02-tempo-e-posicao-solar.md): hora legal, UTC e hora solar; convenção de hora do EPW; NREL SPA, ΔT, ano de referência, refração; tolerâncias contra o pvlib.
 3. [Projeções e transferidor](03-projecoes.md): projeção estereográfica, inversa, imagem de círculos máximos, fórmulas das curvas do transferidor, impressão em escala.
 4. [Dados climáticos](04-dados-climaticos.md): EPW (campos, unidades, códigos de ausente, checagens), CSV legado do SOL-AR 6.2, indicadores de qualidade.
@@ -19,6 +19,7 @@
 - **Tempo:** o EPW está em hora padrão local; a conversão para UTC usa o fuso do cabeçalho, nunca um meridiano fixo. A hora solar verdadeira vem do ângulo horário.
 - **Convenção do EPW:** a linha da hora h descreve o intervalo que termina em h. Radiação é a energia integrada nesse intervalo e é associada ao sol no meio dele (h − 0,5); temperatura e umidade são valores no instante h.
 - **Projeção estereográfica:** r = R · tan(z/2); carta vista de cima, Norte para cima, Leste à direita.
+- **Máscara pelos ângulos:** sombra total (100%) com os ângulos medidos das arestas e cantos da janela e sombra parcial (50%) com os ângulos medidos do centro; regiões exatas na carta, como união das peças (decisão 0014).
 - **Unidades:** SI (°C, m/s, W/m², Wh/m²); vírgula decimal na interface em português.
 
 ## Decisões do portão 0 (aprovadas em 23/10/2026)
@@ -27,7 +28,7 @@
 |---|---|---|
 | Referência padrão do transferidor ao abrir o programa | **Interna**: coincide com AVS/AHS da INI-C e com a aula do LabEEE; a externa continua a um clique | 01, seção 1.3 |
 | Lado "direito" | à direita de quem está dentro olhando para fora (coincide com a direita do papel com a normal para cima); confirmado no código do 6.2 (F2.2) | 01, seção 1.2 |
-| Índices 1 e 2 de α, β, γ | brise afastado da parede: sombra entre a curva da aresta externa (1) e a da aresta interna (2); o 6.2 desenha as duas curvas ordenadas (F2.2) | 01, seção 1.3 |
+| Índices 1 e 2 de α, β, γ | brise afastado da parede: sombra entre a curva da aresta externa (1) e a da aresta interna (2); o 6.2 ordena as duas curvas (F2.2), o novo mantém a ordem digitada (F2.3, decisão 0014) | 01, seções 1.3 e 1.6 |
 | ΔT | 69 s, fixo | 02, seção 2.3 |
 | Ano de referência | 2026, não bissexto | 02, seção 2.3 |
 | Refração | posições geométricas em toda a geometria; refração só no nascer e pôr do sol (h = −0,8333°) | 02, seção 2.4 |
@@ -49,6 +50,7 @@ Serão escritos no passo de cada módulo, com referências e testes:
 | Posição solar (ângulo zenital e separação angular) | pvlib (NREL SPA) | 0,01° |
 | Nascer, pôr e passagem meridiana | pvlib (SPA) | 10 s |
 | Curvas do transferidor e de máscara em casos analíticos | solução analítica | 0,1° |
+| Máscara pelos ângulos (sombra total e centro da janela) | traçado de raios com janela e placas | nenhuma direção classificada errada (1500 por caso); onde a união das peças não é exata, nenhum falso positivo |
 | Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* | RMSE ≤ 0,02 |
 | Estatísticas de vento | cálculo independente em Python | 0,1 ponto percentual |
 | Escala de impressão | régua | ±1 mm no raio |

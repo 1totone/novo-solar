@@ -17,6 +17,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0011](0011-convencoes-aprovadas-no-portao-0.md) | Convenções da spec v0 aprovadas no portão 0 | 2026-10-23 | aceita |
 | [0012](0012-releases-pelo-changelog.md) | Releases criadas por workflow a partir do CHANGELOG | 2026-10-23 | aceita |
 | [0013](0013-interface-da-fase-2.md) | Interface da Fase 2 (wireframes do F2.1) | 2026-10-24 | aceita |
+| [0014](0014-mascara-pelos-angulos.md) | Máscara pelos ângulos: sombra total e parcial, índices 2 e γ das aletas | 2026-10-24 | aceita |
 
 ## Modelo
 

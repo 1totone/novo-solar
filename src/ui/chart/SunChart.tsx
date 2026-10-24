@@ -20,11 +20,14 @@ export function SunChart({
   site,
   title,
   overlay,
+  top,
 }: {
   site: Site;
   title: string;
-  /** Camada desenhada sobre a carta (ex.: transferidor), em coordenadas de raio 1. */
+  /** Camada desenhada sobre a carta e sob as trajetórias (máscara, transferidor), raio 1. */
   overlay?: ReactNode;
+  /** Camada por cima de tudo (ex.: desenho à mão, que recebe os cliques). */
+  top?: ReactNode;
 }) {
   const { t, formatNumber } = useI18n();
   const g = useMemo(() => chartGeometry(site), [site]);
@@ -103,6 +106,7 @@ export function SunChart({
           />
         ))}
       </g>
+      {top}
     </svg>
   );
 }

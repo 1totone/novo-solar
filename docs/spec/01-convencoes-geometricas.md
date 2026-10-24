@@ -84,15 +84,17 @@ Com os ângulos em referência **externa**:
 | Brise horizontal infinito, ângulo α | α_ext,sol ≥ α_ext |
 | Aleta vertical infinita à direita, ângulo β | ψ > 0 e β_ext,sol ≥ β_ext (idem à esquerda com ψ < 0) |
 | Brise horizontal finito: α limitado por γ à direita | α_ext,sol ≥ α_ext **e**, se ψ > 0, γ_ext,sol ≥ γ_ext,direita (idem à esquerda) |
-| Aleta vertical finita: β limitado por γ | condição de β **e** γ_ext,sol ≤ γ_ext da aresta superior da aleta **[a verificar no F2.3]** |
+| Aleta vertical finita: β limitado pelo topo | condição de β **e** γ_ext,sol ≤ γ_ext do topo da aleta ("γ das aletas", medido do canto superior **oposto**) |
 
-As três primeiras linhas foram verificadas numericamente contra traçado de raios (ponto na abertura, raio até o sol, interseção com a placa) em 20 000 casos aleatórios cada. A quarta segue da mesma geometria, mas o ponto da abertura que define a sombra de 100% para a aresta superior da aleta ainda precisa de verificação por traçado de raios (F2.3). O 6.2 não ajuda aqui: ele só desenha as curvas de γ, e a região da máscara era pintada à mão.
+As três primeiras linhas foram verificadas numericamente contra traçado de raios (ponto na abertura, raio até o sol, interseção com a placa) em 20 000 casos aleatórios cada; a quarta, com os pontos de referência da seção 1.6, no F2.3 (`docs/validacao/relatorios/F2.3-mascara.md`). O 6.2 não ajuda aqui: ele só desenha as curvas de γ, e a região da máscara era pintada à mão.
 
 ### Índices 1 e 2
 
-O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". Pelo diagnóstico, o "2" representa brises afastados da parede. Interpretação adotada no portão 0: um brise afastado deixa uma fresta junto à parede, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2); por exemplo, para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2.
+O SOL-AR 6.2 tem campos α1 e α2, β direita 1 e 2, β esquerda 1 e 2, γ direita 1 e 2, γ esquerda 1 e 2; o campo "2" só fica ativo depois do "1". O "2" representa brises afastados da parede (tutorial do SOL-AR da UFU, de Bortoli e Saramago, p. 11 e 15; decisão 0014): a fresta junto à parede deixa passar o sol, e a sombra fica entre duas curvas, a da aresta externa (índice 1) e a da aresta interna (índice 2). Para o brise horizontal, o sol é bloqueado quando α_ext,1 ≤ α_ext,sol ≤ α_ext,2.
 
-**O que o código do 6.2 faz** (F2.2): ordena os dois valores, desenha as duas curvas e, sem o índice 2, usa 90° externo como segundo limite (para α e γ, a linha da fachada, que não é desenhada como curva; para β, a linha da fachada do lado). Isso é compatível com a interpretação acima: o índice 1 fica com o menor ângulo externo (aresta externa) e a sombra fica entre as duas curvas. A região em si não existia no 6.2 (era pintada à mão); no novo ela é calculada no F2.3.
+**O que o código do 6.2 faz** (F2.2): ordena os dois valores, desenha as duas curvas e, sem o índice 2, usa 90° externo como segundo limite (para α e γ, a linha da fachada, que não é desenhada como curva; para β, a linha da fachada do lado). A região em si não existia no 6.2 (era pintada à mão).
+
+**O que o novo faz** (F2.3): mantém os índices na ordem digitada, porque a máscara depende de qual é a aresta externa e qual a interna. Se o índice 2 der um ângulo externo menor que o do 1, não há direção que a janela inteira veja atrás do brise, e a sombra total é vazia. Os pontos da janela de onde cada índice é medido estão na seção 1.6.
 
 ## 1.4 Curvas do transferidor
 
@@ -111,6 +113,60 @@ As fórmulas do centro e do raio de cada arco estão na seção 3.3.
 - Ângulos em graus na interface e nos arquivos; radianos só dentro dos cálculos.
 - Unidades SI na interface: °C, %, m/s, W/m² (irradiância), Wh/m² (irradiação horária), m, cm (raio da carta impressa).
 - Português: vírgula decimal e ponto de milhar (1.234,5). Os arquivos exportados (CSV) usam ponto decimal e vírgula como separador, para abrir em qualquer programa; a escolha fica registrada no cabeçalho do arquivo.
+
+## 1.6 Máscara pelos ângulos (F2.3)
+
+A máscara é a região da carta em que o sol fica atrás da proteção. No 6.2 ela era pintada à mão sobre as curvas do transferidor; no novo, é calculada a partir dos mesmos ângulos (decisão 0014). O desenho à mão continua como opção.
+
+### Dois conjuntos de ângulos
+
+| Conjunto | Onde | Ponto da janela de onde se mede | Cor |
+|---|---|---|---|
+| Sombra total (100%) | campos principais (α, β, γ) e "Mais opções" (índices 2, γ das aletas) | arestas e cantos que tornam a condição válida para a janela inteira (tabela abaixo) | vermelho |
+| Sombra parcial (50%) | "Mais opções", opcional, com os mesmos campos | centro da janela, para todos os ângulos | amarelo |
+
+A região parcial desenhada é a região do conjunto parcial **menos** a total.
+
+**Pontos de referência da sombra total.** Para cada aresta da proteção, vale o ponto da janela em que a condição de sombra é mais difícil de cumprir (o "pior" ponto): se ele está à sombra daquela aresta, a janela inteira está.
+
+| Ângulo | Aresta da proteção | Ponto da janela |
+|---|---|---|
+| α1 | aresta externa do brise | base (peitoril) |
+| α2 | aresta interna do brise (afastado da parede) | verga (topo da janela) |
+| γ direita, γ esquerda | ponta do brise daquele lado | canto inferior do mesmo lado |
+| β1 | aresta externa da aleta | aresta vertical oposta à aleta |
+| β2 | aresta interna da aleta (afastada da parede) | aresta vertical do mesmo lado da aleta |
+| γ das aletas | topo da aleta | canto superior oposto à aleta |
+
+α2 e β2 são medidos de pontos diferentes dos de α1 e β1: pela fresta, o sol chega primeiro à verga (no brise) e à aresta do mesmo lado (na aleta). Medir α2 da base ou β2 da aresta oposta superestima a proteção; o traçado de raios detecta as duas trocas (relatório do F2.3).
+
+**Critério de 50%.** O centro da janela vê o sol atrás da proteção. Para brises e aletas infinitos e sem fresta, a parte sombreada é uma faixa da janela que começa na borda junto à peça, e o centro fica à sombra se, e só se, a faixa cobre pelo menos metade da janela. Com fresta ou com peças finitas, é uma aproximação. A fração exata, com curvas de 0% a 100%, vem da máscara pela geometria (F3.1 a F3.3).
+
+### Região de cada proteção (ângulos externos)
+
+Com ψ o ângulo azimutal relativo (seção 1.2), α_sol o ângulo de perfil e γ_sol o ângulo do sol no plano da fachada (seção 1.3), o sol à frente da fachada (|ψ| < 90°) e acima do horizonte é bloqueado:
+
+- **Brise horizontal:** α_ext,1 ≤ α_sol e, com índice 2, α_sol ≤ α_ext,2; se ψ > 0 e γ direita for dado, γ_sol ≥ γ_ext,direita; se ψ < 0 e γ esquerda for dado, γ_sol ≥ γ_ext,esquerda.
+- **Aleta à direita:** ψ ≥ β_ext,1 e, com índice 2, ψ ≤ β_ext,2; com γ das aletas, γ_sol ≤ γ_ext,aleta. À esquerda, o mesmo com −ψ.
+- **Conjunto:** união do brise e das aletas.
+
+**γ2 não muda a máscara.** A aresta lateral de um brise retangular é paralela à normal da fachada; vista no plano da fachada, as suas duas pontas (junto à parede e na frente) são um ponto só, e dão o mesmo γ. O campo γ2 é desenhado no transferidor, como no 6.2, mas não entra no cálculo. O mesmo vale para o topo das aletas, que tem um campo só.
+
+**União das proteções.** A união das regiões de cada peça é exata com uma peça só e com aletas dos dois lados (para cada direção do sol, só a aleta daquele lado atua). Numa **grelha** (brise encostado nas aletas, com a mesma profundidade, junto à parede), as junções fecham as frestas e a luz só entra pela abertura da frente; os piores pontos de α1 e de β1 coincidem no canto inferior oposto à aleta, e por isso, deixando γ e γ das aletas em branco, a união de α1 e β1 é exata. Com brise e aletas de pontas livres, partes diferentes da janela podem ser sombreadas por peças diferentes, e a união é só uma parte da sombra total real (nunca maior que ela). Na grelha do relatório, digitar os γ como se as pontas fossem livres reduz a região total a cerca de metade da real (413 de 787 direções). Para o critério do centro (50%), a união é sempre exata, porque se trata de um ponto só.
+
+### Na carta
+
+Todas as bordas são imagens de planos pelo observador (seção 3.2 da spec 03): círculos (α, γ, γ das aletas) e retas pelo centro (β e a linha da fachada). Cada região é calculada como interseção e união de discos e semiplanos da carta, sem aproximar as bordas por polígonos: o disco de α contém as direções com perfil maior que α (e as de trás da fachada, que o semiplano da fachada exclui); o disco de γ de um lado contém as direções daquele lado com γ_sol maior que γ (e todo o outro lado). Implementação: `src/core/mask/mask.ts`; desenho em `src/ui/mask/MaskLayer.tsx` (máscaras SVG).
+
+### Desenho à mão
+
+Como no 6.2, o usuário marca na carta os vértices de regiões de sombra total ou parcial. Os lados são segmentos retos na carta (não arcos), os vértices ficam guardados no link como direções do céu (azimute e altura, 0,1°) e a região desenhada se soma à calculada do mesmo tipo.
+
+### Validação
+
+- Traçado de raios com janela e placas reais em 9 casos (brise infinito, finito e afastado; aletas infinita, finita e afastada; duas aletas; grelha; grelha com γ digitado; brise e aletas soltos), 1500 direções do sol por caso: nenhuma direção classificada de forma errada na sombra total onde a união é exata, nenhum falso positivo nos demais, e o critério do centro igual ao traçado em todas as direções de todos os casos. Tolerância: zero erros de classificação nas direções amostradas.
+- Casos analíticos: a borda do brise infinito é a curva α (±0,01°).
+- Caso da literatura: exemplo do tutorial do SOL-AR da UFU em Brasília (verificação qualitativa; relatório do F2.3).
 
 ## Referências
 
