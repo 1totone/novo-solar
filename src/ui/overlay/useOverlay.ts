@@ -22,6 +22,18 @@ export const DIGITS: Record<OverlayQuantity, number> = {
 
 const round = (v: number, digits: number) => Math.round(v * 10 ** digits) / 10 ** digits;
 
+// Cache por arquivo: a carta da tela, a da comparação e a exportação usam os mesmos cálculos.
+const cache = new WeakMap<EpwData, Map<string, unknown>>();
+function cached<T>(epw: EpwData, key: string, compute: () => T): T {
+  let m = cache.get(epw);
+  if (!m) {
+    m = new Map();
+    cache.set(epw, m);
+  }
+  if (!m.has(key)) m.set(key, compute());
+  return m.get(key) as T;
+}
+
 /**
  * Estado e cálculos da sobreposição: células (por semestre e convenção de tempo), estatísticas
  * (por grandeza e limiar) e faixas. Cada cálculo só refaz quando muda o que ele usa.
@@ -38,18 +50,27 @@ export function useOverlay(epw: EpwData | null, hash: HashState) {
   const cells = useMemo(() => {
     if (!epw || !timing) return null;
     const { latitude, longitude, elevation, timeZone } = epw.location;
-    return overlayCells({ latitude, longitude, elevation, timeZone }, semester, timing);
+    return cached(epw, `cells:${semester}:${timing}`, () =>
+      overlayCells({ latitude, longitude, elevation, timeZone }, semester, timing),
+    );
   }, [epw, semester, timing]);
 
   const stats = useMemo(
-    () => (epw && quantity ? cellStatistics(epw, quantity, threshold) : null),
+    () =>
+      epw && quantity
+        ? cached(epw, `stats:${quantity}:${threshold}`, () =>
+            cellStatistics(epw, quantity, threshold),
+          )
+        : null,
     [epw, quantity, threshold],
   );
 
   const fileLimits = useMemo(() => {
     if (!epw || !quantity || !timing || bandSource !== 'file') return null;
-    return filePercentiles(epw, quantity, timing, [20, 40, 60, 80]).map((v) =>
-      round(v, DIGITS[quantity]),
+    return cached(epw, `percentiles:${quantity}`, () =>
+      filePercentiles(epw, quantity, timing, [20, 40, 60, 80]).map((v) =>
+        round(v, DIGITS[quantity]),
+      ),
     );
   }, [epw, quantity, timing, bandSource]);
 

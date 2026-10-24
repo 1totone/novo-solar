@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import {
   protractorCurves,
   protractorGrid,
@@ -49,6 +49,7 @@ export function ProtractorOverlay({
   sideLabels: { right: string; left: string };
 }) {
   const grid = useMemo(() => protractorGrid(orientation), [orientation]);
+  const clipId = `pt-clip${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const curves = useMemo((): DrawnCurve[] => {
     const tag = (list: ProtractorCurve[], isPartial: boolean) =>
       list.map((c) => ({
@@ -70,11 +71,11 @@ export function ProtractorOverlay({
   return (
     <g className="protractor" data-testid="protractor">
       <defs>
-        <clipPath id="horizon-clip">
+        <clipPath id={clipId}>
           <circle r={1} />
         </clipPath>
       </defs>
-      <g clipPath="url(#horizon-clip)" className="pt-grid">
+      <g clipPath={`url(#${clipId})`} className="pt-grid">
         {grid.alpha.map((a) => (
           <circle
             key={a.externalAngle}
@@ -98,7 +99,7 @@ export function ProtractorOverlay({
         data-testid="facade-line"
       />
       <line x1={0} y1={0} x2={normal.x} y2={normal.y} className="pt-normal" />
-      <g clipPath="url(#horizon-clip)">
+      <g clipPath={`url(#${clipId})`}>
         {curves.map((c) => {
           const className = `pt-curve ${c.family}${c.partial ? ' partial' : ''}`;
           if (c.geometry.kind === 'ray') {

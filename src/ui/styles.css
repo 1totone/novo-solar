@@ -339,6 +339,9 @@ details.more summary {
 
 .swatch {
   display: inline-block;
+  /* cores da legenda impressas mesmo sem "gráficos de fundo" no diálogo de impressão */
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
   width: 0.9rem;
   height: 0.9rem;
   margin-right: 0.35rem;
@@ -448,10 +451,6 @@ details.more summary {
 .sun-chart .cell:hover {
   stroke: var(--color-text);
   stroke-width: 1.5;
-}
-
-.sun-chart .cell.no-data {
-  fill: url(#overlay-no-data);
 }
 
 .sun-chart .no-data-line {
@@ -671,25 +670,184 @@ details.more summary {
   overflow-x: auto;
 }
 
-.wind-table {
+.data-table {
   border-collapse: collapse;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
 }
 
-.wind-table caption {
+.data-table caption {
   text-align: left;
   color: var(--color-muted);
   padding-bottom: 0.25rem;
 }
 
-.wind-table th,
-.wind-table td {
+.data-table th,
+.data-table td {
   padding: 0.2rem 0.5rem;
   text-align: right;
   border-bottom: 1px solid var(--color-border);
 }
 
-.wind-table th[scope='row'] {
+.data-table th[scope='row'] {
   text-align: left;
+}
+
+/* Passo 5: impressão, exportação e comparação (F2.6) */
+.btn.primary {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+fieldset.plain {
+  margin: 0 0 0.5rem;
+  padding: 0;
+  border: 0;
+}
+
+fieldset.plain .check {
+  min-height: 36px;
+}
+
+.print-header,
+.print-ruler {
+  display: none;
+}
+
+.compare {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 52rem) {
+  .compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.compare-label {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+}
+
+.cell-table {
+  margin-top: 0.5rem;
+}
+
+.cell-table .data-table td {
+  min-width: 2.5rem;
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .header,
+  .steps,
+  .status,
+  .about-toggle,
+  .about,
+  .footer,
+  .tabs,
+  .cell-info,
+  .cell-table,
+  .chart-section [role='tabpanel'] > .note,
+  .wind-controls,
+  .wind-panel details {
+    display: none !important;
+  }
+
+  .workspace {
+    display: block;
+  }
+
+  .chart-section,
+  .chart-section.sticky {
+    position: static;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .print-header {
+    display: block;
+  }
+
+  .print-title {
+    margin: 0;
+    font-size: 14pt;
+    font-weight: 600;
+  }
+
+  .print-details {
+    margin: 0.2rem 0 0.4rem;
+    font-size: 9pt;
+  }
+
+  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura). */
+  .chart-section .sun-chart {
+    width: calc(var(--print-radius) * 2.64cm) !important;
+    height: calc(var(--print-radius) * 2.64cm) !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 auto;
+  }
+
+  .print-ruler {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 8pt;
+  }
+
+  .print-ruler .ruler {
+    width: 5cm;
+    height: 0.6cm;
+  }
+
+  .print-ruler line {
+    stroke: #000;
+    stroke-width: 0.15;
+  }
+
+  .compare-col {
+    break-inside: avoid;
+  }
+
+  .compare-col + .compare-col {
+    break-before: page;
+  }
+
+  .print-no-protractor .protractor,
+  .print-no-mask .mask,
+  .print-no-mask .mask-legend,
+  .print-no-data .overlay,
+  .print-no-data .overlay-legend,
+  .print-no-legend .legend,
+  .print-no-legend .print-details {
+    display: none !important;
+  }
+
+  /* Só o transferidor, para imprimir em transparência e pôr sobre uma carta impressa. */
+  .print-protractor-only .sun-chart .altitude,
+  .print-protractor-only .sun-chart .azimuth,
+  .print-protractor-only .sun-chart .azimuth-label,
+  .print-protractor-only .sun-chart .altitude-label,
+  .print-protractor-only .sun-chart .hour-lines,
+  .print-protractor-only .sun-chart .sun-paths,
+  .print-protractor-only .sun-chart .overlay,
+  .print-protractor-only .sun-chart .mask,
+  .print-protractor-only .legend {
+    display: none !important;
+  }
 }

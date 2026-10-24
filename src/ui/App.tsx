@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import { maskRegions } from '../core/mask/mask';
-import { SunChart } from './chart/SunChart';
+import { useMemo, useState, type CSSProperties } from 'react';
+import type { EpwData } from '../core/epw/parseEpw';
+import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
+import { windRose } from '../core/wind/windRose';
+import { ChartView } from './chart/ChartView';
+import { describeConfig } from './compare/describe';
+import { overlayCsv, windCsv } from './export/dataCsv';
+import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
+import { OutputsPanel } from './export/OutputsPanel';
+import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
 import { useI18n } from './i18n/useI18n';
-import { DrawingLayer, type Drawing } from './mask/DrawingLayer';
-import { MaskLayer } from './mask/MaskLayer';
+import type { Drawing } from './mask/DrawingLayer';
+import { DataPanel } from './overlay/DataPanel';
+import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
-import { ProtractorOverlay } from './protractor/ProtractorOverlay';
-import { DataPanel } from './overlay/DataPanel';
-import { CellInfo, OverlayLegend } from './overlay/OverlayInfo';
-import { OverlayLayer, type CellView } from './overlay/OverlayLayer';
-import { DIGITS, useOverlay } from './overlay/useOverlay';
+import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
 import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
@@ -20,29 +24,212 @@ import { WindPanel } from './wind/WindPanel';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
+/** Largura do viewBox da carta em raios: a carta impressa tem 2,64 vezes o raio pedido. */
+const CHART_SPAN = 2.64;
+/** Lado do PNG exportado, em pixels. */
+const PNG_PIXELS = 2400;
+
+/** Régua de 5 cm impressa ao lado da carta, para conferir a escala. */
+function PrintRuler({ label }: { label: string }) {
+  return (
+    <div className="print-ruler" aria-hidden="true">
+      <svg viewBox="0 0 50 6" className="ruler">
+        <line x1={0} y1={5.5} x2={50} y2={5.5} />
+        {Array.from({ length: 51 }, (_, mm) => (
+          <line
+            key={mm}
+            x1={mm}
+            y1={5.5}
+            x2={mm}
+            y2={mm % 10 === 0 ? 0.5 : mm % 5 === 0 ? 2.5 : 4}
+          />
+        ))}
+      </svg>
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export function App() {
   const { t, formatNumber } = useI18n();
   const [hashState, setHashState] = useHashState();
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
+  const [drawing, setDrawing] = useState<Drawing | null>(null);
+  const [print, setPrint] = useState<PrintOptions>(DEFAULT_PRINT);
+  const [compareEpw, setCompareEpw] = useState<EpwData | null>(null);
   const aboutOpen = hashState.painel === 'sobre';
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const protractor = protractorFromHash(hashState);
-  const [drawing, setDrawing] = useState<Drawing | null>(null);
-  const { orientation, reference, angles, partial, drawn } = protractor;
-  const regions = maskRegions(orientation, reference, angles, partial, drawn);
-  const hasMask = regions.total.kind !== 'empty' || regions.partial.kind !== 'empty';
   const epw = selected.kind === 'file' ? (loadedFile?.data ?? null) : null;
   const ov = useOverlay(epw, hashState);
-  const [hovered, setHovered] = useState<CellView | null>(null);
-  const showOverlay = Boolean(ov.cells && ov.stats && ov.limits && ov.quantity);
-  const formatValue = (v: number) => formatNumber(v, ov.quantity ? DIGITS[ov.quantity] : 0);
-  // Limites e limiar como digitados: sem casas decimais quando inteiros.
-  const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
   const wind = windFromHash(hashState);
   const sourceUrl = selected.kind === 'test' ? selected.site.sourceUrl : undefined;
-  const hasNoData = showOverlay && ov.cells!.some((c) => !ov.stats!.has(`${c.period}-${c.hour}`));
+  const rose = useMemo(
+    () =>
+      epw && wind.tab === 'rose'
+        ? windRose(epw, { sectors: wind.sectors, season: wind.season, period: wind.period })
+        : null,
+    [epw, wind.tab, wind.sectors, wind.season, wind.period],
+  );
+  // Comparação: a configuração A fica no link (cmp) e o arquivo dela, na memória.
+  const hashA: HashState | null = hashState.cmp ? parseHash(hashState.cmp) : null;
+  const epwA = hashA && siteFromHash(hashA).kind === 'file' ? compareEpw : null;
+  const words = {
+    orientation: (degrees: string) => t('compare.orientation', { degrees }),
+    none: t('compare.none'),
+  };
+  const fmt = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
+
+  const csvAvailable =
+    wind.tab === 'rose' ? rose !== null : Boolean(ov.cells && ov.stats && ov.quantity);
+
+  const header = (what: string): string[] => {
+    const lines = [
+      t('csv.title', { what }),
+      t('csv.site', {
+        place: site.name,
+        latitude: String(site.latitude),
+        longitude: String(site.longitude),
+        timeZone: `${site.timeZone < 0 ? '-' : '+'}${Math.abs(site.timeZone)}`,
+      }),
+    ];
+    if (epw && loadedFile) {
+      lines.push(t('csv.file', { file: loadedFile.fileName, hours: String(loadedFile.hours) }));
+    }
+    return lines;
+  };
+
+  const visibleSvg = (): SVGSVGElement | null =>
+    document.querySelector<SVGSVGElement>(
+      wind.tab === 'rose' ? '#panel-rose .wind-rose' : '#panel-chart .sun-chart',
+    );
+
+  const exportCsv = (): string | null => {
+    if (wind.tab === 'rose') {
+      if (!rose) return null;
+      return windCsv({
+        header: [
+          ...header(t('csv.rose')),
+          t('csv.filters', {
+            season: wind.season ?? t('wind.year'),
+            period: wind.period ?? t('wind.allDay'),
+            sectors: String(wind.sectors),
+          }),
+          t('csv.hypotheses'),
+        ],
+        rose,
+        sectorNames: t('compass.points')
+          .split(',')
+          .filter((_, k) => k % (16 / wind.sectors) === 0),
+      });
+    }
+    if (!ov.cells || !ov.stats || !ov.quantity || !ov.limits || !ov.overlay.key) return null;
+    const info = OVERLAY_QUANTITIES[ov.quantity];
+    return overlayCsv({
+      header: [
+        ...header(t('csv.cells')),
+        t('csv.quantity', {
+          quantity: t(`data.short.${ov.overlay.key}`),
+          unit: info.unit,
+          what: t(ov.overlay.mode === 'frequency' ? 'data.colorFrequency' : 'data.colorMean'),
+        }),
+        t('csv.semester', {
+          semester: t(ov.overlay.semester === 1 ? 'data.semester1' : 'data.semester2'),
+          interval: t(
+            info.timing === 'integrated' ? 'data.intervalIntegrated' : 'data.intervalInstant',
+          ),
+        }),
+        t('csv.bands', { limits: ov.limits.join('; ') }),
+      ],
+      cells: ov.cells,
+      stats: ov.stats,
+      mode: ov.overlay.mode,
+      limits: ov.limits,
+    });
+  };
+
+  const onExport = async (kind: 'svg' | 'png' | 'csv' | 'copy'): Promise<string | null> => {
+    const base = `solar-${fileSlug(site.name)}-${wind.tab === 'rose' ? 'rosa' : 'carta'}`;
+    if (kind === 'csv') {
+      const text = exportCsv();
+      if (!text) return t('outputs.csvNone');
+      downloadBlob(new Blob([text], { type: 'text/csv;charset=utf-8' }), `${base}.csv`);
+      return null;
+    }
+    const svg = visibleSvg();
+    if (!svg) return null;
+    const description = svg.querySelector('title')?.textContent ?? site.name;
+    if (kind === 'svg') {
+      // A carta sai com o tamanho da impressão (raio pedido); a rosa, sem escala.
+      const size =
+        wind.tab === 'rose' ? undefined : `${(print.radiusCm * CHART_SPAN).toFixed(2)}cm`;
+      const text = standaloneSvg(svg, description, size);
+      downloadBlob(new Blob([text], { type: 'image/svg+xml' }), `${base}.svg`);
+      return null;
+    }
+    const png = await svgToPng(standaloneSvg(svg, description, String(PNG_PIXELS)), PNG_PIXELS);
+    if (kind === 'png') {
+      downloadBlob(png, `${base}.png`);
+      return null;
+    }
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': png })]);
+      return t('outputs.copied');
+    } catch {
+      return t('outputs.copyFailed');
+    }
+  };
+
+  const onCompare = (start: boolean) => {
+    if (start) {
+      const current = { ...hashState };
+      delete current.cmp;
+      setCompareEpw(epw);
+      setHashState({ cmp: buildHash(current).replace(/^#/, '') });
+    } else {
+      setCompareEpw(null);
+      setHashState({ cmp: '' });
+    }
+  };
+
+  const sectionClass = [
+    'chart-section',
+    wind.tab === 'chart' && !hashA ? 'sticky' : '',
+    hashA ? 'comparing' : '',
+    print.protractor ? '' : 'print-no-protractor',
+    print.mask ? '' : 'print-no-mask',
+    print.data ? '' : 'print-no-data',
+    print.legend ? '' : 'print-no-legend',
+    print.protractorOnly ? 'print-protractor-only' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const printStyle = { '--print-radius': String(print.radiusCm) } as CSSProperties;
+  const source =
+    epw && loadedFile
+      ? t('print.sourceFile', { file: loadedFile.fileName })
+      : t('print.sourceTest');
+
+  const live =
+    wind.tab === 'rose' ? (
+      <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
+        <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+      </div>
+    ) : (
+      <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
+        <ChartView
+          hash={hashState}
+          epw={epw}
+          drawing={drawing}
+          onDrawingAdd={(v) =>
+            drawing && setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
+          }
+        />
+        <PrintRuler label={t('print.ruler')} />
+        <p className="note">{t('chart.note')}</p>
+      </div>
+    );
 
   return (
     <div className="page">
@@ -82,14 +269,33 @@ export function App() {
               timeZone={site.timeZone}
               onChange={setHashState}
             />
+            <OutputsPanel
+              print={print}
+              onPrintChange={setPrint}
+              onPrint={() => window.print()}
+              onExport={onExport}
+              csvAvailable={csvAvailable}
+              comparing={hashA !== null}
+              onCompare={onCompare}
+            />
           </div>
-          <section
-            className={`chart-section${wind.tab === 'chart' ? ' sticky' : ''}`}
-            aria-labelledby="chart-heading"
-          >
+          <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
             <h2 id="chart-heading" className="visually-hidden">
               {t('tabs.label')}
             </h2>
+            <div className="print-header">
+              <p className="print-title">{t('print.title', { place: site.name })}</p>
+              <p className="print-details">
+                {t('print.details', {
+                  latitude: formatNumber(site.latitude, 3),
+                  longitude: formatNumber(site.longitude, 3),
+                  timeZone: `${site.timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(site.timeZone))}`,
+                  source,
+                  date: new Date().toLocaleDateString('pt-BR'),
+                  radius: fmt(print.radiusCm),
+                })}
+              </p>
+            </div>
             <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
               {(['chart', 'rose'] as const).map((tab) => (
                 <button
@@ -105,104 +311,27 @@ export function App() {
                 </button>
               ))}
             </div>
-            {wind.tab === 'rose' ? (
-              <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
-                <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+            {hashA ? (
+              <div className="compare" data-testid="compare-view">
+                <div className="compare-col" data-testid="compare-a">
+                  <h3 className="compare-label">
+                    {t('compare.a')}: {describeConfig(hashA, fmt, words)}
+                  </h3>
+                  {wind.tab === 'rose' ? (
+                    <WindPanel epw={epwA} wind={windFromHash(hashA)} onChange={() => {}} readOnly />
+                  ) : (
+                    <ChartView hash={hashA} epw={epwA} />
+                  )}
+                </div>
+                <div className="compare-col" data-testid="compare-b">
+                  <h3 className="compare-label">
+                    {t('compare.b')}: {describeConfig(hashState, fmt, words)}
+                  </h3>
+                  {live}
+                </div>
               </div>
             ) : (
-              <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
-                <SunChart
-                  site={site}
-                  title={t('chart.title', {
-                    place: site.name,
-                    latitude: formatNumber(site.latitude, 2),
-                    longitude: formatNumber(site.longitude, 2),
-                    timeZone: formatNumber(site.timeZone),
-                  })}
-                  underlay={
-                    showOverlay ? (
-                      <OverlayLayer
-                        cells={ov.cells!}
-                        stats={ov.stats!}
-                        limits={ov.limits!}
-                        colors={ov.colors}
-                        mode={ov.overlay.mode}
-                        onHover={setHovered}
-                      />
-                    ) : undefined
-                  }
-                  overlay={
-                    <>
-                      <MaskLayer regions={regions} hatched={showOverlay} />
-                      {protractor.show && (
-                        <ProtractorOverlay
-                          orientation={orientation}
-                          reference={reference}
-                          angles={angles}
-                          partial={partial}
-                          sideLabels={{ right: 'd', left: 'e' }}
-                        />
-                      )}
-                    </>
-                  }
-                  top={
-                    drawing ? (
-                      <DrawingLayer
-                        drawing={drawing}
-                        onAdd={(v) =>
-                          setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
-                        }
-                      />
-                    ) : undefined
-                  }
-                />
-                {showOverlay && (
-                  <>
-                    <OverlayLegend
-                      limits={
-                        ov.overlay.mode === 'frequency'
-                          ? ov.limits!.map((v) => v * 100)
-                          : ov.limits!
-                      }
-                      colors={ov.colors}
-                      unit={ov.overlay.mode === 'frequency' ? '%' : ov.unit}
-                      title={
-                        ov.overlay.mode === 'frequency'
-                          ? t('legend.frequencyTitle', {
-                              threshold: formatLimit(ov.overlay.threshold),
-                              unit: ov.unit,
-                            })
-                          : t(`data.short.${ov.overlay.key!}`)
-                      }
-                      hasNoData={hasNoData}
-                      format={formatLimit}
-                    />
-                    <CellInfo
-                      view={hovered}
-                      unit={ov.unit}
-                      mode={ov.overlay.mode}
-                      threshold={ov.overlay.threshold}
-                      format={formatValue}
-                    />
-                  </>
-                )}
-                {hasMask && (
-                  <p
-                    className={`legend${showOverlay ? ' hatched' : ''}`}
-                    aria-label={t('mask.legend')}
-                  >
-                    <span className="legend-item">
-                      <span className="swatch total" aria-hidden="true" />
-                      {t('mask.total')}
-                    </span>
-                    <span className="legend-item">
-                      <span className="swatch partial" aria-hidden="true" />
-                      {t('mask.partial')}
-                    </span>
-                  </p>
-                )}
-                <p className="note">{t('chart.note')}</p>
-              </div>
+              live
             )}
           </section>
         </div>

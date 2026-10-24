@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react';
+import { useId, useMemo, type ReactNode } from 'react';
 import type { Site } from '../../core/chart/sunChart';
 import { useI18n } from '../i18n/useI18n';
 import { chartGeometry, type SvgPoint } from './chartGeometry';
@@ -34,6 +34,7 @@ export function SunChart({
 }) {
   const { t, formatNumber } = useI18n();
   const g = useMemo(() => chartGeometry(site), [site]);
+  const titleId = `chart-title${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   // Rótulos de altura no semieixo meridiano oposto ao lado em que o sol passa mais tempo
   // (sul da carta para latitudes sul): y do SVG cresce para o Sul.
   const labelSide = site.latitude < 0 ? 1 : -1;
@@ -43,10 +44,10 @@ export function SunChart({
       className="sun-chart"
       viewBox="-1.32 -1.32 2.64 2.64"
       role="img"
-      aria-labelledby="sun-chart-title"
+      aria-labelledby={titleId}
       data-testid="sun-chart"
     >
-      <title id="sun-chart-title">{title}</title>
+      <title id={titleId}>{title}</title>
       {underlay}
       <g className="grid">
         {g.altitudeCircles.map((c) => (
