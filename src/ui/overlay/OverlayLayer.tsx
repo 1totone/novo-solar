@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { project } from '../../core/chart/stereographic';
 import { bandIndex, cellKey, type CellStats, type OverlayCell } from '../../core/overlay/overlay';
 
@@ -23,14 +24,17 @@ export function OverlayLayer({
   mode: 'mean' | 'frequency';
   onHover: (view: CellView | null) => void;
 }) {
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  const clipId = `overlay-horizon${uid}`;
+  const noDataId = `overlay-no-data${uid}`;
   return (
     <g className="overlay" data-testid="overlay" onPointerLeave={() => onHover(null)}>
       <defs>
-        <clipPath id="overlay-horizon">
+        <clipPath id={clipId}>
           <circle r={1} />
         </clipPath>
         <pattern
-          id="overlay-no-data"
+          id={noDataId}
           patternUnits="userSpaceOnUse"
           width={0.03}
           height={0.03}
@@ -39,7 +43,7 @@ export function OverlayLayer({
           <rect x={0} y={0} width={0.008} height={0.03} className="no-data-line" />
         </pattern>
       </defs>
-      <g clipPath="url(#overlay-horizon)">
+      <g clipPath={`url(#${clipId})`}>
         {cells.map((cell) => {
           const s = stats.get(cellKey(cell.period, cell.hour));
           const value = s ? (mode === 'frequency' ? s.above : s.mean) : undefined;
@@ -55,7 +59,7 @@ export function OverlayLayer({
               key={`${cell.period}-${cell.hour}`}
               points={points}
               className={band === undefined ? 'cell no-data' : 'cell'}
-              style={band === undefined ? undefined : { fill: colors[band] }}
+              style={{ fill: band === undefined ? `url(#${noDataId})` : colors[band] }}
               data-cell={`${cell.period}-${cell.hour}`}
               data-band={band}
               onPointerEnter={() => onHover({ cell, stats: s })}

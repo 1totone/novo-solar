@@ -74,11 +74,14 @@ export function WindPanel({
   wind,
   sourceUrl,
   onChange,
+  readOnly = false,
 }: {
   epw: EpwData | null;
   wind: WindState;
   sourceUrl?: string;
   onChange: (patch: Record<string, string>) => void;
+  /** Sem os controles (configuração A da comparação). */
+  readOnly?: boolean;
 }) {
   const { t, formatNumber } = useI18n();
   const rose = useMemo(
@@ -120,44 +123,46 @@ export function WindPanel({
 
   return (
     <div className="wind-panel" data-testid="wind-panel">
-      <div className="wind-controls">
-        <Segmented
-          label={t('wind.show')}
-          value={wind.show}
-          options={[
-            { value: 'frequency', label: t('wind.frequency') },
-            { value: 'speed', label: t('wind.speed') },
-          ]}
-          onSelect={(v) => onChange({ rosa: v === 'speed' ? 'vel' : '' })}
-        />
-        <Segmented
-          label={t('wind.sectors')}
-          value={String(wind.sectors) as '8' | '16'}
-          options={[
-            { value: '8', label: '8' },
-            { value: '16', label: '16' },
-          ]}
-          onSelect={(v) => onChange({ setores: v === '16' ? '16' : '' })}
-        />
-        <Segmented
-          label={t('wind.season')}
-          value={wind.season ?? 'ano'}
-          options={[
-            { value: 'ano', label: t('wind.year') },
-            ...SEASON_KEYS.map((s) => ({ value: s, label: t(names[s]) })),
-          ]}
-          onSelect={(v) => onChange({ estacao: v === 'ano' ? '' : v })}
-        />
-        <Segmented
-          label={t('wind.period')}
-          value={wind.period ?? 'todos'}
-          options={[
-            { value: 'todos', label: t('wind.allDay') },
-            ...DAY_PERIOD_KEYS.map((p) => ({ value: p, label: t(PERIOD_NAMES[p]) })),
-          ]}
-          onSelect={(v) => onChange({ periodo: v === 'todos' ? '' : v })}
-        />
-      </div>
+      {!readOnly && (
+        <div className="wind-controls">
+          <Segmented
+            label={t('wind.show')}
+            value={wind.show}
+            options={[
+              { value: 'frequency', label: t('wind.frequency') },
+              { value: 'speed', label: t('wind.speed') },
+            ]}
+            onSelect={(v) => onChange({ rosa: v === 'speed' ? 'vel' : '' })}
+          />
+          <Segmented
+            label={t('wind.sectors')}
+            value={String(wind.sectors) as '8' | '16'}
+            options={[
+              { value: '8', label: '8' },
+              { value: '16', label: '16' },
+            ]}
+            onSelect={(v) => onChange({ setores: v === '16' ? '16' : '' })}
+          />
+          <Segmented
+            label={t('wind.season')}
+            value={wind.season ?? 'ano'}
+            options={[
+              { value: 'ano', label: t('wind.year') },
+              ...SEASON_KEYS.map((s) => ({ value: s, label: t(names[s]) })),
+            ]}
+            onSelect={(v) => onChange({ estacao: v === 'ano' ? '' : v })}
+          />
+          <Segmented
+            label={t('wind.period')}
+            value={wind.period ?? 'todos'}
+            options={[
+              { value: 'todos', label: t('wind.allDay') },
+              ...DAY_PERIOD_KEYS.map((p) => ({ value: p, label: t(PERIOD_NAMES[p]) })),
+            ]}
+            onSelect={(v) => onChange({ periodo: v === 'todos' ? '' : v })}
+          />
+        </div>
+      )}
       <WindRoseChart rose={rose} show={wind.show} labels={compass} title={title} />
       {wind.show === 'frequency' ? (
         <div className="legend" data-testid="wind-legend">
@@ -192,7 +197,7 @@ export function WindPanel({
       <details className="more">
         <summary>{t('wind.table')}</summary>
         <div className="table-scroll">
-          <table className="wind-table" data-testid="wind-table">
+          <table className="data-table wind-table" data-testid="wind-table">
             <caption>{title}</caption>
             <thead>
               <tr>

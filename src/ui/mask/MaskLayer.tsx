@@ -151,13 +151,19 @@ export function MaskLayer({
     );
   }
   if (layers.length === 0) return null;
+  // Recorte no horizonte: as regiões ficam dentro dele, e o recorte evita que o Chrome deixe
+  // vazar a hachura na borda do SVG ao gerar PDF.
+  const clipId = `${prefix}-clip`;
   return (
     <g className="mask" data-testid="mask">
       <defs>
+        <clipPath id={clipId}>
+          <circle r={1} />
+        </clipPath>
         {builder.defs}
         {hatches}
       </defs>
-      {layers}
+      <g clipPath={`url(#${clipId})`}>{layers}</g>
     </g>
   );
 }

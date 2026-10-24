@@ -49,8 +49,10 @@ E = x · cos A_f + y · sen A_f,  N = −x · sen A_f + y · cos A_f
 
 ## 3.4 Impressão em escala
 
-- O raio da carta impressa é dado em centímetros (padrão 6 cm, como no 6.2) e sai em SVG ou PDF vetorial, com o tamanho físico declarado no arquivo.
-- Tolerância: ±1 mm no raio, medido com régua numa impressão a 100% (F2.6).
+- O raio da carta impressa é dado em centímetros (padrão 6 cm, como no 6.2; aceita de 2 a 20 cm). Como o desenho vai até 1,32 raio (rótulos de azimute), a carta impressa tem 2,64 raios de largura: 15,84 cm com o raio padrão. Numa folha A4 em pé (margens de 12 mm) cabe até 7 cm de raio; a tela avisa quando o raio pede folha maior.
+- Impressão pelo navegador (imprimir ou salvar em PDF), com cabeçalho (local, coordenadas, fuso, origem dos dados, data, raio) e uma régua de 5 cm para conferir a escala. Opções: incluir ou não transferidor, máscara, dados e legenda; "só o transferidor", para imprimir em transparência.
+- SVG exportado com largura e altura em centímetros (2,64 raios) e os estilos embutidos em cada elemento; PNG de 2400 × 2400 pixels.
+- Tolerância: ±1 mm no raio, medido com régua numa impressão a 100% (F2.6). Verificação automática: raio do horizonte na mídia de impressão (CSS) e num PDF gerado pelo Chromium e rasterizado a 600 dpi (relatório do F2.6).
 
 ## 3.5 Outras projeções (F4.3)
 
