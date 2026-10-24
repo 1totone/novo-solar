@@ -8,6 +8,10 @@ import { SitePanel, type LoadedFile } from './SitePanel';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
 import { ProtractorOverlay } from './protractor/ProtractorOverlay';
+import { DataPanel } from './overlay/DataPanel';
+import { CellInfo, OverlayLegend } from './overlay/OverlayInfo';
+import { OverlayLayer, type CellView } from './overlay/OverlayLayer';
+import { DIGITS, useOverlay } from './overlay/useOverlay';
 import { protractorFromHash } from './state/protractorHash';
 import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
@@ -27,6 +31,14 @@ export function App() {
   const { orientation, reference, angles, partial, drawn } = protractor;
   const regions = maskRegions(orientation, reference, angles, partial, drawn);
   const hasMask = regions.total.kind !== 'empty' || regions.partial.kind !== 'empty';
+  const epw = selected.kind === 'file' ? (loadedFile?.data ?? null) : null;
+  const ov = useOverlay(epw, hashState);
+  const [hovered, setHovered] = useState<CellView | null>(null);
+  const showOverlay = Boolean(ov.cells && ov.stats && ov.limits && ov.quantity);
+  const formatValue = (v: number) => formatNumber(v, ov.quantity ? DIGITS[ov.quantity] : 0);
+  // Limites e limiar como digitados: sem casas decimais quando inteiros.
+  const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
+  const hasNoData = showOverlay && ov.cells!.some((c) => !ov.stats!.has(`${c.period}-${c.hour}`));
 
   return (
     <div className="page">
@@ -58,6 +70,14 @@ export function App() {
               drawing={drawing}
               onDrawingChange={setDrawing}
             />
+            <DataPanel
+              overlay={ov.overlay}
+              hasData={epw !== null}
+              sourceUrl={selected.kind === 'test' ? selected.site.sourceUrl : undefined}
+              limits={ov.quantityLimits}
+              timeZone={site.timeZone}
+              onChange={setHashState}
+            />
           </div>
           <section className="chart-section" aria-labelledby="chart-heading">
             <h2 id="chart-heading">{t('chart.heading')}</h2>
@@ -69,9 +89,21 @@ export function App() {
                 longitude: formatNumber(site.longitude, 2),
                 timeZone: formatNumber(site.timeZone),
               })}
+              underlay={
+                showOverlay ? (
+                  <OverlayLayer
+                    cells={ov.cells!}
+                    stats={ov.stats!}
+                    limits={ov.limits!}
+                    colors={ov.colors}
+                    mode={ov.overlay.mode}
+                    onHover={setHovered}
+                  />
+                ) : undefined
+              }
               overlay={
                 <>
-                  <MaskLayer regions={regions} />
+                  <MaskLayer regions={regions} hatched={showOverlay} />
                   {protractor.show && (
                     <ProtractorOverlay
                       orientation={orientation}
@@ -92,8 +124,36 @@ export function App() {
                 ) : undefined
               }
             />
+            {showOverlay && (
+              <>
+                <OverlayLegend
+                  limits={
+                    ov.overlay.mode === 'frequency' ? ov.limits!.map((v) => v * 100) : ov.limits!
+                  }
+                  colors={ov.colors}
+                  unit={ov.overlay.mode === 'frequency' ? '%' : ov.unit}
+                  title={
+                    ov.overlay.mode === 'frequency'
+                      ? t('legend.frequencyTitle', {
+                          threshold: formatLimit(ov.overlay.threshold),
+                          unit: ov.unit,
+                        })
+                      : t(`data.short.${ov.overlay.key!}`)
+                  }
+                  hasNoData={hasNoData}
+                  format={formatLimit}
+                />
+                <CellInfo
+                  view={hovered}
+                  unit={ov.unit}
+                  mode={ov.overlay.mode}
+                  threshold={ov.overlay.threshold}
+                  format={formatValue}
+                />
+              </>
+            )}
             {hasMask && (
-              <p className="legend" aria-label={t('mask.legend')}>
+              <p className={`legend${showOverlay ? ' hatched' : ''}`} aria-label={t('mask.legend')}>
                 <span className="legend-item">
                   <span className="swatch total" aria-hidden="true" />
                   {t('mask.total')}

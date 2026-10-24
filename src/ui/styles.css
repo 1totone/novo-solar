@@ -428,3 +428,132 @@ details.more summary {
   stroke: var(--color-bg);
   stroke-width: 1;
 }
+
+/* Dados sobre a carta (F2.4) */
+.sun-chart .grid,
+.sun-chart .labels,
+.sun-chart .hour-lines,
+.sun-chart .mask,
+.sun-chart .protractor,
+.sun-chart .sun-paths {
+  pointer-events: none;
+}
+
+.sun-chart .cell {
+  stroke: var(--color-bg);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .cell:hover {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.sun-chart .cell.no-data {
+  fill: url(#overlay-no-data);
+}
+
+.sun-chart .no-data-line {
+  fill: #8c959f;
+}
+
+.sun-chart .hatch-total {
+  fill: #a40e26;
+}
+
+.sun-chart .hatch-partial {
+  fill: #7d4e00;
+}
+
+.swatch.no-data {
+  background: repeating-linear-gradient(45deg, #8c959f 0 2px, transparent 2px 5px);
+}
+
+.legend.hatched .swatch.total {
+  background: repeating-linear-gradient(45deg, #a40e26 0 2px, transparent 2px 6px);
+}
+
+.legend.hatched .swatch.partial {
+  background: repeating-linear-gradient(135deg, #7d4e00 0 2px, transparent 2px 6px);
+}
+
+.overlay-legend .legend-title {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+}
+
+.band-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.35rem;
+}
+
+.cell-info {
+  min-height: 2.6em;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+.btn[aria-pressed='true'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+/* Celular e tablet em pé (decisão 0013): a carta fica no topo e os passos rolam por baixo dela,
+   como uma folha. No tablet deitado e no computador, as duas colunas. */
+@media (max-width: 51.99rem) {
+  .workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .chart-section {
+    order: -1;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-bottom: 0.25rem;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .chart-section h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .chart-section .sun-chart {
+    width: auto;
+    max-width: 100%;
+    max-height: 42vh;
+    aspect-ratio: 1;
+    margin-top: 0.25rem;
+  }
+
+  .chart-section > .note:last-child {
+    display: none;
+  }
+
+  .chart-section .legend,
+  .chart-section .cell-info {
+    margin: 0.15rem 0;
+    font-size: 0.8rem;
+  }
+
+  .steps {
+    padding: 0.75rem 0.5rem 1rem;
+    background: var(--color-surface);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 8%);
+  }
+
+  .step-panel {
+    background: var(--color-bg);
+  }
+}

@@ -1,5 +1,5 @@
 import { useId, useState, type ChangeEvent } from 'react';
-import { EpwParseError, parseEpw } from '../core/epw/parseEpw';
+import { EpwParseError, parseEpw, type EpwData } from '../core/epw/parseEpw';
 import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import type { SelectedSite } from './state/siteHash';
@@ -11,6 +11,8 @@ export interface LoadedFile {
   hours: number;
   hasLeapDay: boolean;
   comments: string[];
+  /** Dados horários, só na memória do navegador (nada é enviado). */
+  data: EpwData;
 }
 
 interface Props {
@@ -63,6 +65,7 @@ export function SitePanel({ selected, loadedFile, onSelect }: Props) {
           hours: epw.hours,
           hasLeapDay: epw.hasLeapDay,
           comments: epw.comments,
+          data: epw,
         },
       );
     } catch (err) {

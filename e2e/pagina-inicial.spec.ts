@@ -27,16 +27,16 @@ test.describe('página inicial', () => {
 
     await toggle.click();
     await expect(page).toHaveURL(/#painel=sobre$/);
-    const about = page.getByRole('region', { name: 'Sobre' });
+    const about = page.getByRole('region', { name: 'Sobre', exact: true });
     await expect(about).toContainText('Roberto Lamberts e Alexandra Albuquerque Maciel');
     await expect(about).toContainText('Edson T. Ono');
 
     // O estado sobrevive ao recarregamento: o link reabre a mesma tela.
     await page.reload();
-    await expect(page.getByRole('region', { name: 'Sobre' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Sobre', exact: true })).toBeVisible();
 
     await page.getByRole('button', { name: 'Fechar "Sobre"' }).click();
-    await expect(page.getByRole('region', { name: 'Sobre' })).toHaveCount(0);
+    await expect(page.getByRole('region', { name: 'Sobre', exact: true })).toHaveCount(0);
     expect(new URL(page.url()).hash).toBe('');
   });
 

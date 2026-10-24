@@ -19,11 +19,14 @@ function polyline(points: SvgPoint[]): string {
 export function SunChart({
   site,
   title,
+  underlay,
   overlay,
   top,
 }: {
   site: Site;
   title: string;
+  /** Camada sob a grade (dados climáticos), em coordenadas de raio 1. */
+  underlay?: ReactNode;
   /** Camada desenhada sobre a carta e sob as trajetórias (máscara, transferidor), raio 1. */
   overlay?: ReactNode;
   /** Camada por cima de tudo (ex.: desenho à mão, que recebe os cliques). */
@@ -44,6 +47,7 @@ export function SunChart({
       data-testid="sun-chart"
     >
       <title id="sun-chart-title">{title}</title>
+      {underlay}
       <g className="grid">
         {g.altitudeCircles.map((c) => (
           <circle key={c.altitude} r={c.radius} className="altitude" />
