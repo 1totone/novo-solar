@@ -682,10 +682,12 @@ details.more summary {
 .wind-rose .ring-label {
   text-anchor: start;
   font-size: 0.055px;
-  /* contorno da cor do fundo: legível também sobre as cunhas */
+  /* contorno da cor do fundo: legível também sobre as cunhas. A largura está em unidades do
+     viewBox (2,6 de lado), como o tamanho da fonte: 0,012 dá cerca de 2 px na tela. Em "3px", o
+     contorno tinha 3 unidades e cobria a rosa inteira de branco. */
   paint-order: stroke;
   stroke: var(--color-bg);
-  stroke-width: 3px;
+  stroke-width: 0.012px;
   stroke-linejoin: round;
 }
 
