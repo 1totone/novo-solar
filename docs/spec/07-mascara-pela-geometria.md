@@ -141,7 +141,7 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 | Sombra total (100%) | máscara pelos ângulos (seção 1.6) nos casos em que a união é exata; nos demais, a máscara pelos ângulos não pode ter direção fora da sombra total | nenhuma direção classificada errada |
 | Fração ensolarada horária e mapa mês × hora | pvlib (SPA) e shapely, ano inteiro, 3 locais × 3 cenas | 10⁻⁶ |
 | Coerência com a máscara | em todas as amostras do ano com o sol na janela (Florianópolis, 3 cenas): f_s = 1 implica o centro à sombra (máscara de um ponto), f_s = 0 implica o centro ao sol | nenhuma exceção |
-| Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* (F3.8) | RMSE ≤ 0,02 |
+| Fração ensolarada por passo de tempo e horária | EnergyPlus 26.2, *Surface Outside Face Sunlit Fraction* (F3.8), 8 cenas em 5 locais | seção 7.10 (proposta, decisão 0019) |
 
 ## 7.9 Escolhas propostas (decisão 0018)
 
@@ -156,11 +156,35 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 9. **Lâminas** giram em torno da borda interna; inclinação positiva com a borda externa para baixo (horizontais) ou para a direita (verticais).
 10. **29 de fevereiro:** o cálculo usa as 8760 horas do ano de referência; arquivos com 29/02 (anos bissextos reais) ficam para o F3.5, que cruza a fração ensolarada com os dados.
 
+## 7.10 Verificação contra o EnergyPlus (F3.8)
+
+**Arranjo** (`docs/validacao/scripts/energyplus_fracao_ensolarada.py`; modelos em `docs/validacao/casos/energyplus/modelos/`). Cada cena vira um modelo do EnergyPlus 26.2.0: uma zona em caixa atrás da fachada (paredes com 1 m de margem em volta da janela e 4 m de fundo), a janela (*FenestrationSurface:Detailed*, sem caixilho) na parede da frente e cada placa da seção 7.1 como *Shading:Building:Detailed*, nas coordenadas do mundo (x Leste, y Norte, z para cima). O EnergyPlus espelha as placas (*Mir-*), então as duas faces fazem sombra, como as placas finas daqui. Configuração: *Solar Distribution* FullExterior; *ShadowCalculation* PolygonClipping, Timestep, Sutherland e Hodgman; 6 passos por hora; ano de 2026, sem horário de verão; o local vem do cabeçalho do EPW. Saídas por passo de tempo: *Surface Outside Face Sunlit Fraction* da janela e *Surface Outside Face Beam Solar Incident Angle Cosine Value* da janela, da cobertura e das paredes laterais.
+
+**Sol do EnergyPlus** (`SolarShading.cc`, versão 26.2.0). Com mais de um passo por hora, o sol de cada passo é calculado no fim do passo (`FigureSunCosines`), com a declinação e a equação do tempo do dia por séries de Fourier ajustadas por mínimos quadrados (`SUN3`, constantes no dia) e o ângulo horário pelo meridiano do fuso (`SUN4`). Os três cossenos de saída são as componentes, no referencial da fachada, do sol usado na sombra daquele passo (o cosseno reportado é o `SurfCosIncAng` do passo). Eles valem 0 nos passos em que o módulo do clima dá o sol abaixo do horizonte ou o arquivo climático não tem radiação (`currSolRadPositive` em `HeatBalanceSurfaceManager.cc`), mesmo com o sol da sombra acima do horizonte; por isso o teste reproduz o `SUN3` e o `SUN4` e confere a reprodução contra os cossenos onde eles são reportados (diferença nula nas 8 cenas; tolerância de 10⁻¹² no teste). Contra o SPA (seção 2.4), o sol do EnergyPlus difere 0,32° a 0,34° em média e até 0,59°: a declinação do `SUN3` difere até 0,67° (desvio padrão de 0,35°) e a equação do tempo, até 0,87 min.
+
+**Regras de saída do EnergyPlus**, aplicadas também ao valor da aplicação na comparação: fração 0 com o seno da altura solar ou o cos θ abaixo de 10⁻⁵ (seção 7.2) e fração abaixo de 10⁻⁵ trocada por 0 (`FigureSolarBeamAtTimestep`).
+
+**Limitações do EnergyPlus encontradas** (relatório do F3.8):
+
+- O recorte de polígonos trabalha com coordenadas inteiras em unidades de 0,01 mm (`HCMULT` = 10⁵) e junta vértices a menos de 6 unidades (0,06 mm) dos vértices da superfície que recebe a sombra. A fração difere da exata em até 3 × 10⁻⁵ (percentil 99) e uma fresta de sombra de 0,05 mm de largura (lâmina quase de perfil para o sol) desaparece (1,7 × 10⁻⁴ da janela).
+- Com o sol rasante à fachada (cos θ < 10⁻⁴), a sombra projetada tem quilômetros, e os produtos de inteiros de 64 bits do cálculo das interseções (`INTCPT`) passam do limite; o EnergyPlus erra a fração nos dois sentidos (13 passos no ano das 8 cenas, sempre com cos θ < 10⁻⁴, sombras de 3,6 a 43 km). Nesses passos a radiação direta no vidro é menor que 10⁻⁴ da DNI.
+
+**Critérios (proposta, decisão 0019):**
+
+| Comparação | Sol | Critério |
+|---|---|---|
+| Por passo de tempo, dias 1, 11 e 21 de cada mês | o do EnergyPlus, nos dois cálculos | com cos θ ≥ 10⁻³: diferença ≤ 5 × 10⁻⁴ e percentil 99 ≤ 5 × 10⁻⁵; com cos θ < 10⁻³: diferença × cos θ ≤ 5 × 10⁻⁴; nenhum passo com fração positiva no EnergyPlus e sol fora da janela no cálculo daqui |
+| Hora a hora, ano inteiro | o do EnergyPlus, nos dois cálculos | ≤ 10⁻⁴ nas horas sem passo rasante (cos θ < 10⁻³); horas com passo rasante ≤ 1% do ano |
+| Hora a hora, ano inteiro (ponta a ponta) | SPA aqui, `SUN3`/`SUN4` no EnergyPlus | sobre as horas com sol na janela em pelo menos um dos dois: RMSE ≤ 0,03 e viés ≤ 0,002 em módulo; o RMSE é o da posição do sol: a mesma geometria com os dois sóis dá o mesmo RMSE, com diferença ≤ 0,002 |
+
+Resultados (8 cenas, 5 locais, latitudes de −1,4° a −36,8°, fusos UTC−3 e UTC−4): por passo, diferença máxima de 6 × 10⁻⁶ a 6,5 × 10⁻⁵ e percentil 99 de até 2,9 × 10⁻⁵; hora a hora com o mesmo sol, até 3 × 10⁻⁵ (6 a 25 horas rasantes por ano); ponta a ponta, RMSE de 0,006 a 0,026 e viés de até 3 × 10⁻⁴. A proposta do ROADMAP (RMSE ≤ 0,02 com o sol de cada programa) não separava a geometria da posição do sol; com ela, três cenas ficariam de fora só pela diferença entre os modelos de sol.
+
 ## Referências
 
 - Olgyay, A.; Olgyay, V. *Solar control and shading devices*. Princeton: Princeton University Press, 1957.
 - Sutherland, I. E.; Hodgman, G. W. Reentrant polygon clipping. *Communications of the ACM*, 17(1), 32-42, 1974.
 - U.S. DOE. *EnergyPlus Engineering Reference*, módulo de sombreamento (*Shading Module*): projeção de sombras e recorte de polígonos.
-- EnergyPlus 24.2.0, código-fonte: `src/EnergyPlus/SolarShading.cc` (`FigureSunCosines`, `FigureSolarBeamAtTimestep`, `SHADOW`) e `src/EnergyPlus/DataEnvironment.hh` (`SunIsUpValue`).
+- EnergyPlus 24.2.0 e 26.2.0, código-fonte: `src/EnergyPlus/SolarShading.cc` (`FigureSunCosines`, `FigureSolarBeamAtTimestep`, `SHADOW`, `SUN3`, `SUN4`, `HTRANS1`, `INTCPT`), `src/EnergyPlus/HeatBalanceSurfaceManager.cc` e `src/EnergyPlus/DataEnvironment.hh` (`SunIsUpValue`).
+- U.S. DOE. *EnergyPlus 26.2.0* (pacote Linux, Ubuntu 24.04), https://github.com/NREL/EnergyPlus/releases/tag/v26.2.0, usado na verificação do F3.8.
 - Gillies, S. et al. *Shapely* (GEOS), usado só na referência de teste.
 - Holmgren, W. F.; Hansen, C. W.; Mikofski, M. A. pvlib python. *Journal of Open Source Software*, 3(29), 884, 2018.
