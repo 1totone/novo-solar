@@ -26,6 +26,10 @@
 - **Velocidade média por setor:** média das velocidades das horas sem calmaria daquele setor (m/s); setor sem horas fica sem valor.
 - **Resolução da velocidade no arquivo:** o maior passo r entre 1; 0,5; 0,1 e 0,01 m/s do qual todas as velocidades são múltiplas. Com r de 0,5 m/s ou mais, as velocidades caem exatamente nas fronteiras das classes (0,5; 2; 4 e 6 m/s) e vão sempre para a classe de cima; a tela avisa que as classes ficam enviesadas (é o caso das TRY do SOL-AR 6.2, em m/s inteiros).
 
+## 6.4.1 Diferenças em relação ao SOL-AR 6.2 (F2.8)
+
+As rosas que acompanham o 6.2 (`.ventos.csv`) são reproduzidas a 0,5 ponto percentual com setores de 45° centrados no Norte, calmaria com velocidade 0 e estações astronômicas começando à 0 h de 23/09, 22/12, 21/03 e 22/06. Com as estações pelos meses (seção 6.3), a nova versão difere delas em até 13,6 pontos percentuais por setor (Natal). O cálculo do 6.2 para cidades incluídas tem setor Norte de 35° e Nordeste de 55°. Detalhes: `docs/validacao/relatorios/F2.8-regressao.md`.
+
 ## 6.5 Desenho
 
 - Rosa com o Norte para cima e o Leste à direita, como a carta: cada setor é uma cunha apontando para a direção de onde o vento vem, com as classes empilhadas do centro para fora; a calmaria fica num círculo no centro, com a porcentagem escrita.

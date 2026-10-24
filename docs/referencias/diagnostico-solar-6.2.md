@@ -38,8 +38,11 @@ Versão: 23/10/2026. Base: engenharia reversa do instalador "SolAr 6_2.exe" (Lab
 ### 2.3 Rotina de cálculo solar (desmontada; função em 0x40A030 do ProjSolar.exe)
 
 - Declinação de Cooper: δ = 23,45·sen(0,986·(284 + n)), em graus.
-- Equação do tempo de Spencer (forma de Duffie e Beckman): E = 229,2·(0,000075 + 0,001868 cos B − 0,032077 sen B − 0,014615 cos 2B − 0,04089 sen 2B), em minutos.
+- Equação do tempo de Spencer (forma de Duffie e Beckman): E = 229,2·(0,000075 + 0,001868 cos B − 0,032077 sen B − 0,014615 cos 2B − 0,04089 sen 2B), em minutos. **Correção do F2.8:** o programa atribui B = 0 antes do cálculo (0x40a3bf), então E = −2,9 min constante em todos os dias.
 - Hora solar = hora legal + [4·(45 − L) + E]/60, com L = longitude oeste positiva. O meridiano padrão está fixo em 45°W; o fuso do arquivo não é usado.
+- Sobreposição (F2.8): para cada dia do semestre (1 a 171 ou 172 a 365) e cada t de 0 a 23 h de hora legal, em passos de 0,1 h, o ponto usa a linha 24·(n − 1) + floor(t) do CSV, interpolada até a seguinte: o valor da hora h aparece em t = h − 1 (1 h antes para temperatura, 30 min antes para radiação). Campo vazio vale 0.
+- Carta (F2.8): trajetórias com 7 declinações fixas (±0,41, ±0,35, ±0,18 e 0 rad; até 1,7° de erro em abril e agosto) e linhas horárias solares de 6 a 18 h.
+- Rosa para cidade incluída (F2.8): setor Norte de 337,5° a 12,5° e Nordeste de 12,5° a 67,5°; as rosas que acompanham o programa vêm de outro cálculo. Detalhes e regressão: `docs/validacao/relatorios/F2.8-regressao.md` e `docs/validacao/scripts/modelo_solar62.py`.
 - Ângulo horário ω = 15·(hora solar − 12); altura solar por sen α = sen φ sen δ + cos φ cos δ cos ω.
 - Projeção estereográfica: r = R·tan(z/2).
 

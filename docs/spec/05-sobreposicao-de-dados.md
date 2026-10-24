@@ -41,6 +41,10 @@ As trajetórias de borda são amostradas de 5 em 5 minutos. Células inteirament
 - Cores (provisórias até a paleta acessível da Fase 4): TBS em escala divergente, azul para frio e vermelho para quente, com cinza na faixa do meio; UR em azul; radiação em laranja; frequência em vermelho. Rampas de um matiz só em OKLCH, luminosidade de 0,92 a 0,52 em passos de 0,10.
 - Com dados sobre a carta, a máscara de sombra vira hachura (total a 45°, parcial a 135°), para não esconder as cores das células.
 
+## 5.3.1 Diferenças em relação ao SOL-AR 6.2 (F2.8)
+
+O 6.2 desenhava o valor da hora h em t = h − 1 de hora legal (1 h antes para temperatura e umidade, 30 min antes para radiação), com meridiano fixo de 45° O e equação do tempo constante (−2,9 min). Aqui, cada valor fica no seu intervalo (seção 5.1), no fuso do arquivo e com a equação do tempo do SPA. Em média, a mesma temperatura aparece cerca de 1 h mais tarde do que no 6.2 (de 46 a 79 min, conforme o dia; 2 h em Concepción). Detalhes: `docs/validacao/relatorios/F2.8-regressao.md`.
+
 ## 5.4 Verificação (F2.4)
 
 - Toda hora do EPW com sol acima do horizonte (ângulo zenital menor que 89,5°) no instante que o valor representa cai em exatamente uma célula do seu semestre.
