@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import type { Site } from '../../core/chart/sunChart';
 import { useI18n } from '../i18n/useI18n';
 import { chartGeometry, type SvgPoint } from './chartGeometry';
@@ -16,7 +16,16 @@ function polyline(points: SvgPoint[]): string {
   return points.map((p) => `${p.x.toFixed(5)},${p.y.toFixed(5)}`).join(' ');
 }
 
-export function SunChart({ site, title }: { site: Site; title: string }) {
+export function SunChart({
+  site,
+  title,
+  overlay,
+}: {
+  site: Site;
+  title: string;
+  /** Camada desenhada sobre a carta (ex.: transferidor), em coordenadas de raio 1. */
+  overlay?: ReactNode;
+}) {
   const { t, formatNumber } = useI18n();
   const g = useMemo(() => chartGeometry(site), [site]);
   // Rótulos de altura no semieixo meridiano oposto ao lado em que o sol passa mais tempo
@@ -83,6 +92,7 @@ export function SunChart({ site, title }: { site: Site; title: string }) {
           );
         })}
       </g>
+      {overlay}
       <g className="sun-paths" data-testid="sun-paths">
         {g.paths.map((p) => (
           <polyline

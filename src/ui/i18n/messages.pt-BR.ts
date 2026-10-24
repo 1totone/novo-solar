@@ -32,6 +32,33 @@ export const ptBR = {
   'chart.heading': 'Carta solar',
   'chart.note':
     'Projeção estereográfica, Norte para cima. Trajetórias nos solstícios, nos equinócios e no dia 21 dos outros meses; linhas horárias em hora solar verdadeira.',
+  'compass.points': 'N,NNE,NE,ENE,L,ESE,SE,SSE,S,SSO,SO,OSO,O,ONO,NO,NNO',
+  'facade.heading': 'Fachada',
+  'facade.orientation': 'Orientação da fachada (azimute da normal externa)',
+  'facade.orientationHelp':
+    'Graus a partir do Norte, no sentido horário; aceita qualquer valor, inclusive negativo (−30° = 330°).',
+  'facade.orientationInvalid': 'Digite um número em graus.',
+  'facade.normalized': 'Normal externa: {degrees}° ({compass})',
+  'facade.showProtractor': 'Mostrar o transferidor sobre a carta',
+  'protection.heading': 'Proteção',
+  'protection.reference': 'Referência dos ângulos',
+  'protection.internal': 'Interna',
+  'protection.external': 'Externa',
+  'protection.referenceHelpInternal':
+    'Interna: α e β medidos a partir do plano da fachada, γ a partir da vertical (α = AVS e β = AHS da INI-C).',
+  'protection.referenceHelpExternal':
+    'Externa: α medido a partir da horizontal, β a partir da normal, γ a partir da horizontal (externo = 90° − interno).',
+  'protection.left': 'Esquerda',
+  'protection.right': 'Direita',
+  'protection.sidesHelp': 'Esquerda e direita de quem está dentro olhando para fora.',
+  'protection.alpha': 'α (brise horizontal)',
+  'protection.beta': 'β (brises verticais)',
+  'protection.gamma': 'γ (limites laterais)',
+  'protection.index2': 'Índices 2 (brise afastado da parede)',
+  'protection.index2Help':
+    'O índice 2 desenha uma segunda curva; a sombra fica entre as duas (brise afastado da parede).',
+  'protection.invalid': 'Use um valor de 0° a 90°.',
+  'protection.fieldLabel': '{angle} {side} {index}',
   'site.heading': 'Local',
   'site.testLabel': 'Cidade de teste',
   'site.fileOption': 'Arquivo: {name}',

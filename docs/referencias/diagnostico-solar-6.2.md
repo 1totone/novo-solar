@@ -43,6 +43,14 @@ Versão: 23/10/2026. Base: engenharia reversa do instalador "SolAr 6_2.exe" (Lab
 - Ângulo horário ω = 15·(hora solar − 12); altura solar por sen α = sen φ sen δ + cos φ cos δ cos ω.
 - Projeção estereográfica: r = R·tan(z/2).
 
+### 2.3.1 Transferidor (desmontado no F2.2)
+
+- Seletor "Ângulo de Referência" (Interna/Externa): na interna, o programa converte α, β e γ para 90° − valor antes de desenhar; ou seja, desenha sempre com os ângulos externos (perfil, a partir da normal, a partir da horizontal).
+- α: círculo de raio R/cos α_ext com centro a R·tan α_ext do centro da carta, do lado oposto à normal; β: retas no azimute orientação ± β_ext (direita no sentido horário); γ: círculos girados 90°.
+- Índices 1 e 2: as duas curvas, ordenadas; sem o índice 2, a linha da fachada.
+- Grade: curvas de α de 5° em 5° e diâmetros de 10° em 10°.
+- Detalhes, endereços e regressão: `docs/validacao/relatorios/F2.2-transferidor.md`.
+
 ### 2.4 Dados embarcados
 
 - 14 cidades TRY (Belém, Brasília, Curitiba, Florianópolis, Fortaleza, Maceió, Natal, Porto Alegre, Recife, Rio de Janeiro, Salvador, São Luís, São Paulo, Vitória) e Concepción (Chile). A lista interna inclui Goiânia, mas goiania.csv não acompanha o instalador.
