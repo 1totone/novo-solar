@@ -27,11 +27,24 @@ export interface HourLineGeometry {
   points: SvgPoint[];
 }
 
+/** Rótulo das datas de uma trajetória (ou de duas quase iguais), no poente. */
+export interface PathLabel {
+  /** Meses do grupo, em ordem: datas simétricas em relação ao solstício de junho têm quase a
+   * mesma trajetória e um rótulo só (ex.: 21/1 e 21/11). */
+  months: number[];
+  x: number;
+  y: number;
+}
+
 export interface ChartGeometry {
   altitudeCircles: { altitude: number; radius: number }[];
   paths: PathGeometry[];
   hourLines: HourLineGeometry[];
+  pathLabels: PathLabel[];
 }
+
+/** Raio dos rótulos das datas: logo fora do horizonte (raio 1). */
+export const DATE_LABEL_RADIUS = 1.035;
 
 const DAY_MS = 86_400_000;
 
@@ -51,6 +64,34 @@ function hourLineDates(timeZone: number): CivilDate[] {
   return out;
 }
 
+/** Grupo de uma data: o mês e o seu simétrico em relação ao solstício de junho (12 − mês). */
+const groupOf = (month: number) => (month === 12 ? 12 : Math.min(month, 12 - month));
+
+/**
+ * Um rótulo por grupo de trajetórias, no ponto de pôr do sol (no horizonte, lado oeste), levado
+ * para fora do horizonte. Trajetórias sem pôr do sol (dia ou noite polar) ficam sem rótulo.
+ */
+function pathLabels(paths: PathGeometry[]): PathLabel[] {
+  const groups = new Map<number, { months: number[]; x: number; y: number; n: number }>();
+  for (const p of paths) {
+    const sunset = p.points.find((q) => q.x < 0 && Math.abs(Math.hypot(q.x, q.y) - 1) < 1e-3);
+    if (!sunset) continue;
+    const key = groupOf(p.date.month);
+    const g = groups.get(key) ?? { months: [], x: 0, y: 0, n: 0 };
+    g.months.push(p.date.month);
+    g.x += sunset.x;
+    g.y += sunset.y;
+    g.n += 1;
+    groups.set(key, g);
+  }
+  return [...groups.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([, g]) => {
+      const k = DATE_LABEL_RADIUS / Math.hypot(g.x, g.y);
+      return { months: g.months.sort((a, b) => a - b), x: g.x * k, y: g.y * k };
+    });
+}
+
 /** Geometria completa da carta estereográfica para um local (sem física na interface). */
 export function chartGeometry(site: Site): ChartGeometry {
   const altitudeCircles = [10, 20, 30, 40, 50, 60, 70, 80].map((altitude) => ({
@@ -67,5 +108,5 @@ export function chartGeometry(site: Site): ChartGeometry {
     const points = hourLine(site, hour, dates).map(toSvg);
     if (points.length >= 2) hourLines.push({ hour, points });
   }
-  return { altitudeCircles, paths, hourLines };
+  return { altitudeCircles, paths, hourLines, pathLabels: pathLabels(paths) };
 }

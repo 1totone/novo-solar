@@ -31,6 +31,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Corrigido
 
+- Trajetórias da carta sem identificação: cada uma ganha o mês no poente, logo fora do horizonte (jan/nov, fev/out, mar/set, abr/ago, mai/jul, jun e dez; datas simétricas em relação ao solstício de junho têm quase a mesma trajetória e dividem o rótulo). Os pontos cardeais ficam um pouco mais afastados para não encostar nos rótulos. Achado da revisão antes do teste com usuários (as tarefas 1 e 3 do roteiro dependem de achar 21/6 e 21/12).
 - Rosa dos ventos em branco: o contorno dos rótulos dos anéis tinha a largura em unidades do desenho e cobria as cunhas desde o F2.5. Um teste de ponta a ponta passa a conferir as cores da rosa na tela, e não só a presença do desenho.
 
 ## [0.1.0] - 2026-10-23 (v0.1, Esqueleto funcional)

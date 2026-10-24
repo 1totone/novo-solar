@@ -62,3 +62,10 @@
   fill: var(--color-accent);
   font-size: 0.055px;
 }
+
+/* Mês de cada trajetória, no poente, logo fora do horizonte (texto para fora da carta). */
+.sun-chart .date-label {
+  text-anchor: end;
+  font-size: 0.042px;
+  fill: var(--color-sun-text);
+}
