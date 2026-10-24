@@ -1,6 +1,6 @@
 # 6. Vento: rosa dos ventos
 
-**Status:** v1 (F2.5; decisão 0013). Implementação: `src/core/wind/windRose.ts`; desenho em `src/ui/wind/`; validação em `docs/validacao/relatorios/F2.5-rosa-dos-ventos.md`. A correção da velocidade para a altura e a rugosidade do terreno fica para o F4.4.
+**Status:** v1 (F2.5; decisões 0013 e 0016). Implementação: `src/core/wind/windRose.ts`; desenho em `src/ui/wind/`; validação em `docs/validacao/relatorios/F2.5-rosa-dos-ventos.md`. A correção da velocidade para a altura e a rugosidade do terreno fica para o F4.4.
 
 ## 6.1 Dados
 
