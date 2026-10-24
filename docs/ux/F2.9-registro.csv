@@ -1,0 +1,6 @@
+# F2.9: registro consolidado do teste com usuários (uma linha por participante e tarefa; tarefa "sus" e "problema" para os outros registros)
+# resultado: S (sem ajuda), A (com ajuda), N (não concluiu); tempo em minutos; gravidade de 0 a 4
+participante,perfil,ja_usou_6_2,aparelho,tarefa,resultado,tempo_min,resposta,observacao,gravidade
+P1,aluno 7º semestre,sim,computador,1,S,2,"36°, nordeste","exemplo: achou a cidade logo",
+P1,aluno 7º semestre,sim,computador,sus,,,"5,1,4,2,4,1,5,1,4,2",nota 87.5,
+P1,aluno 7º semestre,sim,computador,problema,,,,"exemplo: não achou a referência externa",3
