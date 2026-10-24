@@ -6,6 +6,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Adicionado
 
+- Rosa dos ventos (`src/core/wind/`, `src/ui/wind/`), numa aba ao lado da carta: frequência por setor e classe de velocidade com a calmaria no centro, ou velocidade média por setor; 8 ou 16 setores; filtros por estação e período do dia; resolução da velocidade com aviso de viés; tabela (decisão 0016). Conferida contra um cálculo independente em Python.
 - Dados sobre a carta (`src/core/overlay/`, `src/ui/overlay/`): temperatura, umidade e radiação global, direta e difusa em células por quinzena e hora do arquivo, no fuso do arquivo; média ou frequência acima de um limiar; faixas padrão (as do 6.2 onde existiam), digitadas ou pelos percentis do arquivo; legenda e valores da célula sob o cursor (decisões 0013 e 0015). Conferido hora a hora contra os EPWs de Florianópolis e Manaus.
 - Celular e tablet em pé: carta fixa no topo e passos rolando por baixo.
 - Máscara pelos ângulos (`src/core/mask/`, `src/ui/mask/`): sombra total (100%, vermelha) e parcial (50%, amarela, ângulos medidos do centro da janela) calculadas a partir de α, β e γ, com índices 2 (brise afastado), γ das aletas e desenho à mão em "Mais opções" (decisão 0014). Conferida por traçado de raios em 9 casos e pelo exemplo do tutorial do SOL-AR da UFU em Brasília.

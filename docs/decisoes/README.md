@@ -19,6 +19,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0013](0013-interface-da-fase-2.md) | Interface da Fase 2 (wireframes do F2.1) | 2026-10-24 | aceita |
 | [0014](0014-mascara-pelos-angulos.md) | Máscara pelos ângulos: sombra total e parcial, índices 2 e γ das aletas | 2026-10-24 | aceita |
 | [0015](0015-sobreposicao-de-dados.md) | Sobreposição de dados: bordas das células, faixas e leiaute do celular | 2026-10-24 | aceita (faixas de UR e DHI e cores provisórias) |
+| [0016](0016-rosa-dos-ventos.md) | Rosa dos ventos: estações, períodos do dia e setores | 2026-10-24 | aceita (a conferir no portão 2) |
 
 ## Modelo
 
