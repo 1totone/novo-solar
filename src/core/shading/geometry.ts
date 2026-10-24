@@ -88,7 +88,7 @@ export interface VerticalLouvers {
   extendBelow?: number;
 }
 
-/** Placa dada pelos vértices (plana e convexa). */
+/** Placa dada pelos vértices, em ordem ao longo do contorno (plana e convexa; conferido). */
 export interface FreePlate {
   kind: 'plate';
   vertices: readonly Vec3[];
@@ -136,6 +136,49 @@ function count(value: number): number {
   if (!(Number.isInteger(value) && value >= 1))
     throw new RangeError('count must be a positive integer');
   return value;
+}
+
+/**
+ * A placa livre tem de ser plana, convexa e com área: o recorte da sombra e o corte vertical da
+ * área da união supõem polígonos convexos.
+ */
+function assertPlanarConvex(vertices: readonly Vec3[]): void {
+  const n = vertices.length;
+  const at = (i: number) => vertices[i % n]!;
+  // Normal de Newell (comprimento = 2 × área projetada).
+  let nx = 0;
+  let ny = 0;
+  let nz = 0;
+  let size = 0;
+  for (let i = 0; i < n; i++) {
+    const a = at(i);
+    const b = at(i + 1);
+    nx += (a[1] - b[1]) * (a[2] + b[2]);
+    ny += (a[2] - b[2]) * (a[0] + b[0]);
+    nz += (a[0] - b[0]) * (a[1] + b[1]);
+    size = Math.max(size, Math.hypot(a[0] - at(0)[0], a[1] - at(0)[1], a[2] - at(0)[2]));
+  }
+  const nn = Math.hypot(nx, ny, nz);
+  if (!(nn > 1e-12 * size * size)) throw new RangeError('a plate must have a nonzero area');
+  for (let i = 1; i < n; i++) {
+    const v = at(i);
+    const d = (nx * (v[0] - at(0)[0]) + ny * (v[1] - at(0)[1]) + nz * (v[2] - at(0)[2])) / nn;
+    if (Math.abs(d) > 1e-9 * Math.max(1, size)) throw new RangeError('a plate must be planar');
+  }
+  for (let i = 0; i < n; i++) {
+    const a = at(i);
+    const b = at(i + 1);
+    const c = at(i + 2);
+    const e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]] as const;
+    const e2 = [c[0] - b[0], c[1] - b[1], c[2] - b[2]] as const;
+    const turn =
+      (e1[1] * e2[2] - e1[2] * e2[1]) * nx +
+      (e1[2] * e2[0] - e1[0] * e2[2]) * ny +
+      (e1[0] * e2[1] - e1[1] * e2[0]) * nz;
+    if (turn < -1e-12 * nn * Math.hypot(...e1) * Math.hypot(...e2)) {
+      throw new RangeError('a plate must be convex');
+    }
+  }
 }
 
 /** Verga, peitoril e ombreiras de uma janela recuada d atrás do plano da fachada. */
@@ -249,6 +292,7 @@ function devicePlates(W: number, H: number, d: number, device: Device): Plate[] 
         v.forEach((c) => finite(c, 'vertex'));
         if (v[1] < 0) throw new RangeError('plates must be in front of the glass (y >= 0)');
       }
+      assertPlanarConvex(device.vertices);
       return [device.vertices.map((v): Vec3 => [v[0], v[1], v[2]])];
     }
   }

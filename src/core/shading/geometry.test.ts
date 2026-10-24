@@ -206,6 +206,66 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
           ]),
       ],
       [
+        'placa não plana',
+        () =>
+          buildScene({ width: 1, height: 1 }, [
+            {
+              kind: 'plate',
+              vertices: [
+                [0, 0.1, 1],
+                [1, 0.1, 1],
+                [1, 0.5, 1.5],
+                [0, 0.2, 1.5],
+              ],
+            },
+          ]),
+      ],
+      [
+        'placa côncava',
+        () =>
+          buildScene({ width: 1, height: 1 }, [
+            {
+              kind: 'plate',
+              vertices: [
+                [0, 0.5, 0],
+                [1, 0.5, 0],
+                [0.5, 0.5, 0.2],
+                [1, 0.5, 1],
+                [0, 0.5, 1],
+              ],
+            },
+          ]),
+      ],
+      [
+        'placa em gravata-borboleta',
+        () =>
+          buildScene({ width: 1, height: 1 }, [
+            {
+              kind: 'plate',
+              vertices: [
+                [0, 0.5, 0],
+                [1, 0.5, 1],
+                [1, 0.5, 0],
+                [0, 0.5, 1],
+              ],
+            },
+          ]),
+      ],
+      [
+        'placa sem área',
+        () =>
+          buildScene({ width: 1, height: 1 }, [
+            {
+              kind: 'plate',
+              vertices: [
+                [0, 0.5, 0],
+                [0.5, 0.5, 0.5],
+                [1, 0.5, 1],
+              ],
+            },
+          ]),
+      ],
+      [
         'placa com menos de 3 vértices',
         () =>
           buildScene({ width: 1, height: 1 }, [
@@ -220,6 +280,20 @@ describe('cena: janela, recuo e dispositivos (spec 07, seção 7.1)', () => {
       ],
     ];
     for (const [what, f] of bad) expect(f, what).toThrow(RangeError);
+  });
+
+  it('placa livre plana e convexa é aceita nos dois sentidos de percurso', () => {
+    const square: [number, number, number][] = [
+      [0, 0.2, 1],
+      [1, 0.2, 1],
+      [1, 0.6, 1.2],
+      [0, 0.6, 1.2],
+    ];
+    for (const vertices of [square, [...square].reverse()]) {
+      expect(
+        buildScene({ width: 1, height: 1 }, [{ kind: 'plate', vertices }]).plates,
+      ).toHaveLength(1);
+    }
   });
 
   it('a ordem das placas segue o recuo e depois os dispositivos, na ordem dada', () => {
