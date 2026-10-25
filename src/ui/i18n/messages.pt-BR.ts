@@ -23,6 +23,7 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'chart.overlayPending': 'Calculando as células da carta…',
   'chart.north': 'N',
   'chart.east': 'L',
   'chart.south': 'S',
