@@ -80,6 +80,17 @@ export interface RequiredAngles {
 export interface WindowSize {
   width: number;
   height: number;
+  /**
+   * Recuo do vidro em relação ao plano externo da fachada (padrão 0), como em geometry.ts: as peças
+   * são medidas a partir desse plano, e os ângulos, a partir dos pontos de referência no vidro.
+   */
+  setback?: number;
+}
+
+function setbackOf(window: WindowSize): number {
+  const d = window.setback ?? 0;
+  if (!(Number.isFinite(d) && d >= 0)) throw new RangeError('setback must be zero or positive');
+  return d;
 }
 
 function checkDay({ month, day }: DayOfYear): void {
@@ -219,11 +230,14 @@ export interface SizedOverhang extends Overhang {
 }
 
 export type OverhangResult =
-  { ok: true; device: SizedOverhang } | { ok: false; reason: 'noSun' | 'gapTooLarge' };
+  | { ok: true; device: SizedOverhang }
+  /** Sem sol na janela no período, ou a verga da parede (recuo) já sombreia todas as amostras. */
+  | { ok: false; reason: 'noSun' | 'setbackSuffices' };
 
 /**
  * Brise horizontal que sombreia todas as amostras (seção 10.3): na altura `above` acima da verga
  * (padrão 0) ou, com afastamento `gap`, na altura que fecha a fresta para o sol mais alto do período.
+ * Com recuo d, a profundidade é medida do plano da fachada: D = (H + e) · tan α_int − g − d.
  */
 export function sizeOverhang(
   window: WindowSize,
@@ -234,14 +248,22 @@ export function sizeOverhang(
   if (!alpha || !alphaMax) return { ok: false, reason: 'noSun' };
   const gap = options.gap ?? 0;
   if (!(gap >= 0)) throw new RangeError('gap must be zero or positive');
+  const setback = setbackOf(window);
+  // H · tan α_int ≤ d: a verga da parede corta todo raio com perfil acima de α (e as ombreiras, os
+  // que saem pelos lados antes de chegar à altura da verga).
+  if (cotTimes(window.height, alpha.external) <= setback) {
+    return { ok: false, reason: 'setbackSuffices' };
+  }
   let above = options.above ?? 0;
   // Com o sol perto do plano da fachada no período, α2 tende a 90° e a altura a valores absurdos: a
   // fresta não serve para aquele período (a interface avisa).
   if (gap > 0) above = gap * Math.tan(alphaMax.external * RAD);
   if (!(above >= 0)) throw new RangeError('above must be zero or positive');
   const rise = window.height + above;
-  // Com e = g · tan α2, D = (H + e) · cot α1 − g > 0 sempre, porque α2 ≥ α1 (seção 10.3).
-  const depth = cotTimes(rise, alpha.external) - gap;
+  // Com e = g · tan α2, D = (H + e) · cot α1 − g − d > H · cot α1 − d > 0, porque α2 ≥ α1 e a verga
+  // não basta (seção 10.3). A fresta é medida do plano da fachada: o raio crítico passa rente à
+  // aresta externa da verga da parede.
+  const depth = cotTimes(rise, alpha.external) - gap - setback;
   return {
     ok: true,
     device: {
@@ -260,29 +282,39 @@ export interface SizedFin extends Fin {
   extendAbove: number;
 }
 
+export interface SizedFins {
+  /** null do lado sem sol no período ou em que a ombreira da parede basta. */
+  right: SizedFin | null;
+  left: SizedFin | null;
+  /** A ombreira da parede (recuo) já sombreia as amostras daquele lado: W · tan β_int ≤ d. */
+  setbackSuffices: { right: boolean; left: boolean };
+}
+
 /**
- * Aletas encostadas nas laterais da janela que sombreiam as amostras de cada lado (seção 10.3);
- * null do lado sem sol. Com o sol perto da normal, a profundidade tende ao infinito.
+ * Aletas encostadas nas laterais da janela que sombreiam as amostras de cada lado (seção 10.3).
+ * Com o sol perto da normal, a profundidade tende ao infinito. Com recuo d, a profundidade é medida
+ * do plano da fachada: D = W · tan β_int − d.
  */
-export function sizeFins(
-  window: WindowSize,
-  angles: RequiredAngles,
-): { right: SizedFin | null; left: SizedFin | null } {
+export function sizeFins(window: WindowSize, angles: RequiredAngles): SizedFins {
+  const setback = setbackOf(window);
+  const reach = (beta: Extreme | null) => (beta ? cotTimes(window.width, beta.external) : 0);
   const fin = (side: 'right' | 'left', beta: Extreme | null, top: Extreme | null) =>
-    beta && top
+    beta && top && reach(beta) > setback
       ? {
           kind: 'fin' as const,
           side,
-          depth: cotTimes(window.width, beta.external),
+          depth: reach(beta) - setback,
           offset: 0,
           gap: 0,
           extendAbove: window.width * Math.tan(top.external * RAD),
           extendBelow: 0,
         }
       : null;
+  const suffices = (beta: Extreme | null) => beta !== null && reach(beta) <= setback;
   return {
     right: fin('right', angles.betaRight, angles.finGammaRight),
     left: fin('left', angles.betaLeft, angles.finGammaLeft),
+    setbackSuffices: { right: suffices(angles.betaRight), left: suffices(angles.betaLeft) },
   };
 }
 
@@ -292,7 +324,9 @@ function checkCount(n: number): void {
 
 /**
  * n lâminas horizontais com os mesmos α e γ do brise (sem afastamento): corda D / n, passo
- * (H + e) / n, a primeira na altura do brise, prolongamentos divididos por n (seção 10.4).
+ * (H + e) / n, a primeira na altura do brise, prolongamentos divididos por n (seção 10.4). Com recuo
+ * d, as lâminas abaixo da primeira ficam afastadas do vidro por d, sem a verga da parede atrás: a
+ * corda de todas é (D + d) / n = p · tan α_int, que fecha essa fresta (com n = 1, o próprio brise).
  */
 export function subdivideOverhang(
   window: WindowSize,
@@ -301,10 +335,11 @@ export function subdivideOverhang(
 ): HorizontalLouvers {
   checkCount(n);
   if (overhang.gap !== 0) throw new RangeError('only overhangs without a gap can be subdivided');
+  const setback = n === 1 ? 0 : setbackOf(window);
   return {
     kind: 'horizontalLouvers',
     count: n,
-    chord: overhang.depth / n,
+    chord: (overhang.depth + setback) / n,
     pitch: (window.height + overhang.above) / n,
     angle: 0,
     gap: 0,
@@ -316,20 +351,18 @@ export function subdivideOverhang(
 
 /**
  * n + 1 lâminas verticais que dividem a janela em n faixas, com o β e o γ de aleta mais exigentes
- * dos dois lados (seção 10.4).
+ * dos dois lados (seção 10.4). Com recuo d, a corda é (D + d) / n = p · tan β_int, como nas lâminas
+ * horizontais (com n = 1, as próprias aletas).
  */
-export function subdivideFins(
-  window: WindowSize,
-  fins: { right: SizedFin | null; left: SizedFin | null },
-  n: number,
-): VerticalLouvers {
+export function subdivideFins(window: WindowSize, fins: SizedFins, n: number): VerticalLouvers {
   checkCount(n);
   const list = [fins.right, fins.left].filter((f): f is SizedFin => f !== null);
   if (list.length === 0) throw new RangeError('no fins to subdivide');
+  const setback = n === 1 ? 0 : setbackOf(window);
   return {
     kind: 'verticalLouvers',
     count: n + 1,
-    chord: Math.max(...list.map((f) => f.depth)) / n,
+    chord: (Math.max(...list.map((f) => f.depth)) + setback) / n,
     pitch: window.width / n,
     angle: 0,
     gap: 0,

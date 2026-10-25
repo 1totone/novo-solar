@@ -14,7 +14,8 @@ O F3.6 vai do período a sombrear para os ângulos (na referência escolhida) e 
 3. **Ângulos** pelos extremos sobre as amostras: α1 = menor perfil; γ de cada lado = menor γ das amostras daquele lado; α2 do brise afastado = maior perfil; β de cada lado = menor |ψ|; γ do topo da aleta = maior γ. Cada ângulo sai com a amostra que o determina.
 4. **Dimensões** pelas definições dos ângulos (spec 10, seção 10.3), com o brise na verga por padrão (altura acima da verga como opção) e aletas encostadas nas laterais. Com afastamento, a altura acima da verga é calculada para fechar a fresta. Sem limites artificiais de viabilidade: dimensões absurdas (aletas com o sol perto da normal, fresta com o sol rente à fachada) são devolvidas como estão, e a interface avisa.
 5. **Subdivisão:** n lâminas horizontais com corda D / n e passo (H + e) / n (mesmos α e γ); n + 1 lâminas verticais com o β e o γ de aleta mais exigentes.
-6. **Tutorial da UFU com o ano todo** como interpretação das datas: único recorte que combina os três ângulos lidos (γ esquerda das tardes de junho, γ direita das manhãs de dezembro).
+6. **Tutorial da UFU com o ano todo** como interpretação das datas: único recorte que combina os três ângulos lidos (γ esquerda das tardes de junho, γ direita das manhãs de dezembro). Confirmado em 25/10/2026 pela Figura 13 do tutorial (área verde de 22/06 a 22/12, das 9 h às 15 h da carta).
+7. **Janela recuada** (acrescentado em 25/10/2026, com as figuras do tutorial): as peças são medidas do plano da fachada. O brise desconta o recuo, D = (H + e) · tan α_int − g − d, e a aleta, D_a = W · tan β_int − d, porque a verga e as ombreiras da parede fecham a fresta junto ao vidro; as lâminas não descontam, c = p · tan α_int = (D + d) / n, porque as de baixo ficam afastadas do vidro sem nada na fresta. Quando a parede sozinha basta, o núcleo diz isso em vez de dimensionar a peça. Prolongamentos pelo γ, como no transferidor: suficientes, mas não mínimos com recuo (a ombreira corta parte do sol rasante).
 
 ## Alternativas consideradas
 
@@ -26,5 +27,6 @@ O F3.6 vai do período a sombrear para os ângulos (na referência escolhida) e 
 ## Consequências
 
 - Nova spec 10 (proposta) e núcleo em `src/core/shading/inverse.ts`, com as peças no formato de `geometry.ts`, prontas para a máscara pela geometria e os indicadores do F3.5.
-- O caso do tutorial fica conferido nos ângulos; as dimensões das figuras 22 a 25 dependem das imagens das páginas (pendente).
+- O caso do tutorial fica conferido nos ângulos e, com as figuras obtidas em 25/10/2026, nas dimensões das Figuras 22 a 25 (iguais às fórmulas com os ângulos lidos e o vidro na face interna de uma parede de 15 cm). As lâminas das Figuras 23 a 25 descontam a parede da corda e deixam sol entrar pela fresta (até 28% da janela); a regra do item 7 corrige isso (spec 10, seção 10.7).
+- O prolongamento mínimo com recuo, calculado amostra por amostra, fica para depois (`docs/ideias.md`).
 - A interface (marcar o período, ver as curvas e as peças) fica para depois do portão 2.
