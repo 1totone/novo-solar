@@ -12,12 +12,19 @@ const URLS = import.meta.glob(
     '../../../docs/validacao/casos/solar-6.2/*.csv',
     '!../../../docs/validacao/casos/solar-6.2/Latitudes.csv',
     '!../../../docs/validacao/casos/solar-6.2/*.ventos.csv',
+    // Arquivo de teste do F2.8 (hora em que o 6.2 desenha os dados), não é dado de cidade.
+    '!../../../docs/validacao/casos/solar-6.2/teste-hora.csv',
   ],
   { query: '?url', import: 'default', eager: true },
 ) as Record<string, string>;
 
 export function historicalUrl(file: string): string | undefined {
   return URLS[`../../../docs/validacao/casos/solar-6.2/${file}`];
+}
+
+/** Nomes dos arquivos publicados com a aplicação. */
+export function publishedHistoricalFiles(): string[] {
+  return Object.keys(URLS).map((path) => path.slice(path.lastIndexOf('/') + 1));
 }
 
 const cache = new Map<string, Promise<EpwData>>();

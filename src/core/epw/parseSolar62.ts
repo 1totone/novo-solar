@@ -61,10 +61,30 @@ interface Layout {
   firstData: number;
 }
 
+/** Linhas iniciais conferidas à procura do separador ponto e vírgula. */
+const SEPARATOR_PROBE_LINES = 5;
+
+/**
+ * O 6.2 grava vírgulas; o Excel em português salva CSV com ponto e vírgula (e vírgula decimal).
+ * Nenhum CSV do 6.2 tem ponto e vírgula, então uma das primeiras linhas com 5 ou mais campos
+ * separados por ";" identifica o arquivo convertido, com uma mensagem própria.
+ */
+function rejectSemicolons(lines: string[], first: number): void {
+  for (let i = first, seen = 0; i < lines.length && seen < SEPARATOR_PROBE_LINES; i++) {
+    const line = lines[i]!;
+    if (line.trim() === '') continue;
+    seen++;
+    if (line.split(';').length >= 5) {
+      throw new EpwParseError('semicolonCsv', 'CSV uses semicolons as separators', i + 1);
+    }
+  }
+}
+
 function layout(text: string): Layout {
   const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
   let i = 0;
   while (i < lines.length && isBlank(lines[i]!)) i++;
+  rejectSemicolons(lines, i);
   if (i >= lines.length || isNumeric(lines[i]!.split(',')[0])) {
     return { lines, location: null, firstData: i };
   }
