@@ -33,6 +33,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Corrigido
 
+- CSV do SOL-AR salvo pelo Excel em português (ponto e vírgula entre os campos): mensagem própria, que cita o separador e a linha, no lugar de "a linha 2 deveria trazer o local". Achado 12 da revisão antes do teste com usuários.
 - Fuso fracionário, positivo ou zero mal escrito no título da carta e na impressão: "UTC6" e "UTC+6" para +5,5 e "UTC0" para Lisboa passam a "UTC+5,5" e "UTC", como no painel do local. Os fusos do Brasil continuam escritos como antes. Achado 11 da revisão antes do teste com usuários.
 - Celular: a carta fixa no topo não toma mais a tela. Com a tabela das células aberta, ou numa tela de até 600 px de altura (celular deitado ou pequeno), a carta rola com a página; antes, a área fixa passava de 85% da tela e escondia os passos e as linhas de baixo da tabela. Legendas mais compactas, dica curta na tela de toque e legenda da máscara só com os tipos de sombra presentes.
 - Trajetórias da carta sem identificação: cada uma ganha o mês no poente, logo fora do horizonte (jan/nov, fev/out, mar/set, abr/ago, mai/jul, jun e dez; datas simétricas em relação ao solstício de junho têm quase a mesma trajetória e dividem o rótulo). Os pontos cardeais ficam um pouco mais afastados para não encostar nos rótulos. Achado da revisão antes do teste com usuários (as tarefas 1 e 3 do roteiro dependem de achar 21/6 e 21/12).

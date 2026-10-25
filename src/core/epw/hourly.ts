@@ -63,6 +63,7 @@ export type EpwErrorCode =
   | 'missingLocation'
   | 'missingCsvLocation'
   | 'invalidCsvHeader'
+  | 'semicolonCsv'
   | 'invalidLatitude'
   | 'invalidLongitude'
   | 'invalidTimeZone'

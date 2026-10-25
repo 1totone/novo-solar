@@ -161,6 +161,22 @@ describe('parseSolar62', () => {
     expect([err.code, err.line]).toEqual(['invalidCsvHeader', 2]);
   });
 
+  it('CSV salvo pelo Excel em português (ponto e vírgula): erro próprio com a linha', () => {
+    const excel = (text: string) => text.replace(/,/g, ';').replace(/(\d)\.(\d)/g, '$1,$2');
+    const withHeader = errorOf(() => solar62Header(excel(buildCsv({ header: HEADER }))));
+    expect([withHeader.code, withHeader.line]).toEqual(['semicolonCsv', 1]);
+    const noHeader = errorOf(() => parseSolar62(excel(buildCsv()), PLACE));
+    expect([noHeader.code, noHeader.line]).toEqual(['semicolonCsv', 1]);
+    const afterBlank = errorOf(() => solar62Header('\n' + excel(buildCsv())));
+    expect([afterBlank.code, afterBlank.line]).toEqual(['semicolonCsv', 2]);
+  });
+
+  it('ponto e vírgula num campo de texto não basta para recusar', () => {
+    const header = [...HEADER];
+    header[1] = 'Cidade; Estado,-36.77,-73.05,-4,16,,,,,,,,,,,,,,';
+    expect(solar62Header(buildCsv({ header }))?.name).toBe('Cidade; Estado');
+  });
+
   it('local dado fora dos limites: erro', () => {
     const err = errorOf(() => parseSolar62(buildCsv(), { ...PLACE, timeZone: 20 }));
     expect(err.code).toBe('invalidTimeZone');
