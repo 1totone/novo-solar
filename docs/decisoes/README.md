@@ -26,6 +26,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0020](0020-classificacao-das-horas.md) | Classificação das horas pela temperatura externa (F3.4) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0021](0021-indicadores-de-sombreamento.md) | Indicadores de sombreamento: radiação direta bloqueada e admitida (F3.5) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0022](0022-dimensionamento-inverso.md) | Dimensionamento inverso: do período a sombrear para os ângulos e as dimensões (F3.6) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
+| [0023](0023-interface-da-fase-3.md) | Interface da Fase 3: passos 6 e 7 recolhidos, aba Vista 3D, camadas na carta | 2026-10-25 | proposta (aceita provisoriamente na branch de integração) |
 
 ## Modelo
 

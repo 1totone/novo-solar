@@ -10,6 +10,7 @@ export const ptBR = {
   'status.oldVersionLink': 'SOL-AR 6.2 no site do LabEEE',
   'status.roadmapLink': 'Acompanhe o desenvolvimento',
   'status.wireframesLink': 'Esboço das próximas telas (wireframes da Fase 2)',
+  'status.wireframes3Link': 'Proposta das telas da Fase 3 (wireframes da Fase 3)',
   'about.toggleOpen': 'Sobre',
   'about.toggleClose': 'Fechar "Sobre"',
   'about.title': 'Sobre',

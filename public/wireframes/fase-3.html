@@ -1,0 +1,1505 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOL-AR: wireframes da Fase 3</title>
+    <style>
+      :root {
+        --ink: #1b1f24;
+        --muted: #57606a;
+        --line: #8c959f;
+        --soft: #eaeef2;
+        --paper: #ffffff;
+        --note: #fff8c5;
+        --note-line: #d4a72c;
+        --accent: #1f4e79;
+        --sun: #b5651d;
+        --total: #cf222e;
+        --partial: #e3b341;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: #f6f8fa;
+        line-height: 1.45;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      header.top {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--paper);
+        border-bottom: 1px solid var(--soft);
+        padding: 0.75rem 1rem;
+      }
+      header.top h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+      }
+      nav.screens {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      nav.screens a {
+        padding: 0.35rem 0.65rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.85rem;
+        background: var(--paper);
+      }
+      nav.screens a[aria-current='page'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      main {
+        max-width: 78rem;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      section.screen {
+        display: none;
+      }
+      section.screen.active {
+        display: block;
+      }
+      section.screen > h2 {
+        margin: 0.25rem 0 0.25rem;
+      }
+      .lead {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        max-width: 60rem;
+      }
+      .frame {
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 0.75rem;
+      }
+      .frame .appbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-bottom: 1px dashed var(--line);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .logo {
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .tabs {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .tab {
+        border: 1px solid var(--line);
+        border-radius: 6px 6px 0 0;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.85rem;
+        background: var(--soft);
+      }
+      .tab.on {
+        background: var(--paper);
+        border-bottom-color: var(--paper);
+        font-weight: 600;
+      }
+      .spacer {
+        flex: 1;
+      }
+      .btn {
+        display: inline-block;
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.85rem;
+        background: var(--paper);
+        white-space: nowrap;
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 19rem 1fr;
+        gap: 1rem;
+      }
+      .layout.three {
+        grid-template-columns: 19rem 1fr 15rem;
+      }
+      @media (max-width: 60rem) {
+        .layout,
+        .layout.three {
+          grid-template-columns: 1fr;
+        }
+      }
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .step {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+      }
+      .step h3 {
+        margin: 0;
+        font-size: 0.95rem;
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+      }
+      .step .n {
+        display: inline-grid;
+        place-items: center;
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.75rem;
+      }
+      .step.closed {
+        color: var(--muted);
+      }
+      .step.closed h3::after {
+        content: '▸';
+        margin-left: auto;
+      }
+      .step.open h3::after {
+        content: '▾';
+        margin-left: auto;
+      }
+      .summary {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin: 0.15rem 0 0 1.8rem;
+      }
+      .field {
+        margin: 0.45rem 0 0;
+        font-size: 0.85rem;
+      }
+      .field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.15rem;
+      }
+      .input {
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 0.2rem 0.45rem;
+        background: var(--paper);
+        min-height: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+      }
+      .input.small {
+        display: inline-flex;
+        width: 4.5rem;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.35rem 0.6rem;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr;
+        gap: 0.3rem 0.5rem;
+        align-items: center;
+        font-size: 0.82rem;
+      }
+      .seg {
+        display: inline-flex;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        font-size: 0.8rem;
+      }
+      .seg span {
+        padding: 0.15rem 0.5rem;
+      }
+      .seg span.on {
+        background: var(--ink);
+        color: #fff;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .advanced {
+        margin-top: 0.5rem;
+        border-top: 1px dashed var(--line);
+        padding-top: 0.35rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .chartbox {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .chartbox svg {
+        width: 100%;
+        max-width: 30rem;
+        height: auto;
+      }
+      .toolbar {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .legend {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+        font-size: 0.75rem;
+        align-items: center;
+      }
+      .sw {
+        display: inline-block;
+        width: 1.6rem;
+        height: 0.8rem;
+        border: 1px solid var(--line);
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.82rem;
+      }
+      .card h4 {
+        margin: 0 0 0.25rem;
+        font-size: 0.88rem;
+      }
+      .note {
+        background: var(--note);
+        border: 1px solid var(--note-line);
+        border-radius: 6px;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.85rem;
+        margin-top: 0.75rem;
+      }
+      .note ol,
+      .note ul {
+        margin: 0.25rem 0 0;
+        padding-left: 1.2rem;
+      }
+      .pin {
+        display: inline-grid;
+        place-items: center;
+        min-width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 50%;
+        background: var(--note-line);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        margin-right: 0.15rem;
+      }
+      .list {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        font-size: 0.82rem;
+      }
+      .list div {
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid var(--soft);
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .list div:last-child {
+        border-bottom: 0;
+      }
+      .tag {
+        font-size: 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 0 0.3rem;
+        color: var(--muted);
+      }
+      .tag.old {
+        border-color: var(--note-line);
+        color: #7d4e00;
+      }
+      .phone {
+        width: 21rem;
+        max-width: 100%;
+        border: 2px solid var(--ink);
+        border-radius: 22px;
+        padding: 0.6rem;
+        background: var(--paper);
+      }
+      .phones {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .sheet {
+        border: 1px solid var(--line);
+        border-radius: 12px 12px 0 0;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.82rem;
+      }
+      .handle {
+        width: 3rem;
+        height: 0.3rem;
+        border-radius: 3px;
+        background: var(--line);
+        margin: 0 auto 0.4rem;
+      }
+      .twocharts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 50rem) {
+        .twocharts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .dialog {
+        max-width: 26rem;
+        margin: 0 auto;
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 0.75rem;
+        background: var(--paper);
+        font-size: 0.85rem;
+      }
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        align-items: center;
+        font-size: 0.85rem;
+        margin: 0.25rem 0 0.75rem;
+      }
+      .flow span.box {
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        padding: 0.15rem 0.5rem;
+        background: var(--paper);
+      }
+      footer {
+        max-width: 78rem;
+        margin: 0 auto;
+        padding: 0 1rem 2rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .badge {
+        font-size: 0.7rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        border-radius: 999px;
+        padding: 0 0.4rem;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      .group-title {
+        font-size: 0.8rem;
+        color: var(--muted);
+        border-top: 1px dashed var(--line);
+        padding-top: 0.4rem;
+        margin-top: 0.2rem;
+      }
+      .heat {
+        display: grid;
+        grid-template-columns: 2.2rem repeat(24, minmax(0, 1fr));
+        gap: 1px;
+        font-size: 0.6rem;
+        align-items: center;
+      }
+      .heat span {
+        height: 1rem;
+      }
+      .heat .lab {
+        color: var(--muted);
+        text-align: center;
+        height: auto;
+      }
+      .heat .no {
+        background: repeating-linear-gradient(45deg, #d0d7de 0 2px, #f6f8fa 2px 4px);
+      }
+      .ramp {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        margin-top: 0.35rem;
+      }
+      .ramp i {
+        display: inline-block;
+        width: 9rem;
+        height: 0.7rem;
+        background: linear-gradient(90deg, #f1f5f9, #0b3d5c);
+        border: 1px solid var(--line);
+      }
+      .big {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      .big div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.4rem 0.5rem;
+      }
+      .big strong {
+        display: block;
+        font-size: 1.5rem;
+      }
+      table.t {
+        border-collapse: collapse;
+        font-size: 0.78rem;
+        width: 100%;
+      }
+      table.t th,
+      table.t td {
+        border-bottom: 1px solid var(--soft);
+        padding: 0.15rem 0.3rem;
+        text-align: right;
+      }
+      table.t th:first-child,
+      table.t td:first-child {
+        text-align: left;
+      }
+      .drawings {
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        gap: 0.5rem;
+      }
+      .drawings svg {
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--soft);
+        border-radius: 6px;
+      }
+      .hyp {
+        font-size: 0.78rem;
+        background: #f6f8fa;
+        border-left: 3px solid var(--accent);
+        padding: 0.3rem 0.5rem;
+        margin-top: 0.4rem;
+      }
+      .hyp ol {
+        margin: 0.15rem 0 0;
+        padding-left: 1.1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="carta" viewBox="-1.25 -1.25 2.5 2.5">
+          <g fill="none" stroke="#c9d1d9" stroke-width="0.006">
+            <circle r="0.84" />
+            <circle r="0.70" />
+            <circle r="0.58" />
+            <circle r="0.47" />
+            <circle r="0.36" />
+            <circle r="0.27" />
+            <circle r="0.18" />
+            <circle r="0.09" />
+            <line x1="0" y1="-1" x2="0" y2="1" />
+            <line x1="-1" y1="0" x2="1" y2="0" />
+          </g>
+          <circle r="1" fill="none" stroke="#1b1f24" stroke-width="0.012" />
+          <g fill="none" stroke="#b5651d" stroke-width="0.012">
+            <path d="M -0.94 -0.33 Q 0 -0.62 0.94 -0.33" />
+            <path d="M -1 0 Q 0 -0.47 1 0" />
+            <path d="M -0.94 0.33 Q 0 -0.08 0.94 0.33" />
+          </g>
+          <g font-size="0.11" text-anchor="middle" fill="#1b1f24" font-family="system-ui">
+            <text x="0" y="-1.1">N</text>
+            <text x="1.12" y="0.04">L</text>
+            <text x="0" y="1.17">S</text>
+            <text x="-1.12" y="0.04">O</text>
+          </g>
+        </symbol>
+        <symbol id="curvas" viewBox="-1.25 -1.25 2.5 2.5">
+          <line x1="-1" y1="0" x2="1" y2="0" stroke="#1b1f24" stroke-width="0.012" />
+          <g fill="none" stroke="#005f73">
+            <path
+              d="M -1 0 A 1.15 1.15 0 0 1 1 0"
+              stroke-width="0.008"
+              stroke-dasharray="0.01 0.025"
+            />
+            <path
+              d="M -1 0 A 1.35 1.35 0 0 1 1 0"
+              stroke-width="0.009"
+              stroke-dasharray="0.03 0.02"
+            />
+            <path
+              d="M -1 0 A 1.6 1.6 0 0 1 1 0"
+              stroke-width="0.014"
+              stroke-dasharray="0.06 0.025"
+            />
+            <path d="M -1 0 A 2 2 0 0 1 1 0" stroke-width="0.01" />
+            <path
+              d="M -1 0 A 2.7 2.7 0 0 1 1 0 Z"
+              stroke-width="0.016"
+              fill="#005f73"
+              fill-opacity="0.12"
+            />
+          </g>
+          <g font-size="0.07" fill="#005f73" font-family="system-ui" text-anchor="middle">
+            <text x="0" y="-0.69">0%</text>
+            <text x="0" y="-0.52">25%</text>
+            <text x="0" y="-0.37">50%</text>
+            <text x="0" y="-0.26">75%</text>
+            <text x="0" y="-0.11">100%</text>
+          </g>
+        </symbol>
+        <symbol id="periodo" viewBox="-1.25 -1.25 2.5 2.5">
+          <path
+            d="M -0.42 -0.52 Q 0 -0.62 0.42 -0.52 L 0.36 0.2 Q 0 0.05 -0.36 0.2 Z"
+            fill="#1a7f37"
+            fill-opacity="0.25"
+            stroke="#1a7f37"
+            stroke-width="0.01"
+          />
+          <circle cx="-0.42" cy="-0.52" r="0.03" fill="#1a7f37" />
+          <circle cx="0.36" cy="0.2" r="0.03" fill="#1a7f37" />
+        </symbol>
+      </defs>
+    </svg>
+    <header class="top">
+      <h1>SOL-AR: wireframes da Fase 3 (proposta)</h1>
+      <nav class="screens" aria-label="Telas">
+        <a href="#fluxo">0. Fluxo</a>
+        <a href="#principal">1. Tela com o avançado recolhido</a>
+        <a href="#geometria">2. Passo 6: janela e peças</a>
+        <a href="#periodo">3. Do período para a proteção</a>
+        <a href="#mapa">4. Sombra ao longo do ano</a>
+        <a href="#efeito">5. Passo 7: efeito no ano</a>
+        <a href="#tresd">6. Vista 3D</a>
+        <a href="#celular">7. Celular</a>
+      </nav>
+    </header>
+    <main>
+      <section class="screen" id="fluxo" aria-labelledby="h-fluxo">
+        <h2 id="h-fluxo">0. Fluxo: o básico não muda</h2>
+        <p class="lead">
+          Os passos 1 a 5 continuam iguais, com os mesmos números, textos e posições. O que é da
+          Fase 3 entra depois deles, recolhido, em dois passos próprios e numa aba ao lado da carta.
+          Quem não abre esses passos vê a mesma tela de hoje.
+        </p>
+        <div class="flow" aria-label="Fluxo básico, sem mudanças">
+          <span class="box">1. Local</span>→<span class="box">2. Fachada</span>→<span class="box"
+            >3. Proteção (α, β, γ)</span
+          >→<span class="box">4. Dados sobre a carta</span>→<span class="box"
+            >5. Imprimir e exportar</span
+          >
+        </div>
+        <div class="flow" aria-label="Avançado, recolhido">
+          <span class="muted">Avançado (recolhido):</span
+          ><span class="box">6. Proteção pelas dimensões</span>→<span class="box"
+            >curvas de 0 a 100% na carta</span
+          >→<span class="box">sombra mês × hora</span>→<span class="box"
+            >7. Efeito no ano (com dados horários)</span
+          >
+          <span class="muted">e a aba</span><span class="box">Vista 3D</span>
+        </div>
+        <div class="note">
+          <strong>Propostas para aprovar (decisão 0023)</strong>
+          <ol>
+            <li>
+              Os passos 1 a 5 e a numeração não mudam. A Fase 3 entra em dois passos novos, 6 e 7,
+              recolhidos e abaixo do 5, sob o título "Avançado".
+            </li>
+            <li>
+              Passo 6, "Proteção pelas dimensões": janela (largura, altura, recuo), peças (brise,
+              aletas, lâminas), corte e vista desenhados na hora (SVG exportável em escala), curvas
+              de 0 a 100% e máscara de um ponto na carta, mapa mês × hora e o dimensionamento pelo
+              período. Só precisa do local: não depende do arquivo climático.
+            </li>
+            <li>
+              Passo 7, "Efeito no ano": precisa dos dados horários. Classificação das horas com as
+              hipóteses sempre visíveis, os dois indicadores (radiação direta bloqueada nas horas
+              quentes e admitida nas frias) e a comparação de alternativas.
+            </li>
+            <li>
+              Aba "Vista 3D" entre "Carta solar" e "Rosa dos ventos", carregada só quando aberta.
+            </li>
+            <li>
+              As duas máscaras convivem na carta: a do passo 3 (pelos ângulos, pintada de vermelho e
+              amarelo) e as curvas do passo 6 (linhas azul-petróleo com o percentual escrito). Cada
+              uma pode ser ocultada.
+            </li>
+            <li>
+              Todo o estado vai para o link (#), como hoje; os cálculos do ano rodam num web worker.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="screen" id="principal" aria-labelledby="h-principal">
+        <h2 id="h-principal">1. Tela principal com o avançado recolhido (computador)</h2>
+        <p class="lead">
+          Estado de quem não usa a Fase 3: a tela de hoje, com dois cartões fechados no fim da
+          coluna.
+        </p>
+        <div class="frame">
+          <div class="appbar">
+            <span class="logo">SOL-AR</span>
+            <div class="tabs">
+              <span class="tab on">Carta solar</span><span class="tab">Vista 3D</span
+              ><span class="tab">Rosa dos ventos</span>
+            </div>
+          </div>
+          <div class="layout">
+            <div class="steps">
+              <div class="step closed">
+                <h3><span class="n">1</span>Local</h3>
+                <p class="summary">Florianópolis (SC) · UTC−3</p>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">2</span>Fachada</h3>
+                <p class="summary">Orientação 0° (N)</p>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">3</span>Proteção</h3>
+                <p class="summary">α 45°</p>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">4</span>Dados sobre a carta</h3>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">5</span>Imprimir e exportar</h3>
+              </div>
+              <p class="group-title">Avançado: proteção pelas dimensões e efeito no ano</p>
+              <div class="step closed">
+                <h3>
+                  <span class="n">6</span>Proteção pelas dimensões<span class="badge"
+                    >avançado</span
+                  >
+                </h3>
+                <p class="summary">
+                  Janela, brise, aletas e lâminas em metros; curvas de sombra na carta
+                </p>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">7</span>Efeito no ano<span class="badge">avançado</span></h3>
+                <p class="summary">
+                  Horas quentes e frias, radiação bloqueada e admitida, alternativas
+                </p>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg
+                viewBox="0 0 250 250"
+                role="img"
+                aria-label="Carta solar sem as camadas da Fase 3"
+              >
+                <use href="#carta" width="250" height="250" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Os cartões 6 e 7 abrem com um clique ou pelo teclado (Enter);
+          abrem sozinhos quando o link já traz uma janela. <br /><span class="pin">B</span>A aba
+          "Vista 3D" fica sempre visível; sem peças, mostra só a janela e pede as peças no passo 6.
+        </div>
+      </section>
+
+      <section class="screen" id="geometria" aria-labelledby="h-geometria">
+        <h2 id="h-geometria">
+          2. Passo 6: janela e peças (F3.1), curvas e máscara de um ponto (F3.2)
+        </h2>
+        <p class="lead">
+          A janela e as peças em metros; o corte e a vista se redesenham a cada número, como a
+          máscara no passo 3. A carta ganha as curvas do percentual da janela à sombra.
+        </p>
+        <div class="frame">
+          <div class="layout">
+            <div class="steps">
+              <div class="step open">
+                <h3>
+                  <span class="n">6</span>Proteção pelas dimensões<span class="badge"
+                    >avançado</span
+                  >
+                </h3>
+                <div class="grid2">
+                  <div class="field">
+                    <label>Largura da janela</label>
+                    <div class="input">1,20 m</div>
+                  </div>
+                  <div class="field">
+                    <label>Altura da janela</label>
+                    <div class="input">1,00 m</div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Recuo do vidro (parede)</label>
+                  <div class="input">0,00 m</div>
+                </div>
+                <div class="field">
+                  <label>Peças</label>
+                  <div class="list">
+                    <div>
+                      <span>Brise horizontal: 0,60 m na verga, prolongamentos 0,30 e 0,30 m</span
+                      ><span class="tag">editar</span>
+                    </div>
+                    <div>
+                      <span class="muted"
+                        >+ Adicionar peça: brise, aletas, lâminas horizontais, lâminas
+                        verticais</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="drawings" style="margin-top: 0.4rem">
+                  <svg viewBox="0 0 100 100" role="img" aria-label="Corte">
+                    <rect x="40" y="10" width="6" height="25" fill="#57606a" />
+                    <rect x="40" y="75" width="6" height="20" fill="#57606a" />
+                    <line x1="43" y1="35" x2="43" y2="75" stroke="#0969da" stroke-width="1.5" />
+                    <rect x="46" y="33" width="30" height="2" fill="#1b1f24" />
+                    <line
+                      x1="43"
+                      y1="75"
+                      x2="76"
+                      y2="34"
+                      stroke="#57606a"
+                      stroke-dasharray="2 2"
+                      stroke-width="0.6"
+                    />
+                    <text x="58" y="30" font-size="5" text-anchor="middle">0,60</text>
+                    <text x="22" y="57" font-size="5">1,00</text>
+                    <text x="50" y="98" font-size="5" text-anchor="middle">corte</text>
+                  </svg>
+                  <svg viewBox="0 0 160 100" role="img" aria-label="Vista">
+                    <rect x="50" y="35" width="60" height="45" fill="#ddf4ff" stroke="#0969da" />
+                    <rect x="35" y="31" width="90" height="4" fill="#1b1f24" />
+                    <circle cx="80" cy="57" r="2" fill="#cf222e" />
+                    <text x="83" y="55" font-size="5">ponto</text>
+                    <text x="80" y="27" font-size="5" text-anchor="middle">0,30 · 1,20 · 0,30</text>
+                    <text x="80" y="96" font-size="5" text-anchor="middle">
+                      vista de fora (a direita de quem está dentro fica à esquerda)
+                    </text>
+                  </svg>
+                </div>
+                <div class="toolbar" style="justify-content: flex-start; margin-top: 0.3rem">
+                  <span class="btn">Exportar corte e vista (SVG, escala 1:50)</span>
+                </div>
+                <div class="field">
+                  <label>Na carta</label>
+                  <div>☑ Curvas de 0, 25, 50, 75 e 100%</div>
+                  <div>☐ Máscara de um ponto da janela (clique na vista ou digite x e z)</div>
+                </div>
+                <div class="advanced">
+                  + Mais opções de cada peça: afastamento da fachada, inclinação das lâminas,
+                  prolongamentos infinitos
+                </div>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg
+                viewBox="0 0 250 250"
+                role="img"
+                aria-label="Carta com curvas de percentual sombreado"
+              >
+                <use href="#carta" width="250" height="250" />
+                <use href="#curvas" width="250" height="250" />
+              </svg>
+              <div class="legend">
+                <span
+                  class="sw"
+                  style="background: rgba(0, 95, 115, 0.12); border-color: #005f73"
+                ></span
+                >janela toda à sombra (100%) · curvas de 75, 50, 25 e 0% (pelas dimensões, passo 6)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Unidades em metros, com vírgula decimal; cada campo diz o que
+          mede (do plano da fachada; da verga; da lateral). <br /><span class="pin">B</span>As
+          curvas são linhas, não manchas: ficam legíveis por cima da máscara do passo 3 e dos dados
+          do passo 4. A de 100% tem um preenchimento leve. <br /><span class="pin">C</span>O corte e
+          a vista exportam em SVG na escala escolhida (1:20, 1:25, 1:50), com cotas; a impressão do
+          passo 5 pode incluir os dois desenhos.
+        </div>
+      </section>
+
+      <section class="screen" id="periodo" aria-labelledby="h-periodo">
+        <h2 id="h-periodo">3. Do período para a proteção (F3.6)</h2>
+        <p class="lead">
+          O exercício clássico ao contrário: marcar o período na carta e ler os ângulos e as
+          dimensões. Fica dentro do passo 6, recolhido em "Dimensionar pelo período".
+        </p>
+        <div class="frame">
+          <div class="layout">
+            <div class="steps">
+              <div class="step open">
+                <h3><span class="n">6</span>Proteção pelas dimensões · Dimensionar pelo período</h3>
+                <div class="grid2">
+                  <div class="field">
+                    <label>De</label>
+                    <div class="input">1/jan</div>
+                  </div>
+                  <div class="field">
+                    <label>Até</label>
+                    <div class="input">31/dez</div>
+                  </div>
+                  <div class="field">
+                    <label>Das</label>
+                    <div class="input">9 h</div>
+                  </div>
+                  <div class="field">
+                    <label>Às</label>
+                    <div class="input">15 h</div>
+                  </div>
+                </div>
+                <div class="field">
+                  <span class="seg"><span class="on">Hora solar</span><span>Hora legal</span></span>
+                </div>
+                <table class="t" style="margin-top: 0.4rem">
+                  <tr>
+                    <th>Ângulo (interno)</th>
+                    <th>Valor</th>
+                    <th>Onde passa</th>
+                  </tr>
+                  <tr>
+                    <td>α</td>
+                    <td>57,5°</td>
+                    <td>21/06, 9 h</td>
+                  </tr>
+                  <tr>
+                    <td>γ direita</td>
+                    <td>42,2°</td>
+                    <td>21/12, 9 h</td>
+                  </tr>
+                  <tr>
+                    <td>γ esquerda</td>
+                    <td>58,5°</td>
+                    <td>21/06, 15 h</td>
+                  </tr>
+                  <tr>
+                    <td>β (aletas)</td>
+                    <td colspan="2">o sol passa na frente da janela: aletas não servem</td>
+                  </tr>
+                </table>
+                <table class="t" style="margin-top: 0.4rem">
+                  <tr>
+                    <th>Peça (janela 1,20 × 1,00 m)</th>
+                    <th>Medida</th>
+                  </tr>
+                  <tr>
+                    <td>Brise: profundidade</td>
+                    <td>1,57 m</td>
+                  </tr>
+                  <tr>
+                    <td>Prolongamentos (dir., esq.)</td>
+                    <td>0,91 e 1,63 m</td>
+                  </tr>
+                  <tr>
+                    <td>Ou 3 lâminas: corda, passo</td>
+                    <td>0,52 e 0,33 m</td>
+                  </tr>
+                </table>
+                <div class="toolbar" style="justify-content: flex-start; margin-top: 0.3rem">
+                  <span class="btn">Usar os ângulos no passo 3</span
+                  ><span class="btn">Usar estas peças</span>
+                </div>
+              </div>
+            </div>
+            <div class="chartbox">
+              <svg viewBox="0 0 250 250" role="img" aria-label="Carta com o período marcado">
+                <use href="#carta" width="250" height="250" />
+                <use href="#periodo" width="250" height="250" />
+              </svg>
+              <div class="legend">
+                <span
+                  class="sw"
+                  style="background: rgba(26, 127, 55, 0.25); border-color: #1a7f37"
+                ></span
+                >período a sombrear · pontos que determinam cada ângulo
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>O período aparece na carta como a área verde do tutorial da UFU
+          (Figura 13), e cada ângulo mostra o ponto da carta por onde a curva passa. <br /><span
+            class="pin"
+            >B</span
+          >Avisos em texto quando a peça não serve (aletas com o sol de frente, fresta com o sol
+          rente à fachada, parede que já basta). <br /><span class="pin">C</span>"Usar os ângulos no
+          passo 3" preenche α, β e γ na referência escolhida; "Usar estas peças" troca as peças do
+          passo 6 e as curvas confirmam a sombra total no período.
+        </div>
+      </section>
+
+      <section class="screen" id="mapa" aria-labelledby="h-mapa">
+        <h2 id="h-mapa">4. Sombra ao longo do ano: mapa mês × hora (F3.3)</h2>
+        <p class="lead">
+          Dentro do passo 6. Separa os meses que a carta sobrepõe (fevereiro e outubro, por exemplo)
+          e usa a hora legal do arquivo. Exemplo calculado pelo núcleo: Florianópolis, fachada
+          Norte, janela 1,20 × 1,00 m, brise de 0,60 m.
+        </p>
+        <div class="frame">
+          <h3 style="margin: 0 0 0.3rem; font-size: 0.95rem">
+            Percentual da janela à sombra da proteção, com sol na janela
+          </h3>
+          <div
+            class="heat"
+            role="img"
+            aria-label="Mapa mês por hora do percentual da janela sombreado"
+          >
+            <span class="lab"></span><span class="lab">1</span><span class="lab">2</span
+            ><span class="lab">3</span><span class="lab">4</span><span class="lab">5</span
+            ><span class="lab">6</span><span class="lab">7</span><span class="lab">8</span
+            ><span class="lab">9</span><span class="lab">10</span><span class="lab">11</span
+            ><span class="lab">12</span><span class="lab">13</span><span class="lab">14</span
+            ><span class="lab">15</span><span class="lab">16</span><span class="lab">17</span
+            ><span class="lab">18</span><span class="lab">19</span><span class="lab">20</span
+            ><span class="lab">21</span><span class="lab">22</span><span class="lab">23</span
+            ><span class="lab">24</span><span class="lab">jan</span
+            ><span class="no" title="jan, 1 h: sem sol na janela"></span
+            ><span class="no" title="jan, 2 h: sem sol na janela"></span
+            ><span class="no" title="jan, 3 h: sem sol na janela"></span
+            ><span class="no" title="jan, 4 h: sem sol na janela"></span
+            ><span class="no" title="jan, 5 h: sem sol na janela"></span
+            ><span class="no" title="jan, 6 h: sem sol na janela"></span
+            ><span class="no" title="jan, 7 h: sem sol na janela"></span
+            ><span class="no" title="jan, 8 h: sem sol na janela"></span
+            ><span style="background: #4b7188" title="jan, 9 h: 72%"></span
+            ><span style="background: #295570" title="jan, 10 h: 87%"></span
+            ><span style="background: #144462" title="jan, 11 h: 96%"></span
+            ><span style="background: #0b3d5c" title="jan, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="jan, 13 h: 100%"></span
+            ><span style="background: #0b3d5c" title="jan, 14 h: 100%"></span
+            ><span style="background: #164664" title="jan, 15 h: 95%"></span
+            ><span style="background: #305a75" title="jan, 16 h: 84%"></span
+            ><span class="no" title="jan, 17 h: sem sol na janela"></span
+            ><span class="no" title="jan, 18 h: sem sol na janela"></span
+            ><span class="no" title="jan, 19 h: sem sol na janela"></span
+            ><span class="no" title="jan, 20 h: sem sol na janela"></span
+            ><span class="no" title="jan, 21 h: sem sol na janela"></span
+            ><span class="no" title="jan, 22 h: sem sol na janela"></span
+            ><span class="no" title="jan, 23 h: sem sol na janela"></span
+            ><span class="no" title="jan, 24 h: sem sol na janela"></span
+            ><span class="lab">fev</span><span class="no" title="fev, 1 h: sem sol na janela"></span
+            ><span class="no" title="fev, 2 h: sem sol na janela"></span
+            ><span class="no" title="fev, 3 h: sem sol na janela"></span
+            ><span class="no" title="fev, 4 h: sem sol na janela"></span
+            ><span class="no" title="fev, 5 h: sem sol na janela"></span
+            ><span class="no" title="fev, 6 h: sem sol na janela"></span
+            ><span class="no" title="fev, 7 h: sem sol na janela"></span
+            ><span style="background: #9cb1bf" title="fev, 8 h: 37%"></span
+            ><span style="background: #69889c" title="fev, 9 h: 59%"></span
+            ><span style="background: #37607a" title="fev, 10 h: 81%"></span
+            ><span style="background: #164664" title="fev, 11 h: 95%"></span
+            ><span style="background: #0b3d5c" title="fev, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="fev, 13 h: 100%"></span
+            ><span style="background: #0b3d5c" title="fev, 14 h: 100%"></span
+            ><span style="background: #194865" title="fev, 15 h: 94%"></span
+            ><span style="background: #39627b" title="fev, 16 h: 80%"></span
+            ><span style="background: #6e8ca0" title="fev, 17 h: 57%"></span
+            ><span style="background: #a0b5c2" title="fev, 18 h: 35%"></span
+            ><span class="no" title="fev, 19 h: sem sol na janela"></span
+            ><span class="no" title="fev, 20 h: sem sol na janela"></span
+            ><span class="no" title="fev, 21 h: sem sol na janela"></span
+            ><span class="no" title="fev, 22 h: sem sol na janela"></span
+            ><span class="no" title="fev, 23 h: sem sol na janela"></span
+            ><span class="no" title="fev, 24 h: sem sol na janela"></span
+            ><span class="lab">mar</span><span class="no" title="mar, 1 h: sem sol na janela"></span
+            ><span class="no" title="mar, 2 h: sem sol na janela"></span
+            ><span class="no" title="mar, 3 h: sem sol na janela"></span
+            ><span class="no" title="mar, 4 h: sem sol na janela"></span
+            ><span class="no" title="mar, 5 h: sem sol na janela"></span
+            ><span class="no" title="mar, 6 h: sem sol na janela"></span
+            ><span style="background: #e1e8ee" title="mar, 7 h: 7%"></span
+            ><span style="background: #b5c5d0" title="mar, 8 h: 26%"></span
+            ><span style="background: #7c97a9" title="mar, 9 h: 51%"></span
+            ><span style="background: #406780" title="mar, 10 h: 77%"></span
+            ><span style="background: #1b4a67" title="mar, 11 h: 93%"></span
+            ><span style="background: #0b3d5c" title="mar, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="mar, 13 h: 100%"></span
+            ><span style="background: #0d3f5e" title="mar, 14 h: 99%"></span
+            ><span style="background: #224f6c" title="mar, 15 h: 90%"></span
+            ><span style="background: #4b7188" title="mar, 16 h: 72%"></span
+            ><span style="background: #8ca4b4" title="mar, 17 h: 44%"></span
+            ><span style="background: #c3d0da" title="mar, 18 h: 20%"></span
+            ><span style="background: #e8eef3" title="mar, 19 h: 4%"></span
+            ><span class="no" title="mar, 20 h: sem sol na janela"></span
+            ><span class="no" title="mar, 21 h: sem sol na janela"></span
+            ><span class="no" title="mar, 22 h: sem sol na janela"></span
+            ><span class="no" title="mar, 23 h: sem sol na janela"></span
+            ><span class="no" title="mar, 24 h: sem sol na janela"></span
+            ><span class="lab">abr</span><span class="no" title="abr, 1 h: sem sol na janela"></span
+            ><span class="no" title="abr, 2 h: sem sol na janela"></span
+            ><span class="no" title="abr, 3 h: sem sol na janela"></span
+            ><span class="no" title="abr, 4 h: sem sol na janela"></span
+            ><span class="no" title="abr, 5 h: sem sol na janela"></span
+            ><span class="no" title="abr, 6 h: sem sol na janela"></span
+            ><span style="background: #e8eef3" title="abr, 7 h: 4%"></span
+            ><span style="background: #c3d0da" title="abr, 8 h: 20%"></span
+            ><span style="background: #90a8b7" title="abr, 9 h: 42%"></span
+            ><span style="background: #658599" title="abr, 10 h: 61%"></span
+            ><span style="background: #496f86" title="abr, 11 h: 73%"></span
+            ><span style="background: #3e657f" title="abr, 12 h: 78%"></span
+            ><span style="background: #3e657f" title="abr, 13 h: 78%"></span
+            ><span style="background: #426982" title="abr, 14 h: 76%"></span
+            ><span style="background: #55788e" title="abr, 15 h: 68%"></span
+            ><span style="background: #7995a7" title="abr, 16 h: 52%"></span
+            ><span style="background: #aabcc8" title="abr, 17 h: 31%"></span
+            ><span style="background: #dae3e9" title="abr, 18 h: 10%"></span
+            ><span style="background: #eff3f7" title="abr, 19 h: 1%"></span
+            ><span class="no" title="abr, 20 h: sem sol na janela"></span
+            ><span class="no" title="abr, 21 h: sem sol na janela"></span
+            ><span class="no" title="abr, 22 h: sem sol na janela"></span
+            ><span class="no" title="abr, 23 h: sem sol na janela"></span
+            ><span class="no" title="abr, 24 h: sem sol na janela"></span
+            ><span class="lab">mai</span><span class="no" title="mai, 1 h: sem sol na janela"></span
+            ><span class="no" title="mai, 2 h: sem sol na janela"></span
+            ><span class="no" title="mai, 3 h: sem sol na janela"></span
+            ><span class="no" title="mai, 4 h: sem sol na janela"></span
+            ><span class="no" title="mai, 5 h: sem sol na janela"></span
+            ><span class="no" title="mai, 6 h: sem sol na janela"></span
+            ><span style="background: #ecf1f6" title="mai, 7 h: 2%"></span
+            ><span style="background: #d3dde5" title="mai, 8 h: 13%"></span
+            ><span style="background: #aabcc8" title="mai, 9 h: 31%"></span
+            ><span style="background: #8ca4b4" title="mai, 10 h: 44%"></span
+            ><span style="background: #7793a6" title="mai, 11 h: 53%"></span
+            ><span style="background: #708ea1" title="mai, 12 h: 56%"></span
+            ><span style="background: #6e8ca0" title="mai, 13 h: 57%"></span
+            ><span style="background: #7592a4" title="mai, 14 h: 54%"></span
+            ><span style="background: #839dae" title="mai, 15 h: 48%"></span
+            ><span style="background: #9eb3c0" title="mai, 16 h: 36%"></span
+            ><span style="background: #c3d0da" title="mai, 17 h: 20%"></span
+            ><span style="background: #e6ecf1" title="mai, 18 h: 5%"></span
+            ><span class="no" title="mai, 19 h: sem sol na janela"></span
+            ><span class="no" title="mai, 20 h: sem sol na janela"></span
+            ><span class="no" title="mai, 21 h: sem sol na janela"></span
+            ><span class="no" title="mai, 22 h: sem sol na janela"></span
+            ><span class="no" title="mai, 23 h: sem sol na janela"></span
+            ><span class="no" title="mai, 24 h: sem sol na janela"></span
+            ><span class="lab">jun</span><span class="no" title="jun, 1 h: sem sol na janela"></span
+            ><span class="no" title="jun, 2 h: sem sol na janela"></span
+            ><span class="no" title="jun, 3 h: sem sol na janela"></span
+            ><span class="no" title="jun, 4 h: sem sol na janela"></span
+            ><span class="no" title="jun, 5 h: sem sol na janela"></span
+            ><span class="no" title="jun, 6 h: sem sol na janela"></span
+            ><span class="no" title="jun, 7 h: sem sol na janela"></span
+            ><span style="background: #dce4eb" title="jun, 8 h: 9%"></span
+            ><span style="background: #bac9d3" title="jun, 9 h: 24%"></span
+            ><span style="background: #9cb1bf" title="jun, 10 h: 37%"></span
+            ><span style="background: #8aa2b2" title="jun, 11 h: 45%"></span
+            ><span style="background: #839dae" title="jun, 12 h: 48%"></span
+            ><span style="background: #809bac" title="jun, 13 h: 49%"></span
+            ><span style="background: #859faf" title="jun, 14 h: 47%"></span
+            ><span style="background: #93aab9" title="jun, 15 h: 41%"></span
+            ><span style="background: #aabcc8" title="jun, 16 h: 31%"></span
+            ><span style="background: #ccd8e0" title="jun, 17 h: 16%"></span
+            ><span style="background: #e8eef3" title="jun, 18 h: 4%"></span
+            ><span class="no" title="jun, 19 h: sem sol na janela"></span
+            ><span class="no" title="jun, 20 h: sem sol na janela"></span
+            ><span class="no" title="jun, 21 h: sem sol na janela"></span
+            ><span class="no" title="jun, 22 h: sem sol na janela"></span
+            ><span class="no" title="jun, 23 h: sem sol na janela"></span
+            ><span class="no" title="jun, 24 h: sem sol na janela"></span
+            ><span class="lab">jul</span><span class="no" title="jul, 1 h: sem sol na janela"></span
+            ><span class="no" title="jul, 2 h: sem sol na janela"></span
+            ><span class="no" title="jul, 3 h: sem sol na janela"></span
+            ><span class="no" title="jul, 4 h: sem sol na janela"></span
+            ><span class="no" title="jul, 5 h: sem sol na janela"></span
+            ><span class="no" title="jul, 6 h: sem sol na janela"></span
+            ><span class="no" title="jul, 7 h: sem sol na janela"></span
+            ><span style="background: #dce4eb" title="jul, 8 h: 9%"></span
+            ><span style="background: #b8c7d2" title="jul, 9 h: 25%"></span
+            ><span style="background: #97adbc" title="jul, 10 h: 39%"></span
+            ><span style="background: #839dae" title="jul, 11 h: 48%"></span
+            ><span style="background: #7995a7" title="jul, 12 h: 52%"></span
+            ><span style="background: #7793a6" title="jul, 13 h: 53%"></span
+            ><span style="background: #7c97a9" title="jul, 14 h: 51%"></span
+            ><span style="background: #87a0b1" title="jul, 15 h: 46%"></span
+            ><span style="background: #a0b5c2" title="jul, 16 h: 35%"></span
+            ><span style="background: #c3d0da" title="jul, 17 h: 20%"></span
+            ><span style="background: #e3eaf0" title="jul, 18 h: 6%"></span
+            ><span class="no" title="jul, 19 h: sem sol na janela"></span
+            ><span class="no" title="jul, 20 h: sem sol na janela"></span
+            ><span class="no" title="jul, 21 h: sem sol na janela"></span
+            ><span class="no" title="jul, 22 h: sem sol na janela"></span
+            ><span class="no" title="jul, 23 h: sem sol na janela"></span
+            ><span class="no" title="jul, 24 h: sem sol na janela"></span
+            ><span class="lab">ago</span><span class="no" title="ago, 1 h: sem sol na janela"></span
+            ><span class="no" title="ago, 2 h: sem sol na janela"></span
+            ><span class="no" title="ago, 3 h: sem sol na janela"></span
+            ><span class="no" title="ago, 4 h: sem sol na janela"></span
+            ><span class="no" title="ago, 5 h: sem sol na janela"></span
+            ><span class="no" title="ago, 6 h: sem sol na janela"></span
+            ><span style="background: #eaeff4" title="ago, 7 h: 3%"></span
+            ><span style="background: #ced9e1" title="ago, 8 h: 15%"></span
+            ><span style="background: #9eb3c0" title="ago, 9 h: 36%"></span
+            ><span style="background: #7793a6" title="ago, 10 h: 53%"></span
+            ><span style="background: #5e7f95" title="ago, 11 h: 64%"></span
+            ><span style="background: #55788e" title="ago, 12 h: 68%"></span
+            ><span style="background: #52768d" title="ago, 13 h: 69%"></span
+            ><span style="background: #577a90" title="ago, 14 h: 67%"></span
+            ><span style="background: #67879b" title="ago, 15 h: 60%"></span
+            ><span style="background: #859faf" title="ago, 16 h: 47%"></span
+            ><span style="background: #b1c1cd" title="ago, 17 h: 28%"></span
+            ><span style="background: #dce4eb" title="ago, 18 h: 9%"></span
+            ><span class="no" title="ago, 19 h: sem sol na janela"></span
+            ><span class="no" title="ago, 20 h: sem sol na janela"></span
+            ><span class="no" title="ago, 21 h: sem sol na janela"></span
+            ><span class="no" title="ago, 22 h: sem sol na janela"></span
+            ><span class="no" title="ago, 23 h: sem sol na janela"></span
+            ><span class="no" title="ago, 24 h: sem sol na janela"></span
+            ><span class="lab">set</span><span class="no" title="set, 1 h: sem sol na janela"></span
+            ><span class="no" title="set, 2 h: sem sol na janela"></span
+            ><span class="no" title="set, 3 h: sem sol na janela"></span
+            ><span class="no" title="set, 4 h: sem sol na janela"></span
+            ><span class="no" title="set, 5 h: sem sol na janela"></span
+            ><span class="no" title="set, 6 h: sem sol na janela"></span
+            ><span style="background: #dce4eb" title="set, 7 h: 9%"></span
+            ><span style="background: #b3c3cf" title="set, 8 h: 27%"></span
+            ><span style="background: #7592a4" title="set, 9 h: 54%"></span
+            ><span style="background: #406780" title="set, 10 h: 77%"></span
+            ><span style="background: #204e6a" title="set, 11 h: 91%"></span
+            ><span style="background: #144462" title="set, 12 h: 96%"></span
+            ><span style="background: #144462" title="set, 13 h: 96%"></span
+            ><span style="background: #194865" title="set, 14 h: 94%"></span
+            ><span style="background: #345e78" title="set, 15 h: 82%"></span
+            ><span style="background: #628398" title="set, 16 h: 62%"></span
+            ><span style="background: #a0b5c2" title="set, 17 h: 35%"></span
+            ><span style="background: #d5dfe6" title="set, 18 h: 12%"></span
+            ><span style="background: #f1f5f9" title="set, 19 h: 0%"></span
+            ><span class="no" title="set, 20 h: sem sol na janela"></span
+            ><span class="no" title="set, 21 h: sem sol na janela"></span
+            ><span class="no" title="set, 22 h: sem sol na janela"></span
+            ><span class="no" title="set, 23 h: sem sol na janela"></span
+            ><span class="no" title="set, 24 h: sem sol na janela"></span
+            ><span class="lab">out</span><span class="no" title="out, 1 h: sem sol na janela"></span
+            ><span class="no" title="out, 2 h: sem sol na janela"></span
+            ><span class="no" title="out, 3 h: sem sol na janela"></span
+            ><span class="no" title="out, 4 h: sem sol na janela"></span
+            ><span class="no" title="out, 5 h: sem sol na janela"></span
+            ><span class="no" title="out, 6 h: sem sol na janela"></span
+            ><span style="background: #c3d0da" title="out, 7 h: 20%"></span
+            ><span style="background: #93aab9" title="out, 8 h: 41%"></span
+            ><span style="background: #577a90" title="out, 9 h: 67%"></span
+            ><span style="background: #295570" title="out, 10 h: 87%"></span
+            ><span style="background: #10415f" title="out, 11 h: 98%"></span
+            ><span style="background: #0b3d5c" title="out, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="out, 13 h: 100%"></span
+            ><span style="background: #10415f" title="out, 14 h: 98%"></span
+            ><span style="background: #295570" title="out, 15 h: 87%"></span
+            ><span style="background: #55788e" title="out, 16 h: 68%"></span
+            ><span style="background: #93aab9" title="out, 17 h: 41%"></span
+            ><span style="background: #c1ced8" title="out, 18 h: 21%"></span
+            ><span class="no" title="out, 19 h: sem sol na janela"></span
+            ><span class="no" title="out, 20 h: sem sol na janela"></span
+            ><span class="no" title="out, 21 h: sem sol na janela"></span
+            ><span class="no" title="out, 22 h: sem sol na janela"></span
+            ><span class="no" title="out, 23 h: sem sol na janela"></span
+            ><span class="no" title="out, 24 h: sem sol na janela"></span
+            ><span class="lab">nov</span><span class="no" title="nov, 1 h: sem sol na janela"></span
+            ><span class="no" title="nov, 2 h: sem sol na janela"></span
+            ><span class="no" title="nov, 3 h: sem sol na janela"></span
+            ><span class="no" title="nov, 4 h: sem sol na janela"></span
+            ><span class="no" title="nov, 5 h: sem sol na janela"></span
+            ><span class="no" title="nov, 6 h: sem sol na janela"></span
+            ><span class="no" title="nov, 7 h: sem sol na janela"></span
+            ><span class="no" title="nov, 8 h: sem sol na janela"></span
+            ><span style="background: #426982" title="nov, 9 h: 76%"></span
+            ><span style="background: #224f6c" title="nov, 10 h: 90%"></span
+            ><span style="background: #0d3f5e" title="nov, 11 h: 99%"></span
+            ><span style="background: #0b3d5c" title="nov, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="nov, 13 h: 100%"></span
+            ><span style="background: #0d3f5e" title="nov, 14 h: 99%"></span
+            ><span style="background: #224f6c" title="nov, 15 h: 90%"></span
+            ><span style="background: #446b83" title="nov, 16 h: 75%"></span
+            ><span class="no" title="nov, 17 h: sem sol na janela"></span
+            ><span class="no" title="nov, 18 h: sem sol na janela"></span
+            ><span class="no" title="nov, 19 h: sem sol na janela"></span
+            ><span class="no" title="nov, 20 h: sem sol na janela"></span
+            ><span class="no" title="nov, 21 h: sem sol na janela"></span
+            ><span class="no" title="nov, 22 h: sem sol na janela"></span
+            ><span class="no" title="nov, 23 h: sem sol na janela"></span
+            ><span class="no" title="nov, 24 h: sem sol na janela"></span
+            ><span class="lab">dez</span><span class="no" title="dez, 1 h: sem sol na janela"></span
+            ><span class="no" title="dez, 2 h: sem sol na janela"></span
+            ><span class="no" title="dez, 3 h: sem sol na janela"></span
+            ><span class="no" title="dez, 4 h: sem sol na janela"></span
+            ><span class="no" title="dez, 5 h: sem sol na janela"></span
+            ><span class="no" title="dez, 6 h: sem sol na janela"></span
+            ><span class="no" title="dez, 7 h: sem sol na janela"></span
+            ><span class="no" title="dez, 8 h: sem sol na janela"></span
+            ><span class="no" title="dez, 9 h: sem sol na janela"></span
+            ><span style="background: #1b4a67" title="dez, 10 h: 93%"></span
+            ><span style="background: #10415f" title="dez, 11 h: 98%"></span
+            ><span style="background: #0b3d5c" title="dez, 12 h: 100%"></span
+            ><span style="background: #0b3d5c" title="dez, 13 h: 100%"></span
+            ><span style="background: #0d3f5e" title="dez, 14 h: 99%"></span
+            ><span style="background: #164664" title="dez, 15 h: 95%"></span
+            ><span class="no" title="dez, 16 h: sem sol na janela"></span
+            ><span class="no" title="dez, 17 h: sem sol na janela"></span
+            ><span class="no" title="dez, 18 h: sem sol na janela"></span
+            ><span class="no" title="dez, 19 h: sem sol na janela"></span
+            ><span class="no" title="dez, 20 h: sem sol na janela"></span
+            ><span class="no" title="dez, 21 h: sem sol na janela"></span
+            ><span class="no" title="dez, 22 h: sem sol na janela"></span
+            ><span class="no" title="dez, 23 h: sem sol na janela"></span
+            ><span class="no" title="dez, 24 h: sem sol na janela"></span>
+          </div>
+          <div class="ramp">
+            <span>0%</span><i></i><span>100%</span
+            ><span class="heat" style="display: inline-flex"
+              ><span class="no" style="width: 1.6rem"></span></span
+            ><span>sem sol na janela (noite ou sol atrás da fachada)</span>
+          </div>
+          <div class="toolbar" style="justify-content: flex-start; margin-top: 0.4rem">
+            <span class="btn">Ver como tabela</span><span class="btn">CSV</span
+            ><span class="btn">SVG</span>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Cor pelo percentual sombreado pela proteção nas horas com sol na
+          janela (a recomendação da decisão 0018); as horas sem sol ficam hachuradas, para não
+          parecerem "100% à sombra". <br /><span class="pin">B</span>Valor de cada célula ao passar
+          o cursor ou focar com o teclado, e numa tabela equivalente. Escala de um só tom, com
+          contraste suficiente nas duas pontas.
+        </div>
+      </section>
+
+      <section class="screen" id="efeito" aria-labelledby="h-efeito">
+        <h2 id="h-efeito">5. Passo 7: efeito no ano (F3.4 e F3.5)</h2>
+        <p class="lead">
+          Precisa dos dados horários (passo 1). As hipóteses ficam na tela, junto dos números, e não
+          numa ajuda à parte.
+        </p>
+        <div class="frame">
+          <div class="step open">
+            <h3><span class="n">7</span>Efeito no ano<span class="badge">avançado</span></h3>
+            <div class="field">
+              <label>Horas quentes e frias</label
+              ><span class="seg"
+                ><span class="on">Faixa adaptativa (ASHRAE 55)</span><span>Limiares</span
+                ><span>Temperatura de equilíbrio</span></span
+              >
+            </div>
+            <div class="hyp">
+              <strong>Hipóteses</strong>
+              <ol>
+                <li>
+                  A classe vem só da temperatura do ar externo: é um indicador aproximado da
+                  necessidade de sombra.
+                </li>
+                <li>
+                  A faixa vale para a temperatura operativa interna de ambientes naturalmente
+                  ventilados e aqui é usada com o ar externo; ignora os ganhos internos e solares e
+                  tende a subestimar as horas quentes.
+                </li>
+                <li>
+                  Faixa de 80% de aceitabilidade, média predominante exponencial (α = 0,8, 30 dias);
+                  temperatura da hora: média do início e do fim.
+                </li>
+                <li>Radiação direta só (DNI constante na hora); a difusa fica para a Fase 5.</li>
+              </ol>
+            </div>
+            <p class="muted" style="font-size: 0.8rem">
+              Nas 3704 horas com sol na janela: 6% quentes, 57% neutras, 37% frias (ponderado pela
+              radiação: 6%, 62%, 32%).
+            </p>
+            <div class="big" style="margin-top: 0.4rem">
+              <div>
+                Radiação direta bloqueada nas horas quentes<strong>87%</strong
+                ><span class="muted">de 29 kWh/m² por ano</span>
+              </div>
+              <div>
+                Radiação direta admitida nas horas frias<strong>41%</strong
+                ><span class="muted">de 154 kWh/m² por ano</span>
+              </div>
+            </div>
+            <table class="t" style="margin-top: 0.5rem">
+              <tr>
+                <th>Alternativa</th>
+                <th>Bloqueada (quentes)</th>
+                <th>Admitida (frias)</th>
+                <th></th>
+              </tr>
+              <tr>
+                <td>Sem proteção</td>
+                <td>0%</td>
+                <td>100%</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>A: brise 0,60 m</td>
+                <td>87%</td>
+                <td>41%</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>B: brise 0,40 m</td>
+                <td>71%</td>
+                <td>58%</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>C: 3 lâminas</td>
+                <td>86%</td>
+                <td>39%</td>
+                <td class="muted">superada por A</td>
+              </tr>
+            </table>
+            <div class="toolbar" style="justify-content: flex-start; margin-top: 0.3rem">
+              <span class="btn">Guardar a proteção atual como alternativa</span
+              ><span class="btn">CSV</span>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>Os percentuais das classes são contados só nas horas com sol na
+          janela (e ponderados pela radiação), não nas 8760 horas: as noites não pesam no
+          sombreamento. <br /><span class="pin">B</span>Sem índice único: a tabela mostra os dois
+          percentuais e marca as alternativas superadas nos dois (decisão 0021). <br /><span
+            class="pin"
+            >C</span
+          >Números deste quadro são ilustrativos.
+        </div>
+      </section>
+
+      <section class="screen" id="tresd" aria-labelledby="h-tresd">
+        <h2 id="h-tresd">6. Vista 3D (F3.7)</h2>
+        <p class="lead">
+          Aba ao lado da carta. Sol, janela, peças e a sombra na janela, com data e hora; a fração
+          ensolarada mostrada é a mesma do cálculo do passo 6.
+        </p>
+        <div class="frame">
+          <div class="appbar">
+            <div class="tabs">
+              <span class="tab">Carta solar</span><span class="tab on">Vista 3D</span
+              ><span class="tab">Rosa dos ventos</span>
+            </div>
+          </div>
+          <div class="chartbox">
+            <svg viewBox="0 0 250 160" role="img" aria-label="Vista 3D esquemática">
+              <polygon points="40,40 200,20 200,140 40,150" fill="#eaeef2" stroke="#8c959f" />
+              <polygon points="90,60 160,52 160,115 90,120" fill="#ddf4ff" stroke="#0969da" />
+              <polygon points="80,55 170,45 200,30 110,40" fill="#57606a" />
+              <polygon points="90,60 160,52 160,80 90,86" fill="#1b1f24" fill-opacity="0.35" />
+              <circle cx="225" cy="18" r="8" fill="#e3b341" />
+              <text x="125" y="155" font-size="7" text-anchor="middle">
+                janela 62% ensolarada · 21/03, 15 h (legal)
+              </text>
+            </svg>
+            <div class="toolbar">
+              <span class="btn">◀ hora</span><span class="btn">▶ animar o dia</span
+              ><span class="btn">hora ▶</span><span class="btn">data: 21/03</span
+              ><span class="btn">girar e ampliar</span>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>A biblioteca 3D (Three.js) só é baixada quando a aba abre: a
+          página inicial não fica mais lenta. <br /><span class="pin">B</span>Teste automático: a
+          área ensolarada da janela, contada nos pixels da imagem 3D, bate com a fração calculada.
+        </div>
+      </section>
+
+      <section class="screen" id="celular" aria-labelledby="h-celular">
+        <h2 id="h-celular">7. Celular</h2>
+        <p class="lead">
+          Como hoje: a carta fixa no topo e os passos rolando por baixo; os passos 6 e 7 ficam no
+          fim, fechados.
+        </p>
+        <div class="phones">
+          <div class="phone">
+            <svg viewBox="0 0 250 250" role="img" aria-label="Carta no celular com curvas">
+              <use href="#carta" width="250" height="250" />
+              <use href="#curvas" width="250" height="250" />
+            </svg>
+            <div class="sheet">
+              <div class="handle"></div>
+              <div class="step closed">
+                <h3><span class="n">5</span>Imprimir e exportar</h3>
+              </div>
+              <div class="step open">
+                <h3><span class="n">6</span>Proteção pelas dimensões</h3>
+                <p class="summary">Janela 1,20 × 1,00 m · brise 0,60 m</p>
+                <svg viewBox="0 0 160 70" role="img" aria-label="Vista no celular">
+                  <rect x="50" y="20" width="60" height="40" fill="#ddf4ff" stroke="#0969da" />
+                  <rect x="35" y="16" width="90" height="4" fill="#1b1f24" />
+                </svg>
+              </div>
+              <div class="step closed">
+                <h3><span class="n">7</span>Efeito no ano</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note">
+          <span class="pin">A</span>O mapa mês × hora rola na horizontal dentro do cartão, sem rolar
+          a página. <br /><span class="pin">B</span>A vista 3D usa toque para girar e um botão para
+          voltar à vista de frente.
+        </div>
+      </section>
+    </main>
+    <footer>
+      Proposta do F3 (decisão 0023), 25/10/2026. Números do mapa calculados pelo núcleo da Fase 3;
+      os do passo 7 são ilustrativos.
+    </footer>
+    <script>
+      (function () {
+        var ids = [
+          'fluxo',
+          'principal',
+          'geometria',
+          'periodo',
+          'mapa',
+          'efeito',
+          'tresd',
+          'celular',
+        ];
+        function show() {
+          var id = location.hash.slice(1);
+          if (ids.indexOf(id) < 0) id = 'fluxo';
+          ids.forEach(function (s) {
+            document.getElementById(s).classList.toggle('active', s === id);
+          });
+          document.querySelectorAll('nav.screens a').forEach(function (a) {
+            if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+            else a.removeAttribute('aria-current');
+          });
+          window.scrollTo(0, 0);
+        }
+        window.addEventListener('hashchange', show);
+        show();
+      })();
+    </script>
+  </body>
+</html>
