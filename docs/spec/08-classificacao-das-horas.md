@@ -42,15 +42,17 @@ Cada método dá, para cada hora, um limite inferior L e um superior U (L ≤ U)
 
 | Método | L | U | Valores |
 |---|---|---|---|
-| **Faixa adaptativa da ASHRAE 55** (padrão) | T_conf − Δ | T_conf + Δ | T_conf = 0,31 · t_pma + 17,8 °C; Δ = 3,5 °C (80% de aceitabilidade, padrão) ou 2,5 °C (90%); só com 10 °C ≤ t_pma ≤ 33,5 °C |
+| **Faixa adaptativa da ASHRAE 55** (padrão) | T_conf − Δ − ΔT | T_conf + Δ − ΔT | T_conf = 0,31 · t_pma + 17,8 °C; Δ = 3,5 °C (80% de aceitabilidade, padrão) ou 2,5 °C (90%); só com 10 °C ≤ t_pma ≤ 33,5 °C; acréscimo por ganhos ΔT digitado, padrão 0 |
 | **Limiares fixos** | T_fria | T_quente | digitados, T_fria ≤ T_quente; qualquer um pode ficar em branco (sem horas frias ou sem horas quentes) |
 | **Temperatura de equilíbrio** | T_eq | T_eq | digitada |
 
 **Faixa adaptativa.** Equação e limites da ANSI/ASHRAE 55-2023 (edição vigente em outubro de 2026, pelo catálogo da ASHRAE; os adendos encontrados, *a* em revisão pública e *b*, tratam dos questionários de pesquisa do apêndice L, não do modelo adaptativo). O texto da norma não foi consultado diretamente na sessão (é vendido pela ASHRAE); a equação, os limites e a faixa de α foram conferidos na documentação e no código do pythermalcomfort 4.6.2, que cita a norma, e devem ser conferidos pelo Anthony no texto da norma. Fora da faixa de aplicação (t_pma abaixo de 10 °C ou acima de 33,5 °C), a hora fica **sem classe**: a norma não define a faixa ali, e estender a reta seria inventar um critério. O acréscimo do limite superior por velocidade do ar elevada (de 1,2 a 2,2 °C, com velocidade do ar interno de 0,6 a 1,2 m/s) não se aplica: a velocidade do ar interno não é conhecida. Os limites não são arredondados.
 
-**Limiares fixos.** Sem valor padrão: os limiares dependem do uso e do critério de quem projeta. Na interface, o método padrão é a faixa adaptativa.
+**Acréscimo por ganhos (ΔT).** A faixa vale para a temperatura operativa interna. Com ΔT, a operativa interna é estimada como T_h + ΔT e comparada com a faixa; para o ar externo, os limites descem ΔT. A t_pma continua calculada com o ar externo, como manda o modelo. ΔT representa os ganhos internos e solares sobre o coeficiente de perdas do ambiente (Q / UA); depende do edifício e é digitado, com padrão 0 (o ar externo). Ordem de grandeza com fonte: em casas ocupadas e ventiladas naturalmente, Papst de Abreu (2004) mediu a temperatura interna horária de 0 a 2,7 °C acima da média móvel da temperatura externa das horas anteriores em Florianópolis e de 0,2 a 4,0 °C em Curitiba (regressões sem radiação das Tabelas 8 e 22, para médias externas de 15 °C a 28 °C); é a diferença para uma média de horas anteriores, não para a temperatura da própria hora. O relatório do F3.4 (seção 4) mede o efeito de ΔT = 2 °C e 4 °C nas classes.
 
-**Temperatura de equilíbrio.** É a temperatura externa abaixo da qual o ambiente precisa de calor e acima da qual os ganhos passam a ser excesso: com a temperatura interna desejada T_int, os ganhos internos e solares médios Q e o coeficiente global de perdas da envoltória e da ventilação UA, T_eq = T_int − Q / UA (conceito da temperatura de equilíbrio dos métodos de graus-dia; ASHRAE Handbook, Fundamentals). Depende do edifício e não há um valor por tipologia com fonte verificável que caiba aqui: o campo é digitado e não tem valor padrão. Uma tabela por tipologia só entra com fonte citável (decisão 0020).
+**Limiares fixos.** Sem valor padrão: os limiares dependem do uso e do critério de quem projeta. Na interface, o método padrão é a faixa adaptativa. Critério com fonte que a interface oferece como sugestão: **sombrear acima de 20 °C** (T_fria = T_quente = 20 °C), de Lamberts, Dutra e Pereira (2014): "esta estratégia deve ser utilizada sempre que a temperatura do ar for superior a 20 °C, mesmo quando a carta bioclimática indicar conforto térmico" (p. 91, seção 3.5.7), critério do Analysis-BIO para um ambiente sem carga térmica interna; com carga interna, o limite fica abaixo de 20 °C, sem valor numérico (Tabela 4-4, p. 135). É um limite de conforto das pessoas à sombra, da carta bioclimática, e não um balanço do edifício. Aqui ele é aplicado com a temperatura da hora (seção 8.2) e o empate neutro (seção 8.5).
+
+**Temperatura de equilíbrio.** É a temperatura externa abaixo da qual o ambiente precisa de calor e acima da qual os ganhos passam a ser excesso: com a temperatura interna desejada T_int, os ganhos internos e solares médios Q e o coeficiente global de perdas da envoltória e da ventilação UA, T_eq = T_int − Q / UA (conceito da temperatura de equilíbrio dos métodos de graus-dia; ASHRAE Handbook, Fundamentals). Depende do edifício e não há um valor por tipologia com fonte verificável que caiba aqui: o campo é digitado e não tem valor padrão. Uma tabela por tipologia só entra com fonte citável (decisão 0020). A busca de 25/10/2026 não achou essa fonte: as bases de graus-dia e graus-hora publicadas são convenções climáticas (18,3 °C e 10 °C da ASHRAE; 14 a 18 °C e 24 a 32 °C nas tabelas de Goulart, Lamberts e Firmino, 1998, por cidade), de aquecimento ou da temperatura interna (26 °C e 18 °C da operativa), e a própria ASHRAE observa que o valor de 18,3 °C "em geral não é respeitado" porque a temperatura de equilíbrio varia muito de um edifício para outro (citada por Freire, 2001). O ASHRAE Handbook e o CIBSE TM41 não foram lidos no texto completo (domínios bloqueados na sessão).
 
 ## 8.5 Classe de cada hora
 
@@ -75,6 +77,8 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 2. Método e valores: limiares, ou T_eq, ou faixa adaptativa com a aceitabilidade, a forma da média predominante, α e n.
 3. Na faixa adaptativa: a faixa vale para a temperatura operativa interna de ambientes naturalmente condicionados e é usada aqui com a temperatura externa; tende a subestimar as horas quentes. Número de horas sem classe por t_pma fora de 10 °C a 33,5 °C.
 4. Temperatura da hora: média do início e do fim da hora (ou a do fim, se escolhida).
+5. A parte de cada classe nas **horas com sol na janela**, contada e ponderada pela radiação direta incidente sem proteção, e não sobre as 8760 horas: as noites não pesam no sombreamento (revisão da decisão 0020).
+6. Com a faixa adaptativa, o acréscimo por ganhos (ΔT) e a lembrança de que, com ΔT = 0, a classe é a do ar externo.
 
 ## 8.7 Implementação e validação
 
@@ -95,6 +99,9 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 4. **Limiares fixos e temperatura de equilíbrio sem valor padrão**; nenhuma tabela por tipologia sem fonte citável.
 5. **Empates** com os limites são neutros.
 6. **NBR 15575** não é usada para classificar a temperatura externa.
+7. **Acréscimo por ganhos ΔT** na faixa adaptativa, digitado, padrão 0 (acrescentado na revisão de 25/10/2026).
+8. **Percentuais das classes sobre as horas com sol na janela**, contados e ponderados pela radiação.
+9. **Limiar de 20 °C** (Lamberts, Dutra e Pereira, 2014) oferecido como sugestão com fonte no método de limiares; a decisão 0024 (proposta) recomenda torná-lo o padrão.
 
 ## Referências
 
@@ -103,3 +110,7 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 - Tartarini, F.; Schiavon, S. pythermalcomfort: a Python package for thermal comfort research. *SoftwareX*, 12, 100578, 2020 (versão 4.6.2, usada só na referência de teste).
 - ASHRAE. *ASHRAE Handbook: Fundamentals*, capítulo de métodos de estimativa de energia (temperatura de equilíbrio e graus-dia).
 - U.S. DOE. *EnergyPlus Engineering Reference* e *Auxiliary Programs* (formato EPW; interpolação dos dados climáticos entre as horas).
+- Lamberts, R.; Dutra, L.; Pereira, F. O. R. *Eficiência energética na arquitetura*. 3. ed. Rio de Janeiro: Eletrobras/Procel, 2014 (p. 91, seção 3.5.7, zona de sombreamento; p. 135, Tabela 4-4). Disponível em https://labeee.ufsc.br/sites/default/files/apostilas/eficiencia_energetica_na_arquitetura.pdf.
+- Papst de Abreu, A. L. *Método estimativo da temperatura interna de edificações residenciais em uso*. Tese (Doutorado em Engenharia Civil), PPGEC/UFSC, Florianópolis, 2004 (Tabelas 8 e 22).
+- Goulart, S.; Lamberts, R.; Firmino, S. *Dados climáticos para projeto e avaliação energética de edificações para 14 cidades brasileiras*. Florianópolis: PROCEL/NPC-UFSC, 1998.
+- Freire, I. F. *Medição e verificação em eficiência energética: metodologia para determinação do baseline*. Dissertação (Mestrado), PPGEC/UFSC, 2001 (seção 2.5, temperatura do ponto de balanço).

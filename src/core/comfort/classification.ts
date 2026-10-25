@@ -20,7 +20,17 @@ export type RunningMeanOptions =
   | { averaging: 'arithmetic'; days: number };
 
 export type ClassificationMethod =
-  | { kind: 'adaptive'; acceptability: 80 | 90; running: RunningMeanOptions }
+  | {
+      kind: 'adaptive';
+      acceptability: 80 | 90;
+      running: RunningMeanOptions;
+      /**
+       * Acréscimo da temperatura interna por ganhos internos e solares, ΔT (°C, padrão 0): a
+       * operativa interna é estimada como T_h + ΔT e comparada com a faixa, o que equivale a descer
+       * os limites para o ar externo em ΔT (spec 08, seção 8.4; revisão da decisão 0020).
+       */
+      gains?: number;
+    }
   | { kind: 'thresholds'; cold: number | null; hot: number | null }
   | { kind: 'balance'; balance: number };
 
@@ -162,12 +172,14 @@ export function classifyHours(
   if (method.kind === 'adaptive') {
     const half = ADAPTIVE.halfWidth[method.acceptability];
     if (half === undefined) throw new RangeError('acceptability must be 80 or 90');
+    const gains = method.gains ?? 0;
+    if (!Number.isFinite(gains)) throw new RangeError('gains must be a finite number');
     prevailing = prevailingMean(dailyMeans(dryBulb), method.running);
     comfort = prevailing.map(adaptiveComfort);
     for (let i = 0; i < n; i++) {
       const c = comfort[Math.floor(i / 24)]!;
-      lower[i] = c - half;
-      upper[i] = c + half;
+      lower[i] = c - half - gains;
+      upper[i] = c + half - gains;
     }
   } else {
     const [lo, hi] =

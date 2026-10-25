@@ -154,6 +154,38 @@ describe('classifyHours', () => {
     expect(r.classes[0]).toBe(HOUR_CLASS.cold); // 20 °C < 20,5 °C
   });
 
+  it('faixa adaptativa com acréscimo por ganhos: os limites para o ar externo descem o acréscimo', () => {
+    const t = days(...new Array<number>(30).fill(20));
+    t[24 * 10 + 5] = 25.6; // 25,6 + 2 > 27,5: quente
+    t[24 * 10 + 6] = 25.4; // 25,4 + 2 < 27,5: neutra
+    const r = classifyHours(
+      t,
+      {
+        kind: 'adaptive',
+        acceptability: 80,
+        running: { averaging: 'arithmetic', days: 7 },
+        gains: 2,
+      },
+      'end',
+    );
+    // t_pma vem do ar externo, sem o acréscimo.
+    expect(r.prevailingMean![10]).toBeCloseTo(20, 12);
+    expect(r.comfort![10]).toBeCloseTo(24, 12);
+    expect(r.upper[24 * 10]).toBeCloseTo(25.5, 12);
+    expect(r.lower[24 * 10]).toBeCloseTo(18.5, 12);
+    expect(r.classes[24 * 10 + 5]).toBe(HOUR_CLASS.hot);
+    expect(r.classes[24 * 10 + 6]).toBe(HOUR_CLASS.neutral);
+    expect(r.classes[0]).toBe(HOUR_CLASS.neutral); // 20 + 2 = 22 °C, dentro de 20,5 a 27,5
+    expect(() =>
+      classifyHours(t, {
+        kind: 'adaptive',
+        acceptability: 80,
+        running: { averaging: 'arithmetic', days: 7 },
+        gains: Number.NaN,
+      }),
+    ).toThrow(RangeError);
+  });
+
   it('faixa adaptativa fora de aplicação (t_pma < 10 °C): horas sem classe', () => {
     const t = days(...new Array<number>(10).fill(8));
     const r = classifyHours(t, {

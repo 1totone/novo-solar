@@ -106,3 +106,34 @@ describe.skipIf(!available)('classificação das horas contra numpy e pythermalc
     }
   }
 });
+
+// Acréscimo por ganhos na faixa adaptativa (revisão da decisão 0020): a classe é a da temperatura
+// interna estimada, T_h + ΔT, contra a faixa de conforto da referência (pythermalcomfort), com a
+// média predominante do ar externo. Referência montada só com os arrays do JSON.
+describe.skipIf(!available)('faixa adaptativa com acréscimo por ganhos', () => {
+  const city = data.cidades.find((c) => c.id === 'florianopolis')!;
+  const ref = city.configuracoes.find((c) => c.id === 'adaptativa-80-exp')!;
+  const cfg = data.configuracoes.find((c) => c.id === ref.id)!;
+  const epw = parseEpw(readFileSync(`${root}.cache/epw/${city.arquivo}`, 'utf-8'));
+  for (const gains of [2, 4]) {
+    it(`Florianópolis, 80%, ΔT = ${gains} °C: classes de todas as horas`, () => {
+      if (cfg.metodo.kind !== 'adaptive') throw new Error('configuração inesperada');
+      const r = classifyHours(epw.fields.dryBulb, { ...cfg.metodo, gains }, 'mean');
+      let diff = 0;
+      let near = 0;
+      city.temperatura_hora_media!.forEach((t, i) => {
+        const c = ref.t_conforto![Math.floor(i / 24)];
+        let expected: string;
+        if (t === null || c === null || c === undefined) expected = 's';
+        else {
+          const indoor = t + gains;
+          if (Math.min(Math.abs(indoor - (c + 3.5)), Math.abs(indoor - (c - 3.5))) < 1e-9) near++;
+          expected = indoor > c + 3.5 ? 'q' : indoor < c - 3.5 ? 'f' : 'n';
+        }
+        if (CODE[r.classes[i]!] !== expected) diff++;
+      });
+      expect(near).toBe(0);
+      expect(diff).toBe(0);
+    });
+  }
+});
