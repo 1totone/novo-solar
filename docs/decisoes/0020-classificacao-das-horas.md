@@ -31,3 +31,30 @@ O F3.4 classifica as horas do arquivo climático em quentes (sombra desejada), f
 - A equação e os limites da ASHRAE 55 foram conferidos na documentação e no código do pythermalcomfort, não no texto da norma: o Anthony confere no texto.
 - Uma tabela de temperatura de equilíbrio por tipologia pode entrar depois, com fonte, sem mudar o núcleo (é um valor de T_eq).
 - O F3.5 usa as classes; a interface e as hipóteses na tela ficam para depois do portão 2.
+
+## Revisão crítica (25/10/2026)
+
+O Anthony pediu, com olhar crítico, para medir o viés da faixa adaptativa sobre o ar externo, que ignora os ganhos internos e solares, e para procurar fonte citável de temperatura de equilíbrio por tipologia.
+
+**Temperatura de equilíbrio por tipologia: sem fonte.** A busca (ASHRAE Handbook Fundamentals, graus-dia, CIBSE TM41, Olgyay, trabalhos do LabEEE) não achou fonte que dê valor por tipologia para resfriamento ou sombreamento aplicável ao Brasil; o item 4 fica como está (campo digitado, sem padrão). O que mais se aproxima, lido no texto completo: o critério de sombreamento de 20 °C de Lamberts, Dutra e Pereira (2014, p. 91 e Tabela 4-4 da p. 135), para ambiente sem carga térmica interna, com o limite "abaixo de 20 °C" quando há carga interna, sem número; e a diferença entre a temperatura interna e a média móvel da externa medida em casas ocupadas e ventiladas naturalmente (Papst de Abreu, 2004): de 0 a 2,7 °C em Florianópolis e de 0,2 a 4,0 °C em Curitiba. Nenhum dos dois é temperatura de equilíbrio por tipologia (spec 08, seção 8.4).
+
+**Viés medido** (relatório do F3.4, seção 4; teste `tests/referencia/classificacaoVies.test.ts`). Percentuais das horas com sol na janela e, entre parênteses, da radiação direta incidente sem proteção:
+
+| Cidade, fachada | Padrão | ΔT = 2 °C | ΔT = 4 °C | Limiar de 20 °C |
+|---|---|---|---|---|
+| Florianópolis, Norte: quentes / frias | 6% (6%) / 37% (32%) | 18% (18%) / 20% (19%) | 34% (38%) / 8% (8%) | 67% (68%) / 31% (30%) |
+| Florianópolis, Leste | 2% (1%) / 46% (41%) | 9% (8%) / 24% (20%) | 21% (24%) / 11% (9%) | 61% (67%) / 35% (31%) |
+| Brasília, Norte | 14% (12%) / 29% (23%) | 31% (31%) / 17% (13%) | 50% (53%) / 10% (6%) | 77% (80%) / 22% (18%) |
+| Brasília, Leste | 2% (0%) / 51% (52%) | 9% (4%) / 26% (27%) | 21% (16%) / 13% (12%) | 63% (63%) / 32% (35%) |
+| Porto Alegre, Norte | 12% (12%) / 42% (44%) | 23% (22%) / 29% (32%) | 35% (35%) / 19% (22%) | 59% (55%) / 40% (44%) |
+| Porto Alegre, Oeste | 22% (34%) / 22% (13%) | 37% (51%) / 13% (8%) | 54% (68%) / 8% (5%) | 77% (86%) / 22% (13%) |
+
+O viés existe e é grande: com o padrão, as horas de sol frias das fachadas Leste chegam à metade (o ar da manhã fica abaixo do limite inferior da faixa), e a radiação em horas quentes fica entre 0% e 21% nas fachadas Norte, Leste e Sul das três cidades. Um acréscimo de 2 °C, perto da mediana medida em casas ocupadas, dobra ou triplica a parte quente. Os dois indicadores do F3.5 mudam menos que as classes (são razões dentro de cada classe), o que esconde o viés se a tela mostrar só os percentuais.
+
+**Consequências da revisão:**
+
+- O núcleo ganha o **acréscimo por ganhos ΔT** na faixa adaptativa (padrão 0; spec 08, seção 8.4), para estimar a operativa interna como T_h + ΔT.
+- A interface mostra as classes **só nas horas com sol na janela**, contadas e ponderadas pela radiação, e a radiação de cada classe em kWh/m² junto dos dois indicadores.
+- O critério de 20 °C de Lamberts, Dutra e Pereira (2014) entra como sugestão com fonte no método de limiares.
+- A troca do padrão para o limiar de 20 °C fica proposta na **decisão 0024**, para o Anthony decidir; até lá o padrão continua a faixa adaptativa, com o aviso de viés na tela.
+
