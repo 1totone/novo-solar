@@ -23,6 +23,12 @@ describe('epwErrorMessage', () => {
     ).toBe('Fuso horário inválido no cabeçalho (linha 2): deve estar entre −12 h e +14 h.');
   });
 
+  it('CSV com ponto e vírgula: cita o separador e a linha', () => {
+    const msg = epwErrorMessage(new EpwParseError('semicolonCsv', 'x', 1), t, 'csv');
+    expect(msg).toContain('ponto e vírgula');
+    expect(msg).toContain('(linha 1)');
+  });
+
   it('não deixa marcadores sem valor', () => {
     const err = new EpwParseError('invalidHourCount', 'x');
     expect(epwErrorMessage(err, t)).not.toMatch(/\{\w+\}/);

@@ -6,6 +6,7 @@ const ERROR_KEYS: Record<EpwErrorCode, MessageKey> = {
   missingLocation: 'epw.error.missingLocation',
   missingCsvLocation: 'epw.error.missingCsvLocation',
   invalidCsvHeader: 'epw.error.invalidCsvHeader',
+  semicolonCsv: 'epw.error.semicolonCsv',
   invalidLatitude: 'epw.error.invalidLatitude',
   invalidLongitude: 'epw.error.invalidLongitude',
   invalidTimeZone: 'epw.error.invalidTimeZone',
