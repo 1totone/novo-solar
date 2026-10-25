@@ -920,3 +920,10 @@ fieldset.plain .check {
     display: none !important;
   }
 }
+
+/* Células da sobreposição em cálculo no web worker (achado 9). */
+.overlay-pending {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #555;
+}
