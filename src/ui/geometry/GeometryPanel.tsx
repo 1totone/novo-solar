@@ -29,15 +29,19 @@ export function GeometryPanel({
   scale,
   placeName,
   onChange,
+  open,
+  onOpenChange,
 }: {
   geometry: GeometryState;
   scale: number;
   placeName: string;
   onChange: (patch: Record<string, string>) => void;
+  /** Passo aberto (a carta acompanha a rolagem no computador enquanto ele está aberto). */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   const { t, formatNumber } = useI18n();
   const id = useId();
-  const [open, setOpen] = useState(() => geometry.defined);
   const [addCode, setAddCode] = useState<PieceCode>('b');
   const svgRef = useRef<SVGSVGElement>(null);
   // Ao começar, o botão some: o foco vai para a largura da janela, e não se perde na página.
@@ -119,7 +123,7 @@ export function GeometryPanel({
       aria-labelledby={`${id}-h`}
       data-testid="geometry-panel"
     >
-      <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
+      <details open={open} onToggle={(e) => onOpenChange(e.currentTarget.open)}>
         <summary>
           <h2 id={`${id}-h`}>
             <span className="step-n">6</span>

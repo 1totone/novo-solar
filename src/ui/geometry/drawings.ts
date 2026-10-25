@@ -39,6 +39,8 @@ export interface Dimension {
   value: number;
   from: Point2;
   to: Point2;
+  /** Texto antes da linha (acima ou à esquerda, padrão) ou depois (abaixo ou à direita). */
+  label?: 'before' | 'after';
 }
 
 export interface Drawing {
@@ -213,9 +215,9 @@ export function elevationDrawing(window: WindowGeometry, devices: readonly Devic
       });
     }
   }
+  // A altura da janela fica cotada no corte; na vista, só a largura (os γ ocupam as laterais).
   const dimensions: Dimension[] = [
-    { kind: 'width', value: W, from: [0, -0.08 * margin * 4], to: [W, -0.08 * margin * 4] },
-    { kind: 'height', value: H, from: [W + 0.32 * margin, 0], to: [W + 0.32 * margin, H] },
+    { kind: 'width', value: W, from: [0, -0.45 * margin], to: [W, -0.45 * margin], label: 'after' },
   ];
   return { shapes, angles, dimensions, infinite, bounds: lim };
 }

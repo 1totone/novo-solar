@@ -1113,6 +1113,16 @@ fieldset.piece legend {
   display: none;
 }
 
+/* Com um passo avançado aberto, a carta acompanha a rolagem no computador (decisão 0023). */
+@media (min-width: 52rem) {
+  .chart-section.follow {
+    position: sticky;
+    top: 0.5rem;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+}
+
 @media print {
   .print-geometry {
     display: block;

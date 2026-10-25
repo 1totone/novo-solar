@@ -78,6 +78,8 @@ export function App() {
         : null;
   const ov = useOverlay(epw, hashState);
   const geometry = geometryFromHash(hashState);
+  // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
+  const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
   const geometryScale = scaleFromHash(hashState.esc);
   const geometryPrint = geometry.window
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
@@ -234,6 +236,7 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
+    geometryOpen && wind.tab === 'chart' && !hashA ? 'follow' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -322,6 +325,8 @@ export function App() {
               scale={geometryScale}
               placeName={site.name}
               onChange={setHashState}
+              open={geometryOpen}
+              onOpenChange={setGeometryOpen}
             />
           </div>
           <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">

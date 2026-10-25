@@ -17,7 +17,8 @@ export const fase3PtBR = {
   'geometry.setback': 'Recuo do vidro (m)',
   'geometry.setbackHelp':
     'Distância do vidro ao plano externo da fachada (parede espessa). As peças são medidas a partir desse plano.',
-  'geometry.windowInvalid': 'Use números positivos para a largura e a altura, e zero ou mais para o recuo.',
+  'geometry.windowInvalid':
+    'Use números positivos para a largura e a altura, e zero ou mais para o recuo.',
   'geometry.pieces': 'Peças',
   'geometry.addType': 'Tipo de peça',
   'geometry.add': 'Adicionar peça',

@@ -54,14 +54,15 @@ export const GeometryDrawing = forwardRef<
     const mx = (a[0] + b[0]) / 2 + dx;
     const my = -(a[1] + b[1]) / 2;
     const vertical = Math.abs(a[0] - b[0]) < 1e-9;
+    const after = dim.label === 'after';
     return (
       <g key={key} className="gd-dim" data-testid={`gd-dim-${dim.kind}`}>
         <path d={pathOf([a, b], dx)} />
         <text
-          x={vertical ? mx - 0.35 * font : mx}
-          y={vertical ? my : my - 0.3 * font}
+          x={vertical ? mx + (after ? 0.35 : -0.35) * font : mx}
+          y={vertical ? my : my + (after ? 1.1 : -0.3) * font}
           fontSize={font}
-          textAnchor={vertical ? 'end' : 'middle'}
+          textAnchor={vertical ? (after ? 'start' : 'end') : 'middle'}
           dominantBaseline={vertical ? 'middle' : 'auto'}
         >
           {fmt(dim.value)}
