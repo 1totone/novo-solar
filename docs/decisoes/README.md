@@ -23,6 +23,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0017](0017-cidades-e-dados-historicos.md) | Cidades, dados recentes e dados históricos do SOL-AR 6.2 | 2026-10-24 | aceita (radiação histórica a confirmar no portão 2) |
 | [0018](0018-mascara-pela-geometria.md) | Máscara pela geometria e fração ensolarada hora a hora | 2026-10-24 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0019](0019-verificacao-energyplus.md) | Critérios da verificação contra o EnergyPlus (F3.8) | 2026-10-24 | proposta (arranjo adiantado; a confirmar na integração da Fase 3) |
+| [0020](0020-classificacao-das-horas.md) | Classificação das horas pela temperatura externa (F3.4) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 
 ## Modelo
 

@@ -12,6 +12,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - `casos/carta/linhas-horarias.csv`: 852 pontos das linhas horárias (hora solar verdadeira, 5 h a 19 h, dia 21 de cada mês, 6 locais), com o pvlib.
   - `casos/vento/rosas.json`: 150 rosas (Florianópolis, Porto Alegre e Belém; 8 e 16 setores; estações e períodos do dia), calculadas em Python puro.
   - `casos/mascara/tracado-raios.json`: 9 casos de janela com brise, aletas e grelha, 1500 direções do sol cada, classificadas por traçado de raios (sombra total, centro à sombra e fração sombreada).
+  - `casos/classificacao/classificacao-horas.json`: médias diárias, temperatura média predominante, temperatura de conforto adaptativo e classe de cada hora nos 6 EPWs de teste (numpy e pythermalcomfort), F3.4.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
@@ -20,6 +21,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F2.4-sobreposicao.md`](relatorios/F2.4-sobreposicao.md): cada hora dos EPWs de Florianópolis e Manaus na célula certa, com teste negativo de fuso.
   - [`relatorios/F2.5-rosa-dos-ventos.md`](relatorios/F2.5-rosa-dos-ventos.md): 150 rosas contra um cálculo independente em Python.
   - [`relatorios/F2.6-saidas.md`](relatorios/F2.6-saidas.md): escala da carta impressa (navegador e PDF rasterizado a 600 dpi) e exportações.
+  - [`relatorios/F3.4-classificacao.md`](relatorios/F3.4-classificacao.md): classificação das horas contra numpy e o pythermalcomfort.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -32,6 +34,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/gerar_referencia_epw.py` | gera a referência do leitor de EPW com o `pvlib.iotools.read_epw` |
 | `scripts/mascara_tracado_raios.py` | traçado de raios com janela e placas reais para a máscara pelos ângulos (só biblioteca padrão) |
 | `scripts/rosa_dos_ventos.py` | estatísticas da rosa dos ventos dos EPWs de teste (só biblioteca padrão) |
+| `scripts/classificacao_horas.py` | classificação das horas (F3.4): médias com numpy, faixa adaptativa da ASHRAE 55 com o pythermalcomfort |
 
 ## Referências independentes
 
