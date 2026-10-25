@@ -8,7 +8,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import type { Site } from '../../src/core/chart/sunChart';
-import { classifyHours, DEFAULT_METHOD } from '../../src/core/comfort/classification';
+import { classifyHours, type ClassificationMethod } from '../../src/core/comfort/classification';
+
+// Classes da referência: faixa adaptativa de 80%, média exponencial (α = 0,8, 30 dias), fixada aqui
+// para não depender do padrão da interface (decisão 0024, proposta).
+const REFERENCE_METHOD: ClassificationMethod = {
+  kind: 'adaptive',
+  acceptability: 80,
+  running: { averaging: 'exponential', alpha: 0.8, days: 30 },
+};
 import { parseEpw } from '../../src/core/epw/parseEpw';
 import { buildScene, type Device, type WindowGeometry } from '../../src/core/shading/geometry';
 import { hourlyShading, sunSamples } from '../../src/core/shading/hourly';
@@ -60,7 +68,7 @@ describe.skipIf(!available)('indicadores nas cenas do F3.8 (EnergyPlus 26.2.0)',
       );
       const r = beamIndicators(
         hourlyBeam(shading, epw, epw.fields.directNormal),
-        classifyHours(epw.fields.dryBulb, DEFAULT_METHOD).classes,
+        classifyHours(epw.fields.dryBulb, REFERENCE_METHOD).classes,
       );
       const s4 = c.passos.S4;
       const kwh = (wh: number) => wh / 1000;

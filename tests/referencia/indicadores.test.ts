@@ -5,7 +5,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import type { Site } from '../../src/core/chart/sunChart';
-import { classifyHours, DEFAULT_METHOD } from '../../src/core/comfort/classification';
+import { classifyHours, type ClassificationMethod } from '../../src/core/comfort/classification';
+
+// Classes da referência: faixa adaptativa de 80%, média exponencial (α = 0,8, 30 dias), fixada aqui
+// para não depender do padrão da interface (decisão 0024, proposta).
+const REFERENCE_METHOD: ClassificationMethod = {
+  kind: 'adaptive',
+  acceptability: 80,
+  running: { averaging: 'exponential', alpha: 0.8, days: 30 },
+};
 import { parseEpw } from '../../src/core/epw/parseEpw';
 import { buildScene, type Device, type WindowGeometry } from '../../src/core/shading/geometry';
 import { hourlyShading, sunSamples, type SunSamples } from '../../src/core/shading/hourly';
@@ -82,7 +90,7 @@ describe.skipIf(!available)('indicadores contra pvlib, shapely e a DNI do EPW', 
         relClose(beam.incident[i]!, e0);
         relClose(beam.admitted[i]!, e);
       }
-      const classes = classifyHours(epw.fields.dryBulb, DEFAULT_METHOD, 'mean').classes;
+      const classes = classifyHours(epw.fields.dryBulb, REFERENCE_METHOD, 'mean').classes;
       const r = beamIndicators(beam, classes);
       for (const k of ['hot', 'cold', 'neutral', 'none'] as const) {
         relClose(r.byClass[k].incident, c.por_classe[k].incident);
