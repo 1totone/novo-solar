@@ -15,6 +15,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - `casos/classificacao/classificacao-horas.json`: médias diárias, temperatura média predominante, temperatura de conforto adaptativo e classe de cada hora nos 6 EPWs de teste (numpy e pythermalcomfort), F3.4.
   - `casos/indicadores/indicadores.json`: radiação direta incidente por classe de hora e percentuais (pvlib, shapely e DNI do EPW), F3.5.
   - `casos/energyplus/indicadores.json`: radiação direta incidente na janela com e sem as placas no EnergyPlus 26.2.0, com a decomposição das diferenças, F3.5.
+  - `casos/dimensionamento/angulos.json`: ângulos exigidos no dimensionamento inverso em 5 casos, inclusive o tutorial da UFU (pvlib), F3.6.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
@@ -26,6 +27,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F3.4-classificacao.md`](relatorios/F3.4-classificacao.md): classificação das horas contra numpy e o pythermalcomfort.
   - [`relatorios/F3.5-memoria-de-calculo.md`](relatorios/F3.5-memoria-de-calculo.md): indicadores calculados à mão em casos simples.
   - [`relatorios/F3.5-indicadores.md`](relatorios/F3.5-indicadores.md): indicadores contra pvlib e shapely e contra o EnergyPlus.
+  - [`relatorios/F3.6-dimensionamento-inverso.md`](relatorios/F3.6-dimensionamento-inverso.md): ângulos contra o pvlib, ida e volta, minimalidade e o caso do tutorial da UFU.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -41,6 +43,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/classificacao_horas.py` | classificação das horas (F3.4): médias com numpy, faixa adaptativa da ASHRAE 55 com o pythermalcomfort |
 | `scripts/indicadores.py` | indicadores do F3.5 com pvlib, shapely e a DNI do EPW |
 | `scripts/energyplus_indicadores.py` | radiação direta incidente na janela no EnergyPlus, com e sem as placas, e decomposição das diferenças |
+| `scripts/dimensionamento_inverso.py` | ângulos exigidos no dimensionamento inverso (F3.6) com o pvlib |
 
 ## Referências independentes
 

@@ -25,6 +25,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0019](0019-verificacao-energyplus.md) | Critérios da verificação contra o EnergyPlus (F3.8) | 2026-10-24 | proposta (arranjo adiantado; a confirmar na integração da Fase 3) |
 | [0020](0020-classificacao-das-horas.md) | Classificação das horas pela temperatura externa (F3.4) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0021](0021-indicadores-de-sombreamento.md) | Indicadores de sombreamento: radiação direta bloqueada e admitida (F3.5) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
+| [0022](0022-dimensionamento-inverso.md) | Dimensionamento inverso: do período a sombrear para os ângulos e as dimensões (F3.6) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 
 ## Modelo
 
