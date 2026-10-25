@@ -3,10 +3,12 @@ import { downloadBlob, fileSlug, standaloneSvg } from '../export/image';
 import { useI18n } from '../i18n/useI18n';
 import type { MessageKey } from '../i18n/i18n';
 import {
+  formatMeters,
   MAX_PIECES,
   newPieceRaw,
   piecesPatch,
   PIECE_FIELDS,
+  pointPatch,
   type GeometryState,
   type PieceCode,
   type PieceField,
@@ -82,6 +84,8 @@ export function GeometryPanel({
     : '';
   const paper = win ? paperDrawing(win, geometry.devices, scale) : null;
   const size = paper;
+  const point = geometry.point?.value ?? null;
+  const hasPlates = win !== null && (geometry.devices.length > 0 || (win.setback ?? 0) > 0);
 
   const setPieceField = (i: number, k: number, value: string) => {
     const next = pieceList.map((p, j) =>
@@ -267,6 +271,12 @@ export function GeometryPanel({
                       font={screenFont(win, geometry.devices, part, boxPx)}
                       parts={part}
                       testId={`geometry-${part}`}
+                      point={point}
+                      onPick={
+                        part === 'elevation' && geometry.point
+                          ? (p) => onChange(pointPatch(formatMeters(p.x), formatMeters(p.z)))
+                          : undefined
+                      }
                     />
                   ))}
                 </div>
@@ -283,6 +293,7 @@ export function GeometryPanel({
                         height: `${paper.height.toFixed(2)}cm`,
                       }}
                       testId="geometry-export-drawing"
+                      point={point}
                     />
                   </div>
                 )}
@@ -320,6 +331,67 @@ export function GeometryPanel({
                       height: formatNumber(size.height, 1),
                     })}
                   </p>
+                )}
+                <h3 className="sub-heading">{t('shading.heading')}</h3>
+                {!hasPlates && <p className="note">{t('shading.noPlates')}</p>}
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={geometry.contours}
+                    data-testid="shading-contours"
+                    onChange={(e) => onChange({ cs: e.target.checked ? '' : '0' })}
+                  />
+                  {t('shading.showContours')}
+                </label>
+                <p className="note">{t('shading.contoursHelp')}</p>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={geometry.point !== null}
+                    data-testid="shading-point-toggle"
+                    onChange={(e) =>
+                      onChange(
+                        e.target.checked
+                          ? pointPatch(formatMeters(win.width / 2), formatMeters(win.height / 2))
+                          : { pt: '' },
+                      )
+                    }
+                  />
+                  {t('shading.showPoint')}
+                </label>
+                {geometry.point && (
+                  <>
+                    <div className="piece-grid">
+                      {(['x', 'z'] as const).map((k) => (
+                        <div className="field" key={k}>
+                          <label htmlFor={`${id}-pt-${k}`}>
+                            {t(k === 'x' ? 'shading.pointX' : 'shading.pointZ')}
+                          </label>
+                          <input
+                            id={`${id}-pt-${k}`}
+                            type="text"
+                            inputMode="decimal"
+                            value={geometry.point!.raw[k]}
+                            aria-invalid={geometry.point!.invalid.includes(k)}
+                            data-testid={`shading-point-${k}`}
+                            onChange={(e) => {
+                              const raw = { ...geometry.point!.raw, [k]: e.target.value };
+                              onChange(pointPatch(raw.x, raw.z));
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {geometry.point.invalid.length > 0 && (
+                      <p className="error" role="alert">
+                        {t('shading.pointInvalid', {
+                          width: fmt(win.width),
+                          height: fmt(win.height),
+                        })}
+                      </p>
+                    )}
+                    <p className="note">{t('shading.pointHelp')}</p>
+                  </>
                 )}
               </>
             )}

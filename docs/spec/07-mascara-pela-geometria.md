@@ -85,6 +85,8 @@ As curvas de 0, 25, 50, 75 e 100% são as bordas das regiões {f_s > 0}, {f_s �
 
 **Precisão.** Os vértices estão sobre a curva exata (|f_s − nível| ≤ 10⁻⁶; no brise infinito, a menos de 10⁻⁸ grau da curva α). Entre dois vértices vizinhos (até cerca de 1° de distância no céu), a curva é aproximada por um segmento reto na carta; no brise infinito, o meio dos segmentos fica a até 0,002° da curva exata (distância angular na esfera; o erro cai com o quadrado do passo da grade). Regiões menores que uma célula podem não aparecer.
 
+**Região de sombra total.** A região {f_s ≥ 1 − 10⁻⁹}, que a carta preenche, sai da mesma grade e dos mesmos pontos de cruzamento da curva de 100%: as linhas fechadas entram como anéis; cada linha aberta termina no contorno do retângulo (φ, ρ), e o anel segue pelo contorno, a partir de uma ponta, pelo lado em que os nós da grade estão dentro da região, até a ponta de linha vizinha (entre duas pontas vizinhas no contorno, os nós estão todos dentro ou todos fora), e assim por diante até fechar. Sem pontas no contorno, o retângulo inteiro entra como anel se o contorno está dentro. Os anéis são preenchidos pela regra par-ímpar, que dá os furos e as ilhas sem precisar do sentido de cada anel. No céu, o contorno do retângulo é o horizonte (φ = 0° e 180°), o plano da fachada (ρ = ρ_máx) e a normal (ρ = 0, um ponto só). Conferência: em campos analíticos (disco, meio disco na borda, quadrado com furo, coroa, dois cantos, faixa de borda a borda) e em quatro cenas (brise infinito, brise e aletas, brise da Figura 22 com o recuo do vidro e lâminas verticais que se sobrepõem de frente), o preenchimento coincide com f_s ≥ 1 − 10⁻⁹ em todas as direções sorteadas a mais de 0,01 da borda na carta (`contours.test.ts`).
+
 **Casos analíticos.** Brise horizontal infinito, sem afastamento (g = 0), a uma altura e acima da verga: a sombra cobre a faixa da janela abaixo da verga de altura D · tan α_sol − e, então
 
   f_s = mín(1, máx(0, (D · tan α_sol − e) / H))
@@ -190,6 +192,19 @@ O corte e a vista são desenhados a partir das mesmas placas que entram no cálc
 - **Escala:** o desenho é em metros. Na tela, a letra tem cerca de 12 px; na exportação em SVG e na impressão do passo 5, corte e vista saem lado a lado com o tamanho real na escala escolhida (1:10, 1:20, 1:25, 1:50 ou 1:100, padrão 1:50) e letra de 2,5 mm no papel.
 
 Conferência: as funções do desenho reproduzem os ângulos e as cotas da Figura 22 do tutorial (α = 55,0° com a parede de 15 cm; γ = 50,2° e 59,5°) e o espelhamento da vista (`src/ui/geometry/drawings.test.ts`); os testes de ponta a ponta leem os pixels do corte e da vista (brise escuro na verga, vidro azul, prolongamento direito à esquerda do desenho, parede além das pontas), o tamanho do SVG exportado e o tamanho impresso (`e2e/geometria.spec.ts`).
+
+## 7.12 Curvas e máscara de um ponto na carta (F3.2)
+
+Com a janela e ao menos uma peça (ou um recuo do vidro, que já sombreia) no passo 6, a carta ganha duas camadas, cada uma com a sua opção no passo, na seção "Na carta":
+
+- **Curvas de 0, 25, 50, 75 e 100%** (seção 7.5), para a orientação do passo 2, com o percentual escrito no meio de cada curva (ou num ponto de reserva da curva, quando o meio cai sobre outro rótulo). A curva de 0% é tracejada e a de 100% é mais grossa, para que o nível não dependa só da cor; a região de sombra total tem preenchimento leve, ou hachura horizontal quando há dados climáticos sobre a carta (como a máscara do passo 3). As curvas aparecem por padrão; `cs=0` no link as oculta.
+- **Máscara de um ponto** (seção 7.4), em hachura vertical violeta, para o ponto (x, z) do vidro: x medido da lateral esquerda de quem está dentro olhando para fora e z acima do peitoril, de 0 à largura e de 0 à altura da janela. Liga com o ponto no centro da janela; o ponto pode ser digitado ou escolhido com um clique na vista de fora (arredondado a 5 cm, porque um pixel da vista passa de 1 cm no celular), e aparece marcado no corte e na vista. No link, `pt=x_z`.
+
+Cores provisórias até a paleta da Fase 4 (decisão 0023): azul-petróleo #005f73 nas curvas e nos rótulos (contraste de 7,3:1 sobre o branco) e violeta #6f42c1 na hachura do ponto.
+
+As curvas de uma geometria levam de 0,2 a 0,6 s num computador (mais num celular): o cálculo roda num web worker (`src/ui/shading/`), com cache das últimas 16 geometrias, e só depende da janela, das peças e da orientação, não do local nem do arquivo. Enquanto o worker calcula, a carta mostra as curvas anteriores esmaecidas e o aviso "Calculando as curvas da proteção…", sobre o canto da carta, sem empurrar o resto da tela; um pedido que ninguém mais espera (a geometria mudou de novo) sai da fila antes de começar. A máscara de um ponto é uma região exata (seção 7.4), leve, calculada na linha principal. A impressão leva as duas camadas como estão na tela; "só o transferidor" as tira.
+
+Conferência de ponta a ponta (`e2e/curvas.spec.ts`), com pixels lidos da carta no caso analítico do brise infinito: cada curva de 25 a 100% passa pela altura h com tan h = cos ψ · (e + p · H) / D a ψ = 25° (e não a 3° dela), o preenchimento está dentro da curva de 100% e não entre as de 75% e 100%, e a hachura do ponto do centro da janela fica acima da curva de 50% e não abaixo dela (seção 7.4: é o mesmo critério); também o clique na vista, o cálculo no worker, a impressão, o teclado e o axe.
 
 ## Referências
 

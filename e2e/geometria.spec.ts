@@ -16,8 +16,13 @@ const isWall = ([r, g, b]: Rgb) =>
 const isWhite = ([r, g, b]: Rgb) => r > 250 && g > 250 && b > 250;
 const isGlassLine = ([r, , b]: Rgb) => b > 170 && r < 90;
 
-/** Rola o desenho para a parte de baixo da tela (no celular, a carta fixa ocupa o topo). */
+/**
+ * Rola o desenho para a parte de baixo da tela (no celular, a carta fixa ocupa o topo), depois que
+ * as curvas da carta chegam do worker: a legenda delas muda a altura da área fixa.
+ */
 async function reveal(svg: Locator) {
+  const page = svg.page();
+  await expect(page.getByTestId('shading-pending')).toHaveCount(0);
   await svg.evaluate((el) => el.scrollIntoView({ block: 'end' }));
 }
 

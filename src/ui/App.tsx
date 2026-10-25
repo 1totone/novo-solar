@@ -396,6 +396,7 @@ export function App() {
                     height: `${geometryPrint.height.toFixed(2)}cm`,
                   }}
                   testId="print-geometry-drawing"
+                  point={geometry.point?.value ?? null}
                 />
               </div>
             )}
