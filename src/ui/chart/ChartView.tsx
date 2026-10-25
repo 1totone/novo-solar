@@ -134,6 +134,11 @@ export function ChartView({
           )}
         </p>
       )}
+      {ov.pending && ov.quantity && (
+        <p className="overlay-pending" role="status" data-testid="overlay-pending">
+          {t('chart.overlayPending')}
+        </p>
+      )}
       {showOverlay && (
         <CellTable
           cells={ov.cells!}
