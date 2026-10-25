@@ -101,6 +101,56 @@ describe('dimensões (seção 10.3)', () => {
   });
 });
 
+describe('janela recuada (seções 10.3 e 10.4)', () => {
+  const angles = requiredAngles([sample(45, 0), sample(45, 30), sample(45, -30), sample(20, 70)]);
+
+  it('brise: profundidade descontando o recuo; prolongamentos pelo γ, sem desconto', () => {
+    const plain = sizeOverhang(WINDOW, angles);
+    const deep = sizeOverhang({ ...WINDOW, setback: 0.2 }, angles);
+    if (!plain.ok || !deep.ok) throw new Error();
+    expect(deep.device.depth).toBeCloseTo(plain.device.depth - 0.2, 12);
+    expect(deep.device.extendRight).toBe(plain.device.extendRight);
+    const gap = sizeOverhang({ ...WINDOW, setback: 0.2 }, angles, { gap: 0.1 });
+    if (!gap.ok) throw new Error();
+    const rise = 1 + 0.1 * Math.tan(angles.alphaMax!.external * RAD);
+    expect(gap.device.above).toBeCloseTo(rise - 1, 12);
+    expect(gap.device.depth).toBeCloseTo(rise / Math.tan(angles.alpha!.external * RAD) - 0.3, 12);
+  });
+
+  it('recuo que basta: H · tan α_int ≤ d', () => {
+    // perfil mínimo de 45°: H · cot 45° = 1 m
+    expect(sizeOverhang({ ...WINDOW, setback: 1.001 }, angles)).toEqual({
+      ok: false,
+      reason: 'setbackSuffices',
+    });
+    expect(sizeOverhang({ ...WINDOW, setback: 0.999 }, angles).ok).toBe(true);
+    expect(() => sizeOverhang({ ...WINDOW, setback: -0.1 }, angles)).toThrow(RangeError);
+  });
+
+  it('lâminas: corda (D + d) / n = p · tan α_int; com n = 1, o próprio brise', () => {
+    const r = sizeOverhang({ ...WINDOW, setback: 0.2 }, angles);
+    if (!r.ok) throw new Error();
+    const l = subdivideOverhang({ ...WINDOW, setback: 0.2 }, r.device, 4);
+    expect(l.chord).toBeCloseTo((r.device.depth + 0.2) / 4, 12);
+    expect(l.chord / l.pitch).toBeCloseTo(1 / Math.tan(angles.alpha!.external * RAD), 12);
+    expect(subdivideOverhang({ ...WINDOW, setback: 0.2 }, r.device, 1).chord).toBe(r.device.depth);
+  });
+
+  it('aletas: profundidade W · tan β_int − d; ombreira que basta de um lado', () => {
+    const a = requiredAngles([sample(10, 60), sample(30, 70), sample(10, -80)]);
+    const plain = sizeFins(WINDOW, a);
+    expect(plain.setbackSuffices).toEqual({ right: false, left: false });
+    // β esquerdo de 80°: W · cot 80° = 0,176 m; β direito de 60°: 0,577 m
+    const f = sizeFins({ ...WINDOW, setback: 0.2 }, a);
+    expect(f.right!.depth).toBeCloseTo(plain.right!.depth - 0.2, 12);
+    expect(f.right!.extendAbove).toBe(plain.right!.extendAbove);
+    expect(f.left).toBeNull();
+    expect(f.setbackSuffices).toEqual({ right: false, left: true });
+    const v = subdivideFins({ ...WINDOW, setback: 0.2 }, f, 2);
+    expect(v.chord).toBeCloseTo((f.right!.depth + 0.2) / 2, 12);
+  });
+});
+
 describe('periodSamples', () => {
   const site = { latitude: -27.67, longitude: -48.547, elevation: 6.1, timeZone: -3 };
 
