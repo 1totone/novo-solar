@@ -15,6 +15,7 @@ import type { Drawing } from './mask/DrawingLayer';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
+import { timeZoneOffset } from './timeZoneOffset';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
 import { buildHash, parseHash, type HashState } from './state/hashState';
@@ -316,7 +317,7 @@ export function App() {
                 {t('print.details', {
                   latitude: formatNumber(site.latitude, 3),
                   longitude: formatNumber(site.longitude, 3),
-                  timeZone: `${site.timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(site.timeZone))}`,
+                  timeZone: timeZoneOffset(site.timeZone, formatNumber),
                   source,
                   date: new Date().toLocaleDateString('pt-BR'),
                   radius: fmt(print.radiusCm),
