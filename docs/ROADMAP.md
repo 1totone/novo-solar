@@ -17,7 +17,6 @@
 - Confirmar no portão 2 o tratamento da radiação dos dados históricos: mostrada como está, com avisos (decisão 0017).
 - Decidir no portão 2 as estações da rosa dos ventos: pelos meses (decisão 0016) ou astronômicas, como as rosas do 6.2 (diferença de até 13,6 pontos percentuais; relatório do F2.8).
 - Opcional: conferir no 6.2 real, com `docs/validacao/casos/solar-6.2/teste-hora.csv`, a hora em que ele desenha os dados (relatório do F2.8, seção 6).
-- Enviar fotos das p. 9 a 15 do tutorial do SOL-AR da UFU (Bortoli e Saramago), com as figuras 22 a 25: o PDF não foi encontrado (site do LabEEE com erro 500). Servem para a conferência quantitativa do caso do F2.3 e para as dimensões do caso do F3.6, único item pendente dele.
 - Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
 
 **Última atualização:** 25/10/2026.

@@ -1,8 +1,11 @@
-// Caso da literatura (F2.3): exemplo do tutorial do SOL-AR de Bortoli e Saramago (UFU), p. 13 a 15.
-// Brasília, fachada nordeste com o transferidor a 30°, sombrear das 9 h às 15 h (hora solar):
-// α = 55°, γ direita = 50°, γ esquerda = 60° (referência interna, como na Figura 11). Variante com
-// o brise afastado 28 cm da parede: α1 = 55°, α2 = 20°. Verificação qualitativa, porque o tutorial
-// não dá a geometria nem a hora a hora; números em docs/validacao/relatorios/F2.3-mascara.md.
+// Caso da literatura (F2.3): exemplo do tutorial do SOL-AR de Bortoli e Saramago (UFU), p. 9 a 15
+// (https://labeee.ufsc.br/sites/default/files/softwares/tutorial-analysis-sol-ar.pdf, não versionado).
+// Brasília, fachada nordeste com o transferidor a 30°, sombrear das 9 h às 15 h em hora solar, o ano
+// todo (área verde da Figura 13): α = 55°, γ direita = 50°, γ esquerda = 60° (referência interna,
+// Figura 11). Variante com o brise afastado 28 cm da parede (Figuras 26 a 28): α1 = 55°, α2 = 20°.
+// Números em docs/validacao/relatorios/F2.3-mascara.md.
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { project } from '../../src/core/chart/stereographic';
 import { chartDates, hourLine, type ChartDate } from '../../src/core/chart/sunChart';
@@ -88,5 +91,64 @@ describe('tutorial do SOL-AR (UFU): Brasília, fachada nordeste, das 9 h às 15 
     const extra = misses(WITH_GAP, [june.d]).filter((x) => x.profile > 35);
     expect(extra.map((x) => x.hour)).toEqual([14.75, 15]);
     for (const x of extra) expect(x.profile).toBeLessThan(73);
+  });
+});
+
+// Figura 27 do tutorial (p. 15): máscara pintada no SOL-AR 6.2 com α1 = 55°, α2 = 20°, γ direita
+// = 50° e γ esquerda = 60°, transferidor a 30°, referência interna. Pixels amostrados da figura e
+// registrados pelo círculo do horizonte (docs/validacao/scripts/tutorial_ufu_figura27.py; o PDF não é
+// versionado). Vermelho: zona de eficiência total; amarelo: parcial; branco: fora.
+interface Figure27 {
+  registro: { raio_px: number };
+  pontos: [number, number, 'total' | 'parcial' | 'fora'][];
+}
+const figure27 = JSON.parse(
+  readFileSync(
+    fileURLToPath(
+      new URL('../../docs/validacao/casos/mascara/tutorial-ufu-figura27.json', import.meta.url),
+    ),
+    'utf-8',
+  ),
+) as Figure27;
+
+/** Concordância com a figura: total ↔ sombra total calculada; parcial ↔ resto da frente da fachada. */
+function figureAgreement(orientation: number, set: ShadingSet) {
+  const { total } = maskRegions(orientation, 'internal', set);
+  // Diante da fachada: componente positiva na direção da normal (azimute = orientação).
+  const front = (x: number, y: number) =>
+    x * Math.sin(orientation * RAD) + y * Math.cos(orientation * RAD) > 0;
+  let same = 0;
+  let inter = 0;
+  let union = 0;
+  for (const [x, y, c] of figure27.pontos) {
+    const isTotal = regionContains(total, x, y);
+    const mine = isTotal ? 'total' : front(x, y) ? 'parcial' : 'fora';
+    if (mine === c) same++;
+    if (isTotal && c === 'total') inter++;
+    if (isTotal || c === 'total') union++;
+  }
+  return { agreement: same / figure27.pontos.length, iou: inter / union };
+}
+
+describe('Figura 27 do tutorial: zona total pintada no 6.2 contra a máscara calculada', () => {
+  it('registro da carta: círculo do horizonte com resíduo abaixo de 1 px e amostra suficiente', () => {
+    expect(figure27.pontos.filter((p) => p[2] === 'total').length).toBeGreaterThan(500);
+    expect(figure27.pontos.length).toBeGreaterThan(6000);
+  });
+
+  it('a zona total é a faixa entre α1 e α2 limitada pelos γ, com γ direita a 50° do lado direito', () => {
+    const r = figureAgreement(ORIENTATION, WITH_GAP);
+    // Só pixels de cor pura entram na amostra; os de linha (cinza) ficam de fora.
+    expect(r.agreement).toBeGreaterThanOrEqual(0.995);
+    expect(r.iou).toBeGreaterThanOrEqual(0.99);
+  });
+
+  it('a comparação discrimina: lados trocados, sem α2 ou orientação a ±5° não reproduzem a figura', () => {
+    expect(
+      figureAgreement(ORIENTATION, { ...WITH_GAP, gammaRight: [60], gammaLeft: [50] }).iou,
+    ).toBeLessThan(0.9);
+    expect(figureAgreement(ORIENTATION, DESIGN).iou).toBeLessThan(0.75);
+    expect(figureAgreement(ORIENTATION - 5, WITH_GAP).iou).toBeLessThan(0.95);
+    expect(figureAgreement(ORIENTATION + 5, WITH_GAP).iou).toBeLessThan(0.95);
   });
 });
