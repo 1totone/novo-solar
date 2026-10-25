@@ -11,6 +11,7 @@
 5. [Sobreposição de dados](05-sobreposicao-de-dados.md): células como áreas (quinzenas, semestres pelos solstícios, intervalos de radiação e temperatura, bordas entre quinzenas), cor pela média ou pela frequência acima de um limiar, faixas padrão e pelo arquivo.
 6. [Vento](06-vento.md): rosa dos ventos (calmaria, setores, classes de velocidade, estações e períodos do dia, resolução da velocidade).
 7. [Máscara pela geometria e fração ensolarada](07-mascara-pela-geometria.md) (proposta): janela, placas e dispositivos; percentual sombreado exato; máscara de um ponto; curvas de 0 a 100%; fração ensolarada hora a hora e mapa mês × hora.
+8. [Classificação das horas](08-classificacao-das-horas.md) (proposta): temperatura da hora, temperatura média predominante do EPW, faixa adaptativa da ASHRAE 55, limiares fixos e temperatura de equilíbrio; hipóteses mostradas.
 
 ## Resumo do que está fixado
 
@@ -42,7 +43,7 @@ Serão escritos no passo de cada módulo, com referências e testes:
 
 - **Máscaras por geometria (F3.1 a F3.3):** núcleo descrito na seção 7 (proposta, decisão 0018): percentual sombreado exato pela área da união das sombras, no lugar da amostragem em grade prevista na v0. Falta o formulário e o desenho da janela e dos dispositivos (F3.1).
 - **Vento, correção para altura e rugosidade e filtro por condição térmica (F4.4):** como no EnergyPlus: V_z = V_met · (δ_met / z_met)^α_met · (z / δ)^α, com os parâmetros de terreno da *Engineering Reference*. A rosa em si está na seção 6.
-- **Classificação das horas (F3.4):** limiares editáveis; faixa do conforto adaptativo da ASHRAE 55 (T_conf = 0,31 · T_pma,ext + 17,8 °C; ±3,5 K para 80% e ±2,5 K para 90% de aceitabilidade; válida para 10 °C ≤ T_pma,ext ≤ 33,5 °C) como referência; temperatura de equilíbrio por tipologia. A temperatura externa é um indicador aproximado da necessidade de sombra, e a interface deve dizer isso.
+- **Classificação das horas (F3.4):** núcleo descrito na seção 8 (proposta, decisão 0020). Falta a interface com as hipóteses na tela.
 - **Indicadores de sombreamento (F3.5):** radiação direta incidente na janela por hora, E = DNI · cos θ · f_ens (θ: ângulo de incidência; f_ens: fração ensolarada); parcelas bloqueada e admitida por classe de hora; difusa com fator de visão do céu na Fase 5.
 
 ## Tolerâncias de validação
