@@ -377,6 +377,9 @@ export function App() {
             <li>
               <a href="./wireframes/">{t('status.wireframesLink')}</a>
             </li>
+            <li>
+              <a href="./wireframes/fase-3.html">{t('status.wireframes3Link')}</a>
+            </li>
           </ul>
         </section>
 
