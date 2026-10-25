@@ -26,9 +26,14 @@ const STYLE_PROPS = [
 
 /**
  * SVG independente do elemento dado. Com `size`, largura e altura ficam nessa medida (ex.:
- * "15.84cm" para a escala de impressão, ou "2400" para o PNG).
+ * "15.84cm" para a escala de impressão, ou "2400" para o PNG); para desenhos não quadrados, as duas
+ * medidas separadas.
  */
-export function standaloneSvg(svg: SVGSVGElement, description: string, size?: string): string {
+export function standaloneSvg(
+  svg: SVGSVGElement,
+  description: string,
+  size?: string | { width: string; height: string },
+): string {
   const clone = svg.cloneNode(true) as SVGSVGElement;
   const source = [svg, ...Array.from(svg.querySelectorAll('*'))];
   const target = [clone, ...Array.from(clone.querySelectorAll('*'))];
@@ -40,8 +45,8 @@ export function standaloneSvg(svg: SVGSVGElement, description: string, size?: st
   });
   clone.setAttribute('xmlns', SVG_NS);
   if (size) {
-    clone.setAttribute('width', size);
-    clone.setAttribute('height', size);
+    clone.setAttribute('width', typeof size === 'string' ? size : size.width);
+    clone.setAttribute('height', typeof size === 'string' ? size : size.height);
   }
   const desc = document.createElementNS(SVG_NS, 'desc');
   desc.textContent = description;

@@ -6,6 +6,8 @@ export interface PrintOptions {
   data: boolean;
   legend: boolean;
   protractorOnly: boolean;
+  /** Corte e vista da proteção pelas dimensões (passo 6), na escala do desenho. */
+  geometry: boolean;
 }
 
 export const DEFAULT_PRINT: PrintOptions = {
@@ -15,4 +17,5 @@ export const DEFAULT_PRINT: PrintOptions = {
   data: true,
   legend: true,
   protractorOnly: false,
+  geometry: true,
 };

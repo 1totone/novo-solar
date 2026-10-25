@@ -1,5 +1,7 @@
 // Textos da interface em português do Brasil (idioma de referência).
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
+import { fase3PtBR } from './messages.pt-BR.fase3';
+
 export const ptBR = {
   'app.name': 'SOL-AR',
   'app.tagline':
@@ -334,4 +336,5 @@ export const ptBR = {
   'epw.field.windDirection': 'direção do vento',
   'epw.field.windSpeed': 'velocidade do vento',
   'epw.field.totalSkyCover': 'cobertura do céu',
+  ...fase3PtBR,
 } as const;
