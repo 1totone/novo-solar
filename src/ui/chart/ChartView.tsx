@@ -13,6 +13,7 @@ import type { HashState } from '../state/hashState';
 import { protractorFromHash } from '../state/protractorHash';
 import { siteFromHash } from '../state/siteHash';
 import { SunChart } from './SunChart';
+import { timeZoneOffset } from '../timeZoneOffset';
 
 /**
  * A carta com todas as camadas (dados, máscara, transferidor, desenho à mão), as legendas e os
@@ -52,7 +53,8 @@ export function ChartView({
           place: site.name,
           latitude: formatNumber(site.latitude, 2),
           longitude: formatNumber(site.longitude, 2),
-          timeZone: formatNumber(site.timeZone),
+          // Hífen no fuso negativo, como antes (o título vai no SVG exportado).
+          timeZone: timeZoneOffset(site.timeZone, formatNumber, '-'),
         })}
         underlay={
           showOverlay ? (

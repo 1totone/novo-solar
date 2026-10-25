@@ -13,6 +13,8 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - `casos/vento/rosas.json`: 150 rosas (Florianópolis, Porto Alegre e Belém; 8 e 16 setores; estações e períodos do dia), calculadas em Python puro.
   - `casos/mascara/tracado-raios.json`: 9 casos de janela com brise, aletas e grelha, 1500 direções do sol cada, classificadas por traçado de raios (sombra total, centro à sombra e fração sombreada).
   - `casos/classificacao/classificacao-horas.json`: médias diárias, temperatura média predominante, temperatura de conforto adaptativo e classe de cada hora nos 6 EPWs de teste (numpy e pythermalcomfort), F3.4.
+  - `casos/indicadores/indicadores.json`: radiação direta incidente por classe de hora e percentuais (pvlib, shapely e DNI do EPW), F3.5.
+  - `casos/energyplus/indicadores.json`: radiação direta incidente na janela com e sem as placas no EnergyPlus 26.2.0, com a decomposição das diferenças, F3.5.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
@@ -22,6 +24,8 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F2.5-rosa-dos-ventos.md`](relatorios/F2.5-rosa-dos-ventos.md): 150 rosas contra um cálculo independente em Python.
   - [`relatorios/F2.6-saidas.md`](relatorios/F2.6-saidas.md): escala da carta impressa (navegador e PDF rasterizado a 600 dpi) e exportações.
   - [`relatorios/F3.4-classificacao.md`](relatorios/F3.4-classificacao.md): classificação das horas contra numpy e o pythermalcomfort.
+  - [`relatorios/F3.5-memoria-de-calculo.md`](relatorios/F3.5-memoria-de-calculo.md): indicadores calculados à mão em casos simples.
+  - [`relatorios/F3.5-indicadores.md`](relatorios/F3.5-indicadores.md): indicadores contra pvlib e shapely e contra o EnergyPlus.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -35,6 +39,8 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/mascara_tracado_raios.py` | traçado de raios com janela e placas reais para a máscara pelos ângulos (só biblioteca padrão) |
 | `scripts/rosa_dos_ventos.py` | estatísticas da rosa dos ventos dos EPWs de teste (só biblioteca padrão) |
 | `scripts/classificacao_horas.py` | classificação das horas (F3.4): médias com numpy, faixa adaptativa da ASHRAE 55 com o pythermalcomfort |
+| `scripts/indicadores.py` | indicadores do F3.5 com pvlib, shapely e a DNI do EPW |
+| `scripts/energyplus_indicadores.py` | radiação direta incidente na janela no EnergyPlus, com e sem as placas, e decomposição das diferenças |
 
 ## Referências independentes
 

@@ -293,6 +293,8 @@ export const ptBR = {
   'epw.error.missingCsvLocation': 'O arquivo CSV não tem cabeçalho de local; informe o local.',
   'epw.error.invalidCsvHeader':
     'O arquivo não parece ser um CSV do SOL-AR: a linha {line} deveria trazer o local (nome, latitude, longitude, fuso e elevação).',
+  'epw.error.semicolonCsv':
+    'O arquivo usa ponto e vírgula entre os campos (linha {line}), como o Excel em português salva. O CSV do SOL-AR usa vírgula entre os campos e ponto como separador decimal: use o arquivo original ou salve de novo nesse formato.',
   'epw.error.invalidLatitude':
     'Latitude inválida no cabeçalho (linha {line}): deve estar entre −90° e 90°.',
   'epw.error.invalidLongitude':
