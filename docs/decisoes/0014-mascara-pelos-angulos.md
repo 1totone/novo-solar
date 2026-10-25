@@ -31,3 +31,4 @@ No SOL-AR 6.2 a máscara era pintada à mão sobre as curvas do transferidor. O 
 - O transferidor deixa de ordenar os índices; a regressão contra o 6.2 compara o conjunto de curvas.
 - A máscara total de brise com aletas soltas é conservadora; o valor exato vem da máscara pela geometria (F3.1 a F3.3).
 - A confirmação quantitativa do caso do tutorial depende das figuras das p. 13 a 15 (pendência do Anthony).
+- Atualização de 25/10/2026: o PDF do tutorial foi obtido no site do LabEEE. A zona total da Figura 27 (pintada no 6.2) coincide com a região calculada pelo F2.3 com os ângulos do tutorial (6277 pixels, 100%), o que confirma a orientação, os lados de γ e a faixa entre α1 e α2. A Figura 26 mede o α2 do peitoril, e não da verga: com o brise desenhado, a zona total da Figura 27 não existe (relatório do F2.3, seção 2). A definição desta decisão (α2 da verga) fica mantida.
