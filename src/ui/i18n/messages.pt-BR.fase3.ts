@@ -1,0 +1,70 @@
+// Textos da Fase 3 (passos 6 e 7 e vista 3D), em português do Brasil. Separados do catálogo
+// principal só para organização; as chaves fazem parte do mesmo catálogo (decisão 0005).
+export const fase3PtBR = {
+  'advanced.group': 'Avançado: proteção pelas dimensões e efeito no ano',
+  'advanced.badge': 'avançado',
+  'geometry.heading': 'Proteção pelas dimensões',
+  'geometry.summary': 'Janela, brise, aletas e lâminas em metros; corte, vista e sombra na carta.',
+  'geometry.summaryDefined': 'Janela de {width} × {height} m · {pieces}',
+  'geometry.piecesCount': '{count} peça(s)',
+  'geometry.noPieces': 'sem peças',
+  'geometry.start': 'Começar com uma janela de 1,20 × 1,00 m',
+  'geometry.intro':
+    'Descreva a janela e as peças pelas dimensões. O cálculo usa a geometria exata (placas finas diante do vidro) e é o que conferimos contra o EnergyPlus.',
+  'geometry.window': 'Janela',
+  'geometry.width': 'Largura da janela (m)',
+  'geometry.height': 'Altura da janela (m)',
+  'geometry.setback': 'Recuo do vidro (m)',
+  'geometry.setbackHelp':
+    'Distância do vidro ao plano externo da fachada (parede espessa). As peças são medidas a partir desse plano.',
+  'geometry.windowInvalid':
+    'Use números positivos para a largura e a altura, e zero ou mais para o recuo.',
+  'geometry.pieces': 'Peças',
+  'geometry.addType': 'Tipo de peça',
+  'geometry.add': 'Adicionar peça',
+  'geometry.maxPieces': 'Até 9 peças.',
+  'geometry.remove': 'Remover',
+  'geometry.removeLabel': 'Remover a peça {n}, {name}',
+  'geometry.pieceLegend': '{n}. {name}',
+  'geometry.piecesInvalid':
+    'Há campos inválidos (em vermelho); a peça só entra no desenho e no cálculo quando todos estão certos.',
+  'geometry.sidesHelp':
+    'Esquerda e direita de quem está dentro olhando para fora. Prolongamento infinito: digite i ou ∞.',
+  'geometry.type.b': 'Brise horizontal',
+  'geometry.type.ad': 'Aleta à direita',
+  'geometry.type.ae': 'Aleta à esquerda',
+  'geometry.type.lh': 'Lâminas horizontais',
+  'geometry.type.lv': 'Lâminas verticais',
+  'geometry.field.depth': 'Profundidade (m)',
+  'geometry.field.above.b': 'Altura acima da verga (m)',
+  'geometry.field.above.lh': 'Altura da 1ª lâmina acima da verga (m)',
+  'geometry.field.gap': 'Afastamento da fachada (m)',
+  'geometry.field.extendLeft': 'Prolongamento à esquerda (m)',
+  'geometry.field.extendRight': 'Prolongamento à direita (m)',
+  'geometry.field.offset': 'Distância da lateral da janela (m)',
+  'geometry.field.extendAbove': 'Prolongamento acima da verga (m)',
+  'geometry.field.extendBelow': 'Prolongamento abaixo do peitoril (m)',
+  'geometry.field.count': 'Número de lâminas',
+  'geometry.field.chord': 'Largura de cada lâmina (m)',
+  'geometry.field.pitch': 'Distância entre lâminas (m)',
+  'geometry.field.angle.lh': 'Inclinação (°, + borda externa para baixo)',
+  'geometry.field.angle.lv': 'Rotação (°, + borda externa para a direita)',
+  'geometry.field.start': 'Posição da 1ª lâmina a partir da lateral esquerda (m)',
+  'geometry.drawingTitle':
+    'Corte pelo meio da janela e vista de fora: janela de {width} × {height} m, {pieces}',
+  'geometry.section': 'Corte (meio da janela)',
+  'geometry.elevation': 'Vista de fora',
+  'geometry.elevationHelp':
+    'Na vista de fora, o lado direito de quem está dentro aparece à esquerda do desenho.',
+  'geometry.angle.alpha': 'α {value}°',
+  'geometry.angle.gammaRight': 'γ dir. {value}°',
+  'geometry.angle.gammaLeft': 'γ esq. {value}°',
+  'geometry.anglesHelp':
+    'α do peitoril, no vidro, à aresta externa do brise; γ do canto inferior do mesmo lado à ponta do brise (ângulos internos, medidos do plano da fachada).',
+  'geometry.scale': 'Escala do desenho exportado e impresso',
+  'geometry.export': 'Exportar corte e vista (SVG)',
+  'geometry.exportHelp':
+    'O SVG sai com o tamanho real na escala escolhida ({width} × {height} cm). A impressão do passo 5 pode incluir os dois desenhos.',
+  'geometry.printTitle': 'Corte e vista da proteção, escala 1:{scale}',
+  'outputs.includeGeometry': 'Corte e vista da proteção (passo 6), na escala do desenho',
+} as const;

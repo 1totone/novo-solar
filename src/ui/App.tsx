@@ -16,8 +16,12 @@ import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { timeZoneOffset } from './timeZoneOffset';
+import { GeometryDrawing } from './geometry/GeometryDrawing';
+import { GeometryPanel } from './geometry/GeometryPanel';
+import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
+import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
 import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
@@ -73,6 +77,13 @@ export function App() {
         ? historical.data
         : null;
   const ov = useOverlay(epw, hashState);
+  const geometry = geometryFromHash(hashState);
+  // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
+  const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
+  const geometryScale = scaleFromHash(hashState.esc);
+  const geometryPrint = geometry.window
+    ? paperDrawing(geometry.window, geometry.devices, geometryScale)
+    : null;
   const wind = windFromHash(hashState);
   const sourceUrl = city?.sourceUrl;
   const rose = useMemo(
@@ -225,6 +236,7 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
+    geometryOpen && wind.tab === 'chart' && !hashA ? 'follow' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -305,6 +317,16 @@ export function App() {
               csvAvailable={csvAvailable}
               comparing={hashA !== null}
               onCompare={onCompare}
+              geometryAvailable={geometry.window !== null}
+            />
+            <p className="steps-group">{t('advanced.group')}</p>
+            <GeometryPanel
+              geometry={geometry}
+              scale={geometryScale}
+              placeName={site.name}
+              onChange={setHashState}
+              open={geometryOpen}
+              onOpenChange={setGeometryOpen}
             />
           </div>
           <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
@@ -360,6 +382,22 @@ export function App() {
               </div>
             ) : (
               live
+            )}
+            {geometry.window && geometryPrint && print.geometry && (
+              <div className="print-geometry" data-testid="print-geometry">
+                <p className="print-title">{t('geometry.printTitle', { scale: geometryScale })}</p>
+                <GeometryDrawing
+                  window={geometry.window}
+                  devices={geometry.devices}
+                  title={t('geometry.printTitle', { scale: geometryScale })}
+                  font={geometryPrint.font}
+                  size={{
+                    width: `${geometryPrint.width.toFixed(2)}cm`,
+                    height: `${geometryPrint.height.toFixed(2)}cm`,
+                  }}
+                  testId="print-geometry-drawing"
+                />
+              </div>
             )}
           </section>
         </div>

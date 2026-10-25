@@ -11,6 +11,7 @@ export function OutputsPanel({
   csvAvailable,
   comparing,
   onCompare,
+  geometryAvailable = false,
 }: {
   print: PrintOptions;
   onPrintChange: (next: PrintOptions) => void;
@@ -19,6 +20,8 @@ export function OutputsPanel({
   csvAvailable: boolean;
   comparing: boolean;
   onCompare: (start: boolean) => void;
+  /** Há corte e vista no passo 6 para imprimir. */
+  geometryAvailable?: boolean;
 }) {
   const { t } = useI18n();
   const id = useId();
@@ -84,6 +87,7 @@ export function OutputsPanel({
         {check('data', t('outputs.includeData'))}
         {check('legend', t('outputs.includeLegend'))}
         {check('protractorOnly', t('outputs.protractorOnly'))}
+        {geometryAvailable && check('geometry', t('outputs.includeGeometry'))}
       </fieldset>
       <button type="button" className="btn primary" onClick={onPrint}>
         {t('outputs.print')}

@@ -179,6 +179,18 @@ As amostras ficam simétricas em torno de h − 0,5, o instante da convenção d
 
 Resultados (8 cenas, 5 locais, latitudes de −1,4° a −36,8°, fusos UTC−3 e UTC−4): por passo, diferença máxima de 6 × 10⁻⁶ a 6,5 × 10⁻⁵ e percentil 99 de até 2,9 × 10⁻⁵; hora a hora com o mesmo sol, até 3 × 10⁻⁵ (6 a 25 horas rasantes por ano); ponta a ponta, RMSE de 0,006 a 0,026 e viés de até 3 × 10⁻⁴. A proposta do ROADMAP (RMSE ≤ 0,02 com o sol de cada programa) não separava a geometria da posição do sol; com ela, três cenas ficariam de fora só pela diferença entre os modelos de sol.
 
+## 7.11 Janela e peças na interface: corte e vista (F3.1)
+
+O passo 6 da interface (decisão 0023, proposta) descreve a janela e as peças da seção 7.1 em metros: largura e altura da janela, recuo do vidro e até 9 peças (brise horizontal, aleta à direita ou à esquerda, lâminas horizontais ou verticais), com os mesmos parâmetros e os mesmos padrões (campo em branco vale 0; profundidade, corda, passo e número de lâminas são obrigatórios; "i" ou "∞" é prolongamento infinito). O estado vai para o link: `jl`, `ja` e `jr` (janela) e `pc1` a `pc9` (uma peça cada, com o texto digitado em cada campo).
+
+O corte e a vista são desenhados a partir das mesmas placas que entram no cálculo (`buildScene`), então o desenho mostra a geometria calculada, sem uma segunda descrição:
+
+- **Corte:** plano vertical pelo meio da janela (x = W / 2), com a normal para a direita do desenho; as placas que cruzam o plano aparecem cortadas e as demais (aletas, lâminas verticais que não o cruzam) "em vista", tracejadas. Mostra α de cada brise e da lâmina mais baixa, do peitoril, no vidro, à aresta externa (o α interno da seção 1.6), e as cotas de altura da janela, profundidade, altura acima da verga e recuo.
+- **Vista de fora:** projeção no plano da fachada, vista de fora, como na Figura 22 do tutorial da UFU: X = W − x, então o lado direito de quem está dentro aparece à esquerda do desenho, e a tela diz isso. Mostra γ de cada brise, do canto inferior do mesmo lado à ponta (o γ interno da seção 1.6), e as cotas da janela.
+- **Escala:** o desenho é em metros. Na tela, a letra tem cerca de 12 px; na exportação em SVG e na impressão do passo 5, corte e vista saem lado a lado com o tamanho real na escala escolhida (1:10, 1:20, 1:25, 1:50 ou 1:100, padrão 1:50) e letra de 2,5 mm no papel.
+
+Conferência: as funções do desenho reproduzem os ângulos e as cotas da Figura 22 do tutorial (α = 55,0° com a parede de 15 cm; γ = 50,2° e 59,5°) e o espelhamento da vista (`src/ui/geometry/drawings.test.ts`); os testes de ponta a ponta leem os pixels do corte e da vista (brise escuro na verga, vidro azul, prolongamento direito à esquerda do desenho, parede além das pontas), o tamanho do SVG exportado e o tamanho impresso (`e2e/geometria.spec.ts`).
+
 ## Referências
 
 - Olgyay, A.; Olgyay, V. *Solar control and shading devices*. Princeton: Princeton University Press, 1957.
