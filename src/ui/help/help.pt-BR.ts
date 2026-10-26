@@ -98,7 +98,7 @@ export const helpPtBR: HelpContent = {
       },
       {
         title: '5. Imprimir e exportar',
-        text: 'Imprima em escala (raio da carta em cm), exporte a imagem (SVG ou PNG) ou os dados (CSV), compare duas configurações lado a lado e salve o projeto em arquivo.',
+        text: 'Imprima em escala (raio da carta em cm), exporte a imagem (SVG ou PNG) ou os dados (CSV), compare duas configurações lado a lado (ou dois climas do mesmo lugar na mesma carta) e salve o projeto em arquivo.',
       },
     ],
     advanced: [
@@ -417,7 +417,12 @@ export const helpPtBR: HelpContent = {
     {
       question: 'De onde vêm os dados climáticos? Posso usar o meu arquivo?',
       answer:
-        'As cidades da lista têm os dados históricos do SOL-AR 6.2 (TRY ou IWEC) e o link para o arquivo recente TMYx 2011 a 2025, de Climate.OneBuilding.org. Você pode carregar qualquer EPW ou CSV do SOL-AR: o arquivo é lido no seu navegador e não é enviado a lugar nenhum. A origem, o período e os avisos de qualidade aparecem no passo 1.',
+        'As cidades da lista têm os dados históricos do SOL-AR 6.2 (TRY ou IWEC). O catálogo do passo 1 tem as 579 estações do Brasil com arquivo TMYx 2011 a 2025 (Climate.OneBuilding.org), com mapa, qualidade de cada arquivo e o link para baixar. Você pode carregar qualquer EPW ou CSV do SOL-AR: o arquivo é lido no seu navegador e não é enviado a lugar nenhum. A origem, o período e os avisos de qualidade aparecem no passo 1.',
+    },
+    {
+      question: 'Como comparar o clima de antes com o de hoje, ou com o futuro?',
+      answer:
+        'Abra os dados do primeiro clima (os históricos da cidade ou um arquivo) e escolha uma variável no passo 4. No passo 5, "Comparar" guarda essa configuração como A. Carregue então o arquivo do outro clima do mesmo lugar (o TMYx recente ou um arquivo futuro, como os do BrazFuture) e clique em "Diferença B − A na mesma carta": cada célula mostra a média de B menos a de A. A diferença mistura a mudança do clima com as diferenças entre os arquivos (cada um é um ano típico, com fonte e método próprios); na radiação, a tela também diz se a radiação de um arquivo vem deslocada no tempo em relação à do outro. Para isolar a mudança projetada, compare arquivos do mesmo conjunto e modelo, como o BrazFuture de 2010 e o de 2050 da mesma rodada.',
     },
     {
       question: 'Como imprimir a carta em escala?',
@@ -484,6 +489,7 @@ export const helpPtBR: HelpContent = {
           'Cada valor do arquivo se refere à hora que termina: a radiação é a acumulada de h − 1 a h; a temperatura e a umidade são as do instante h.',
           'A célula é a região ocupada pelo sol nos dias da quinzena e nos instantes que o valor representa; a cor é a média das horas da célula ou a frequência acima de um limiar.',
           'Faixas padrão do SOL-AR 6.2 na temperatura e na radiação global e direta (propostas novas na umidade e na difusa), ou pelos percentis do arquivo, que não se comparam entre cidades.',
+          'Diferença entre dois climas: a média de cada célula em B menos a de A, só no mesmo local (até 0,1° e o mesmo fuso). Na radiação, a diferença de tempo entre os arquivos vem do centróide diário da global nos 30 dias mais claros de cada um, supondo nuvens parecidas nos dias claros dos dois arquivos do mesmo lugar.',
         ],
       },
       {

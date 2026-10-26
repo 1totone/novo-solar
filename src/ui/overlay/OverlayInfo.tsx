@@ -61,7 +61,8 @@ export function CellInfo({
 }: {
   view: CellView | null;
   unit: string;
-  mode: 'mean' | 'frequency';
+  /** "difference": B − A na comparação de climas (F4.2), com as médias de cada um. */
+  mode: 'mean' | 'frequency' | 'difference';
   threshold: number;
   format: (v: number) => string;
 }) {
@@ -87,21 +88,28 @@ export function CellInfo({
       </strong>{' '}
       {!stats
         ? t('cell.noData')
-        : mode === 'frequency'
-          ? t('cell.above', {
-              count: formatNumber(Math.round((stats.above ?? 0) * stats.n)),
-              n: formatNumber(stats.n),
-              threshold: formatNumber(threshold, Number.isInteger(threshold) ? 0 : 1),
+        : mode === 'difference'
+          ? t('cell.difference', {
+              diff: `${stats.mean > 0 ? '+' : ''}${format(stats.mean)}`,
+              a: format((stats as { a?: number }).a ?? NaN),
+              b: format((stats as { b?: number }).b ?? NaN),
               unit,
-              percent: formatNumber(Math.round((stats.above ?? 0) * 100)),
             })
-          : t('cell.mean', {
-              mean: format(stats.mean),
-              min: format(stats.min),
-              max: format(stats.max),
-              unit,
-              n: formatNumber(stats.n),
-            })}
+          : mode === 'frequency'
+            ? t('cell.above', {
+                count: formatNumber(Math.round((stats.above ?? 0) * stats.n)),
+                n: formatNumber(stats.n),
+                threshold: formatNumber(threshold, Number.isInteger(threshold) ? 0 : 1),
+                unit,
+                percent: formatNumber(Math.round((stats.above ?? 0) * 100)),
+              })
+            : t('cell.mean', {
+                mean: format(stats.mean),
+                min: format(stats.min),
+                max: format(stats.max),
+                unit,
+                n: formatNumber(stats.n),
+              })}
     </p>
   );
 }

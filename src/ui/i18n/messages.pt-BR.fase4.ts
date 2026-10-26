@@ -260,4 +260,26 @@ export const fase4PtBR = {
   'station.futureLink': 'Baixar no Zenodo',
   'print.sourceStation':
     'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
+  // Comparação de climas (F4.2): diferença B − A na mesma carta.
+  'difference.toggle': 'Diferença B − A na mesma carta',
+  'difference.title': 'Diferença B − A',
+  'difference.note':
+    'Cada célula mostra a média das horas de B menos a de A, na mesma quinzena e hora do arquivo; a carta, a máscara e o transferidor são os de B. A diferença mistura a mudança do clima com as diferenças entre os arquivos (cada um é um ano típico, com meses de anos diferentes, e tem fonte e método próprios), e cada célula tem só cerca de 15 horas de cada arquivo: vale o padrão de muitas células, não uma célula isolada.',
+  'difference.summary': 'Média das {n} células desenhadas: {mean} {unit} (de {min} a {max}).',
+  'difference.lagSame':
+    'Nos dias claros, a radiação de A e a de B diferem menos de 15 min no tempo.',
+  'difference.lagLate':
+    'Nos dias claros, a radiação de B vem cerca de {minutes} min depois da de A: só por isso, a diferença fica negativa de manhã e positiva à tarde.',
+  'difference.lagEarly':
+    'Nos dias claros, a radiação de B vem cerca de {minutes} min antes da de A: só por isso, a diferença fica positiva de manhã e negativa à tarde.',
+  'difference.needData':
+    'A diferença precisa de dados climáticos em A e em B (dados históricos ou arquivo carregado) e de uma variável escolhida no passo 4; por enquanto, A e B ficam lado a lado.',
+  'difference.otherPlace':
+    'A diferença só vale para o mesmo local (até 0,1° de latitude e de longitude, mesmo fuso); A e B ficam lado a lado.',
+  'difference.legend': 'B − A: {quantity}',
+  'difference.print': 'Diferença B − A. A: {a} B: {b}',
+  'difference.csvWhat': 'média das horas de B menos a de A',
+  'cell.difference': 'B − A: {diff} {unit} (média de A: {a}; de B: {b}).',
+  'cells.captionDifference':
+    'Média das horas de B menos a de A em cada célula ({unit}); linhas: quinzenas; colunas: horas do arquivo.',
 } as const;

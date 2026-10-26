@@ -98,7 +98,7 @@ export const helpEn: HelpContent = {
       },
       {
         title: '5. Print and export',
-        text: 'Print to scale (chart radius in cm), export the image (SVG or PNG) or the data (CSV), compare two set-ups side by side and save the project to a file.',
+        text: 'Print to scale (chart radius in cm), export the image (SVG or PNG) or the data (CSV), compare two set-ups side by side (or two climates of the same place on the same chart) and save the project to a file.',
       },
     ],
     advanced: [
@@ -420,7 +420,12 @@ export const helpEn: HelpContent = {
     {
       question: 'Where do the weather data come from? Can I use my own file?',
       answer:
-        'The cities in the list have the historical data of SOL-AR 6.2 (TRY or IWEC) and the link to the recent TMYx 2011 to 2025 file, from Climate.OneBuilding.org. You can load any EPW or SOL-AR CSV file: it is read in your browser and sent nowhere. The source, the period and the quality warnings appear in step 1.',
+        'The cities in the list have the historical data of SOL-AR 6.2 (TRY or IWEC). The catalogue in step 1 has the 579 Brazilian stations with a TMYx 2011 to 2025 file (Climate.OneBuilding.org), with a map, the quality of each file and the download link. You can load any EPW or SOL-AR CSV file: it is read in your browser and sent nowhere. The source, the period and the quality warnings appear in step 1.',
+    },
+    {
+      question: 'How do I compare the climate of the past with today, or with the future?',
+      answer:
+        'Open the data of the first climate (the historical data of the city or a file) and choose a variable in step 4. In step 5, "Compare" keeps this set-up as A. Then load the file of the other climate of the same place (the recent TMYx or a future file, such as those of BrazFuture) and click "Difference B − A on the same chart": each cell shows the mean of B minus that of A. The difference mixes climate change with the differences between the files (each is a typical year, with its own source and method); for radiation, the screen also says whether the radiation of one file is shifted in time relative to the other. To isolate the projected change, compare files of the same set and model, such as the 2010 and 2050 BrazFuture files of the same run.',
     },
     {
       question: 'How do I print the chart to scale?',
@@ -487,6 +492,7 @@ export const helpEn: HelpContent = {
           'Each value of the file refers to the hour that ends: radiation is the amount accumulated from h − 1 to h; temperature and humidity are those of instant h.',
           'A cell is the region taken by the sun on the days of the fortnight and at the instants the value represents; its colour is the mean of the hours in the cell or the frequency above a threshold.',
           'Default bands of SOL-AR 6.2 for temperature and global and direct radiation (new proposals for humidity and diffuse radiation), or from the percentiles of the file, which cannot be compared between cities.',
+          'Difference between two climates: the mean of each cell in B minus that in A, only for the same place (within 0.1° and the same time zone). For radiation, the time shift between the files comes from the daily centroid of the global radiation on the 30 clearest days of each, assuming similar clouds on the clear days of the two files of the same place.',
         ],
       },
       {

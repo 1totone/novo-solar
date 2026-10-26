@@ -938,4 +938,25 @@ export const en: Catalog = {
   'station.futureLink': 'Download on Zenodo',
   'print.sourceStation':
     'Coordinates of station {station} (TMYx 2011 to 2025, Climate.OneBuilding.org).',
+  'difference.toggle': 'Difference B − A on the same chart',
+  'difference.title': 'Difference B − A',
+  'difference.note':
+    'Each cell shows the mean of the hours of B minus that of A, in the same half-month and file hour; the chart, the mask and the protractor are those of B. The difference mixes climate change with the differences between the files (each is a typical year, with months from different years, and has its own source and method), and each cell has only about 15 hours of each file: read the pattern of many cells, not a single cell.',
+  'difference.summary': 'Mean of the {n} cells drawn: {mean} {unit} (from {min} to {max}).',
+  'difference.lagSame':
+    'On clear days, the radiation of A and that of B differ by less than 15 min in timing.',
+  'difference.lagLate':
+    'On clear days, the radiation of B comes about {minutes} min later than that of A: this alone makes the difference negative in the morning and positive in the afternoon.',
+  'difference.lagEarly':
+    'On clear days, the radiation of B comes about {minutes} min earlier than that of A: this alone makes the difference positive in the morning and negative in the afternoon.',
+  'difference.needData':
+    'The difference needs climate data in A and in B (historical data or a loaded file) and a variable chosen in step 4; for now, A and B stay side by side.',
+  'difference.otherPlace':
+    'The difference only applies to the same place (within 0.1° of latitude and longitude, same time zone); A and B stay side by side.',
+  'difference.legend': 'B − A: {quantity}',
+  'difference.print': 'Difference B − A. A: {a} B: {b}',
+  'difference.csvWhat': 'mean of the hours of B minus that of A',
+  'cell.difference': 'B − A: {diff} {unit} (mean of A: {a}; of B: {b}).',
+  'cells.captionDifference':
+    'Mean of the hours of B minus that of A in each cell ({unit}); rows: half-months; columns: file hours.',
 };

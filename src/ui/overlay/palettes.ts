@@ -10,6 +10,8 @@ import type { OverlayQuantity } from '../../core/overlay/overlay';
 const BLUE = ['#d4e6fe', '#9dc7fe', '#6ba7f5', '#4d88d3', '#2f69b2'];
 const ORANGE = ['#ffdcd0', '#fead90', '#f28057', '#cf6137', '#ad4213'];
 const DIVERGING = ['#3872bc', '#74b0ff', '#e5e4e2', '#ff847d', '#b94643'];
+/** Diferença entre dois climas (F4.2): a mesma escala divergente da temperatura. */
+export const DIFFERENCE_COLORS = DIVERGING;
 /** Frequência de horas acima do limiar. */
 export const FREQUENCY_COLORS = ['#ffdbd7', '#ffaba4', '#f97770', '#d55753', '#b33736'];
 export const FREQUENCY_LIMITS = [0.2, 0.4, 0.6, 0.8];
