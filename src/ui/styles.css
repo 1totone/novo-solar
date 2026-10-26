@@ -680,6 +680,26 @@ details.more summary {
   margin-bottom: 0.5rem;
 }
 
+/* Idioma (F4.6) */
+.header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.language {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language select {
+  min-height: 40px;
+  font: inherit;
+}
+
 /* Arquivo de projeto (F4.7) */
 input.manual-link {
   width: 100%;
@@ -863,7 +883,8 @@ fieldset.plain .check {
   .cell-table,
   .chart-section [role='tabpanel'] > .note,
   .wind-controls,
-  .wind-panel details {
+  .wind-panel details,
+  .language {
     display: none !important;
   }
 

@@ -10,6 +10,7 @@ import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
 import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
+import { LanguageSelect } from './i18n/LanguageSelect';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
 import { DataPanel } from './overlay/DataPanel';
@@ -63,7 +64,7 @@ function PrintRuler({ label }: { label: string }) {
 }
 
 export function App() {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatDate } = useI18n();
   const [hashState, setHashState] = useHashState();
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
   const [drawing, setDrawing] = useState<Drawing | null>(null);
@@ -146,6 +147,8 @@ export function App() {
   const words = {
     orientation: (degrees: string) => t('compare.orientation', { degrees }),
     none: t('compare.none'),
+    right: t('sides.rightShort'),
+    left: t('sides.leftShort'),
   };
   const fmt = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
   // Origem dos dados históricos em poucas palavras (impressão e CSV).
@@ -211,6 +214,7 @@ export function App() {
               })
             : t('csv.noCorrection'),
           t('csv.hypotheses'),
+          t('csv.separator'),
         ],
         rose,
         sectorNames: t('compass.points')
@@ -235,6 +239,7 @@ export function App() {
           ),
         }),
         t('csv.bands', { limits: ov.limits.join('; ') }),
+        t('csv.separator'),
       ],
       cells: ov.cells,
       stats: ov.stats,
@@ -369,7 +374,10 @@ export function App() {
   return (
     <div className="page">
       <header className="header">
-        <h1>{t('app.name')}</h1>
+        <div className="header-row">
+          <h1>{t('app.name')}</h1>
+          <LanguageSelect />
+        </div>
         <p className="tagline">{t('app.tagline')}</p>
       </header>
 
@@ -468,7 +476,7 @@ export function App() {
                   longitude: formatNumber(site.longitude, 3),
                   timeZone: timeZoneOffset(site.timeZone, formatNumber),
                   source,
-                  date: new Date().toLocaleDateString('pt-BR'),
+                  date: formatDate(new Date()),
                   scale: t(
                     chartOptions.projection === 'cylindrical'
                       ? 'print.scaleHeight'

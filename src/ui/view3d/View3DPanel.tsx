@@ -31,7 +31,7 @@ export function View3DPanel({
   hash: HashState;
   onChange: (patch: Record<string, string>) => void;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatClock } = useI18n();
   const id = useId();
   const geometry = geometryFromHash(hash);
   const site = siteFromHash(hash).site;
@@ -64,7 +64,7 @@ export function View3DPanel({
   const tz = timeZoneOffset(site.timeZone, formatNumber);
   const months = t('annual.monthsLong').split(',');
   const hh = Math.floor(hour + 1e-9);
-  const hourText = `${hh}h${String(Math.round((hour - hh) * 60)).padStart(2, '0')} (UTC${tz})`;
+  const hourText = `${formatClock(hh, Math.round((hour - hh) * 60))} (UTC${tz})`;
   const dateText = t('view3d.dayOption', { month: months[month - 1]! });
   const status =
     sun.elevation <= 0

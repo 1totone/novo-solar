@@ -135,4 +135,12 @@ export const fase4PtBR = {
   'project.linkCopied': 'Link copiado.',
   'project.linkManual': 'Não foi possível copiar: selecione e copie o link abaixo.',
   'project.linkLabel': 'Link deste estado',
+  // F4.6: idiomas (decisão 0029).
+  'language.label': 'Idioma',
+  'sides.rightShort': 'd',
+  'sides.leftShort': 'e',
+  'period.sameMonth': '{from} a {to}/{month}',
+  'period.twoMonths': '{from}/{fromMonth} a {to}/{toMonth}',
+  'sizing.solarHour': '{hour} solar',
+  'csv.separator': 'Separador: vírgula; decimal: ponto.',
 } as const;

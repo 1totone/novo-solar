@@ -90,6 +90,7 @@ export function AnnualSection({
     }),
     t('annual.csvLink', { url: globalThis.location?.href ?? '' }),
     t('annual.csvHypotheses'),
+    t('csv.separator'),
   ];
   const base = `solar-${fileSlug(site.name)}`;
   const download = (text: string, name: string, type: string) =>

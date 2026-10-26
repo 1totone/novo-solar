@@ -13,18 +13,17 @@ import type { HashState } from '../state/hashState';
 const PROJECTIONS: ProjectionKind[] = ['stereographic', 'equidistant', 'cylindrical'];
 const HOUR_LINES: HourLinesMode[] = ['solar', 'legal', 'both'];
 
-/** Hora do relógio de um deslocamento em minutos a partir das 12h00 (ex.: −28,4 → "11h32"). */
-function clock(minutes: number): string {
+/** Hora e minuto de um deslocamento em minutos a partir das 12h00 (ex.: −28,4 → 11 h 32 min). */
+function clockParts(minutes: number): [number, number] {
   const total = Math.round(12 * 60 + minutes);
   const h = Math.floor(total / 60);
-  const m = total - 60 * h;
-  return `${h}h${String(m).padStart(2, '0')}`;
+  return [h, total - 60 * h];
 }
 
-/** Data do dia do ano de referência (0 = 1º de janeiro), como "11/02". */
-function dayLabel(day: number): string {
+/** Dia e mês do dia do ano de referência (0 = 1º de janeiro). */
+function dayParts(day: number): [number, number] {
   const d = new Date(Date.UTC(2026, 0, 1 + day));
-  return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+  return [d.getUTCDate(), d.getUTCMonth() + 1];
 }
 
 /**
@@ -46,7 +45,9 @@ export function ChartOptionsPanel({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatClock, formatDayMonth } = useI18n();
+  const clock = (minutes: number) => formatClock(...clockParts(minutes));
+  const dayLabel = (day: number) => formatDayMonth(...dayParts(day));
   const id = useId();
   const options = chartOptionsFromHash(hash);
   const changed = Boolean(hash.proj || hash.hl);

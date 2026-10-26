@@ -42,7 +42,7 @@ export function SizingSection({
   active: boolean;
   onChange: (patch: Record<string, string>) => void;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatClock, formatDayMonth, locale } = useI18n();
   const id = useId();
   const sizing = sizingFromHash(hash);
   const input = active ? sizingInput(site, orientation, geometry, sizing) : null;
@@ -54,13 +54,18 @@ export function SizingSection({
   const m2 = (v: number) => formatNumber(v, 2);
   const hourText = (h: number) => {
     const hh = Math.floor(h + 1e-9);
-    const mm = Math.round((h - hh) * 60);
-    return `${hh}h${String(mm).padStart(2, '0')}`;
+    return formatClock(hh, Math.round((h - hh) * 60));
   };
   const sampleText = (e: Extreme) =>
     t('sizing.sampleAt', {
-      date: `${e.sample.day}/${e.sample.month}`,
-      hour: `${hourText(e.sample.hour)}${sizing.timeBase === 'solar' ? ' solar' : ''}`,
+      date:
+        locale === 'en'
+          ? formatDayMonth(e.sample.day, e.sample.month)
+          : `${e.sample.day}/${e.sample.month}`,
+      hour:
+        sizing.timeBase === 'solar'
+          ? t('sizing.solarHour', { hour: hourText(e.sample.hour) })
+          : hourText(e.sample.hour),
     });
 
   const field = (f: SizingField, label: string, placeholder: string) => (
