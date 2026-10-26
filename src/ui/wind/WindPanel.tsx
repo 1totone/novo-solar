@@ -1,16 +1,27 @@
-import { useMemo } from 'react';
+import { useId, useMemo, useState } from 'react';
 import type { EpwData } from '../../core/epw/parseEpw';
+import type { TerrainKey } from '../../core/wind/windProfile';
 import {
   SPEED_CLASSES,
   speedResolution,
-  windRose,
   type DayPeriodKey,
   type SeasonKey,
 } from '../../core/wind/windRose';
 import { useI18n } from '../i18n/useI18n';
 import type { MessageKey } from '../i18n/i18n';
-import { DAY_PERIOD_KEYS, SEASON_KEYS, type WindState } from '../state/windHash';
+import type { ClassificationState } from '../state/classificationHash';
+import {
+  DAY_PERIOD_KEYS,
+  SEASON_KEYS,
+  TERRAIN_KEYS,
+  THERMAL_KEYS,
+  terrainPatch,
+  thermalPatch,
+  type ThermalKey,
+  type WindState,
+} from '../state/windHash';
 import { SPEED_COLORS } from './colors';
+import { useMethodSentence, useWindRose } from './useWindRose';
 import { WindRoseChart } from './WindRoseChart';
 
 const SEASON_NAMES_SOUTH: Record<SeasonKey, MessageKey> = {
@@ -37,6 +48,34 @@ const PERIOD_NAMES: Record<DayPeriodKey, MessageKey> = {
   tarde: 'wind.afternoon',
   noite: 'wind.night',
 };
+const THERMAL_NAMES: Record<ThermalKey, MessageKey> = {
+  hot: 'wind.thermal.hot',
+  cold: 'wind.thermal.cold',
+  neutral: 'wind.thermal.neutral',
+};
+const THERMAL_TITLE: Record<ThermalKey, MessageKey> = {
+  hot: 'wind.titleThermal.hot',
+  cold: 'wind.titleThermal.cold',
+  neutral: 'wind.titleThermal.neutral',
+};
+const TERRAIN_NAMES: Record<TerrainKey, MessageKey> = {
+  country: 'wind.terrain.country',
+  suburbs: 'wind.terrain.suburbs',
+  city: 'wind.terrain.city',
+  ocean: 'wind.terrain.ocean',
+};
+const TERRAIN_SHORT: Record<TerrainKey, MessageKey> = {
+  country: 'wind.terrainShort.country',
+  suburbs: 'wind.terrainShort.suburbs',
+  city: 'wind.terrainShort.city',
+  ocean: 'wind.terrainShort.ocean',
+};
+const TERRAIN_HELP: Record<TerrainKey, MessageKey> = {
+  country: 'wind.terrainHelp.country',
+  suburbs: 'wind.terrainHelp.suburbs',
+  city: 'wind.terrainHelp.city',
+  ocean: 'wind.terrainHelp.ocean',
+};
 
 function Segmented<T extends string>({
   label,
@@ -45,7 +84,7 @@ function Segmented<T extends string>({
   onSelect,
 }: {
   label: string;
-  options: { value: T; label: string }[];
+  options: { value: T; label: string; disabled?: boolean }[];
   value: T;
   onSelect: (v: T) => void;
 }) {
@@ -59,6 +98,7 @@ function Segmented<T extends string>({
             type="button"
             role="radio"
             aria-checked={value === o.value}
+            disabled={o.disabled}
             onClick={() => onSelect(o.value)}
           >
             {o.label}
@@ -72,25 +112,27 @@ function Segmented<T extends string>({
 export function WindPanel({
   epw,
   wind,
+  classification,
   sourceUrl,
   onChange,
   readOnly = false,
 }: {
   epw: EpwData | null;
   wind: WindState;
+  /** Classificação das horas do passo 7, para o filtro pela condição térmica (F4.4). */
+  classification: ClassificationState;
   sourceUrl?: string;
   onChange: (patch: Record<string, string>) => void;
   /** Sem os controles (configuração A da comparação). */
   readOnly?: boolean;
 }) {
   const { t, formatNumber } = useI18n();
-  const rose = useMemo(
-    () =>
-      epw
-        ? windRose(epw, { sectors: wind.sectors, season: wind.season, period: wind.period })
-        : null,
-    [epw, wind.sectors, wind.season, wind.period],
-  );
+  const id = useId();
+  const [moreOpen, setMoreOpen] = useState(wind.advanced);
+  const methodSentence = useMethodSentence(classification);
+  const { rose, classes, thermal } = useWindRose(epw, wind, classification, {
+    withClasses: moreOpen && !readOnly,
+  });
   const resolution = useMemo(() => (epw ? speedResolution(epw) : null), [epw]);
   if (!epw || !rose || resolution === null) {
     return (
@@ -115,11 +157,20 @@ export function WindPanel({
     ? `${t(names[wind.season])} (${t(SEASON_MONTHS_LABEL[wind.season])})`
     : t('wind.year');
   const periodLabel = wind.period ? t(PERIOD_NAMES[wind.period]) : t('wind.allDay');
-  const title = t('wind.title', {
-    place: [epw.location.city, epw.location.state].filter(Boolean).join(', '),
-    season: seasonLabel,
-    period: periodLabel,
-  });
+  const height = formatNumber(wind.height, wind.height % 1 ? 1 : 0);
+  const terrainShort = t(TERRAIN_SHORT[wind.terrain]);
+  const factor = formatNumber(wind.speedFactor, 2);
+  const title = [
+    t('wind.title', {
+      place: [epw.location.city, epw.location.state].filter(Boolean).join(', '),
+      season: seasonLabel,
+      period: periodLabel,
+    }),
+    thermal && t(THERMAL_TITLE[thermal]),
+    wind.corrected && t('wind.titleCorrection', { height, terrain: terrainShort }),
+  ]
+    .filter(Boolean)
+    .join('; ');
 
   return (
     <div className="wind-panel" data-testid="wind-panel">
@@ -163,7 +214,95 @@ export function WindPanel({
           />
         </div>
       )}
+      {!readOnly && (
+        <details
+          className="more wind-more"
+          open={moreOpen}
+          onToggle={(e) => setMoreOpen(e.currentTarget.open)}
+          data-testid="wind-more"
+        >
+          <summary>{t('wind.more')}</summary>
+          <Segmented
+            label={t('wind.thermal')}
+            value={wind.thermal ?? 'all'}
+            options={[
+              { value: 'all', label: t('wind.thermal.all') },
+              ...THERMAL_KEYS.map((k) => ({
+                value: k,
+                label: t(THERMAL_NAMES[k]),
+                disabled: !classification.method,
+              })),
+            ]}
+            onSelect={(v) => onChange(thermalPatch(v === 'all' ? undefined : v))}
+          />
+          {classification.method ? (
+            <p className="note" data-testid="wind-thermal-method">
+              {methodSentence}{' '}
+              {classes &&
+                t('wind.thermalCounts', {
+                  hot: formatNumber(classes.counts.hot),
+                  cold: formatNumber(classes.counts.cold),
+                  neutral: formatNumber(classes.counts.neutral),
+                  none:
+                    classes.counts.none > 0
+                      ? t('wind.thermalNone', { count: formatNumber(classes.counts.none) })
+                      : '',
+                })}{' '}
+              {t('wind.thermalWhere')}
+            </p>
+          ) : (
+            !wind.thermal && (
+              <p className="note" data-testid="wind-thermal-unavailable">
+                {t('wind.thermalUnavailable')}
+              </p>
+            )
+          )}
+          <div className="field">
+            <label htmlFor={`${id}-height`}>{t('wind.height')}</label>
+            <input
+              id={`${id}-height`}
+              className="wind-height"
+              type="text"
+              inputMode="decimal"
+              placeholder="10"
+              value={wind.heightText}
+              aria-invalid={wind.heightInvalid || undefined}
+              aria-describedby={`${id}-height-help`}
+              onChange={(e) => onChange({ va: e.target.value })}
+              data-testid="wind-height"
+            />
+            <span id={`${id}-height-help`} className="muted">
+              {t('wind.heightHelp')}
+            </span>
+          </div>
+          {wind.heightInvalid && (
+            <p className="error" role="status" data-testid="wind-height-invalid">
+              {t('wind.heightInvalid')}
+            </p>
+          )}
+          <Segmented
+            label={t('wind.terrain')}
+            value={wind.terrain}
+            options={TERRAIN_KEYS.map((k) => ({ value: k, label: t(TERRAIN_NAMES[k]) }))}
+            onSelect={(v) => onChange(terrainPatch(v))}
+          />
+          <p className="note" data-testid="wind-factor">
+            {t(TERRAIN_HELP[wind.terrain])}{' '}
+            {t('wind.factor', { height, terrain: terrainShort, factor })}
+          </p>
+        </details>
+      )}
+      {wind.thermal && !thermal && (
+        <p className="error" role="status" data-testid="wind-thermal-not-applied">
+          {t('wind.thermalNotApplied')}
+        </p>
+      )}
       <WindRoseChart rose={rose} show={wind.show} labels={compass} title={title} />
+      {rose.valid === 0 && (
+        <p className="error" role="status" data-testid="wind-empty">
+          {t('wind.emptyFilter')}
+        </p>
+      )}
       {wind.show === 'frequency' ? (
         <div className="legend" data-testid="wind-legend">
           <span className="legend-title">{t('wind.legendTitle')}</span>
@@ -186,14 +325,18 @@ export function WindPanel({
           resolution: formatNumber(resolution, resolution < 1 ? (resolution < 0.1 ? 2 : 1) : 0),
         })}
       </p>
-      {resolution >= 0.5 && (
+      {resolution >= 0.5 && wind.speedFactor === 1 && (
         <p className="error" role="status" data-testid="wind-bias">
           {t('wind.resolutionWarning', {
             resolution: formatNumber(resolution, resolution < 1 ? 1 : 0),
           })}
         </p>
       )}
-      <p className="note">{t('wind.stationWarning')}</p>
+      <p className="note" data-testid="wind-station-warning">
+        {t('wind.stationWarning')}
+        {wind.corrected &&
+          ` ${t('wind.correctionWarning', { height, terrain: terrainShort, factor })}`}
+      </p>
       <details className="more">
         <summary>{t('wind.table')}</summary>
         <div className="table-scroll">
