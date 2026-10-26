@@ -49,7 +49,7 @@ test.describe('passo 7: indicadores e alternativas (F3.5)', () => {
   }) => {
     await load(page, BASE);
     await expect(page.getByTestId('indicators-needs-geometry')).toBeVisible();
-    const panel = await load(page, `${BASE}&pc1=b_0%2C3`);
+    await load(page, `${BASE}&pc1=b_0%2C3`);
     const tiles = page.getByTestId('indicator-tiles');
     await expect(tiles).toBeVisible({ timeout: 20000 });
     // Percentuais dos quadros = somas da tabela por classe (kWh/m², uma casa).
@@ -75,18 +75,20 @@ test.describe('passo 7: indicadores e alternativas (F3.5)', () => {
     // Sem proteção: nada bloqueado, tudo admitido.
     expect(await percentages(page, 'sem')).toEqual([0, 100]);
     await expect(page.getByTestId('alternative-status-sem')).toHaveText('não superada');
-    await expect(panel).toContainText('Só a radiação direta');
+    await expect(page.getByTestId('indicators-section')).toContainText('Só a radiação direta');
   });
 
   test('a aleta a oeste supera o brise sozinho: mesma parte admitida nas frias, mais bloqueada', async ({
     page,
   }) => {
-    const panel = await load(page, `${BASE}&pc1=b_0%2C3`);
+    await load(page, `${BASE}&pc1=b_0%2C3`);
     await expect(page.getByTestId('indicator-tiles')).toBeVisible({ timeout: 20000 });
-    await panel.getByTestId('alternative-name').fill('Brise');
-    await panel.getByTestId('alternative-save').click();
+    await page.getByTestId('alternative-name').fill('Brise');
+    await page.getByTestId('alternative-save').click();
     await expect(page).toHaveURL(/alter1=Brise%7C1%2C5%7C1%2C2%7C%7Cb_0%2C3/);
-    await expect(panel).toContainText('A proteção atual já está guardada como "Brise"');
+    await expect(page.getByTestId('indicators-section')).toContainText(
+      'A proteção atual já está guardada como "Brise"',
+    );
 
     // Aleta à esquerda de quem está dentro olhando para o Norte: a oeste. De manhã (horas frias,
     // antes do meio-dia solar, 12h14 em hora legal) o sol vem do leste, e a sombra dela cai fora
@@ -103,8 +105,8 @@ test.describe('passo 7: indicadores e alternativas (F3.5)', () => {
     expect(admittedBoth).toBe(admittedBrise);
     expect(blockedBoth).toBeGreaterThan(blockedBrise!);
 
-    await panel.getByTestId('alternative-name').fill('Brise e aleta');
-    await panel.getByTestId('alternative-save').click();
+    await page.getByTestId('alternative-name').fill('Brise e aleta');
+    await page.getByTestId('alternative-save').click();
     await expect(page).toHaveURL(/alter2=Brise\+e\+aleta/);
     await expect(page.getByTestId('alternative-status-alter1')).toHaveText(
       'superada por Brise e aleta',
@@ -142,12 +144,12 @@ test.describe('passo 7: indicadores e alternativas (F3.5)', () => {
 
   test('teclado e acessibilidade (axe) com indicadores, tabela e gráfico', async ({ page }) => {
     const hash = `${BASE}&pc1=b_0%2C3&alter1=${encodeURIComponent('Brise maior|1,5|1,2||b_0,8')}`;
-    const panel = await load(page, hash);
+    await load(page, hash);
     await expect(page.getByTestId('alternatives-plot')).toBeVisible({ timeout: 20000 });
-    await panel.getByTestId('alternative-name').focus();
+    await page.getByTestId('alternative-name').focus();
     await page.keyboard.type('Atual');
     await page.keyboard.press('Tab');
-    await expect(panel.getByTestId('alternative-save')).toBeFocused();
+    await expect(page.getByTestId('alternative-save')).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/alter2=Atual/);
     const result = await new AxeBuilder({ page })
