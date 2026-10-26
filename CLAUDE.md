@@ -15,6 +15,7 @@ Mapa dos documentos:
 - `docs/spec/`: especificação técnica (convenções, fórmulas, algoritmos, tolerâncias).
 - `docs/validacao/`: casos de referência e relatórios de validação.
 - `docs/referencias/diagnostico-solar-6.2.md`: engenharia reversa do SOL-AR 6.2 (interface, fórmulas, dados e erros conhecidos).
+- `docs/manutencao/guia-do-mantenedor.md`: guia para quem mantém o programa (LabEEE): arquitetura, publicação, dados, traduções, validação e versões.
 - `docs/ideias.md`: estacionamento de ideias fora da fase atual.
 
 ## Princípios (desempate de qualquer decisão)
