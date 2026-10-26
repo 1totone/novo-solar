@@ -22,13 +22,13 @@ const altitudeOf = (p: number) =>
 
 type Rgb = [number, number, number];
 /**
- * Azul-petróleo das curvas (#005f73), também misturado ao branco pela suavização da borda (a linha
- * de 1,25 px cobre no máximo uns 60% de um pixel): verde e azul bem acima do vermelho, na proporção
- * do azul-petróleo (0,83), longe da do azul das linhas de hora (#1f4e79, 0,52).
+ * Azul-petróleo das curvas (#4493a1, decisão 0030), também misturado ao branco pela suavização da
+ * borda (a linha de 1,25 px cobre uns 60% de um pixel): verde e azul acima do vermelho, na proporção
+ * do azul-petróleo (0,85), longe da do azul das linhas de hora (#1f4e79, 0,52) e da grade cinza.
  */
 const isContour = ([r, g, b]: Rgb) =>
-  r < 140 && b - r > 50 && g - r > 40 && (g - r) / (b - r) > 0.7;
-/** Preenchimento leve da sombra total (azul-petróleo a 18% sobre o branco: 209, 226, 230). */
+  r < 175 && b - r > 35 && g - r > 30 && (g - r) / (b - r) > 0.7 && (g - r) / (b - r) < 1;
+/** Preenchimento leve da sombra total (azul-petróleo a 20% sobre o branco: 218, 233, 236). */
 const isFullShade = ([r, g, b]: Rgb) => r > 185 && r < 230 && g - r > 8 && b - r > 10;
 const isWhite = ([r, g, b]: Rgb) => r > 245 && g > 245 && b > 245;
 /** Violeta da hachura do ponto (#6f42c1). */

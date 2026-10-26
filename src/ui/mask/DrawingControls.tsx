@@ -2,6 +2,7 @@ import type { DrawnMask } from '../../core/mask/mask';
 import { useI18n } from '../i18n/useI18n';
 import { formatPolygons } from '../state/protractorHash';
 import type { Drawing } from './DrawingLayer';
+import { onRovingKeyDown } from '../a11y/roving';
 
 /** Botões do desenho à mão (o modo do SOL-AR 6.2): marcar vértices na carta e fechar polígonos. */
 export function DrawingControls({
@@ -38,12 +39,18 @@ export function DrawingControls({
         </button>
       ) : (
         <>
-          <div className="segmented" role="radiogroup" aria-label={t('draw.kind')}>
+          <div
+            className="segmented"
+            role="radiogroup"
+            aria-label={t('draw.kind')}
+            onKeyDown={(e) => onRovingKeyDown(e, 'radio')}
+          >
             {(['total', 'partial'] as const).map((k) => (
               <button
                 key={k}
                 type="button"
                 role="radio"
+                tabIndex={drawing.kind === k ? 0 : -1}
                 aria-checked={drawing.kind === k}
                 onClick={() => onDrawingChange({ ...drawing, kind: k })}
               >

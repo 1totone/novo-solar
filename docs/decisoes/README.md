@@ -33,6 +33,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0027](0027-vento-avancado.md) | Vento avançado: filtro pela condição térmica do passo 7 e correção para a altura e o terreno pelo perfil do EnergyPlus (F4.4) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0028](0028-arquivo-de-projeto.md) | Arquivo de projeto em JSON com esquema versionado, com o estado do link, os arquivos climáticos carregados e a impressão; copiar o link (F4.7) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0029](0029-idiomas.md) | Idiomas PT, ES e EN: glossário técnico, idioma pelo navegador com escolha guardada no navegador (fora do link), formatos de número, hora e data (F4.6) | 2026-10-26 | proposta (na integração da Fase 4; traduções a revisar por falantes nativos) |
+| [0030](0030-paleta-e-acessibilidade.md) | Paleta da carta conferida para daltonismo e contraste (só as camadas que falharam mudaram), setas do teclado nas abas e grupos de opções, nomes acessíveis dos campos de ângulo (F4.6) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 
 ## Modelo
 

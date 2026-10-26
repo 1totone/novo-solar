@@ -4,7 +4,10 @@ import { ChartClip } from '../chart/ChartClip';
 import { useChartProjection } from '../chart/projectionContext';
 import { BIG, HATCH, MaskBuilder, shortHash } from './maskBuilder';
 
-/** Máscara de sombra pintada na carta: total em vermelho, parcial em amarelo (decisão 0013). */
+/**
+ * Máscara de sombra pintada na carta: total em vermelho, parcial em amarelo (decisões 0013 e 0030);
+ * com dados sobre a carta, hachuras a 45° (total) e 135° (parcial), que não dependem só da cor.
+ */
 export function MaskLayer({
   regions,
   hatched = false,

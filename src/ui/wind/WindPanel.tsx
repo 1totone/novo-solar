@@ -23,6 +23,7 @@ import {
 import { SPEED_COLORS } from './colors';
 import { useMethodSentence, useWindRose } from './useWindRose';
 import { WindRoseChart } from './WindRoseChart';
+import { onRovingKeyDown, rovingTabIndex } from '../a11y/roving';
 
 const SEASON_NAMES_SOUTH: Record<SeasonKey, MessageKey> = {
   'dez-fev': 'wind.summer',
@@ -91,12 +92,22 @@ function Segmented<T extends string>({
   return (
     <div className="field">
       <span className="field-label">{label}</span>
-      <div className="segmented wrap" role="radiogroup" aria-label={label}>
-        {options.map((o) => (
+      <div
+        className="segmented wrap"
+        role="radiogroup"
+        aria-label={label}
+        onKeyDown={(e) => onRovingKeyDown(e, 'radio')}
+      >
+        {options.map((o, i) => (
           <button
             key={o.value}
             type="button"
             role="radio"
+            tabIndex={rovingTabIndex(
+              value === o.value,
+              i,
+              options.some((x) => x.value === value),
+            )}
             aria-checked={value === o.value}
             disabled={o.disabled}
             onClick={() => onSelect(o.value)}
