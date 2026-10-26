@@ -28,6 +28,18 @@ const CASES: [string, string][] = [
     'curvas de brise e aletas na fachada leste de Florianópolis',
     '#local=florianopolis&o=90&jl=1%2C2&ja=1&pc1=ad_0%2C4&pc2=lh_x_0%2C2_0%2C3',
   ],
+  [
+    'carta cilíndrica com analemas, transferidor e máscara (F4.3)',
+    '#local=florianopolis&o=90&a1=40&bd1=30&proj=cil&hl=a',
+  ],
+  [
+    'carta cilíndrica com as curvas de um brise na fachada norte (F4.3)',
+    '#local=florianopolis&o=0&proj=cil&jl=1%2C5&ja=1%2C2&pc1=b_0%2C8_0%2C1__i_i',
+  ],
+  [
+    'carta equidistante com curvas e período (F4.3)',
+    '#local=brasilia&o=30&proj=eq&jl=2&ja=1&jr=0%2C15&pc1=b_1%2C28___1%2C7_1%2C2&dpi=1%2F1&dpf=31%2F12&dhi=9&dhf=15',
+  ],
 ];
 
 type Rect = { text: string; cls: string; x0: number; y0: number; x1: number; y1: number };
