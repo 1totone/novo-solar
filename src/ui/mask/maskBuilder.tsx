@@ -1,5 +1,13 @@
 import type { ReactNode } from 'react';
+import {
+  BIG_CHART_RING,
+  projectRegion,
+  type ChartPoint,
+  type ProjectedRegion,
+  type Projection,
+} from '../../core/chart/projection';
 import type { Region } from '../../core/mask/mask';
+import { pathD } from '../chart/projectionContext';
 
 /**
  * Regiões exatas da carta (árvores de discos, semiplanos e polígonos) como máscaras SVG: usadas
@@ -36,9 +44,15 @@ export class MaskBuilder {
   defs: ReactNode[] = [];
   private count = 0;
   private readonly prefix: string;
+  private readonly projection: Projection | null;
 
-  constructor(prefix: string) {
+  /**
+   * Sem projeção (ou na estereográfica), as regiões são desenhadas com as formas exatas (círculos e
+   * semiplanos); nas outras projeções (F4.3), convertidas em polígonos (spec 03, seção 3.5.3).
+   */
+  constructor(prefix: string, projection: Projection | null = null) {
     this.prefix = prefix;
+    this.projection = projection && projection.kind !== 'stereographic' ? projection : null;
   }
 
   /** Desenha a região na cor dada sobre o que já está na máscara. */
@@ -70,6 +84,7 @@ export class MaskBuilder {
 
   /** Cria a máscara da região e devolve o id. */
   mask(r: Region): string {
+    if (this.projection) return this.maskProjected(projectRegion(r, this.projection));
     const id = `${this.prefix}-${this.count++}`;
     let content: ReactNode;
     if (r.kind === 'not') {
@@ -86,6 +101,60 @@ export class MaskBuilder {
       );
     } else {
       content = this.paint(r, 'white', 'c');
+    }
+    this.defs.push(
+      <mask key={id} id={id} maskUnits="userSpaceOnUse" {...BIG}>
+        {content}
+      </mask>,
+    );
+    return id;
+  }
+
+  /** Pinta uma região já convertida para a projeção da carta. */
+  private paintProjected(r: ProjectedRegion, color: 'white' | 'black', key: string): ReactNode {
+    switch (r.kind) {
+      case 'empty':
+        return null;
+      case 'all':
+        return <rect key={key} {...BIG} style={{ fill: color }} />;
+      case 'shape': {
+        const rings: ChartPoint[][] = r.complement ? [BIG_CHART_RING, ...r.rings] : r.rings;
+        return <path key={key} d={pathD(rings, true)} fillRule="evenodd" style={{ fill: color }} />;
+      }
+      case 'or':
+        return (
+          <g key={key}>{r.regions.map((c, i) => this.paintProjected(c, color, `${key}.${i}`))}</g>
+        );
+      case 'and':
+      case 'not':
+        return (
+          <rect
+            key={key}
+            {...BIG}
+            style={{ fill: color }}
+            mask={`url(#${this.maskProjected(r)})`}
+          />
+        );
+    }
+  }
+
+  private maskProjected(r: ProjectedRegion): string {
+    const id = `${this.prefix}-${this.count++}`;
+    let content: ReactNode;
+    if (r.kind === 'not') {
+      content = (
+        <>
+          <rect {...BIG} style={{ fill: 'white' }} />
+          {this.paintProjected(r.region, 'black', 'n')}
+        </>
+      );
+    } else if (r.kind === 'and') {
+      content = r.regions.reduceRight<ReactNode>(
+        (inner, child) => <g mask={`url(#${this.maskProjected(child)})`}>{inner}</g>,
+        <rect {...BIG} style={{ fill: 'white' }} />,
+      );
+    } else {
+      content = this.paintProjected(r, 'white', 'c');
     }
     this.defs.push(
       <mask key={id} id={id} maskUnits="userSpaceOnUse" {...BIG}>

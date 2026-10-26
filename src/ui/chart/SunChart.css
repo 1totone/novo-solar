@@ -69,3 +69,42 @@
   font-size: 0.042px;
   fill: var(--color-sun-text);
 }
+
+/* F4.3: projeções equidistante e cilíndrica (caminhos no lugar de polilinhas) e analemas. */
+.sun-chart path.sun-path,
+.sun-chart path.hour-line,
+.sun-chart .legal-hour-line {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .legal-hour-line {
+  stroke: var(--color-legal, #9c2f6b);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.sun-chart .legal-hour-label {
+  fill: var(--color-legal, #9c2f6b);
+  font-size: 0.05px;
+  font-weight: 600;
+}
+
+.sun-chart .zenith-edge,
+.sun-chart .side-edge {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.sun-chart .altitude-label.cylindrical {
+  text-anchor: end;
+}
+
+.sun-chart .date-label.cylindrical {
+  text-anchor: start;
+}
+
+.sun-chart .protractor path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}

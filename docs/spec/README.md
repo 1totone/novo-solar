@@ -5,8 +5,8 @@
 ## Seções
 
 1. [Convenções geométricas](01-convencoes-geometricas.md): azimute, orientação da fachada, referencial da fachada, α, β e γ nas referências interna e externa (com figuras), condições de sombra, curvas do transferidor, unidades, máscara pelos ângulos (sombra total e parcial).
-2. [Tempo e posição solar](02-tempo-e-posicao-solar.md): hora legal, UTC e hora solar; convenção de hora do EPW; NREL SPA, ΔT, ano de referência, refração; tolerâncias contra o pvlib.
-3. [Projeções e transferidor](03-projecoes.md): projeção estereográfica, inversa, imagem de círculos máximos, fórmulas das curvas do transferidor, impressão em escala.
+2. [Tempo e posição solar](02-tempo-e-posicao-solar.md): hora legal, UTC e hora solar; convenção de hora do EPW; NREL SPA, ΔT, ano de referência, refração; linhas horárias em hora legal (analemas, seção 2.5.1); tolerâncias contra o pvlib.
+3. [Projeções e transferidor](03-projecoes.md): projeção estereográfica, inversa, imagem de círculos máximos, fórmulas das curvas do transferidor, impressão em escala; projeções equidistante e cilíndrica (seção 3.5, proposta, decisão 0025).
 4. [Dados climáticos](04-dados-climaticos.md): EPW (campos, unidades, códigos de ausente, checagens), CSV legado do SOL-AR 6.2, indicadores de qualidade.
 5. [Sobreposição de dados](05-sobreposicao-de-dados.md): células como áreas (quinzenas, semestres pelos solstícios, intervalos de radiação e temperatura, bordas entre quinzenas), cor pela média ou pela frequência acima de um limiar, faixas padrão e pelo arquivo.
 6. [Vento](06-vento.md): rosa dos ventos (calmaria, setores, classes de velocidade, estações e períodos do dia, resolução da velocidade).
@@ -55,6 +55,9 @@ Serão escritos no passo de cada módulo, com referências e testes:
 | Posição solar (ângulo zenital e separação angular) | pvlib (NREL SPA) | 0,01° |
 | Nascer, pôr e passagem meridiana | pvlib (SPA) | 10 s |
 | Curvas do transferidor e de máscara em casos analíticos | solução analítica | 0,1° |
+| Coordenadas nas projeções equidistante e cilíndrica | fórmulas da seção 3.5 num script independente, com o pvlib | 10⁻⁶ R |
+| Curvas do transferidor fora da estereográfica | fórmulas fechadas (seção 3.5.2) | 10⁻⁴ R da polilinha |
+| Analemas (sol às H:00 legais) | pvlib, com o instante montado pelo fuso | 0,01° |
 | Máscara pelos ângulos (sombra total e centro da janela) | traçado de raios com janela e placas | nenhuma direção classificada errada (1500 por caso); onde a união das peças não é exata, nenhum falso positivo |
 | Sobreposição: hora do EPW na sua célula | posição do sol no instante da convenção do EPW (Florianópolis e Manaus) | todas dentro da sua célula e fora das outras, com 10⁻⁴ na carta de raio 1 |
 | Percentual sombreado (máscara pela geometria) | área da união com shapely; traçado de raios | 10⁻⁹; 0,01 (grade de 400 × 400) |

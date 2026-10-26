@@ -1,5 +1,8 @@
-import { project } from '../../core/chart/stereographic';
+import { useId } from 'react';
+import { projectDirection, projectRing } from '../../core/chart/projection';
 import type { RequiredAngles, SkyPosition } from '../../core/shading/inverse';
+import { ChartClip } from '../chart/ChartClip';
+import { pathD, useChartProjection } from '../chart/projectionContext';
 
 const LABELS: [keyof RequiredAngles, string][] = [
   ['alpha', 'α'],
@@ -12,31 +15,26 @@ const LABELS: [keyof RequiredAngles, string][] = [
   ['finGammaLeft', 'γa e'],
 ];
 
-const svg = (d: SkyPosition) => {
-  const c = project(90 - d.altitude, d.azimuth);
-  return [c.x, -c.y] as const;
-};
-
 /**
  * Área do período do dimensionamento na carta (F3.6), em verde, como a Figura 13 do tutorial do
  * SOL-AR da UFU; fica sob as trajetórias.
  */
 export function PeriodArea({ outline }: { outline: readonly SkyPosition[] }) {
-  const d = outline.map(
-    (p, i) =>
-      `${i === 0 ? 'M' : 'L'}${svg(p)
-        .map((v) => v.toFixed(5))
-        .join(',')}`,
+  const projection = useChartProjection();
+  const clipId = `period-clip${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const rings = projectRing(
+    projection,
+    outline.map((p) => ({ zenith: 90 - p.altitude, azimuth: p.azimuth })),
   );
   return (
     <g className="period" data-testid="period-layer">
-      <clipPath id="period-clip">
-        <circle r={1} />
-      </clipPath>
+      <defs>
+        <ChartClip id={clipId} />
+      </defs>
       <path
-        d={`${d.join('')}Z`}
+        d={pathD(rings, true)}
         className="period-area"
-        clipPath="url(#period-clip)"
+        clipPath={`url(#${clipId})`}
         data-testid="period-area"
       />
     </g>
@@ -54,6 +52,11 @@ export function PeriodMarks({
   angles: RequiredAngles;
   showAlphaMax: boolean;
 }) {
+  const projection = useChartProjection();
+  const svg = (d: SkyPosition) => {
+    const c = projectDirection(projection, 90 - d.altitude, d.azimuth);
+    return [c.x, -c.y] as const;
+  };
   // Pontos repetidos (o mesmo sol determina dois ângulos): um rótulo só, com os dois nomes.
   const marks = new Map<string, { x: number; y: number; names: string[] }>();
   for (const [key, name] of LABELS) {

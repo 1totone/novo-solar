@@ -49,7 +49,18 @@ Arquivos climáticos típicos (TMY, TRY) misturam meses de anos diferentes e nã
 - **Nascer e pôr do sol**, em hora legal e em hora solar: SPA, Apêndice A.2.
 - **Trajetórias da carta:** 12 datas do ano de referência: os dois solstícios e os dois equinócios, na data civil do fuso do local, e o dia 21 dos outros oito meses. Os instantes de equinócios e solstícios são aqueles em que a ascensão reta aparente do sol vale 0°, 90°, 180° e 270° (coincidem com a longitude eclíptica aparente a menos de segundos, porque a latitude eclíptica do sol é menor que 1"). Em 2026, no fuso −3: 20/03, 21/06, 22/09 e 21/12. Meses simétricos em relação ao solstício (ex.: 21/jan e 21/nov) têm declinações próximas, mas não iguais; desenhamos cada data com a sua declinação.
 - **Trajetória de um dia:** posições a cada 10 min (5 min nos testes) desde 00:00 local, com o sol acima do horizonte geométrico, mais os pontos exatos de cruzamento do horizonte (bisseção até 1 ms).
-- **Linhas horárias:** em hora solar verdadeira (padrão didático, linhas que cruzam as trajetórias): para cada data, o instante em que o ângulo horário do SPA vale 15° · (hora − 12), achado por iteração de Newton; a linha é desenhada com datas a cada 3 dias entre os solstícios de junho e de dezembro, intervalo em que a declinação é monótona. Em hora legal, viram analemas (F4.3).
+- **Linhas horárias:** em hora solar verdadeira (padrão didático, linhas que cruzam as trajetórias): para cada data, o instante em que o ângulo horário do SPA vale 15° · (hora − 12), achado por iteração de Newton; a linha é desenhada com datas a cada 3 dias entre os solstícios de junho e de dezembro, intervalo em que a declinação é monótona. Em hora legal, viram analemas (seção 2.5.1).
+
+### 2.5.1 Linhas horárias em hora legal: analemas (F4.3)
+
+Proposta da decisão 0025.
+
+- **Definição:** a linha da hora legal H é o lugar do sol às H:00 do fuso do arquivo (UTC = H − fuso), em cada dia do ano de referência. Ao longo do ano, a curva fecha um "8" (analema): a declinação dá a altura do laço, e a equação do tempo, a largura.
+- **Por que difere da linha solar:** pela relação da seção 2.1, às H:00 legais a hora solar verdadeira é H + [4 · (λ − 15 · fuso) + E] / 60. Em Florianópolis (λ = −48,55°, fuso −3), a parcela da longitude é −14,2 min (o sol "atrasa" em relação ao relógio), e a equação do tempo vai de −14,2 min (11/02) a +16,4 min (03/11): o meio-dia legal fica entre 28 min antes e 2 min depois do meio-dia solar. Em Manaus (λ = −60,05°, fuso −4), a parcela da longitude é de −0,2 min, e o meio-dia legal acompanha só a equação do tempo; em Porto Alegre, −24,7 min; em Concepción (λ = −73,06°, fuso −4), −52,3 min, e o meio-dia legal acontece de 36 a 66 min antes do solar; em Rio Branco (fuso −5), +28,4 min.
+- **Amostras:** dias 1, 4, 7, … do ano de referência (a cada 3 dias, 122 dias), às H:00 legais; a curva é fechada ligando o último dia ao primeiro. Horas desenhadas: de 5 a 19 h legais, só os trechos com o sol acima do horizonte geométrico (recortados na carta).
+- **Rótulo:** a hora, junto do ponto do analema no solstício de inverno do local (21/06 com latitude negativa, 21/12 com latitude positiva), do lado de fora do laço; se esse ponto estiver abaixo do horizonte, junto do ponto visível mais baixo.
+- **Opção na carta:** linhas horárias em hora solar (padrão, como no SOL-AR 6.2 e no ensino), em hora legal ou as duas juntas, para mostrar a diferença.
+- **Validação:** posições às H:00 legais contra o pvlib (`spa_python`, mesmo ΔT), com o instante montado pelo fuso de forma independente (`Etc/GMT±n` ou deslocamento fixo do pandas, inclusive fuso fracionário de +5,5 h), em locais com fusos de −5 a +5,5; tolerância de 0,01° na direção, a da seção 2.6.
 
 ## 2.6 Validação e tolerâncias
 

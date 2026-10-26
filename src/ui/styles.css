@@ -572,6 +572,11 @@ details.more summary {
     margin-top: 0.25rem;
   }
 
+  .chart-section .sun-chart.cylindrical {
+    width: 100%;
+    aspect-ratio: 2.28 / 1.36;
+  }
+
   #panel-chart > .note:last-child {
     display: none;
   }
@@ -862,10 +867,11 @@ fieldset.plain .check {
     font-size: 9pt;
   }
 
-  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura). */
+  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura); na cilíndrica,
+     a faixa de 0° a 90° tem a altura pedida (F4.3). */
   .chart-section .sun-chart {
-    width: calc(var(--print-radius) * 2.64cm) !important;
-    height: calc(var(--print-radius) * 2.64cm) !important;
+    width: calc(var(--print-radius) * var(--chart-span-x, 2.64) * 1cm) !important;
+    height: calc(var(--print-radius) * var(--chart-span-y, 2.64) * 1cm) !important;
     max-width: none !important;
     max-height: none !important;
     margin: 0 auto;
@@ -1455,4 +1461,17 @@ fieldset.piece legend {
   .print-geometry .geometry-drawing {
     border: 0;
   }
+}
+
+/* F4.3: legenda das linhas horárias solares e legais. */
+.swatch.solar-hour-line,
+.swatch.legal-hour-line {
+  width: 1.2rem;
+  height: 0;
+  border-top: 2px solid var(--color-accent);
+  background: none;
+}
+
+.swatch.legal-hour-line {
+  border-top: 2px dashed var(--color-legal, #9c2f6b);
 }

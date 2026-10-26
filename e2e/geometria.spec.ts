@@ -47,6 +47,8 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
       /3\s*Proteção/,
       /4\s*Dados sobre a carta/,
       /5\s*Imprimir e exportar/,
+      // F4.3 (decisão 0025): opções da carta no grupo "Avançado", sem número, antes do passo 6.
+      /Projeção e linhas horárias/,
       /6\s*Proteção pelas dimensões/,
       /7\s*Efeito no ano/,
     ]);
@@ -55,9 +57,12 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
     await expect(page.getByTestId('effect-panel').locator('details').first()).not.toHaveAttribute(
       'open',
     );
+    await expect(page.getByTestId('chart-options-panel').locator('details')).not.toHaveAttribute(
+      'open',
+    );
     await expect(page.getByTestId('geometry-start')).toBeHidden();
     await expect(page.getByTestId('geometry-summary')).toContainText('Janela, brise');
-    expect(page.url()).not.toMatch(/jl=|pc1=/);
+    expect(page.url()).not.toMatch(/jl=|pc1=|proj=|hl=/);
   });
 
   test('janela e brise do tutorial: corte e vista com os ângulos, as cotas e as cores', async ({

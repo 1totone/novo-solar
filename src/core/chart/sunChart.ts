@@ -166,3 +166,62 @@ export function chartDates(timeZone: number, year: number = REFERENCE_YEAR): Cha
   }
   return [...seasons, ...others].sort((a, b) => a.month - b.month || a.day - b.day);
 }
+
+const MS_PER_DAY = 86_400_000;
+
+/**
+ * Posição do sol às H:00 da hora legal (fuso do arquivo) no dia de índice `day` do ano de
+ * referência (0 = 1º de janeiro): um ponto do analema da hora H (spec 02, seção 2.5.1).
+ */
+export function legalHourPosition(site: Site, day: number, hour: number): SkyPoint {
+  const t =
+    Date.UTC(REFERENCE_YEAR, 0, 1) + day * MS_PER_DAY + (hour - site.timeZone) * MS_PER_HOUR;
+  return at(site, t);
+}
+
+export interface AnalemmaPoint extends SkyPoint {
+  /** Dia do ano de referência (0 = 1º de janeiro). */
+  day: number;
+}
+
+/**
+ * Linha horária em hora legal (analema): o sol às H:00 legais nos dias 0, `dayStep`, 2·`dayStep`…
+ * do ano de referência, inclusive abaixo do horizonte (a carta recorta). Fechada: o último dia
+ * liga ao primeiro.
+ */
+export function legalHourLine(site: Site, hour: number, dayStep = 3): AnalemmaPoint[] {
+  const out: AnalemmaPoint[] = [];
+  for (let day = 0; day < 365; day += dayStep) {
+    out.push({ ...legalHourPosition(site, day, hour), day });
+  }
+  return out;
+}
+
+export interface SolarOffset {
+  /** Hora solar verdadeira menos a hora legal, em minutos. */
+  minutes: number;
+  day: number;
+}
+
+/**
+ * Diferença entre a hora solar verdadeira e a legal ao meio-dia legal, dia a dia (spec 02, seções
+ * 2.1 e 2.5.1): a parcela da longitude, 4 · (λ − 15 · fuso), e os extremos do ano, que somam a
+ * equação do tempo. A hora solar vem do ângulo horário do SPA: TST = 12 + ω / 15.
+ */
+export function legalNoonSolarOffsets(site: Site): {
+  longitudeMinutes: number;
+  min: SolarOffset;
+  max: SolarOffset;
+} {
+  let min: SolarOffset = { minutes: Infinity, day: 0 };
+  let max: SolarOffset = { minutes: -Infinity, day: 0 };
+  for (let day = 0; day < 365; day++) {
+    const t =
+      Date.UTC(REFERENCE_YEAR, 0, 1) + day * MS_PER_DAY + (12 - site.timeZone) * MS_PER_HOUR;
+    const omega = solarPosition(t, site.latitude, site.longitude, site.elevation).hourAngle;
+    const minutes = 4 * omega;
+    if (minutes < min.minutes) min = { minutes, day };
+    if (minutes > max.minutes) max = { minutes, day };
+  }
+  return { longitudeMinutes: 4 * (site.longitude - 15 * site.timeZone), min, max };
+}
