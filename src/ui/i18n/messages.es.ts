@@ -939,7 +939,7 @@ export const es: Catalog = {
   'station.warnLagEarly':
     'La radiación del archivo llega unos {minutes} min antes del sol (días despejados): las celdas de radiación y los indicadores del paso 7 usan la radiación tal como está en el archivo.',
   'station.q.lag':
-    'tiempo de la radiación respecto al sol, en los días despejados: {minutes} min (positivo: después del sol)',
+    'tiempo de la radiación respecto al sol, en los días despejados: {minutes} min (positivo: después del sol; incertidumbre de hasta unos 10 min, por las nubes)',
   'station.warnAbove':
     'La estación está {m} m más arriba que el lugar de la obra: la temperatura y el viento pueden ser distintos.',
   'station.warnBelow':

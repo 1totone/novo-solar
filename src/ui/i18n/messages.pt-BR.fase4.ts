@@ -248,7 +248,7 @@ export const fase4PtBR = {
   'station.warnLagEarly':
     'A radiação do arquivo vem cerca de {minutes} min antes do sol (dias claros): as células de radiação e os indicadores do passo 7 usam a radiação como está no arquivo.',
   'station.q.lag':
-    'tempo da radiação em relação ao sol, nos dias claros: {minutes} min (positivo: depois do sol)',
+    'tempo da radiação em relação ao sol, nos dias claros: {minutes} min (positivo: depois do sol; incerteza de até cerca de 10 min, pelas nuvens)',
   'station.warnAbove':
     'A estação fica {m} m acima do local da obra: a temperatura e o vento podem ser diferentes.',
   'station.warnBelow':

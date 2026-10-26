@@ -1,0 +1,15 @@
+arquivo,wmo_tmyx,estacao_tmyx,atraso_f27_min,vies_nuvens_min,atraso_centroide_try_min,nebulosidade_manha,nebulosidade_tarde,kt_manha,kt_tarde,atraso_tmyx_min,atraso_tmyx_sem_vies_min
+belem.csv,821930,Belem-Val.de.Cans.Intl.AP,-0.5,-7.6,-8.1,2.8,5.8,0.753,0.672,24.6,32.2
+brasilia.csv,833780,Brasilia-Kubitschek.Intl.AP,1.7,-0.2,1.5,1.8,2.5,0.797,0.797,29.8,30.0
+curitiba.csv,838400,Curitiba-Pena.Intl.AP,-3.3,0.1,-3.2,2.3,1.6,0.764,0.772,30.4,30.3
+florianopolis.csv,838990,Florianopolis-Luz.Intl.AP,-0.8,-0.7,-1.5,1.3,1.5,0.71,0.711,31.7,32.4
+fortaleza.csv,823980,Fortaleza-Pinto.Martins.Intl.AP,39.2,6.0,45.2,3.8,1.5,0.673,0.743,31.8,25.8
+maceio.csv,829930,Maceio-Palmares.Intl.AP,50.2,9.2,59.4,6.4,5.0,0.687,0.791,39.3,30.1
+natal.csv,825990,Natal.Intl.AP,52.3,9.7,62.0,5.5,2.7,0.675,0.786,43.7,34.0
+porto_alegre.csv,839710,Porto.Alegre-Salgado.Filho.Intl.AP,-11.3,-0.9,-12.2,0.5,1.2,0.794,0.781,13.3,14.2
+recife.csv,828990,Recife-Guararapes-Freyre.Intl.AP,53.7,3.5,57.2,4.5,2.8,0.689,0.729,92.7,89.2
+rio_de_janeiro.csv,837460,Rio.de.Janeiro-Galeao-Jobim.Intl.AP,20.4,-0.4,20.0,1.5,0.9,0.764,0.764,29.9,30.3
+salvador.csv,832480,Salvador-Magalhaes.Intl.AP,40.0,5.9,45.9,4.6,1.8,0.716,0.789,34.3,28.4
+sao_luis.csv,822810,Sao.Luis-Machado.Intl.AP,16.4,3.4,19.8,4.2,4.3,0.702,0.735,30.8,27.4
+sao_paulo.csv,837800,Sao.Paulo-Congonhas.AP,6.8,1.6,8.4,1.9,1.9,0.788,0.808,30.9,29.3
+vitoria.csv,836490,Vitoria-Aguiar.Salles.AP,32.2,0.9,33.1,2.8,1.5,0.783,0.8,32.2,31.3

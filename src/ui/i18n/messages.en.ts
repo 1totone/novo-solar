@@ -926,7 +926,7 @@ export const en: Catalog = {
   'station.warnLagEarly':
     'The radiation in the file comes about {minutes} min before the sun (clear days): the radiation cells and the step 7 indicators use the radiation as it is in the file.',
   'station.q.lag':
-    'timing of the radiation relative to the sun, on clear days: {minutes} min (positive: after the sun)',
+    'timing of the radiation relative to the sun, on clear days: {minutes} min (positive: after the sun; uncertainty up to about 10 min, from clouds)',
   'station.warnAbove':
     'The station is {m} m higher than the project site: temperature and wind may differ.',
   'station.warnBelow':
