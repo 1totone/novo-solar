@@ -82,7 +82,10 @@ Indicadores calculados para todo arquivo carregado e mostrados junto da origem e
 - percentual de calmarias (velocidade igual a 0) e resolução da velocidade (inteira ou decimal) e da direção (passo em graus);
 - índice de claridade horário k_t = GHI / radiação extraterrestre horizontal; horas com k_t > 0,8 e radiação extraterrestre acima de 200 Wh/m² são marcadas como implausíveis ou estimadas por modelo (no 6.2: até 9,8% das horas em São Paulo, diagnóstico 2.5);
 - fechamento GHI ≈ DNI · cos z + DHI, com o sol no meio do intervalo; desvio tolerado a definir com os dados reais no F1.1;
-- origem da separação direta/difusa, quando o cabeçalho informa.
+- origem da separação direta/difusa, quando o cabeçalho informa;
+- **tempo da radiação** (F4.1): atraso do centróide diário da GHI em relação ao da radiação extraterrestre integrada nas mesmas horas (h − 1 a h, pelo SPA, com as coordenadas e o fuso do cabeçalho), na média dos 30 dias mais claros; positivo, a radiação vem depois do sol. O método recupera deslocamentos conhecidos de 0, 30 e 60 min em dados de céu claro. Nos TMYx 2011-2025 do Brasil, a mediana é +30,5 min (relatório do F4.1, seção 4). Por enquanto, calculado só no catálogo (seção 4.5).
+
+No catálogo (seção 4.5), o índice de claridade usa a extraterrestre da própria hora pelo SPA, e não o campo do arquivo: nos TMYx, esse campo está centrado em h − 1, e o índice com ele marca como implausíveis horas que não são.
 
 ## 4.4 Cidades e fontes de dados (F2.7)
 
@@ -92,6 +95,16 @@ Catálogo (`src/ui/cities.ts`, decisão 0017): as 15 cidades do SOL-AR 6.2 e Man
 - **Dados recentes:** link para o arquivo TMYx no Climate.OneBuilding.org; o usuário baixa e carrega (decisões 0010 e 0013). Origem e período aparecem a partir do arquivo (seção 4.1).
 - **Dados históricos:** os 15 CSV do 6.2, publicados com a aplicação e abertos no passo 1 ("Abrir dados históricos", `hist=1` no link), com o local do catálogo e o fuso −3 (−4 em Concepción, do cabeçalho do formato de inclusão). Origem: TRY de aeroporto (Goulart, Lamberts e Firmino, 1998), ano de referência escolhido entre 1961 e 1970 (1951 e 1970 em Natal, Porto Alegre, Recife e São Paulo; o livro não diz qual ano); Concepción: IWEC (ASHRAE), período não informado. Selo "dados históricos".
 - **Avisos** sob a origem: radiação estimada por modelo (TRY); atraso ou adiantamento da radiação em relação ao sol real, quando de 5 min ou mais (seção 4.2); horas em que a radiação global contradiz a extraterrestre do próprio arquivo (Concepción: 259 horas com global sem sol e 461 com global acima da extraterrestre); valores ausentes por campo, para qualquer arquivo.
+
+## 4.5 Catálogo nacional (F4.1)
+
+Decisão 0034 (proposta). As 579 estações do Brasil com arquivo TMYx 2011-2025 no Climate.OneBuilding.org, geradas por `scripts/catalogo/gerar_catalogo.py`:
+
+- **Metadados:** identificador do ISD, nome, UF pelas coordenadas (Natural Earth 1:50m; a mais próxima para as estações fora dos polígonos), coordenadas, altitude e fuso do cabeçalho do EPW, período e anos de dados (comentário do EPW e KML), fonte (estação com ERA5, ou só ERA5), arquivos futuros (BrazFuture) e o caminho do zip oficial.
+- **Qualidade:** os indicadores da seção 4.3 de cada arquivo, inclusive o tempo da radiação.
+- **Os arquivos não vêm com a aplicação** (termos em `docs/dados/termos-de-redistribuicao.md`): o usuário baixa o oficial e carrega no passo 1. Um arquivo carregado com o nome de um TMYx do catálogo ganha a qualidade e os avisos da estação.
+- **Local da obra** (opcional, `perto=lat,lon,alt`): estações mais próximas pela distância no círculo máximo (esfera de raio médio, 6371,0088 km) e o desnível; avisos com distância acima de 50 km, desnível acima de 200 m, menos de 10 anos, só reanálise e tempo da radiação de 15 min ou mais (limites propostos, sem fonte).
+- **Estação no link:** `local=estacao&est=<id>` com as coordenadas, como o arquivo (seção 4.4), para a carta reabrir sem o catálogo.
 
 ## Referências
 

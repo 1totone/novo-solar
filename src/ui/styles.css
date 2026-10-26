@@ -178,6 +178,16 @@ a:focus-visible {
   overflow-wrap: anywhere;
 }
 
+/* Origem, avisos e qualidade: textos longos, na largura toda do painel (F4.1). */
+.site-info dt.wide,
+.site-info dd.wide {
+  grid-column: 1 / -1;
+}
+
+.site-info dt.wide {
+  margin-top: 0.25rem;
+}
+
 /* Selo dos dados históricos (F2.7) e lista de avisos sobre os dados. */
 .badge {
   display: inline-block;
@@ -1752,4 +1762,89 @@ a.btn {
   :root[data-tutorial] [data-step] {
     outline: none;
   }
+}
+
+/* Catálogo nacional de estações (F4.1) */
+.catalog {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.catalog > summary {
+  min-height: 32px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.station-list {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.station-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.station-choice[aria-pressed='true'] {
+  border: 2px solid var(--color-accent);
+}
+
+.station-choice:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.station-name {
+  font-weight: 600;
+}
+
+.catalog-map {
+  margin: 0.5rem 0 0;
+}
+
+.catalog-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.catalog-map .ufs path {
+  fill: var(--color-surface);
+  stroke: var(--chart-grid);
+  stroke-width: 0.08;
+}
+
+.catalog-map .stations circle {
+  fill: var(--color-accent);
+}
+
+.catalog-map .stations circle.era5 {
+  fill: var(--color-muted);
+}
+
+.catalog-map .selected {
+  fill: none;
+  stroke: var(--color-sun);
+  stroke-width: 0.25;
+}
+
+.catalog-map .project-point {
+  fill: none;
+  stroke: var(--chart-legal);
+  stroke-width: 0.3;
 }
