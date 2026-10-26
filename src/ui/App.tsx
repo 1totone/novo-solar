@@ -12,6 +12,7 @@ import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
+import { StepNav } from './layout/StepNav';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
@@ -292,6 +293,8 @@ export function App() {
       <main>
         <div className="workspace">
           <div className="steps">
+            {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
+            {(geometryOpen || effectOpen) && <StepNav />}
             <SitePanel
               selected={selected}
               loadedFile={selected.kind === 'file' ? loadedFile : null}

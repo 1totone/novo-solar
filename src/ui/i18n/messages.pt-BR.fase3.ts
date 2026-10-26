@@ -337,4 +337,7 @@ export const fase3PtBR = {
   'view3d.note':
     'A sombra no vidro é a do cálculo (a mesma das curvas, do mapa e dos indicadores), desenhada em azul-escuro; a luz nas peças e na parede é só ilustrativa.',
   'view3d.label': 'Vista 3D da janela e da proteção. {status}',
+  'stepNav.label': 'Ir a um passo',
+  'stepNav.title': 'Passos',
+  'stepNav.go': 'Ir ao passo {n}, {name}',
 } as const;
