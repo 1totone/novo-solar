@@ -5,6 +5,7 @@ import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
 import { chartFrame } from './chart/projectionContext';
 import type { City } from './cities';
+import { projectPointFromHash } from './catalog/catalog';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
 import { exampleFromHash, helpSectionFromHash } from './help/content';
@@ -361,6 +362,8 @@ export function App() {
     source = t('print.sourceHistorical', { what: historicalWhat(city) });
   } else if (city) {
     source = t('print.sourceCity', { station: city.station });
+  } else if (selected.kind === 'station') {
+    source = t('print.sourceStation', { station: site.name });
   } else source = '';
 
   const live =
@@ -455,6 +458,8 @@ export function App() {
                 setLoadedFile(file);
                 setHashState(hashForSite(next));
               }}
+              projectPoint={projectPointFromHash(hashState.perto)}
+              onProjectPointChange={(value) => setHashState({ perto: value })}
             />
             <FacadePanel
               state={protractor}

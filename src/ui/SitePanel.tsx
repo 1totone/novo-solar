@@ -1,6 +1,15 @@
 import { useId, useState, type ChangeEvent, type ReactNode } from 'react';
 import { EPW_FIELD_NAMES, epwPeriodOfRecord, EpwParseError } from '../core/epw/parseEpw';
 import { parseSolar62, solar62Header, type Solar62Location } from '../core/epw/parseSolar62';
+import {
+  catalogIdFromFileName,
+  displayName,
+  stationWarnings,
+  type ProjectPoint,
+  type Station,
+} from './catalog/catalog';
+import { CatalogSection } from './catalog/CatalogSection';
+import { useCatalog } from './catalog/useCatalog';
 import { CITIES, type City } from './cities';
 import { fileSite, readClimateFile, type LoadedFile } from './data/climateFile';
 import type { HistoricalState } from './data/historical';
@@ -17,7 +26,13 @@ interface Props {
   loadedFile: LoadedFile | null;
   historical: HistoricalState;
   onSelect: (selected: SelectedSite, file: LoadedFile | null) => void;
+  /** Local da obra do catálogo (F4.1), `perto` no link. */
+  projectPoint: ProjectPoint | null;
+  onProjectPointChange: (value: string) => void;
 }
+
+/** Arquivos futuros do LabEEE e do INPE (BrazFuture), no Zenodo (decisão 0034). */
+const BRAZFUTURE_URL = 'https://doi.org/10.5281/zenodo.13744587';
 
 function formatTimeZone(tz: number, format: (n: number) => string): string {
   if (tz === 0) return 'UTC';
@@ -32,8 +47,29 @@ const placeOf = (city: City): Solar62Location => ({
   elevation: city.elevation,
 });
 
-export function SitePanel({ selected, loadedFile, historical, onSelect }: Props) {
+export function SitePanel({
+  selected,
+  loadedFile,
+  historical,
+  onSelect,
+  projectPoint,
+  onProjectPointChange,
+}: Props) {
   const { t, formatNumber } = useI18n();
+  const [catalogOpen, setCatalogOpen] = useState(
+    () => selected.kind === 'station' || projectPoint !== null,
+  );
+  // Estação do catálogo: a escolhida ou a do arquivo TMYx carregado (pelo nome do arquivo).
+  const stationId =
+    selected.kind === 'station'
+      ? selected.id
+      : selected.kind === 'file' && loadedFile
+        ? catalogIdFromFileName(loadedFile.fileName)
+        : null;
+  const { catalog, map, failed } = useCatalog(catalogOpen || stationId !== null);
+  const catalogStation: Station | null =
+    stationId === null ? null : (catalog?.estacoes.find((x) => x.id === stationId) ?? null);
+  const station = selected.kind === 'station' ? catalogStation : null;
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<{ fileName: string; text: string } | null>(null);
   const selectId = useId();
@@ -144,7 +180,63 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
         ? t('site.periodRecord', { start: record[0], end: record[1] })
         : t('site.periodUnknown');
     }
+  } else if (selected.kind === 'station') {
+    source = station ? (
+      <>
+        {t(station.fonte === 'era5' ? 'station.sourceEra5' : 'station.source', {
+          name: displayName(station),
+          uf: station.uf,
+        })}{' '}
+        <a href={`${catalog!.base}${station.url}`} data-testid="station-download">
+          {t('station.download')}
+        </a>
+        . {t('station.downloadHelp')}
+      </>
+    ) : (
+      t('site.sourceLink')
+    );
+    if (station) {
+      period = t('station.period', {
+        start: station.periodo[0],
+        end: station.periodo[1],
+        years: station.anos,
+      });
+      const w = stationWarnings(station, projectPoint);
+      if (w.reanalysis) notices.push(t('station.warnReanalysis'));
+      if (w.fewYears) notices.push(t('station.warnFewYears', { years: station.anos }));
+      if (w.far !== null) notices.push(t('station.warnFar', { km: formatNumber(w.far, 0) }));
+      if (w.height !== null) {
+        notices.push(
+          t(w.height > 0 ? 'station.warnAbove' : 'station.warnBelow', {
+            m: formatNumber(Math.abs(w.height), 0),
+          }),
+        );
+      }
+      if (w.lag !== null) {
+        notices.push(
+          t(w.lag > 0 ? 'station.warnLagLate' : 'station.warnLagEarly', {
+            minutes: formatNumber(Math.abs(w.lag), 0),
+          }),
+        );
+      }
+      if (station.ufArquivo) {
+        notices.push(t('station.warnUf', { fileUf: station.ufArquivo, uf: station.uf }));
+      }
+    }
   } else source = t('site.sourceLink');
+
+  // Arquivo TMYx do catálogo carregado: os avisos que o próprio arquivo não dá.
+  if (selected.kind === 'file' && catalogStation) {
+    const w = stationWarnings(catalogStation, projectPoint);
+    if (w.reanalysis) notices.push(t('station.warnReanalysis'));
+    if (w.lag !== null) {
+      notices.push(
+        t(w.lag > 0 ? 'station.warnLagLate' : 'station.warnLagEarly', {
+          minutes: formatNumber(Math.abs(w.lag), 0),
+        }),
+      );
+    }
+  }
 
   if (data) {
     const missing = EPW_FIELD_NAMES.filter((f) => data.missing[f] > 0).map((f) =>
@@ -164,9 +256,16 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
       </h2>
       <div className="field">
         <label htmlFor={selectId}>{t('site.cityLabel')}</label>
-        <select id={selectId} value={city ? city.id : 'arquivo'} onChange={onCityChange}>
+        <select
+          id={selectId}
+          value={city ? city.id : selected.kind === 'station' ? 'estacao' : 'arquivo'}
+          onChange={onCityChange}
+        >
           {selected.kind === 'file' && (
             <option value="arquivo">{t('site.fileOption', { name: selected.site.name })}</option>
+          )}
+          {selected.kind === 'station' && (
+            <option value="estacao">{t('station.option', { name: selected.site.name })}</option>
           )}
           {CITIES.map((s) => (
             <option key={s.id} value={s.id}>
@@ -175,6 +274,35 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
           ))}
         </select>
       </div>
+      <CatalogSection
+        catalog={catalog}
+        map={map}
+        failed={failed}
+        selectedId={selected.kind === 'station' ? selected.id : null}
+        point={projectPoint}
+        current={site}
+        open={catalogOpen}
+        onOpenChange={setCatalogOpen}
+        onPointChange={onProjectPointChange}
+        onChoose={(s) => {
+          setError(null);
+          setPending(null);
+          onSelect(
+            {
+              kind: 'station',
+              id: s.id,
+              site: {
+                name: `${displayName(s)} (${s.uf})`,
+                latitude: s.lat,
+                longitude: s.lon,
+                timeZone: s.fuso,
+                elevation: s.alt,
+              },
+            },
+            null,
+          );
+        }}
+      />
       {city && (
         <div className="field" data-testid="city-data">
           <span className="field-label">{t('site.cityData')}</span>
@@ -252,8 +380,10 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
         </dd>
         <dt>{t('site.elevation')}</dt>
         <dd>{fmt(site.elevation, 1)} m</dd>
-        <dt>{t('site.source')}</dt>
-        <dd data-testid="site-source">{source}</dd>
+        <dt className="wide">{t('site.source')}</dt>
+        <dd className="wide" data-testid="site-source">
+          {source}
+        </dd>
         {period && (
           <>
             <dt>{t('site.period')}</dt>
@@ -262,14 +392,62 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
         )}
         {notices.length > 0 && (
           <>
-            <dt>{t('site.notices')}</dt>
-            <dd data-testid="site-notices">
+            <dt className="wide">{t('site.notices')}</dt>
+            <dd className="wide" data-testid="site-notices">
               <ul className="notices">
                 {notices.map((n) => (
                   <li key={n}>{n}</li>
                 ))}
               </ul>
             </dd>
+          </>
+        )}
+        {catalogStation && (
+          <>
+            <dt className="wide">{t('station.quality')}</dt>
+            <dd className="wide" data-testid="station-quality">
+              <ul className="notices">
+                <li>
+                  {t('station.q.missing', { count: formatNumber(catalogStation.q.ausentes) })}
+                </li>
+                <li>{t('station.q.calm', { pct: formatNumber(catalogStation.q.calmaria, 1) })}</li>
+                <li>{t('station.q.kt', { count: formatNumber(catalogStation.q.kt) })}</li>
+                {catalogStation.q.atraso !== null && (
+                  <li>
+                    {t('station.q.lag', {
+                      minutes: `${catalogStation.q.atraso > 0 ? '+' : catalogStation.q.atraso < 0 ? '−' : ''}${formatNumber(Math.abs(catalogStation.q.atraso), 0)}`,
+                    })}
+                  </li>
+                )}
+                {catalogStation.q.fechamento !== null && (
+                  <li>
+                    {t('station.q.closure', { wh: formatNumber(catalogStation.q.fechamento, 0) })}
+                  </li>
+                )}
+                <li>
+                  {t('station.q.radiation', {
+                    ghi: formatNumber(catalogStation.q.ghi, 0),
+                    dni: formatNumber(catalogStation.q.dni, 0),
+                    dhi: formatNumber(catalogStation.q.dhi, 0),
+                  })}
+                </li>
+                <li>
+                  {t('station.q.temperature', {
+                    min: formatNumber(catalogStation.q.tbs[0], 1),
+                    mean: formatNumber(catalogStation.q.tbs[1], 1),
+                    max: formatNumber(catalogStation.q.tbs[2], 1),
+                  })}
+                </li>
+              </ul>
+            </dd>
+            {catalogStation.futuro && (
+              <>
+                <dt className="wide">{t('station.futureLabel')}</dt>
+                <dd className="wide">
+                  {t('station.future')} <a href={BRAZFUTURE_URL}>{t('station.futureLink')}</a>
+                </dd>
+              </>
+            )}
           </>
         )}
         {selected.kind === 'file' && loadedFile?.comments[0] && (

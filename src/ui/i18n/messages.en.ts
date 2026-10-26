@@ -873,4 +873,69 @@ export const en: Catalog = {
   'exercise.orientationChanged':
     'The orientation changed: the comparison stays with the facade at {orientation}°, that of the exercise.',
   'mask.answer': 'computed mask (answer of the exercise)',
+  // F4.1: national station catalogue (decision 0034).
+  'catalog.heading': 'National catalogue: {count} stations (TMYx 2011 to 2025)',
+  'catalog.intro':
+    'Brazilian stations with a TMYx 2011 to 2025 file on Climate.OneBuilding.org, with the data of each file and its quality checked by us. The file is downloaded from the official site and loaded here.',
+  'catalog.loading': 'Loading the catalogue…',
+  'catalog.failed': 'The catalogue could not be opened.',
+  'catalog.search': 'Search station (city, airport or state)',
+  'catalog.resultsLabel': 'Stations found',
+  'catalog.results': '{count} stations found.',
+  'catalog.noResults': 'No station with that name.',
+  'catalog.more': 'And {count} more: refine the search.',
+  'catalog.years': '{count} years',
+  'catalog.point': 'Project site (optional)',
+  'catalog.pointHelp':
+    'Click on the map or type the coordinates to see the nearest stations, with the distance and the height difference.',
+  'catalog.pointLat': 'Latitude (°, negative to the South)',
+  'catalog.pointLon': 'Longitude (°, negative to the West)',
+  'catalog.pointAlt': 'Elevation (m)',
+  'catalog.pointUseCurrent': 'Use the current location',
+  'catalog.pointClear': 'Clear the project site',
+  'catalog.nearest': 'Stations nearest to the project site',
+  'catalog.distance': '{km} km away',
+  'catalog.dzAbove': '{m} m higher',
+  'catalog.dzBelow': '{m} m lower',
+  'catalog.map': 'Map of the catalogue stations. Click to mark the project site.',
+  'catalog.mapCredit': 'Map: Natural Earth (public domain). Stations: Climate.OneBuilding.org.',
+  'station.option': 'Station: {name}',
+  'station.source':
+    'Station {name} ({uf}), TMYx 2011 to 2025 file from Climate.OneBuilding.org (NCEI ISD measurements and ERA5 radiation); no hourly data open.',
+  'station.sourceEra5':
+    'Point {name} ({uf}), TMYx 2011 to 2025 file from Climate.OneBuilding.org built only from the ERA5 reanalysis; no hourly data open.',
+  'station.download': 'Download the file of this station (Climate.OneBuilding.org)',
+  'station.downloadHelp': 'Unzip the downloaded file and load the .epw in the field above.',
+  'station.period': '{start} to {end} ({years} years of data)',
+  'station.quality': 'File quality',
+  'station.q.missing': 'missing values: {count}',
+  'station.q.calm': 'calm: {pct}% of the hours',
+  'station.q.kt':
+    'hours with clearness index above 0.8 (global radiation too high for the sky): {count}',
+  'station.q.closure':
+    'closure GHI = DNI · cos z + DHI: in 95% of the sun hours, difference up to {wh} Wh/m²',
+  'station.q.radiation':
+    'radiation over the year: global {ghi}, direct normal {dni} and diffuse {dhi} kWh/m²',
+  'station.q.temperature': 'temperature: minimum {min}, mean {mean} and maximum {max} °C',
+  'station.warnReanalysis': 'Reanalysis only (ERA5): the file has no data measured at a station.',
+  'station.warnFewYears':
+    'Only {years} years of data: the typical year represents the local climate less well.',
+  'station.warnFar': 'The station is {km} km from the project site.',
+  'station.warnLagLate':
+    'The radiation in the file comes about {minutes} min after the sun (clear days): the radiation cells and the step 7 indicators use the radiation as it is in the file.',
+  'station.warnLagEarly':
+    'The radiation in the file comes about {minutes} min before the sun (clear days): the radiation cells and the step 7 indicators use the radiation as it is in the file.',
+  'station.q.lag':
+    'timing of the radiation relative to the sun, on clear days: {minutes} min (positive: after the sun; uncertainty up to about 10 min, from clouds)',
+  'station.warnAbove':
+    'The station is {m} m higher than the project site: temperature and wind may differ.',
+  'station.warnBelow':
+    'The station is {m} m lower than the project site: temperature and wind may differ.',
+  'station.warnUf': 'The file name says {fileUf}, but the coordinates fall in {uf}.',
+  'station.futureLabel': 'Future files',
+  'station.future':
+    'Future weather files exist for this station (BrazFuture, LabEEE and INPE: years 2010, 2050 and 2090, two scenarios, six models), under the CC BY 4.0 license.',
+  'station.futureLink': 'Download on Zenodo',
+  'print.sourceStation':
+    'Coordinates of station {station} (TMYx 2011 to 2025, Climate.OneBuilding.org).',
 };

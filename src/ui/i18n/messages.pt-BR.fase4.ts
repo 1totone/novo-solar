@@ -196,4 +196,68 @@ export const fase4PtBR = {
   'exercise.orientationChanged':
     'A orientação mudou: a comparação continua com a fachada a {orientation}°, a do exercício.',
   'mask.answer': 'máscara calculada (resposta do exercício)',
+  // F4.1: catálogo nacional de estações (decisão 0034).
+  'catalog.heading': 'Catálogo nacional: {count} estações (TMYx 2011 a 2025)',
+  'catalog.intro':
+    'Estações do Brasil com arquivo TMYx 2011 a 2025 no Climate.OneBuilding.org, com os dados de cada arquivo e a qualidade conferida por nós. O arquivo é baixado do site oficial e carregado aqui.',
+  'catalog.loading': 'Carregando o catálogo…',
+  'catalog.failed': 'Não foi possível abrir o catálogo.',
+  'catalog.search': 'Procurar estação (cidade, aeroporto ou UF)',
+  'catalog.resultsLabel': 'Estações encontradas',
+  'catalog.results': '{count} estações encontradas.',
+  'catalog.noResults': 'Nenhuma estação com esse nome.',
+  'catalog.more': 'E mais {count}: refine a busca.',
+  'catalog.years': '{count} anos',
+  'catalog.point': 'Local da obra (opcional)',
+  'catalog.pointHelp':
+    'Clique no mapa ou digite as coordenadas para ver as estações mais próximas, com a distância e o desnível.',
+  'catalog.pointLat': 'Latitude (°, negativa ao Sul)',
+  'catalog.pointLon': 'Longitude (°, negativa a Oeste)',
+  'catalog.pointAlt': 'Altitude (m)',
+  'catalog.pointUseCurrent': 'Usar o local atual',
+  'catalog.pointClear': 'Limpar o local da obra',
+  'catalog.nearest': 'Estações mais próximas do local da obra',
+  'catalog.distance': 'a {km} km',
+  'catalog.dzAbove': '{m} m acima',
+  'catalog.dzBelow': '{m} m abaixo',
+  'catalog.map': 'Mapa das estações do catálogo. Clique para marcar o local da obra.',
+  'catalog.mapCredit': 'Mapa: Natural Earth (domínio público). Estações: Climate.OneBuilding.org.',
+  'station.option': 'Estação: {name}',
+  'station.source':
+    'Estação {name} ({uf}), arquivo TMYx 2011 a 2025 do Climate.OneBuilding.org (medições do NCEI ISD e radiação do ERA5); nenhum dado horário aberto.',
+  'station.sourceEra5':
+    'Ponto {name} ({uf}), arquivo TMYx 2011 a 2025 do Climate.OneBuilding.org feito só com a reanálise ERA5; nenhum dado horário aberto.',
+  'station.download': 'Baixar o arquivo desta estação (Climate.OneBuilding.org)',
+  'station.downloadHelp': 'Descompacte o arquivo baixado e carregue o .epw no campo acima.',
+  'station.period': '{start} a {end} ({years} anos de dados)',
+  'station.quality': 'Qualidade do arquivo',
+  'station.q.missing': 'valores ausentes: {count}',
+  'station.q.calm': 'calmaria: {pct}% das horas',
+  'station.q.kt':
+    'horas com índice de claridade acima de 0,8 (radiação global alta demais para o céu): {count}',
+  'station.q.closure':
+    'fechamento GHI = DNI · cos z + DHI: em 95% das horas de sol, diferença de até {wh} Wh/m²',
+  'station.q.radiation': 'radiação no ano: global {ghi}, direta normal {dni} e difusa {dhi} kWh/m²',
+  'station.q.temperature': 'temperatura: mínima {min}, média {mean} e máxima {max} °C',
+  'station.warnReanalysis': 'Só reanálise (ERA5): o arquivo não tem dados medidos numa estação.',
+  'station.warnFewYears':
+    'Só {years} anos de dados: o ano típico representa menos o clima do lugar.',
+  'station.warnFar': 'A estação fica a {km} km do local da obra.',
+  'station.warnLagLate':
+    'A radiação do arquivo vem cerca de {minutes} min depois do sol (dias claros): as células de radiação e os indicadores do passo 7 usam a radiação como está no arquivo.',
+  'station.warnLagEarly':
+    'A radiação do arquivo vem cerca de {minutes} min antes do sol (dias claros): as células de radiação e os indicadores do passo 7 usam a radiação como está no arquivo.',
+  'station.q.lag':
+    'tempo da radiação em relação ao sol, nos dias claros: {minutes} min (positivo: depois do sol; incerteza de até cerca de 10 min, pelas nuvens)',
+  'station.warnAbove':
+    'A estação fica {m} m acima do local da obra: a temperatura e o vento podem ser diferentes.',
+  'station.warnBelow':
+    'A estação fica {m} m abaixo do local da obra: a temperatura e o vento podem ser diferentes.',
+  'station.warnUf': 'O nome do arquivo diz {fileUf}, mas as coordenadas caem em {uf}.',
+  'station.futureLabel': 'Arquivos futuros',
+  'station.future':
+    'Há arquivos futuros para esta estação (BrazFuture, LabEEE e INPE: anos 2010, 2050 e 2090, dois cenários, seis modelos), sob a licença CC BY 4.0.',
+  'station.futureLink': 'Baixar no Zenodo',
+  'print.sourceStation':
+    'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
 } as const;
