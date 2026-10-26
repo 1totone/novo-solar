@@ -29,6 +29,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0023](0023-interface-da-fase-3.md) | Interface da Fase 3: passos 6 e 7 recolhidos, aba Vista 3D, camadas na carta | 2026-10-25 | proposta (aceita provisoriamente na branch de integração) |
 | [0024](0024-padrao-da-classificacao-das-horas.md) | Padrão da classificação das horas para o sombreamento: limiar de 20 °C (Lamberts, Dutra e Pereira, 2014) | 2026-10-25 | aceita provisoriamente em 26/10/2026 (aplicada na integração da Fase 3; a confirmar no portão 3) |
 | [0025](0025-projecoes-e-analemas.md) | Outras projeções (equidistante e cilíndrica centrada na fachada) e analemas em hora legal (F4.3) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
+| [0026](0026-criterio-sus-do-portao-4.md) | Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança | 2026-10-26 | proposta (confirmar antes da coleta do F4.9) |
 
 ## Modelo
 
