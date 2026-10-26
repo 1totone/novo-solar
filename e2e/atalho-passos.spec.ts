@@ -6,7 +6,10 @@ const ADVANCED = '#local=florianopolis&o=0&jl=1%2C5&ja=1%2C2&pc1=b_0%2C8_0%2C1__
 
 /** O título do passo está na tela e não fica sob o que é fixo no alto. */
 async function headingUncovered(page: Page, n: number) {
-  const heading = page.locator('.steps .step-panel h2').filter({ hasText: String(n) }).first();
+  const heading = page
+    .locator('.steps .step-panel h2')
+    .filter({ hasText: String(n) })
+    .first();
   await expect(heading).toBeInViewport();
   const box = (await heading.boundingBox())!;
   const covers = await page.evaluate(() =>
