@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { ADAPTIVE, SHADING_THRESHOLD } from '../../core/comfort/classification';
 import type { EpwData } from '../../core/epw/parseEpw';
+import { SideSlot } from '../layout/SideResults';
 import { useI18n } from '../i18n/useI18n';
 import {
   classificationFromHash,
@@ -290,89 +291,97 @@ export function EffectPanel({
                 {t('classes.incomplete')}
               </p>
             )}
-            <h4 className="sub-heading">{t('classes.hypotheses')}</h4>
-            <ul className="hypotheses" data-testid="classes-hypotheses">
-              {hypotheses.map((h) => (
-                <li key={h}>{h}</li>
-              ))}
-            </ul>
-            {annual.pending && (
-              <p className="overlay-pending" role="status" data-testid="effect-pending">
-                {t('effect.pending')}
-              </p>
-            )}
-            {shares && method && (
-              <div className="class-results" data-testid="classes-results">
-                {(
-                  [
-                    ['radiation', radShares, 'classes.radiationShares'],
-                    ['hours', hourShares, 'classes.hoursShares'],
-                  ] as const
-                ).map(
-                  ([kind, part, title]) =>
-                    part && (
-                      <div key={kind} className="class-share">
-                        <p className="field-label">{t(title)}</p>
-                        <ClassBar shares={part} label={t(title)} testId={`class-bar-${kind}`} />
-                        <p className="legend class-legend" aria-hidden="true">
-                          {CLASS_ORDER.filter((c) => part[c] > 0).map((c) => (
-                            <span className="legend-item" key={c}>
-                              <span className={`swatch class-${c}`} />
-                              {t('classes.barLabel', {
-                                name: t(`classes.class.${c}`),
-                                share: pct(part[c]),
-                              })}
-                            </span>
-                          ))}
-                        </p>
-                      </div>
-                    ),
-                )}
-                <div
-                  className="table-scroll"
-                  tabIndex={0}
-                  role="region"
-                  aria-label={t('classes.tableCaption')}
-                >
-                  <table className="data-table" data-testid="classes-table">
-                    <caption>{t('classes.tableCaption')}</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">{t('classes.col.class')}</th>
-                        <th scope="col">{t('classes.col.hours')}</th>
-                        <th scope="col">{t('classes.col.share')}</th>
-                        <th scope="col">{t('classes.col.radiation')}</th>
-                        <th scope="col">{t('classes.col.share')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {CLASS_ORDER.map((c) => (
-                        <tr key={c} data-class={c}>
-                          <th scope="row">{t(`classes.class.${c}`)}</th>
-                          <td>{shares.byClass[c].hours}</td>
-                          <td>{hourShares ? pct(hourShares[c]) : ''}</td>
-                          <td>{fmt1(shares.byClass[c].incident / 1000)}</td>
-                          <td>{radShares ? pct(radShares[c]) : ''}</td>
+            <SideSlot
+              slot="effect"
+              active={open}
+              step={7}
+              stepName={t('effect.heading')}
+              title={t('side.effect')}
+            >
+              <h4 className="sub-heading">{t('classes.hypotheses')}</h4>
+              <ul className="hypotheses" data-testid="classes-hypotheses">
+                {hypotheses.map((h) => (
+                  <li key={h}>{h}</li>
+                ))}
+              </ul>
+              {annual.pending && (
+                <p className="overlay-pending" role="status" data-testid="effect-pending">
+                  {t('effect.pending')}
+                </p>
+              )}
+              {shares && method && (
+                <div className="class-results" data-testid="classes-results">
+                  {(
+                    [
+                      ['radiation', radShares, 'classes.radiationShares'],
+                      ['hours', hourShares, 'classes.hoursShares'],
+                    ] as const
+                  ).map(
+                    ([kind, part, title]) =>
+                      part && (
+                        <div key={kind} className="class-share">
+                          <p className="field-label">{t(title)}</p>
+                          <ClassBar shares={part} label={t(title)} testId={`class-bar-${kind}`} />
+                          <p className="legend class-legend" aria-hidden="true">
+                            {CLASS_ORDER.filter((c) => part[c] > 0).map((c) => (
+                              <span className="legend-item" key={c}>
+                                <span className={`swatch class-${c}`} />
+                                {t('classes.barLabel', {
+                                  name: t(`classes.class.${c}`),
+                                  share: pct(part[c]),
+                                })}
+                              </span>
+                            ))}
+                          </p>
+                        </div>
+                      ),
+                  )}
+                  <div
+                    className="table-scroll"
+                    tabIndex={0}
+                    role="region"
+                    aria-label={t('classes.tableCaption')}
+                  >
+                    <table className="data-table" data-testid="classes-table">
+                      <caption>{t('classes.tableCaption')}</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">{t('classes.col.class')}</th>
+                          <th scope="col">{t('classes.col.hours')}</th>
+                          <th scope="col">{t('classes.col.share')}</th>
+                          <th scope="col">{t('classes.col.radiation')}</th>
+                          <th scope="col">{t('classes.col.share')}</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {CLASS_ORDER.map((c) => (
+                          <tr key={c} data-class={c}>
+                            <th scope="row">{t(`classes.class.${c}`)}</th>
+                            <td>{shares.byClass[c].hours}</td>
+                            <td>{hourShares ? pct(hourShares[c]) : ''}</td>
+                            <td>{fmt1(shares.byClass[c].incident / 1000)}</td>
+                            <td>{radShares ? pct(radShares[c]) : ''}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {shares.missingDni > 0 && (
+                    <p className="note">{t('classes.missingDni', { count: shares.missingDni })}</p>
+                  )}
                 </div>
-                {shares.missingDni > 0 && (
-                  <p className="note">{t('classes.missingDni', { count: shares.missingDni })}</p>
-                )}
-              </div>
-            )}
-            {open && (
-              <IndicatorsSection
-                epw={epw}
-                classes={classes}
-                hash={hash}
-                geometry={geometry}
-                orientation={orientation}
-                onChange={onChange}
-              />
-            )}
+              )}
+              {open && (
+                <IndicatorsSection
+                  epw={epw}
+                  classes={classes}
+                  hash={hash}
+                  geometry={geometry}
+                  orientation={orientation}
+                  onChange={onChange}
+                />
+              )}
+            </SideSlot>
           </>
         )}
       </details>

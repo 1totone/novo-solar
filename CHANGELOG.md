@@ -39,6 +39,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Alterado
 
+- Resultados ao lado da carta no computador (decisão 0038, proposta): com a aba da carta, o mapa mês × hora do passo 6 e a classificação, os indicadores e as alternativas do passo 7 passam para o painel da direita, abaixo da carta, com a largura dele; no passo fica uma linha que leva até lá. No celular e nas outras abas, nada muda.
 - Células da sobreposição calculadas num web worker e guardadas por local (não por arquivo): escolher a variável ou trocar o semestre não trava mais a página (a maior tarefa longa da linha principal, num celular emulado com a CPU 4 vezes mais lenta, caiu de 0,8 a 1,0 s para menos de 0,1 s), outro arquivo do mesmo local reaproveita o cálculo, e um aviso "Calculando as células da carta…" aparece enquanto o cálculo roda. Achado 9 da revisão antes do teste com usuários.
 - As 6 cidades de teste dão lugar ao catálogo de cidades; os links antigos continuam abrindo o mesmo local.
 - As mensagens de erro do cabeçalho de arquivos climáticos indicam a linha.
@@ -49,6 +50,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Corrigido
 
+- Rótulos da carta que se atropelavam com várias camadas (inspeção visual da Fase 4): os percentuais das curvas da proteção e os nomes dos ângulos do dimensionamento pelo período passam a ter posições candidatas e ficam na primeira que não cobre outro texto da carta (horas, meses, grade, transferidor). Teste de ponta a ponta `e2e/rotulos.spec.ts` confere, pelos retângulos dos textos na tela, em pixels, que nenhum cobre outro em 6 casos.
 - O arquivo de teste `teste-hora.csv` do F2.8 (486 kB) deixa de ser copiado para o build; um teste confere que só os dados históricos das cidades do catálogo são publicados. Achado 19 da revisão antes do teste com usuários.
 - CSV do SOL-AR salvo pelo Excel em português (ponto e vírgula entre os campos): mensagem própria, que cita o separador e a linha, no lugar de "a linha 2 deveria trazer o local". Achado 12 da revisão antes do teste com usuários.
 - Fuso fracionário, positivo ou zero mal escrito no título da carta e na impressão: "UTC6" e "UTC+6" para +5,5 e "UTC0" para Lisboa passam a "UTC+5,5" e "UTC", como no painel do local. Os fusos do Brasil continuam escritos como antes. Achado 11 da revisão antes do teste com usuários.

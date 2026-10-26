@@ -1,5 +1,6 @@
 import { project } from '../../core/chart/stereographic';
 import type { RequiredAngles, SkyPosition } from '../../core/shading/inverse';
+import { aroundPoint, formatCandidates } from '../chart/labelLayout';
 
 const LABELS: [keyof RequiredAngles, string][] = [
   ['alpha', 'α'],
@@ -70,7 +71,12 @@ export function PeriodMarks({
       {[...marks.values()].map((m) => (
         <g key={`${m.x},${m.y}`} className="period-mark" data-testid="period-mark">
           <circle cx={m.x} cy={m.y} r={0.018} />
-          <text x={m.x + 0.03} y={m.y} className="period-label">
+          <text
+            x={m.x + 0.03}
+            y={m.y}
+            className="period-label"
+            data-candidates={formatCandidates(aroundPoint(m.x, m.y, 0.03, 0.045))}
+          >
             {m.names.join(', ')}
           </text>
         </g>

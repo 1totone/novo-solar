@@ -12,6 +12,7 @@ import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
+import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
 import { StepNav } from './layout/StepNav';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
@@ -94,6 +95,16 @@ export function App() {
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
     : null;
   const wind = windFromHash(hashState);
+  // Resultados ao lado (decisão 0038): no computador, com a aba da carta, os resultados pesados
+  // dos passos 6 e 7 vão para o painel da direita, abaixo da carta.
+  const wide = useWideLayout();
+  const sideOn = wide && wind.tab === 'chart';
+  const [annualSlot, setAnnualSlot] = useState<HTMLElement | null>(null);
+  const [effectSlot, setEffectSlot] = useState<HTMLElement | null>(null);
+  const sideSlots = useMemo(
+    () => (sideOn ? { annual: annualSlot, effect: effectSlot } : {}),
+    [sideOn, annualSlot, effectSlot],
+  );
   const sourceUrl = city?.sourceUrl;
   const rose = useMemo(
     () =>
@@ -291,145 +302,160 @@ export function App() {
       </header>
 
       <main>
-        <div className="workspace">
-          <div className="steps">
-            {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
-            {(geometryOpen || effectOpen) && <StepNav />}
-            <SitePanel
-              selected={selected}
-              loadedFile={selected.kind === 'file' ? loadedFile : null}
-              historical={historical}
-              onSelect={(next, file) => {
-                setLoadedFile(file);
-                setHashState(hashForSite(next));
-              }}
-            />
-            <FacadePanel
-              state={protractor}
-              rawOrientation={hashState.o ?? ''}
-              onChange={setHashState}
-            />
-            <ProtectionPanel
-              state={protractor}
-              hash={hashState}
-              onChange={setHashState}
-              drawing={drawing}
-              onDrawingChange={setDrawing}
-            />
-            <DataPanel
-              overlay={ov.overlay}
-              hasData={epw !== null}
-              sourceUrl={sourceUrl}
-              limits={ov.quantityLimits}
-              timeZone={site.timeZone}
-              onChange={setHashState}
-            />
-            <OutputsPanel
-              print={print}
-              onPrintChange={setPrint}
-              onPrint={() => window.print()}
-              onExport={onExport}
-              csvAvailable={csvAvailable}
-              comparing={hashA !== null}
-              onCompare={onCompare}
-              geometryAvailable={geometry.window !== null}
-            />
-            <p className="steps-group">{t('advanced.group')}</p>
-            <GeometryPanel
-              geometry={geometry}
-              hash={hashState}
-              scale={geometryScale}
-              site={site}
-              orientation={protractor.orientation}
-              onChange={setHashState}
-              open={geometryOpen}
-              onOpenChange={setGeometryOpen}
-            />
-            <EffectPanel
-              epw={epw}
-              hash={hashState}
-              geometry={geometry}
-              orientation={protractor.orientation}
-              onChange={setHashState}
-              open={effectOpen}
-              onOpenChange={setEffectOpen}
-            />
+        <SideResultsProvider value={sideSlots}>
+          <div className="workspace">
+            <div className="steps">
+              {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
+              {(geometryOpen || effectOpen) && <StepNav />}
+              <SitePanel
+                selected={selected}
+                loadedFile={selected.kind === 'file' ? loadedFile : null}
+                historical={historical}
+                onSelect={(next, file) => {
+                  setLoadedFile(file);
+                  setHashState(hashForSite(next));
+                }}
+              />
+              <FacadePanel
+                state={protractor}
+                rawOrientation={hashState.o ?? ''}
+                onChange={setHashState}
+              />
+              <ProtectionPanel
+                state={protractor}
+                hash={hashState}
+                onChange={setHashState}
+                drawing={drawing}
+                onDrawingChange={setDrawing}
+              />
+              <DataPanel
+                overlay={ov.overlay}
+                hasData={epw !== null}
+                sourceUrl={sourceUrl}
+                limits={ov.quantityLimits}
+                timeZone={site.timeZone}
+                onChange={setHashState}
+              />
+              <OutputsPanel
+                print={print}
+                onPrintChange={setPrint}
+                onPrint={() => window.print()}
+                onExport={onExport}
+                csvAvailable={csvAvailable}
+                comparing={hashA !== null}
+                onCompare={onCompare}
+                geometryAvailable={geometry.window !== null}
+              />
+              <p className="steps-group">{t('advanced.group')}</p>
+              <GeometryPanel
+                geometry={geometry}
+                hash={hashState}
+                scale={geometryScale}
+                site={site}
+                orientation={protractor.orientation}
+                onChange={setHashState}
+                open={geometryOpen}
+                onOpenChange={setGeometryOpen}
+              />
+              <EffectPanel
+                epw={epw}
+                hash={hashState}
+                geometry={geometry}
+                orientation={protractor.orientation}
+                onChange={setHashState}
+                open={effectOpen}
+                onOpenChange={setEffectOpen}
+              />
+            </div>
+            <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
+              <h2 id="chart-heading" className="visually-hidden">
+                {t('tabs.label')}
+              </h2>
+              <div className="print-header">
+                <p className="print-title">{t('print.title', { place: site.name })}</p>
+                <p className="print-details">
+                  {t('print.details', {
+                    latitude: formatNumber(site.latitude, 3),
+                    longitude: formatNumber(site.longitude, 3),
+                    timeZone: timeZoneOffset(site.timeZone, formatNumber),
+                    source,
+                    date: new Date().toLocaleDateString('pt-BR'),
+                    radius: fmt(print.radiusCm),
+                  })}
+                </p>
+              </div>
+              <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
+                {(['chart', '3d', 'rose'] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    role="tab"
+                    id={`tab-${tab}`}
+                    aria-selected={wind.tab === tab}
+                    aria-controls={`panel-${tab}`}
+                    onClick={() =>
+                      setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
+                    }
+                  >
+                    {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
+                  </button>
+                ))}
+              </div>
+              {hashA ? (
+                <div className="compare" data-testid="compare-view">
+                  <div className="compare-col" data-testid="compare-a">
+                    <h3 className="compare-label">
+                      {t('compare.a')}: {describeConfig(hashA, fmt, words)}
+                    </h3>
+                    {wind.tab === 'rose' ? (
+                      <WindPanel
+                        epw={epwA}
+                        wind={windFromHash(hashA)}
+                        onChange={() => {}}
+                        readOnly
+                      />
+                    ) : (
+                      <ChartView hash={hashA} epw={epwA} />
+                    )}
+                  </div>
+                  <div className="compare-col" data-testid="compare-b">
+                    <h3 className="compare-label">
+                      {t('compare.b')}: {describeConfig(hashState, fmt, words)}
+                    </h3>
+                    {live}
+                  </div>
+                </div>
+              ) : (
+                live
+              )}
+              {sideOn && (
+                <div className="side-results" data-testid="side-results">
+                  <div ref={setAnnualSlot} />
+                  <div ref={setEffectSlot} />
+                </div>
+              )}
+              {geometry.window && geometryPrint && print.geometry && (
+                <div className="print-geometry" data-testid="print-geometry">
+                  <p className="print-title">
+                    {t('geometry.printTitle', { scale: geometryScale })}
+                  </p>
+                  <GeometryDrawing
+                    window={geometry.window}
+                    devices={geometry.devices}
+                    title={t('geometry.printTitle', { scale: geometryScale })}
+                    font={geometryPrint.font}
+                    size={{
+                      width: `${geometryPrint.width.toFixed(2)}cm`,
+                      height: `${geometryPrint.height.toFixed(2)}cm`,
+                    }}
+                    testId="print-geometry-drawing"
+                    point={geometry.point?.value ?? null}
+                  />
+                </div>
+              )}
+            </section>
           </div>
-          <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
-            <h2 id="chart-heading" className="visually-hidden">
-              {t('tabs.label')}
-            </h2>
-            <div className="print-header">
-              <p className="print-title">{t('print.title', { place: site.name })}</p>
-              <p className="print-details">
-                {t('print.details', {
-                  latitude: formatNumber(site.latitude, 3),
-                  longitude: formatNumber(site.longitude, 3),
-                  timeZone: timeZoneOffset(site.timeZone, formatNumber),
-                  source,
-                  date: new Date().toLocaleDateString('pt-BR'),
-                  radius: fmt(print.radiusCm),
-                })}
-              </p>
-            </div>
-            <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
-              {(['chart', '3d', 'rose'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  role="tab"
-                  id={`tab-${tab}`}
-                  aria-selected={wind.tab === tab}
-                  aria-controls={`panel-${tab}`}
-                  onClick={() =>
-                    setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
-                  }
-                >
-                  {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
-                </button>
-              ))}
-            </div>
-            {hashA ? (
-              <div className="compare" data-testid="compare-view">
-                <div className="compare-col" data-testid="compare-a">
-                  <h3 className="compare-label">
-                    {t('compare.a')}: {describeConfig(hashA, fmt, words)}
-                  </h3>
-                  {wind.tab === 'rose' ? (
-                    <WindPanel epw={epwA} wind={windFromHash(hashA)} onChange={() => {}} readOnly />
-                  ) : (
-                    <ChartView hash={hashA} epw={epwA} />
-                  )}
-                </div>
-                <div className="compare-col" data-testid="compare-b">
-                  <h3 className="compare-label">
-                    {t('compare.b')}: {describeConfig(hashState, fmt, words)}
-                  </h3>
-                  {live}
-                </div>
-              </div>
-            ) : (
-              live
-            )}
-            {geometry.window && geometryPrint && print.geometry && (
-              <div className="print-geometry" data-testid="print-geometry">
-                <p className="print-title">{t('geometry.printTitle', { scale: geometryScale })}</p>
-                <GeometryDrawing
-                  window={geometry.window}
-                  devices={geometry.devices}
-                  title={t('geometry.printTitle', { scale: geometryScale })}
-                  font={geometryPrint.font}
-                  size={{
-                    width: `${geometryPrint.width.toFixed(2)}cm`,
-                    height: `${geometryPrint.height.toFixed(2)}cm`,
-                  }}
-                  testId="print-geometry-drawing"
-                  point={geometry.point?.value ?? null}
-                />
-              </div>
-            )}
-          </section>
-        </div>
+        </SideResultsProvider>
 
         <section className="status" aria-labelledby="status-title">
           <h2 id="status-title">{t('status.title')}</h2>

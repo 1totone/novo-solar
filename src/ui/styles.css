@@ -1457,6 +1457,38 @@ fieldset.piece legend {
   }
 }
 
+/* Resultados ao lado (decisão 0038): no computador, os resultados pesados dos passos 6 e 7
+   ficam no painel da direita, abaixo da carta; no passo, uma linha leva até eles. */
+.side-results > div:not(:empty) {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.side-result-heading {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.side-result-heading:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.side-pointer {
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+@media print {
+  .side-results {
+    display: none;
+  }
+}
+
 /* Atalho entre passos (decisão 0040): só com um passo avançado aberto. No computador, fixo no
    alto da coluna dos passos; no celular, no pé da tela. */
 .step-nav {
