@@ -247,4 +247,69 @@ export const fase3PtBR = {
   'alternatives.plotX': 'admitida nas horas frias (%)',
   'alternatives.plotY': 'bloqueada nas horas quentes (%)',
   'alternatives.plotIdeal': 'ideal',
+  'sizing.heading': 'Dimensionar pelo período',
+  'sizing.intro':
+    'Diga quando a janela deve ficar toda à sombra: o programa acha os ângulos que a proteção precisa ter, com o sol que determina cada um, e as dimensões do brise e das aletas que dão esses ângulos.',
+  'sizing.start': 'Começar com o verão (21/10 a 21/2, das 9 às 15 h solares)',
+  'sizing.from': 'Primeiro dia (dd/mm)',
+  'sizing.to': 'Último dia (dd/mm)',
+  'sizing.fromHour': 'Da hora',
+  'sizing.toHour': 'Até a hora',
+  'sizing.timeBase': 'Horas em',
+  'sizing.timeBase.solar': 'hora solar verdadeira (a das linhas da carta)',
+  'sizing.timeBase.legal': 'hora legal (UTC{timeZone})',
+  'sizing.gap': 'Afastamento do brise (m)',
+  'sizing.count': 'Lâminas na subdivisão',
+  'sizing.optionsHelp':
+    'Com afastamento, a altura do brise acima da verga sai do sol mais alto do período (α2), para fechar a fresta. Com mais de uma lâmina, a peça é dividida mantendo os ângulos.',
+  'sizing.invalid':
+    'Há campos inválidos (em vermelho): dias como 21/12, horas de 0 a 24 (a primeira antes da última), afastamento de 0 ou mais e de 1 a 20 lâminas.',
+  'sizing.pending': 'Calculando o período…',
+  'sizing.failed': 'Não foi possível dimensionar para este período.',
+  'sizing.samples':
+    '{sunny} das {total} posições do sol do período (a cada 5 minutos) ficam diante da janela.',
+  'sizing.noSun': 'O sol não chega à janela no período: não há o que sombrear.',
+  'sizing.anglesCaption':
+    'Ângulos exigidos: internos, medidos do plano da fachada (entre parênteses, os externos)',
+  'sizing.col.angle': 'Ângulo',
+  'sizing.col.value': 'Valor',
+  'sizing.col.sample': 'Sol que o determina',
+  'sizing.angle.alpha': 'α do brise',
+  'sizing.angle.alphaMax': 'α2 do brise afastado',
+  'sizing.angle.gammaRight': 'γ do brise, direita',
+  'sizing.angle.gammaLeft': 'γ do brise, esquerda',
+  'sizing.angle.betaRight': 'β da aleta, direita',
+  'sizing.angle.betaLeft': 'β da aleta, esquerda',
+  'sizing.angle.finGammaRight': 'γ do topo da aleta, direita',
+  'sizing.angle.finGammaLeft': 'γ do topo da aleta, esquerda',
+  'sizing.sampleAt': '{date}, {hour}',
+  'sizing.overhang': 'Brise horizontal',
+  'sizing.overhangDims':
+    'Profundidade de {depth} m, {above} m acima da verga, afastamento de {gap} m; prolongamentos de {left} m à esquerda e {right} m à direita.',
+  'sizing.setbackSuffices':
+    'A verga da parede (recuo do vidro) já sombreia o período: não precisa de brise.',
+  'sizing.fins': 'Aletas',
+  'sizing.fin':
+    'Aleta à {side}: profundidade de {depth} m, prolongamento de {above} m acima da verga.',
+  'sizing.finNone': 'Sem sol pela {side} no período: sem aleta desse lado.',
+  'sizing.finUseless':
+    'Aleta à {side}: não serve para este período. O sol passa quase de frente para a janela (β externo de {beta}), e a aleta teria de ser enorme; use o brise ou encurte o período.',
+  'sizing.finSetback': 'A ombreira da parede já sombreia o sol pela {side}: sem aleta desse lado.',
+  'sizing.right': 'direita',
+  'sizing.left': 'esquerda',
+  'sizing.louvers':
+    '{count} lâminas horizontais de {chord} m a cada {pitch} m, a primeira {above} m acima da verga.',
+  'sizing.finLouvers': '{count} lâminas verticais de {chord} m a cada {pitch} m.',
+  'sizing.tooBig':
+    'O brise sai grande demais para a janela (o sol fica quase rasante à fachada no período). Encurte o período ou combine outras peças.',
+  'sizing.useOverhang': 'Usar o brise no passo 6',
+  'sizing.useAll': 'Usar o brise e as aletas no passo 6',
+  'sizing.useLouvers': 'Usar as lâminas horizontais no passo 6',
+  'sizing.useFinLouvers': 'Usar as lâminas verticais no passo 6',
+  'sizing.useAngles': 'Usar os ângulos no passo 3',
+  'sizing.useHelp':
+    'As peças substituem as do passo 6; os ângulos vão para a sombra total do passo 3, na referência escolhida lá.',
+  'sizing.showOnChart': 'Mostrar o período e o sol que determina cada ângulo na carta',
+  'sizing.legend': 'período a sombrear',
+  'sizing.legendPoints': 'sol que determina cada ângulo',
 } as const;

@@ -1155,6 +1155,47 @@ fieldset.plain .check {
   margin: 0.5rem 0;
 }
 
+/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU). */
+.sun-chart .period-area {
+  fill: rgb(45 164 78 / 22%);
+  stroke: #1a7f37;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-mark circle {
+  fill: #1b1f24;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-label {
+  font-size: 0.045px;
+  font-weight: 700;
+  fill: #1b1f24;
+  text-anchor: start;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.swatch.period-area {
+  background: rgb(45 164 78 / 22%);
+  border-color: #1a7f37;
+}
+
+.swatch.period-mark {
+  border-radius: 50%;
+  background: #1b1f24;
+}
+
+.sizing-fins {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
 /* Células da sobreposição em cálculo no web worker (achado 9). */
 .overlay-pending {
   margin: 0.25rem 0;

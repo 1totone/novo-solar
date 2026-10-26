@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { project } from '../chart/stereographic';
 import {
+  periodOutline,
   periodSamples,
   requiredAngles,
   sizeFins,
@@ -19,6 +21,8 @@ function sample(altitude: number, psi: number): PeriodSample {
     month: 1,
     day: 1,
     hour: 12,
+    altitude,
+    azimuth: (psi + 360) % 360,
     s,
     psi,
     profile: Math.atan2(s.z, s.y) / RAD,
@@ -185,4 +189,71 @@ describe('periodSamples', () => {
       periodSamples(site, 0, { ...p, startHour: 9, endHour: 15, stepMinutes: 0 }),
     ).toThrow(RangeError);
   });
+});
+
+describe('direção de cada amostra e contorno do período na carta', () => {
+  const site = { latitude: -15.78, longitude: -47.93, elevation: 1060, timeZone: -3 };
+
+  it('altura e azimute de cada amostra são os do vetor no referencial da fachada', () => {
+    const orientation = 30;
+    const { samples } = periodSamples(site, orientation, {
+      start: { month: 3, day: 1 },
+      end: { month: 3, day: 3 },
+      startHour: 8,
+      endHour: 16,
+      stepMinutes: 60,
+    });
+    expect(samples.length).toBeGreaterThan(5);
+    for (const p of samples) {
+      expect(Math.sin(p.altitude * RAD)).toBeCloseTo(p.s.z, 12);
+      const az = (orientation + Math.atan2(p.s.x, p.s.y) / RAD + 360) % 360;
+      expect(Math.abs(((p.azimuth - az + 540) % 360) - 180)).toBeLessThan(1e-9);
+    }
+  });
+
+  /** Ponto dentro do polígono (regra par-ímpar), em coordenadas da carta. */
+  function inside(poly: { x: number; y: number }[], x: number, y: number) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const a = poly[i]!;
+      const b = poly[j]!;
+      if (a.y > y !== b.y > y && x < b.x + ((y - b.y) * (a.x - b.x)) / (a.y - b.y)) c = !c;
+    }
+    return c;
+  }
+
+  for (const [name, start, end] of [
+    [
+      'verão, passando pelo solstício e pelo fim do ano',
+      { month: 11, day: 21 },
+      { month: 2, day: 21 },
+    ],
+    ['inverno', { month: 5, day: 1 }, { month: 8, day: 31 }],
+    ['ano inteiro', { month: 1, day: 1 }, { month: 12, day: 31 }],
+  ] as const) {
+    it(`hora solar: todas as posições do sol do período ficam dentro do contorno (${name})`, () => {
+      const period = { start, end, startHour: 9, endHour: 15, timeBase: 'solar' as const };
+      const outline = periodOutline(site, period).map((d) => project(90 - d.altitude, d.azimuth));
+      expect(outline.length).toBeGreaterThan(20);
+      // Todas as posições do período, inclusive atrás da fachada (orientação qualquer, ψ ignorado):
+      // as amostras numa fachada para o Norte e numa para o Sul cobrem o céu do período.
+      let checked = 0;
+      for (const orientation of [0, 180]) {
+        for (const p of periodSamples(site, orientation, { ...period, stepMinutes: 20 }).samples) {
+          const c = project(90 - p.altitude, p.azimuth);
+          const near = outline.some((q) => Math.hypot(q.x - c.x, q.y - c.y) < 0.01);
+          expect(inside(outline, c.x, c.y) || near, `${p.month}/${p.day} ${p.hour} h`).toBe(true);
+          checked++;
+        }
+      }
+      expect(checked).toBeGreaterThan(500);
+      // E pontos claramente fora (antes das 8 h e depois das 16 h solares) ficam fora.
+      const out = periodSamples(site, 0, { ...period, startHour: 7, endHour: 7.5 }).samples;
+      const out2 = periodSamples(site, 180, { ...period, startHour: 7, endHour: 7.5 }).samples;
+      for (const p of [...out, ...out2]) {
+        const c = project(90 - p.altitude, p.azimuth);
+        expect(inside(outline, c.x, c.y), `${p.month}/${p.day} ${p.hour} h`).toBe(false);
+      }
+    });
+  }
 });
