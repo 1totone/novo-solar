@@ -52,9 +52,9 @@ export function SideSlot({
           aria-labelledby={headingId}
           data-testid={`side-result-${slot}`}
         >
-          <p className="side-result-heading" id={headingId} tabIndex={-1}>
+          <h3 className="side-result-heading" id={headingId} tabIndex={-1}>
             {t('side.heading', { step, name: stepName })}
-          </p>
+          </h3>
           {children}
         </section>,
         target,
