@@ -33,3 +33,33 @@ export function useQueued<I, O>(
   const pending = key !== null && result === null && !failed;
   return { result, stale: pending ? (loaded?.result ?? null) : null, pending, failed };
 }
+
+/**
+ * Resultados da fila para várias entradas ao mesmo tempo (as alternativas do F3.5), na ordem das
+ * entradas; null onde ainda não chegou ou falhou.
+ */
+export function useQueuedAll<I, O>(
+  queue: WorkerQueue<I, O>,
+  inputs: readonly I[],
+): { results: (O | null)[]; pending: boolean } {
+  const keys = inputs.map(queue.key);
+  const joined = keys.join('\n');
+  const [loaded, setLoaded] = useState<ReadonlyMap<string, O | null>>(new Map());
+  useEffect(() => {
+    const requests = inputs.map((input, i) => ({ key: keys[i]!, request: queue.request(input) }));
+    let alive = true;
+    for (const { key, request } of requests) {
+      void request.promise.then((result) => {
+        if (alive) setLoaded((m) => new Map(m).set(key, result));
+      });
+    }
+    return () => {
+      alive = false;
+      for (const { request } of requests) request.cancel();
+    };
+    // As entradas são recriadas a cada render; as chaves já as representam.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [joined, queue]);
+  const results = keys.map((k) => queue.peek(k) ?? loaded.get(k) ?? null);
+  return { results, pending: keys.some((k) => !queue.peek(k) && !loaded.has(k)) };
+}
