@@ -323,7 +323,8 @@ export function App() {
             <GeometryPanel
               geometry={geometry}
               scale={geometryScale}
-              placeName={site.name}
+              site={site}
+              orientation={protractor.orientation}
               onChange={setHashState}
               open={geometryOpen}
               onOpenChange={setGeometryOpen}

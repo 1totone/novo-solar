@@ -88,4 +88,38 @@ export const fase3PtBR = {
   'shading.legendFull': 'janela inteira à sombra (100%)',
   'shading.legendPoint': 'ponto x = {x} m, z = {z} m à sombra',
   'shading.pointMarker': 'Ponto da máscara: x = {x} m, z = {z} m',
+  'annual.heading': 'Sombra ao longo do ano',
+  'annual.intro':
+    'Percentual da janela à sombra em cada mês e hora, nos instantes com sol na janela (média dos dias do mês). Cada mês tem a sua linha: na carta, meses como janeiro e novembro dividem a mesma trajetória.',
+  'annual.hypotheses':
+    'Hora legal (UTC{timeZone}), sem horário de verão, como no arquivo climático: a coluna 9 é das 8 às 9 h. Sol a cada 10 minutos (6 instantes por hora), pelo SPA. Só a geometria: não considera nuvens nem o clima.',
+  'annual.needsPieces':
+    'Adicione uma peça (ou um recuo do vidro) para ver a sombra ao longo do ano.',
+  'annual.pending': 'Calculando o mapa do ano…',
+  'annual.failed': 'Não foi possível calcular o mapa desta proteção. Confira as peças.',
+  'annual.mapTitle':
+    'Mapa mês × hora da janela à sombra com sol na janela: {place}, fachada a {orientation}°, {pieces}',
+  'annual.hourAxis': 'hora legal (UTC{timeZone})',
+  'annual.monthsLong':
+    'janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro',
+  'annual.cell':
+    '{month}, {from} a {to} h: {shaded}% da janela à sombra; sol na janela em {exposure}% da hora',
+  'annual.cellNoSun': '{month}, {from} a {to} h: sem sol na janela',
+  'annual.legend': 'Janela à sombra, com sol na janela',
+  'annual.range': '{from} a {to}%',
+  'annual.noSun': 'sem sol na janela',
+  'annual.table': 'Tabela do mapa',
+  'annual.tableCaption':
+    'Percentual da janela à sombra com sol na janela, por mês e hora legal (a coluna 9 é das 8 às 9 h). Célula vazia: sem sol na janela.',
+  'annual.month': 'Mês',
+  'annual.exportSvg': 'Exportar o mapa (SVG)',
+  'annual.exportCsv': 'Exportar o mapa (CSV)',
+  'annual.exportHourly': 'Exportar hora a hora (CSV, 8760 h)',
+  'annual.csvMap': 'mapa mês × hora da janela à sombra',
+  'annual.csvHourly': 'fração ensolarada hora a hora',
+  'annual.csvGeometry':
+    'Fachada a {orientation}°; janela de {width} × {height} m, recuo do vidro {setback} m; {pieces}',
+  'annual.csvLink': 'Configuração (link): {url}',
+  'annual.csvHypotheses':
+    'Hora legal do arquivo, sem horário de verão; a hora h é o intervalo de h - 1 a h; 6 instantes por hora, no meio de cada intervalo de 10 min; sol pelo SPA; só a geometria (spec 07, seção 7.6).',
 } as const;

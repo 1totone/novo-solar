@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import type { Site } from '../../core/chart/sunChart';
+import { AnnualSection } from '../annual/AnnualSection';
 import { downloadBlob, fileSlug, standaloneSvg } from '../export/image';
 import { useI18n } from '../i18n/useI18n';
 import type { MessageKey } from '../i18n/i18n';
@@ -29,14 +31,17 @@ function fieldLabel(code: PieceCode, field: PieceField): MessageKey {
 export function GeometryPanel({
   geometry,
   scale,
-  placeName,
+  site,
+  orientation,
   onChange,
   open,
   onOpenChange,
 }: {
   geometry: GeometryState;
   scale: number;
-  placeName: string;
+  site: Site & { name: string };
+  /** Orientação da fachada (passo 2), para o mapa do ano. */
+  orientation: number;
   onChange: (patch: Record<string, string>) => void;
   /** Passo aberto (a carta acompanha a rolagem no computador enquanto ele está aberto). */
   open: boolean;
@@ -109,7 +114,7 @@ export function GeometryPanel({
     });
     downloadBlob(
       new Blob([text], { type: 'image/svg+xml' }),
-      `solar-${fileSlug(placeName)}-corte-e-vista-1-${scale}.svg`,
+      `solar-${fileSlug(site.name)}-corte-e-vista-1-${scale}.svg`,
     );
   };
 
@@ -393,6 +398,12 @@ export function GeometryPanel({
                     <p className="note">{t('shading.pointHelp')}</p>
                   </>
                 )}
+                <AnnualSection
+                  site={site}
+                  geometry={geometry}
+                  orientation={orientation}
+                  active={open}
+                />
               </>
             )}
           </>
