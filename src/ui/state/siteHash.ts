@@ -65,8 +65,3 @@ export function hashForSite(selected: SelectedSite): HashState {
     alt: String(s.elevation),
   };
 }
-
-/** O estado tem dados horários associados (arquivo carregado ou dados históricos)? */
-export function hasHourlyData(selected: SelectedSite): boolean {
-  return selected.kind === 'file' || selected.historical;
-}

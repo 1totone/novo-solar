@@ -1,5 +1,4 @@
 import { useState, type CSSProperties } from 'react';
-import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
@@ -16,6 +15,8 @@ import type { Drawing } from './mask/DrawingLayer';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
+import { ProjectSection } from './project/ProjectSection';
+import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
 import { GeometryDrawing } from './geometry/GeometryDrawing';
 import { EffectPanel } from './effect/EffectPanel';
@@ -27,7 +28,7 @@ import { ProtectionPanel } from './protractor/ProtectionPanel';
 import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
-import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
+import { hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { classificationFromHash } from './state/classificationHash';
 import { windFromHash } from './state/windHash';
@@ -67,7 +68,8 @@ export function App() {
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
   const [drawing, setDrawing] = useState<Drawing | null>(null);
   const [print, setPrint] = useState<PrintOptions>(DEFAULT_PRINT);
-  const [compareEpw, setCompareEpw] = useState<EpwData | null>(null);
+  // Arquivo carregado da configuração A da comparação (só quando a A usa um arquivo).
+  const [compareFile, setCompareFile] = useState<LoadedFile | null>(null);
   const aboutOpen = hashState.painel === 'sobre';
   const selected = siteFromHash(hashState);
   const site = selected.site;
@@ -109,9 +111,38 @@ export function App() {
     active: wind.tab === 'rose',
   });
   const roseMethod = useMethodSentence(classification);
-  // Comparação: a configuração A fica no link (cmp) e o arquivo dela, na memória.
+  // Comparação: a configuração A fica no link (cmp); os dados dela vêm do próprio link (dados
+  // históricos de uma cidade) ou do arquivo carregado guardado na memória (ou no projeto, F4.7).
   const hashA: HashState | null = hashState.cmp ? parseHash(hashState.cmp) : null;
-  const epwA = hashA && hasHourlyData(siteFromHash(hashA)) ? compareEpw : null;
+  const selectedA = hashA ? siteFromHash(hashA) : null;
+  const historicalA = useHistorical(
+    selectedA?.kind === 'city' ? selectedA.site : null,
+    selectedA?.kind === 'city' && selectedA.historical,
+  );
+  const epwA =
+    selectedA?.kind === 'file'
+      ? (compareFile?.data ?? null)
+      : historicalA.status === 'ready'
+        ? historicalA.data
+        : null;
+  const liveFile = selected.kind === 'file' ? loadedFile : null;
+  const project = useProjectActions({
+    hash: hashState,
+    setHash: setHashState,
+    placeName: site.name,
+    liveFile,
+    compareFile: selectedA?.kind === 'file' ? compareFile : null,
+    print,
+    onOpened: (opened) => {
+      setLoadedFile(opened.liveFile);
+      setCompareFile(opened.compareFile);
+      setPrint(opened.print);
+      setDrawing(null);
+    },
+  });
+  const projectFiles = [liveFile, selectedA?.kind === 'file' ? compareFile : null].filter(
+    (f, i, all): f is LoadedFile => f !== null && all.indexOf(f) === i,
+  );
   const words = {
     orientation: (degrees: string) => t('compare.orientation', { degrees }),
     none: t('compare.none'),
@@ -260,10 +291,10 @@ export function App() {
     if (start) {
       const current = { ...hashState };
       delete current.cmp;
-      setCompareEpw(epw);
+      setCompareFile(liveFile);
       setHashState({ cmp: buildHash(current).replace(/^#/, '') });
     } else {
-      setCompareEpw(null);
+      setCompareFile(null);
       setHashState({ cmp: '' });
     }
   };
@@ -383,7 +414,19 @@ export function App() {
               comparing={hashA !== null}
               onCompare={onCompare}
               geometryAvailable={geometry.window !== null}
-            />
+            >
+              <ProjectSection
+                onSave={project.save}
+                onOpen={project.open}
+                onCopyLink={project.copyLink}
+                fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
+                fileSizeMb={
+                  projectFiles.length > 0
+                    ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
+                    : null
+                }
+              />
+            </OutputsPanel>
             <p className="steps-group">{t('advanced.group')}</p>
             <ChartOptionsPanel
               hash={hashState}

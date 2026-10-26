@@ -1,13 +1,8 @@
 import { useId, useState, type ChangeEvent, type ReactNode } from 'react';
-import {
-  EPW_FIELD_NAMES,
-  epwPeriodOfRecord,
-  EpwParseError,
-  parseEpw,
-  type EpwData,
-} from '../core/epw/parseEpw';
+import { EPW_FIELD_NAMES, epwPeriodOfRecord, EpwParseError } from '../core/epw/parseEpw';
 import { parseSolar62, solar62Header, type Solar62Location } from '../core/epw/parseSolar62';
 import { CITIES, type City } from './cities';
+import { fileSite, readClimateFile, type LoadedFile } from './data/climateFile';
 import type { HistoricalState } from './data/historical';
 import { LocationForm } from './data/LocationForm';
 import { decodeText } from './data/readText';
@@ -15,17 +10,7 @@ import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import type { SelectedSite } from './state/siteHash';
 
-/** Informações do arquivo carregado nesta sessão (não vão para a URL). */
-export interface LoadedFile {
-  fileName: string;
-  /** EPW, ou CSV do SOL-AR 6.2 importado pelo usuário. */
-  format: 'epw' | 'csv';
-  hours: number;
-  hasLeapDay: boolean;
-  comments: string[];
-  /** Dados horários, só na memória do navegador (nada é enviado). */
-  data: EpwData;
-}
+export type { LoadedFile } from './data/climateFile';
 
 interface Props {
   selected: SelectedSite;
@@ -57,30 +42,16 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
   const city = selected.kind === 'city' ? selected.site : null;
   const fmt = (n: number, digits: number) => formatNumber(n, digits);
 
-  const openFile = (fileName: string, format: 'epw' | 'csv', data: EpwData) => {
-    const loc = data.location;
+  const openFile = (
+    fileName: string,
+    format: 'epw' | 'csv',
+    text: string,
+    location?: Solar62Location,
+  ) => {
+    const file = readClimateFile(fileName, format, text, location);
     setError(null);
     setPending(null);
-    onSelect(
-      {
-        kind: 'file',
-        site: {
-          name: [loc.city, loc.state, loc.country].filter(Boolean).join(', '),
-          latitude: loc.latitude,
-          longitude: loc.longitude,
-          timeZone: loc.timeZone,
-          elevation: loc.elevation,
-        },
-      },
-      {
-        fileName,
-        format,
-        hours: data.hours,
-        hasLeapDay: data.hasLeapDay,
-        comments: data.comments,
-        data,
-      },
-    );
+    onSelect(fileSite(file), file);
   };
 
   const onCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -100,7 +71,7 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
     try {
       const text = decodeText(await file.arrayBuffer());
       if (/^\uFEFF?\s*LOCATION/i.test(text) || /\.epw$/i.test(file.name)) {
-        openFile(file.name, 'epw', parseEpw(text));
+        openFile(file.name, 'epw', text);
         return;
       }
       if (!/\.csv$/i.test(file.name)) {
@@ -109,7 +80,7 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
       }
       format = 'csv';
       if (solar62Header(text)) {
-        openFile(file.name, 'csv', parseSolar62(text));
+        openFile(file.name, 'csv', text);
         return;
       }
       // Sem cabeçalho: confere os dados antes de pedir o local (qualquer local válido serve).
@@ -256,7 +227,7 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
           onCancel={() => setPending(null)}
           onSubmit={(location) => {
             try {
-              openFile(pending.fileName, 'csv', parseSolar62(pending.text, location));
+              openFile(pending.fileName, 'csv', pending.text, location);
             } catch (err) {
               setError(
                 err instanceof EpwParseError ? epwErrorMessage(err, t, 'csv') : t('site.readError'),

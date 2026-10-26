@@ -1,0 +1,26 @@
+{
+  "format": "sol-ar-project",
+  "schema": 1,
+  "app": { "version": "0.1.0", "commit": "f9b8675" },
+  "savedAt": "2026-10-26T13:20:00.000Z",
+  "state": {
+    "a1": "55",
+    "aba": "rosa",
+    "local": "florianopolis",
+    "o": "30",
+    "va": "3",
+    "vh": "q",
+    "vt": "c"
+  },
+  "print": {
+    "radiusCm": 8,
+    "protractor": true,
+    "mask": true,
+    "data": true,
+    "legend": true,
+    "protractorOnly": false,
+    "geometry": true
+  },
+  "climateFile": null,
+  "compareClimateFile": null
+}

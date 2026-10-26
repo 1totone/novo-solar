@@ -31,6 +31,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0025](0025-projecoes-e-analemas.md) | Outras projeções (equidistante e cilíndrica centrada na fachada) e analemas em hora legal (F4.3) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0026](0026-criterio-sus-do-portao-4.md) | Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança | 2026-10-26 | proposta (confirmar antes da coleta do F4.9) |
 | [0027](0027-vento-avancado.md) | Vento avançado: filtro pela condição térmica do passo 7 e correção para a altura e o terreno pelo perfil do EnergyPlus (F4.4) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
+| [0028](0028-arquivo-de-projeto.md) | Arquivo de projeto em JSON com esquema versionado, com o estado do link, os arquivos climáticos carregados e a impressão; copiar o link (F4.7) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 
 ## Modelo
 
