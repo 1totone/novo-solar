@@ -1,0 +1,42 @@
+# Metadados de citação (Citation File Format 1.2.0). O GitHub mostra "Cite this repository" a
+# partir deste arquivo. Ao lançar uma versão, atualizar `version` e `date-released` junto com o
+# package.json (o teste em tests/metadados.test.ts confere); o DOI entra depois do primeiro
+# depósito no Zenodo (docs/lancamento/roteiro-f4.10.md).
+cff-version: 1.2.0
+message: 'Se usar este programa num trabalho, cite-o como abaixo.'
+type: software
+title: 'SOL-AR (nova versão)'
+abstract: >-
+  Carta solar, transferidor de ângulos e projeto de proteções solares no navegador, com dados
+  climáticos atuais. Nova versão do Analysis SOL-AR, do LabEEE/UFSC.
+authors:
+  - family-names: Aliardi
+    given-names: Anthony
+version: '0.1.0'
+license: MIT
+repository-code: 'https://github.com/1totone/novo-solar'
+url: 'https://1totone.github.io/novo-solar/'
+keywords:
+  - carta solar
+  - sun-path diagram
+  - transferidor de ângulos
+  - proteção solar
+  - sombreamento
+  - brise
+  - EPW
+  - desempenho térmico
+  - eficiência energética
+references:
+  - type: software
+    title: 'Analysis SOL-AR'
+    version: '6.2'
+    authors:
+      - family-names: Lamberts
+        given-names: Roberto
+      - family-names: Maciel
+        given-names: Alexandra Albuquerque
+      - family-names: Ono
+        given-names: Edson T.
+    institution:
+      name: 'Laboratório de Eficiência Energética em Edificações (LabEEE), Universidade Federal de Santa Catarina'
+    url: 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar'

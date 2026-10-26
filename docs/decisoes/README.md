@@ -39,6 +39,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0033](0033-modo-didatico.md) | Modo didático: tutorial guiado de 8 etapas com realce e "Fazer por mim"; exercícios de máscara desenhada à mão, conferidos pelo índice de Jaccard em ângulo sólido e nas horas de sol (F4.5) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0034](0034-catalogo-nacional.md) | Catálogo nacional: 579 TMYx do Brasil com metadados, qualidade por script e link oficial (sem redistribuir), INMET fora até a resposta do LabEEE, BrazFuture pelo Zenodo, mapa do Natural Earth embutido, local da obra com distância e desnível (F4.1) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0035](0035-comparacao-de-climas.md) | Comparação de climas: diferença B − A na mesma carta, só no mesmo local, com faixas simétricas propostas, origem de A e B, resumo das células e o tempo da radiação de cada arquivo calculado na aplicação, sem correção (F4.2) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
+| [0036](0036-citacao-e-lancamento.md) | Citação e lançamento: CITATION.cff e .zenodo.json com os créditos da versão original, DOI pelo Zenodo nas releases, canal de retorno pelas issues do GitHub e e-mail do LabEEE, sem contagem de uso na v1.0 (preparação do F4.10) | 2026-10-26 | proposta (endereço, DOI e canal dependem do Anthony e do LabEEE) |
 
 ## Modelo
 

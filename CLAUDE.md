@@ -69,7 +69,7 @@ O Anthony quer que você conduza o projeto sem pedir permissão a cada ação.
 ## Ambiente (sessões do Claude Code na nuvem)
 
 - Node 22 já instalado. Dependências com `npm ci` (ou `npm install` enquanto não houver lockfile).
-- Git: o push funciona pelo proxy da sessão; não é possível enviar tags nem apagar branches. A criação de releases pela API também é bloqueada nas sessões na nuvem; as releases saem do workflow `release.yml` a partir do `CHANGELOG.md` (decisão 0012): no PR do portão aprovado, mova "Não lançado" para a seção `## [X.Y.Z] - AAAA-MM-DD (vX.Y, Nome)` e atualize a versão no `package.json`.
+- Git: o push funciona pelo proxy da sessão; não é possível enviar tags nem apagar branches. A criação de releases pela API também é bloqueada nas sessões na nuvem; as releases saem do workflow `release.yml` a partir do `CHANGELOG.md` (decisão 0012): no PR do portão aprovado, mova "Não lançado" para a seção `## [X.Y.Z] - AAAA-MM-DD (vX.Y, Nome)` e atualize a versão no `package.json` e no `CITATION.cff` (com `date-released`; o teste `tests/metadados.test.ts` confere).
 - Se a rede da sessão bloquear o download de navegadores do Playwright ou de arquivos climáticos, peça ao Anthony para liberar os domínios no ambiente (ROADMAP, seção 7) e, enquanto isso, rode esses testes no CI.
 
 ## Comandos
