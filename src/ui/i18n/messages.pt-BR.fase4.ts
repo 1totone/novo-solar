@@ -110,4 +110,29 @@ export const fase4PtBR = {
     'Velocidade a {height} m sobre {terrain}: k = {factor} vezes a da estação (perfil de lei de potência da ASHRAE, como no EnergyPlus; estação a 10 m em campo aberto)',
   'csv.noCorrection': 'Velocidade da estação, sem correção de altura e terreno',
   'wind.emptyFilter': 'Nenhuma hora válida nesta condição e neste período: a rosa fica vazia.',
+  // F4.7: arquivo de projeto e link (decisão 0028).
+  'project.heading': 'Projeto',
+  'project.save': 'Salvar projeto',
+  'project.open': 'Abrir projeto',
+  'project.copyLink': 'Copiar link',
+  'project.help':
+    'O link guarda a análise: local, fachada, proteção, dados, opções e passos 6 e 7. O projeto (.json) guarda também o arquivo climático carregado do computador e as opções de impressão. Nada é enviado pela internet.',
+  'project.helpFile': 'Com {file}, o projeto terá cerca de {size} MB.',
+  'project.saved': 'Projeto salvo: {file}.',
+  'project.opened': 'Projeto aberto: {file}, salvo em {date}{climate}.',
+  'project.openedClimate': ', com o arquivo climático {name}',
+  'project.unknownDate': 'data desconhecida',
+  'project.notProject': 'O arquivo {file} não é um projeto do SOL-AR; nada mudou.',
+  'project.newer':
+    'O projeto {file} foi salvo numa versão mais nova da aplicação (esquema {schema}); nada mudou. Use a versão mais nova do SOL-AR para abri-lo.',
+  'project.invalid': 'O projeto {file} está incompleto ou foi alterado ({field}); nada mudou.',
+  'project.field.schema': 'versão do esquema',
+  'project.field.state': 'estado da análise',
+  'project.field.climateFile': 'arquivo climático',
+  'project.field.compareClimateFile': 'arquivo climático da comparação',
+  'project.climateError':
+    'O arquivo climático do projeto {file} não pôde ser lido; nada mudou. {error}',
+  'project.linkCopied': 'Link copiado.',
+  'project.linkManual': 'Não foi possível copiar: selecione e copie o link abaixo.',
+  'project.linkLabel': 'Link deste estado',
 } as const;

@@ -14,6 +14,7 @@
 8. [Classificação das horas](08-classificacao-das-horas.md) (proposta): temperatura da hora, temperatura média predominante do EPW, faixa adaptativa da ASHRAE 55, limiares fixos e temperatura de equilíbrio; hipóteses mostradas.
 9. [Indicadores de sombreamento](09-indicadores.md) (proposta): radiação direta incidente na janela por hora, bloqueada nas horas quentes e admitida nas horas frias; comparação entre alternativas; diferenças em relação ao EnergyPlus.
 10. [Dimensionamento inverso](10-dimensionamento-inverso.md) (proposta): do período a sombrear para os ângulos α, β e γ e as dimensões de brise e aletas; subdivisão em lâminas.
+11. [Arquivo de projeto e link](11-arquivo-de-projeto.md) (proposta, decisão 0028): o que o link e o projeto guardam, formato JSON com versão de esquema, abrir, salvar e compatibilidade com os links.
 
 ## Resumo do que está fixado
 
