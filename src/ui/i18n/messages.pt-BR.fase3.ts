@@ -3,6 +3,7 @@
 export const fase3PtBR = {
   'advanced.group': 'Avançado: proteção pelas dimensões e efeito no ano',
   'advanced.badge': 'avançado',
+  'advanced.loading': 'Carregando o passo…',
   'geometry.heading': 'Proteção pelas dimensões',
   'geometry.summary': 'Janela, brise, aletas e lâminas em metros; corte, vista e sombra na carta.',
   'geometry.summaryDefined': 'Janela de {width} × {height} m · {pieces}',

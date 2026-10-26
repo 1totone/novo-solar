@@ -31,6 +31,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | 0025 | Decisão da Fase 4, na branch de integração da Fase 4 (PR #51); entra aqui quando a fase for integrada | 2026-10-26 | proposta |
 | [0026](0026-criterio-sus-do-portao-4.md) | Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança | 2026-10-26 | proposta (confirmar antes da coleta do F4.9) |
 | [0038](0038-resultados-ao-lado.md) | Resultados ao lado da carta no computador: mapa mês × hora, classificação e indicadores no painel da direita, abaixo da carta; no celular e nas outras abas, dentro do passo | 2026-10-26 | proposta (na integração da Fase 3; a confirmar no portão 3) |
+| [0039](0039-carregamento-sob-demanda.md) | Carregamento sob demanda do que não é do caminho básico (passos 6 e 7, vista 3D; na Fase 4, idiomas, ajuda, modo didático, catálogo e projeções) e orçamento do JavaScript inicial no CI | 2026-10-26 | proposta (nas integrações das Fases 3 e 4; a confirmar no portão 4) |
 | [0040](0040-atalho-entre-passos.md) | Atalho entre passos: barra com os números dos passos, só com um passo avançado aberto; no alto da coluna no computador e no pé da tela no celular | 2026-10-26 | proposta (na integração da Fase 3; a confirmar no portão 3) |
 
 ## Modelo

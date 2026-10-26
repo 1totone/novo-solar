@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useMemo, useState, type CSSProperties } from 'react';
 import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { windRose } from '../core/wind/windRose';
@@ -19,9 +19,7 @@ import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { timeZoneOffset } from './timeZoneOffset';
 import { GeometryDrawing } from './geometry/GeometryDrawing';
-import { EffectPanel } from './effect/EffectPanel';
-import { View3DPanel } from './view3d/View3DPanel';
-import { GeometryPanel } from './geometry/GeometryPanel';
+import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
@@ -32,6 +30,18 @@ import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { windFromHash } from './state/windHash';
 import { WindPanel } from './wind/WindPanel';
+
+// Fora do caminho básico, carregados sob demanda (decisão 0039): os passos 6 e 7, só quando
+// abertos, e a aba da vista 3D, só quando escolhida.
+const GeometryPanel = lazy(() =>
+  import('./geometry/GeometryPanel').then((m) => ({ default: m.GeometryPanel })),
+);
+const EffectPanel = lazy(() =>
+  import('./effect/EffectPanel').then((m) => ({ default: m.EffectPanel })),
+);
+const View3DPanel = lazy(() =>
+  import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
+);
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
@@ -270,6 +280,41 @@ export function App() {
     source = t('print.sourceCity', { station: city.station });
   } else source = '';
 
+  // Passos 6 e 7 recolhidos: só o cabeçalho, sem carregar o código do passo (decisão 0039).
+  const piecesText =
+    geometry.devices.length > 0
+      ? t('geometry.piecesCount', { count: geometry.devices.length })
+      : t('geometry.noPieces');
+  const geometryStub = (
+    <AdvancedStepStub
+      n={6}
+      heading={t('geometry.heading')}
+      summary={
+        geometry.window
+          ? t('geometry.summaryDefined', {
+              width: formatNumber(geometry.window.width, 2),
+              height: formatNumber(geometry.window.height, 2),
+              pieces: piecesText,
+            })
+          : t('geometry.summary')
+      }
+      testId="geometry-panel"
+      summaryTestId="geometry-summary"
+      open={geometryOpen}
+      onOpenChange={setGeometryOpen}
+    />
+  );
+  const effectStub = (
+    <AdvancedStepStub
+      n={7}
+      heading={t('effect.heading')}
+      summary={t('effect.summary')}
+      testId="effect-panel"
+      open={effectOpen}
+      onOpenChange={setEffectOpen}
+    />
+  );
+
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
@@ -277,7 +322,9 @@ export function App() {
       </div>
     ) : wind.tab === '3d' ? (
       <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
-        <View3DPanel hash={hashState} onChange={setHashState} />
+        <Suspense fallback={<p className="note">{t('view3d.loading')}</p>}>
+          <View3DPanel hash={hashState} onChange={setHashState} />
+        </Suspense>
       </div>
     ) : (
       <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
@@ -347,25 +394,39 @@ export function App() {
                 geometryAvailable={geometry.window !== null}
               />
               <p className="steps-group">{t('advanced.group')}</p>
-              <GeometryPanel
-                geometry={geometry}
-                hash={hashState}
-                scale={geometryScale}
-                site={site}
-                orientation={protractor.orientation}
-                onChange={setHashState}
-                open={geometryOpen}
-                onOpenChange={setGeometryOpen}
-              />
-              <EffectPanel
-                epw={epw}
-                hash={hashState}
-                geometry={geometry}
-                orientation={protractor.orientation}
-                onChange={setHashState}
-                open={effectOpen}
-                onOpenChange={setEffectOpen}
-              />
+              {geometryOpen ? (
+                <Suspense fallback={geometryStub}>
+                  <GeometryPanel
+                    geometry={geometry}
+                    hash={hashState}
+                    scale={geometryScale}
+                    site={site}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={geometryOpen}
+                    onOpenChange={setGeometryOpen}
+                  />
+                  <RestoreStepFocus testId="geometry-panel" />
+                </Suspense>
+              ) : (
+                geometryStub
+              )}
+              {effectOpen ? (
+                <Suspense fallback={effectStub}>
+                  <EffectPanel
+                    epw={epw}
+                    hash={hashState}
+                    geometry={geometry}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={effectOpen}
+                    onOpenChange={setEffectOpen}
+                  />
+                  <RestoreStepFocus testId="effect-panel" />
+                </Suspense>
+              ) : (
+                effectStub
+              )}
             </div>
             <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
               <h2 id="chart-heading" className="visually-hidden">
