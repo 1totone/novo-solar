@@ -1,7 +1,8 @@
-import { useId, useMemo, type ReactNode } from 'react';
+import { useId, useMemo, useRef, type ReactNode } from 'react';
 import type { Site } from '../../core/chart/sunChart';
 import { useI18n } from '../i18n/useI18n';
 import { chartGeometry, type SvgPoint } from './chartGeometry';
+import { useLabelLayout } from './useLabelLayout';
 import './SunChart.css';
 
 const AZIMUTH_LABELS = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
@@ -39,9 +40,13 @@ export function SunChart({
   // (sul da carta para latitudes sul): y do SVG cresce para o Sul.
   const labelSide = site.latitude < 0 ? 1 : -1;
   const months = t('chart.monthsShort').split(',');
+  // Rótulos móveis das camadas (curvas, período) longe dos outros textos da carta.
+  const svgRef = useRef<SVGSVGElement>(null);
+  useLabelLayout(svgRef);
 
   return (
     <svg
+      ref={svgRef}
       className="sun-chart"
       viewBox="-1.32 -1.32 2.64 2.64"
       role="img"

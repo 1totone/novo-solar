@@ -2,6 +2,7 @@ import { useId, useMemo } from 'react';
 import { project } from '../../core/chart/stereographic';
 import type { Region } from '../../core/mask/mask';
 import type { ShadingChart, SkyDirection } from '../../core/shading/contours';
+import { formatCandidates } from '../chart/labelLayout';
 import { useI18n } from '../i18n/useI18n';
 import { BIG, HATCH, MaskBuilder, shortHash } from '../mask/maskBuilder';
 
@@ -37,26 +38,7 @@ function pointAt(points: readonly Point[], fraction: number): Point {
 }
 
 /** Frações da linha tentadas para o rótulo, da preferida (o meio) às de reserva. */
-const LABEL_FRACTIONS = [0.5, 0.35, 0.65, 0.2, 0.8];
-/** Meia largura e meia altura da caixa de um rótulo ("100%"), em unidades da carta. */
-const LABEL_BOX = [0.055, 0.025] as const;
-
-/**
- * Posições dos rótulos: o meio de cada linha ou, se ele cair sobre um rótulo já posto (curvas muito
- * próximas), a primeira fração de reserva livre.
- */
-function labelPositions(lines: readonly (readonly Point[])[]): Point[] {
-  const placed: Point[] = [];
-  const free = (p: Point) =>
-    placed.every(
-      (q) => Math.abs(q[0] - p[0]) > 2 * LABEL_BOX[0] || Math.abs(q[1] - p[1]) > 2 * LABEL_BOX[1],
-    );
-  for (const line of lines) {
-    const candidates = LABEL_FRACTIONS.map((f) => pointAt(line, f));
-    placed.push(candidates.find(free) ?? candidates[0]!);
-  }
-  return placed;
-}
+const LABEL_FRACTIONS = [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8, 0.12, 0.88];
 
 /**
  * Camadas da proteção pelas dimensões na carta (F3.2): região de sombra total (preenchimento leve
@@ -87,7 +69,8 @@ export function ShadingLayer({
     return {
       fill: chart.fullShade.map((ring) => pathOf(ring.map(svgPoint)) + 'Z').join(''),
       lines,
-      labels: labelPositions(lines.map((l) => l.points)),
+      // Posições candidatas de cada rótulo; a escolhida não cobre outro texto (useLabelLayout).
+      labels: lines.map((l) => LABEL_FRACTIONS.map((f) => pointAt(l.points, f))),
     };
   }, [chart]);
   if (!drawn && !point) return null;
@@ -146,13 +129,15 @@ export function ShadingLayer({
               />
             ))}
           </g>
-          {drawn.labels.map(([x, y], i) => {
+          {drawn.labels.map((candidates, i) => {
             const line = drawn.lines[i]!;
+            const [x, y] = candidates[0]!;
             return (
               <text
                 key={`t${i}`}
                 x={x}
                 y={y}
+                data-candidates={formatCandidates(candidates.map(([cx, cy]) => ({ x: cx, y: cy })))}
                 className={`contour-label ${levelClass(line.level)}`}
                 data-testid="contour-label"
               >
