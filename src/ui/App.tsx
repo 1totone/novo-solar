@@ -7,6 +7,9 @@ import { chartFrame } from './chart/projectionContext';
 import type { City } from './cities';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
+import { exampleFromHash, helpSectionFromHash } from './help/content';
+import { ExampleCard } from './help/ExampleCard';
+import { HelpDialog } from './help/HelpDialog';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
 import { OutputsPanel } from './export/OutputsPanel';
@@ -73,6 +76,9 @@ export function App() {
   // Arquivo carregado da configuração A da comparação (só quando a A usa um arquivo).
   const [compareFile, setCompareFile] = useState<LoadedFile | null>(null);
   const aboutOpen = hashState.painel === 'sobre';
+  // Ajuda (F4.8): ajuda=<parte> abre o diálogo; exemplo=<id> mostra o cartão do exemplo resolvido.
+  const helpSection = helpSectionFromHash(hashState);
+  const example = exampleFromHash(hashState);
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const city: City | null = selected.kind === 'city' ? selected.site : null;
@@ -377,7 +383,18 @@ export function App() {
       <header className="header">
         <div className="header-row">
           <h1>{t('app.name')}</h1>
-          <LanguageSelect />
+          <div className="header-tools">
+            <button
+              type="button"
+              className="btn"
+              aria-haspopup="dialog"
+              data-testid="help-open"
+              onClick={() => setHashState({ ajuda: 'guia' })}
+            >
+              {t('help.open')}
+            </button>
+            <LanguageSelect />
+          </div>
         </div>
         <p className="tagline">{t('app.tagline')}</p>
       </header>
@@ -385,6 +402,13 @@ export function App() {
       <main>
         <div className="workspace">
           <div className="steps">
+            {example && (
+              <ExampleCard
+                id={example}
+                onClose={() => setHashState({ exemplo: '' })}
+                onMore={() => setHashState({ ajuda: 'exemplos' })}
+              />
+            )}
             <SitePanel
               selected={selected}
               loadedFile={selected.kind === 'file' ? loadedFile : null}
@@ -605,6 +629,15 @@ export function App() {
           </section>
         )}
       </main>
+
+      {helpSection && (
+        <HelpDialog
+          section={helpSection}
+          example={example}
+          onSection={(s) => setHashState({ ajuda: s })}
+          onClose={() => setHashState({ ajuda: '' })}
+        />
+      )}
 
       <footer className="footer">
         {t('footer.build', {

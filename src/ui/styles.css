@@ -9,7 +9,7 @@
   --color-border: #d0d7de;
   --color-bg: #ffffff;
   /* Cores da carta (F4.6, decisão 0030), conferidas para daltonismo e contraste em
-     src/ui/a11y/palette.test.ts: linhas e textos contra o branco e entre si (simulação de Machado,
+     tests/acessibilidade/paleta.test.ts: linhas e textos contra o branco e entre si (simulação de Machado,
      Oliveira e Fernandes, 2009). A trajetória do sol é --color-sun; as linhas horárias,
      --color-accent; o desenho à mão, --color-text. */
   --chart-grid: #8c959f;
@@ -1548,4 +1548,170 @@ fieldset.piece legend {
 
 .swatch.legal-hour-line {
   border-top: 2px dashed var(--chart-legal);
+}
+
+/* Ajuda e exemplos resolvidos (F4.8) */
+.header-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+/* Altura fixa: o diálogo não muda de tamanho ao trocar de parte. */
+dialog.help {
+  width: min(52rem, calc(100vw - 2rem));
+  max-width: none;
+  height: min(46rem, calc(100dvh - 2rem));
+  max-height: none;
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+}
+
+dialog.help::backdrop {
+  background: rgb(27 31 36 / 45%);
+}
+
+.help-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.help-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+.help-head h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.help-tabs {
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+.help-tabs button {
+  padding: 0.25rem 0.6rem;
+}
+
+.help-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.25rem 1rem 1rem;
+}
+
+.help-body:focus-visible,
+.help-faq summary:focus-visible,
+a.btn:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.help-body h3 {
+  margin: 1.1rem 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--color-accent);
+}
+
+.help-body h4 {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.help-items {
+  margin: 0;
+}
+
+.help-items > div {
+  margin-bottom: 0.6rem;
+}
+
+.help-items dt {
+  font-weight: 600;
+}
+
+.help-items dd {
+  margin: 0.1rem 0 0;
+}
+
+.help-example {
+  margin-top: 1rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.help-faq details {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.help-faq summary {
+  min-height: 32px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-faq p {
+  margin: 0.4rem 0 0.2rem;
+}
+
+/* No celular, a ajuda ocupa a tela inteira. */
+@media (max-width: 40rem) {
+  dialog.help {
+    width: 100vw;
+    height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.example-card {
+  padding: 0.75rem 0.9rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+}
+
+.example-card-label {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.example-card h2 {
+  margin: 0.1rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.example-card ol {
+  padding-left: 1.25rem;
+}
+
+.example-card li {
+  margin-bottom: 0.35rem;
+}
+
+@media print {
+  dialog.help {
+    display: none !important;
+  }
 }
