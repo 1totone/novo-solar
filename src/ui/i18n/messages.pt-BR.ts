@@ -73,11 +73,17 @@ export const ptBR = {
   'protection.combinedHelp':
     'Grelha (brise encostado nas aletas, mesma profundidade, junto à parede): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
   'protection.partialSet': 'Sombra parcial (50%)',
-  'protection.partialShort': 'parcial',
   'protection.partialHelp':
     'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos e sem fresta; nos outros casos, é uma aproximação.',
   'protection.invalid': 'Use um valor de 0° a 90°.',
-  'protection.fieldLabel': '{angle} {side} {index}',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'brise horizontal',
+  'protection.desc.beta': 'brises verticais',
+  'protection.desc.gamma': 'limites laterais',
+  'protection.desc.finTop': 'topo das aletas',
+  'protection.setTotal': 'sombra total',
+  'protection.setPartial': 'sombra parcial',
   'draw.heading': 'Desenhar à mão',
   'draw.help':
     'Como no SOL-AR 6.2: marque na carta os vértices de uma região de sombra. O desenho se soma à máscara calculada e fica guardado no link.',

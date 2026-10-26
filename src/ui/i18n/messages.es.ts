@@ -73,11 +73,17 @@ export const es: Catalog = {
   'protection.combinedHelp':
     'Rejilla (protección horizontal unida a las aletas, con la misma profundidad, junto a la pared): deje γ y γ de las aletas en blanco, porque las uniones cierran las rendijas. Con piezas separadas, la región roja puede ser menor que la sombra total real, porque distintas partes de la ventana pueden quedar sombreadas por distintas piezas.',
   'protection.partialSet': 'Sombra parcial (50%)',
-  'protection.partialShort': 'parcial',
   'protection.partialHelp':
     'Los mismos ángulos medidos desde el centro de la ventana (curvas discontinuas). En la región amarilla el centro queda a la sombra, lo que equivale a por lo menos la mitad de la ventana con protecciones y aletas largas y sin rendija; en los demás casos, es una aproximación.',
   'protection.invalid': 'Use un valor de 0° a 90°.',
-  'protection.fieldLabel': '{angle} {side} {index}',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'protección horizontal',
+  'protection.desc.beta': 'aletas verticales',
+  'protection.desc.gamma': 'límites laterales',
+  'protection.desc.finTop': 'extremo superior de las aletas',
+  'protection.setTotal': 'sombra total',
+  'protection.setPartial': 'sombra parcial',
   'draw.heading': 'Dibujo a mano alzada',
   'draw.help':
     'Como en SOL-AR 6.2: marque en la carta los vértices de una región de sombra. El dibujo se suma a la máscara calculada y queda guardado en el enlace.',

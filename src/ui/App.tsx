@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react';
+import { onRovingKeyDown } from './a11y/roving';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
@@ -486,13 +487,19 @@ export function App() {
                 })}
               </p>
             </div>
-            <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
+            <div
+              className="tabs"
+              role="tablist"
+              aria-label={t('tabs.label')}
+              onKeyDown={(e) => onRovingKeyDown(e, 'tab')}
+            >
               {(['chart', '3d', 'rose'] as const).map((tab) => (
                 <button
                   key={tab}
                   type="button"
                   role="tab"
                   id={`tab-${tab}`}
+                  tabIndex={wind.tab === tab ? 0 : -1}
                   aria-selected={wind.tab === tab}
                   aria-controls={`panel-${tab}`}
                   onClick={() =>

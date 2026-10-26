@@ -7,9 +7,8 @@ import { csvDocument } from '../export/csv';
 
 /**
  * Cores das 6 classes, do 0% ao 100% da janela à sombra: rampa de um matiz (OKLCH, matiz 215°,
- * luminosidade de 0,935 a 0,43, passos de pelo menos 0,06), conferida com o validador de paletas;
- * a ponta clara recua para o fundo, como num mapa de calor, e a tabela traz os números.
- * Provisórias até a paleta da Fase 4 (decisão 0023).
+ * luminosidade de 0,935 a 0,43, passos de pelo menos 0,06); a ponta clara recua para o fundo, como
+ * num mapa de calor, e a tabela traz os números (decisão 0030; tests/acessibilidade/paleta.test.ts).
  */
 export const MAP_COLORS = [
   '#d4eff6',

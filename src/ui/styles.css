@@ -8,6 +8,24 @@
   --color-surface: #f6f8fa;
   --color-border: #d0d7de;
   --color-bg: #ffffff;
+  /* Cores da carta (F4.6, decisão 0030), conferidas para daltonismo e contraste em
+     src/ui/a11y/palette.test.ts: linhas e textos contra o branco e entre si (simulação de Machado,
+     Oliveira e Fernandes, 2009). A trajetória do sol é --color-sun; as linhas horárias,
+     --color-accent; o desenho à mão, --color-text. */
+  --chart-grid: #8c959f;
+  --chart-protractor: #8250df;
+  --chart-protractor-text: #6639ba;
+  --chart-legal: #a01642;
+  --chart-contour: #4493a1;
+  --chart-contour-text: #2d6e7a;
+  --chart-contour-fill: rgb(68 147 161 / 20%);
+  --chart-period: #1c500e;
+  --chart-period-fill: rgb(45 164 78 / 22%);
+  --chart-point: #6f42c1;
+  --mask-total: rgb(207 34 46 / 35%);
+  --mask-partial: rgb(227 179 65 / 45%);
+  --mask-total-hatch: #a40e26;
+  --mask-partial-hatch: #b5820c;
   color-scheme: light;
   font-family:
     system-ui,
@@ -310,7 +328,7 @@ details.more summary {
 
 .sun-chart .pt-grid circle,
 .sun-chart .pt-grid line {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-opacity: 0.25;
   stroke-width: 0.5;
 }
@@ -331,18 +349,20 @@ details.more summary {
 }
 
 .sun-chart .pt-curve {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-width: 2.25;
 }
 
 .sun-chart .pt-label {
-  fill: #6639ba;
+  fill: var(--chart-protractor-text);
   font-size: 0.06px;
   font-weight: 600;
 }
 
+/* Curvas da sombra parcial: a cor do transferidor, tracejadas e mais finas, com o rótulo em itálico
+   (F4.6). O dourado de antes ficava a ΔE 5 da trajetória do sol, mesmo sem daltonismo. */
 .sun-chart .pt-curve.partial {
-  stroke: #9a6700;
+  stroke: var(--chart-protractor);
   stroke-width: 1.75;
   stroke-dasharray: 6 4;
 }
@@ -356,16 +376,17 @@ details.more summary {
 }
 
 .sun-chart .pt-label.partial {
-  fill: #7d4e00;
+  font-style: italic;
 }
 
-/* Máscara: total vermelha, parcial amarela (decisão 0013; paleta para daltonismo na Fase 4). */
+/* Máscara: total vermelha, parcial amarela (decisão 0013), conferidas para daltonismo (decisão 0030);
+   com dados sobre a carta, hachuras a 45° e 135°. */
 .sun-chart .mask-total {
-  fill: rgb(207 34 46 / 35%);
+  fill: var(--mask-total);
 }
 
 .sun-chart .mask-partial {
-  fill: rgb(227 179 65 / 45%);
+  fill: var(--mask-partial);
 }
 
 .swatch {
@@ -381,11 +402,11 @@ details.more summary {
 }
 
 .swatch.total {
-  background: rgb(207 34 46 / 35%);
+  background: var(--mask-total);
 }
 
 .swatch.partial {
-  background: rgb(227 179 65 / 45%);
+  background: var(--mask-partial);
 }
 
 .legend {
@@ -489,11 +510,11 @@ details.more summary {
 }
 
 .sun-chart .hatch-total {
-  fill: #a40e26;
+  fill: var(--mask-total-hatch);
 }
 
 .sun-chart .hatch-partial {
-  fill: #7d4e00;
+  fill: var(--mask-partial-hatch);
 }
 
 .swatch.no-data {
@@ -501,11 +522,15 @@ details.more summary {
 }
 
 .legend.hatched .swatch.total {
-  background: repeating-linear-gradient(45deg, #a40e26 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(45deg, var(--mask-total-hatch) 0 2px, transparent 2px 6px);
 }
 
 .legend.hatched .swatch.partial {
-  background: repeating-linear-gradient(135deg, #7d4e00 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--mask-partial-hatch) 0 2px,
+    transparent 2px 6px
+  );
 }
 
 .overlay-legend .legend-title {
@@ -975,12 +1000,12 @@ fieldset.plain .check {
   }
 }
 
-/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores provisórias até a
-   paleta da Fase 4, decisão 0023). Curva de 0% tracejada e de 100% grossa: o nível não depende só
-   da cor. */
+/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores da decisão 0030).
+   Curva de 0% tracejada e de 100% grossa: o nível não depende só da cor. O azul-petróleo escuro de
+   antes ficava a ΔE 6 das linhas horárias. */
 .sun-chart .contour {
   fill: none;
-  stroke: #005f73;
+  stroke: var(--chart-contour);
   stroke-width: 1.25;
   vector-effect: non-scaling-stroke;
 }
@@ -996,7 +1021,7 @@ fieldset.plain .check {
 .sun-chart .contour-label {
   font-size: 0.045px;
   font-weight: 600;
-  fill: #005f73;
+  fill: var(--chart-contour-text);
   stroke: var(--color-bg);
   stroke-width: 0.012px;
   stroke-linejoin: round;
@@ -1004,15 +1029,15 @@ fieldset.plain .check {
 }
 
 .sun-chart .full-shade {
-  fill: rgb(0 95 115 / 18%);
+  fill: var(--chart-contour-fill);
 }
 
 .sun-chart .hatch-full-shade {
-  fill: #005f73;
+  fill: var(--chart-contour-text);
 }
 
 .sun-chart .hatch-point {
-  fill: #6f42c1;
+  fill: var(--chart-point);
 }
 
 /* Curvas da geometria anterior enquanto o worker calcula as novas. */
@@ -1021,19 +1046,20 @@ fieldset.plain .check {
 }
 
 .swatch.contour-line {
-  background: linear-gradient(#005f73, #005f73) center / 100% 2px no-repeat;
+  background: linear-gradient(var(--chart-contour), var(--chart-contour)) center / 100% 2px
+    no-repeat;
 }
 
 .swatch.full-shade {
-  background: rgb(0 95 115 / 18%);
+  background: var(--chart-contour-fill);
 }
 
 .legend.hatched .swatch.full-shade {
-  background: repeating-linear-gradient(0deg, #005f73 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(0deg, var(--chart-contour-text) 0 2px, transparent 2px 6px);
 }
 
 .swatch.point-mask {
-  background: repeating-linear-gradient(90deg, #6f42c1 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(90deg, var(--chart-point) 0 2px, transparent 2px 6px);
 }
 
 /* Curvas em cálculo no worker: aviso sobre o canto da carta, sem empurrar o que vem abaixo. */
@@ -1208,10 +1234,11 @@ fieldset.plain .check {
   margin: 0.5rem 0;
 }
 
-/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU). */
+/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU; o contorno
+   escureceu na decisão 0030 para não se confundir com a trajetória do sol em deuteranopia). */
 .sun-chart .period-area {
-  fill: rgb(45 164 78 / 22%);
-  stroke: #1a7f37;
+  fill: var(--chart-period-fill);
+  stroke: var(--chart-period);
   stroke-width: 1.25;
   vector-effect: non-scaling-stroke;
 }
@@ -1235,8 +1262,8 @@ fieldset.plain .check {
 }
 
 .swatch.period-area {
-  background: rgb(45 164 78 / 22%);
-  border-color: #1a7f37;
+  background: var(--chart-period-fill);
+  border-color: var(--chart-period);
 }
 
 .swatch.period-mark {
@@ -1520,5 +1547,5 @@ fieldset.piece legend {
 }
 
 .swatch.legal-hour-line {
-  border-top: 2px dashed var(--color-legal, #9c2f6b);
+  border-top: 2px dashed var(--chart-legal);
 }

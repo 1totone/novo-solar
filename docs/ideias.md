@@ -15,3 +15,4 @@ Ideias que surgiram mas não pertencem à fase atual. A triagem acontece nos por
 | Estação editável na correção do vento (altura e terreno do anemômetro, como no Site:WeatherStation) e α e δ livres (como no Site:HeightVariation) | F4.4, decisão 0027 | 2026-10-26 | aguardando |
 | Aviso de velocidades em passos de nó (98% das velocidades dos TMYx são nós inteiros arredondados a 0,1 m/s), que fazem a calmaria e as classes da rosa corrigida mudarem em degraus | relatório do F4.4, seção 3 | 2026-10-26 | aguardando |
 | Rosa com a direção corrigida pelo entorno (canalização, proteção por vizinhos), com dados de túnel de vento ou CFD | F4.4 | 2026-10-26 | aguardando (fora do alcance de uma ferramenta sem servidor) |
+| Contorno nas regiões da máscara pelos ângulos, para a região parcial ter 3:1 com o fundo mesmo sem o transferidor (hoje 1,3:1; as curvas do transferidor desenham as bordas) | decisão 0030 | 2026-10-26 | aguardando |

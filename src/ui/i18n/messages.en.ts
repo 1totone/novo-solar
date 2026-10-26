@@ -73,11 +73,17 @@ export const en: Catalog = {
   'protection.combinedHelp':
     'Egg-crate (overhang joined to the fins, same depth, against the wall): leave γ and γ of the fins blank, because the joints close the gaps. With separate pieces, the red region may be smaller than the real full shade, because different parts of the window may be shaded by different pieces.',
   'protection.partialSet': 'Partial shade (50%)',
-  'protection.partialShort': 'partial',
   'protection.partialHelp':
     'The same angles measured from the centre of the window (dashed curves). In the yellow region the centre is shaded, which means at least half of the window for long overhangs and fins without a gap; in other cases, it is an approximation.',
   'protection.invalid': 'Use a value from 0° to 90°.',
-  'protection.fieldLabel': '{angle} {side} {index}',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'overhang',
+  'protection.desc.beta': 'vertical fins',
+  'protection.desc.gamma': 'side limits',
+  'protection.desc.finTop': 'top of the fins',
+  'protection.setTotal': 'full shade',
+  'protection.setPartial': 'partial shade',
   'draw.heading': 'Freehand drawing',
   'draw.help':
     'As in SOL-AR 6.2: mark on the chart the vertices of a shaded region. The drawing is added to the computed mask and saved in the link.',
