@@ -28,6 +28,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0022](0022-dimensionamento-inverso.md) | Dimensionamento inverso: do período a sombrear para os ângulos e as dimensões (F3.6) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0023](0023-interface-da-fase-3.md) | Interface da Fase 3: passos 6 e 7 recolhidos, aba Vista 3D, camadas na carta | 2026-10-25 | proposta (aceita provisoriamente na branch de integração) |
 | [0024](0024-padrao-da-classificacao-das-horas.md) | Padrão da classificação das horas para o sombreamento: limiar de 20 °C (Lamberts, Dutra e Pereira, 2014) | 2026-10-25 | aceita provisoriamente em 26/10/2026 (aplicada na integração da Fase 3; a confirmar no portão 3) |
+| [0025](0025-projecoes-e-analemas.md) | Outras projeções (equidistante e cilíndrica centrada na fachada) e analemas em hora legal (F4.3) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 
 ## Modelo
 
