@@ -1,6 +1,7 @@
 // Viés da faixa adaptativa sobre o ar externo (revisão da decisão 0020): classes das horas com sol na
 // janela, contadas e ponderadas pela radiação direta incidente sem proteção (DNI · cos θ), em três
-// cidades e quatro fachadas, com a classificação padrão e com as alternativas plausíveis:
+// cidades e quatro fachadas, com a faixa adaptativa sem ganhos (o padrão da decisão 0020, trocado
+// pelo limiar de 20 °C na decisão 0024) e com as alternativas plausíveis:
 // - acréscimo da temperatura interna por ganhos de 2 °C e 4 °C (ordem de grandeza medida em casas
 //   ocupadas e ventiladas naturalmente em Florianópolis e Curitiba; Papst de Abreu, 2004);
 // - limiar de sombreamento de 20 °C (Lamberts, Dutra e Pereira, 2014, p. 91 e 135).
@@ -10,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   classifyHours,
-  DEFAULT_METHOD,
+  ADAPTIVE_DEFAULT,
   HOUR_CLASS,
   type ClassificationMethod,
 } from '../../src/core/comfort/classification';
@@ -37,12 +38,12 @@ const FACADES = [
   ['O', 270],
 ] as const;
 
-const adaptive = DEFAULT_METHOD as Extract<ClassificationMethod, { kind: 'adaptive' }>;
+const adaptive = ADAPTIVE_DEFAULT;
 const VARIANTS: [string, ClassificationMethod][] = [
-  ['faixa adaptativa (padrão)', DEFAULT_METHOD],
+  ['faixa adaptativa', ADAPTIVE_DEFAULT],
   ['faixa adaptativa, ΔT = 2 °C', { ...adaptive, gains: 2 }],
   ['faixa adaptativa, ΔT = 4 °C', { ...adaptive, gains: 4 }],
-  ['limiar de 20 °C', { kind: 'thresholds', cold: 20, hot: 20 }],
+  ['limiar de 20 °C (padrão)', { kind: 'thresholds', cold: 20, hot: 20 }],
 ];
 
 interface Shares {
@@ -129,10 +130,10 @@ describe.skipIf(!available)('viés da faixa adaptativa sobre o ar externo', () =
     }
   }
 
-  it('o padrão deixa como frias horas de sol que, com ganhos ou pelo limiar de 20 °C, não são', () => {
+  it('a faixa adaptativa deixa como frias horas de sol que, com ganhos ou pelo limiar de 20 °C, não são', () => {
     const get = (city: string, facade: string, label: string) =>
       result.get(`${city}|${facade}|${label}`)!;
-    // Florianópolis, Norte: com o padrão, 37% das horas com sol (32% da radiação) são frias e só 6%
+    // Florianópolis, Norte: com a faixa adaptativa, 37% das horas com sol (32% da radiação) são frias e só 6%
     // quentes; com ΔT = 4 °C, as frias caem para 8% e as quentes sobem para 34%.
     const flnDefault = get('Florianópolis', 'N', VARIANTS[0]![0]);
     expect(flnDefault.cold).toBeGreaterThan(0.35);

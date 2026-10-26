@@ -132,8 +132,8 @@ export const fase3PtBR = {
     'Sem janela no passo 6, as horas com sol na janela são as da fachada do passo 2, sem proteção.',
   'classes.heading': 'Horas quentes e frias',
   'classes.method': 'Como classificar as horas',
-  'classes.method.adaptive': 'Faixa adaptativa da ASHRAE 55 (padrão)',
-  'classes.method.thresholds': 'Limiares de temperatura',
+  'classes.method.adaptive': 'Faixa adaptativa da ASHRAE 55',
+  'classes.method.thresholds': 'Limiares de temperatura (padrão: 20 °C)',
   'classes.method.balance': 'Temperatura de equilíbrio',
   'classes.acceptability': 'Aceitabilidade',
   'classes.gains': 'Acréscimo por ganhos, ΔT (°C)',
@@ -153,9 +153,9 @@ export const fase3PtBR = {
   'classes.cold': 'Hora fria abaixo de (°C)',
   'classes.hot': 'Hora quente acima de (°C)',
   'classes.thresholdsHelp': 'Deixe um em branco para não ter horas frias ou quentes.',
-  'classes.suggest20': 'Usar 20 °C',
+  'classes.suggest20': 'Voltar a 20 °C',
   'classes.suggest20Source':
-    'Sugestão com fonte: sombrear sempre que o ar passar de 20 °C, critério de Lamberts, Dutra e Pereira (2014, p. 91 e 135) para ambiente sem carga térmica interna; com carga interna, use um limite menor.',
+    'Padrão: sombrear sempre que o ar passar de 20 °C, critério de Lamberts, Dutra e Pereira (2014, p. 91 e 135) para ambiente sem carga térmica interna; com carga interna, use um limite menor.',
   'classes.balance': 'Temperatura de equilíbrio (°C)',
   'classes.balanceHelp':
     'Temperatura externa acima da qual os ganhos passam a ser excesso: T_eq = T_int − Q / UA. Depende do edifício e não tem valor padrão (não há valor por tipologia com fonte).',
@@ -168,9 +168,13 @@ export const fase3PtBR = {
     'Faixa adaptativa da ASHRAE 55-2023, {acceptability}% de aceitabilidade: conforto = 0,31 · t_pma + 17,8 °C, mais ou menos {half} °C, com t_pma pela {averaging}. A faixa vale para a temperatura operativa interna de ambientes naturalmente condicionados; aqui é comparada com o ar externo, o que tende a subestimar as horas quentes.',
   'classes.h2.gains': 'Acréscimo por ganhos: os limites descem ΔT = {gains} °C.',
   'classes.h2.noGains': 'Sem acréscimo por ganhos (ΔT = 0): a classe é a do ar externo.',
-  'classes.h2.thresholds':
-    'Limiares: hora fria abaixo de {cold}; quente acima de {hot}; entre eles, neutra.',
-  'classes.h2.noLimit': 'sem limite',
+  'classes.h2.thresholds': 'Limiares: {cold}; {hot}; entre eles, neutra.',
+  'classes.h2.coldBelow': 'hora fria abaixo de {value} °C',
+  'classes.h2.noCold': 'sem horas frias',
+  'classes.h2.hotAbove': 'quente acima de {value} °C',
+  'classes.h2.noHot': 'sem horas quentes',
+  'classes.h2.threshold20':
+    'Limiar de 20 °C (padrão): acima, a hora pede sombra; abaixo, sol; em 20 °C, neutra. É o critério de sombreamento de Lamberts, Dutra e Pereira (2014) para ambiente sem carga térmica interna; com carga interna, a sombra é desejada abaixo de 20 °C, e o limite deve ser menor. Não se adapta ao clima do lugar.',
   'classes.h2.balance':
     'Temperatura de equilíbrio de {balance} °C: acima, hora quente; abaixo, fria; igual, neutra.',
   'classes.h3':

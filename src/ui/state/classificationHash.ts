@@ -1,6 +1,7 @@
 import {
   ADAPTIVE,
-  DEFAULT_METHOD,
+  ADAPTIVE_DEFAULT,
+  SHADING_THRESHOLD,
   type ClassificationMethod,
   type HourTemperature,
 } from '../../core/comfort/classification';
@@ -8,11 +9,15 @@ import { parseDecimal } from './geometryHash';
 import type { HashState } from './hashState';
 
 /**
- * Classificação das horas (passo 7, F3.4) no '#' da URL, com o texto digitado: cm (método: a faixa
- * adaptativa, padrão; l limiares; e temperatura de equilíbrio), ca (aceitabilidade, 80 ou 90), cr
- * (média predominante: e exponencial, padrão; m aritmética), cal (α), cn (dias), cg (acréscimo por
- * ganhos ΔT, °C), tf e tq (limiares frio e quente, °C), te (temperatura de equilíbrio, °C) e ct
- * (temperatura da hora: m média do início e do fim, padrão; f fim).
+ * Classificação das horas (passo 7, F3.4) no '#' da URL, com o texto digitado: cm (método: em
+ * branco, o padrão, limiar de 20 °C da decisão 0024; a faixa adaptativa; l limiares digitados; e
+ * temperatura de equilíbrio), ca (aceitabilidade, 80 ou 90), cr (média predominante: e exponencial,
+ * padrão; m aritmética), cal (α), cn (dias), cg (acréscimo por ganhos ΔT, °C), tf e tq (limiares
+ * frio e quente, °C), te (temperatura de equilíbrio, °C) e ct (temperatura da hora: m média do
+ * início e do fim, padrão; f fim).
+ *
+ * Até a decisão 0024, sem cm valia a faixa adaptativa: um link sem cm e com uma chave só dela (ca,
+ * cr, cal, cn ou cg) continua abrindo a faixa adaptativa.
  */
 export type MethodKind = 'adaptive' | 'thresholds' | 'balance';
 
@@ -20,6 +25,8 @@ export type ClassificationField = 'alpha' | 'days' | 'gains' | 'cold' | 'hot' | 
 
 export interface ClassificationState {
   kind: MethodKind;
+  /** Limiar padrão de 20 °C, sem cm no link: os campos mostram 20 e não ficam em branco. */
+  preset: boolean;
   acceptability: 80 | 90;
   averaging: 'exponential' | 'arithmetic';
   mode: HourTemperature;
@@ -29,12 +36,34 @@ export interface ClassificationState {
   method: ClassificationMethod | null;
 }
 
-const DEFAULT_RUNNING = (DEFAULT_METHOD as Extract<ClassificationMethod, { kind: 'adaptive' }>)
-  .running as { averaging: 'exponential'; alpha: number; days: number };
+export const FIELD_KEY: Record<ClassificationField, string> = {
+  alpha: 'cal',
+  days: 'cn',
+  gains: 'cg',
+  cold: 'tf',
+  hot: 'tq',
+  balance: 'te',
+};
+
+/** Chaves que só a faixa adaptativa usa. */
+const ADAPTIVE_KEYS = ['ca', 'cr', 'cal', 'cn', 'cg'];
+const DEFAULT_RUNNING = ADAPTIVE_DEFAULT.running as {
+  averaging: 'exponential';
+  alpha: number;
+  days: number;
+};
+const THRESHOLD_TEXT = String(SHADING_THRESHOLD);
+
+function methodKind(state: HashState): MethodKind {
+  if (state.cm === 'a') return 'adaptive';
+  if (state.cm === 'l') return 'thresholds';
+  if (state.cm === 'e') return 'balance';
+  return ADAPTIVE_KEYS.some((k) => state[k]) ? 'adaptive' : 'thresholds';
+}
 
 export function classificationFromHash(state: HashState): ClassificationState {
-  const kind: MethodKind =
-    state.cm === 'l' ? 'thresholds' : state.cm === 'e' ? 'balance' : 'adaptive';
+  const kind = methodKind(state);
+  const preset = kind === 'thresholds' && state.cm !== 'l';
   const acceptability = state.ca === '90' ? 90 : 80;
   const averaging = state.cr === 'm' ? 'arithmetic' : 'exponential';
   const mode: HourTemperature = state.ct === 'f' ? 'end' : 'mean';
@@ -42,8 +71,8 @@ export function classificationFromHash(state: HashState): ClassificationState {
     alpha: state.cal ?? '',
     days: state.cn ?? '',
     gains: state.cg ?? '',
-    cold: state.tf ?? '',
-    hot: state.tq ?? '',
+    cold: state.tf ?? (preset ? THRESHOLD_TEXT : ''),
+    hot: state.tq ?? (preset ? THRESHOLD_TEXT : ''),
     balance: state.te ?? '',
   };
   const invalid: ClassificationField[] = [];
@@ -91,13 +120,35 @@ export function classificationFromHash(state: HashState): ClassificationState {
     const balance = num('balance');
     if (invalid.length === 0 && balance !== undefined) method = { kind: 'balance', balance };
   }
-  return { kind, acceptability, averaging, mode, raw, invalid, method };
+  return { kind, preset, acceptability, averaging, mode, raw, invalid, method };
 }
 
-/** Patch que troca o método, sem apagar os valores digitados nos outros. */
-export const methodPatch = (kind: MethodKind) => ({
-  cm: kind === 'adaptive' ? '' : kind === 'thresholds' ? 'l' : 'e',
-});
+/**
+ * Patch que troca o método, sem apagar os valores digitados nos outros. Voltar aos limiares sem
+ * nada digitado grava os 20 °C do padrão (sem cm, chaves da faixa adaptativa a reabririam).
+ */
+export function methodPatch(kind: MethodKind, state: HashState): HashState {
+  if (kind === 'adaptive') return { cm: 'a' };
+  if (kind === 'balance') return { cm: 'e' };
+  if (state.tf || state.tq) return { cm: 'l' };
+  return { cm: 'l', tf: THRESHOLD_TEXT, tq: THRESHOLD_TEXT };
+}
+
+/**
+ * Patch de um campo digitado. A partir do padrão (sem cm), editar um limiar grava cm=l e o outro
+ * limiar como está, para que apagar um campo depois signifique "sem limite" e não "20 °C".
+ */
+export function fieldPatch(
+  s: ClassificationState,
+  field: ClassificationField,
+  value: string,
+): HashState {
+  if (s.preset && (field === 'cold' || field === 'hot')) {
+    const other: ClassificationField = field === 'cold' ? 'hot' : 'cold';
+    return { cm: 'l', [FIELD_KEY[field]]: value, [FIELD_KEY[other]]: s.raw[other] };
+  }
+  return { [FIELD_KEY[field]]: value };
+}
 
 /** Chave curta do método (para memorizar a classificação). */
 export const methodKey = (s: ClassificationState) => JSON.stringify([s.method, s.mode]);

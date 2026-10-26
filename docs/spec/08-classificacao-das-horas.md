@@ -1,6 +1,6 @@
 # 8. Classificação das horas
 
-**Status:** proposta (núcleo de cálculo do F3.4), 25/10/2026. Escrita antes do portão 2, numa branch separada, sem interface. As escolhas que dependem do Anthony estão na seção 8.8 e na decisão 0020 (proposta), cada uma com a recomendação adotada no código enquanto isso.
+**Status:** proposta (núcleo de cálculo do F3.4), 25/10/2026; padrão trocado para o limiar de 20 °C em 26/10/2026 (decisão 0024, aceita provisoriamente). Escrita antes do portão 2, numa branch separada, sem interface. As escolhas que dependem do Anthony estão na seção 8.8 e nas decisões 0020 e 0024, cada uma com a recomendação adotada no código enquanto isso.
 
 Cada hora do arquivo climático recebe uma classe: **quente** (a sombra é desejada), **fria** (o sol é desejado), **neutra** ou **sem classe**. A classificação é a entrada dos indicadores do F3.5 (radiação direta bloqueada nas horas quentes e admitida nas horas frias).
 
@@ -91,29 +91,29 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 | T_conf, L, U e faixa de aplicação | `adaptive_ashrae` do pythermalcomfort 4.6.2 (sem arredondamento, com verificação dos limites de entrada; o limite da temperatura operativa, de 10 °C a 40 °C, não entra porque a referência usa uma operativa fictícia de 25 °C só para obter os limites) | 10⁻⁹ °C; mesma aplicabilidade em todos os dias |
 | Classes de todas as horas | classificação da referência com os limites do pythermalcomfort, em 4 configurações (adaptativa 80% com a média da hora; adaptativa 90%, aritmética de 7 dias, com o fim da hora; limiares fixos; temperatura de equilíbrio) | iguais em todas as horas; horas a menos de 10⁻⁹ °C de um limite seriam listadas à parte (nenhuma encontrada) |
 
-## 8.8 Escolhas propostas (decisão 0020)
+## 8.8 Escolhas propostas (decisões 0020 e 0024)
 
 1. **Temperatura da hora:** média de T(h − 1) e T(h), com a do fim da hora como opção.
-2. **Faixa adaptativa como método padrão**, com 80% de aceitabilidade; fora de 10 °C ≤ t_pma ≤ 33,5 °C, horas sem classe.
+2. **Limiar de 20 °C como método padrão** (decisão 0024, aceita provisoriamente em 26/10/2026, no lugar do item 2 da decisão 0020): T_fria = T_quente = 20 °C, empate neutro, com a fonte na tela (Lamberts, Dutra e Pereira, 2014). A **faixa adaptativa** continua como alternativa, com 80% de aceitabilidade por padrão; fora de 10 °C ≤ t_pma ≤ 33,5 °C, horas sem classe.
 3. **Média predominante exponencial**, α = 0,8, 30 dias, normalizada; aritmética de 7 a 30 dias como opção; ano cíclico; média diária com pelo menos 18 horas.
-4. **Limiares fixos e temperatura de equilíbrio sem valor padrão**; nenhuma tabela por tipologia sem fonte citável.
+4. **Temperatura de equilíbrio sem valor padrão**; nenhuma tabela por tipologia sem fonte citável. Os limiares fixos têm o padrão de 20 °C do item 2.
 5. **Empates** com os limites são neutros.
 6. **NBR 15575** não é usada para classificar a temperatura externa.
 7. **Acréscimo por ganhos ΔT** na faixa adaptativa, digitado, padrão 0 (acrescentado na revisão de 25/10/2026).
 8. **Percentuais das classes sobre as horas com sol na janela**, contados e ponderados pela radiação.
-9. **Limiar de 20 °C** (Lamberts, Dutra e Pereira, 2014) oferecido como sugestão com fonte no método de limiares; a decisão 0024 (proposta) recomenda torná-lo o padrão.
+9. **Limiar de 20 °C** (Lamberts, Dutra e Pereira, 2014): o padrão (item 2); com carga térmica interna, o livro manda usar um limite menor, sem número, e o usuário digita o seu.
 
 ## 8.9 Interface (F3.4)
 
 O passo 7, "Efeito no ano" (decisão 0023, proposta), recolhido depois do passo 6, classifica as horas do arquivo aberto no passo 1 (arquivo carregado ou dados históricos da cidade); sem dados horários, ele pede os dados. A seção "Horas quentes e frias" tem:
 
-- **Método**, em botões de opção: faixa adaptativa da ASHRAE 55 (padrão, seção 8.4, com a aceitabilidade de 80% ou 90% e o acréscimo por ganhos ΔT, com a ordem de grandeza de Papst de Abreu, 2004, na tela); limiares de temperatura (fria abaixo de, quente acima de; um pode ficar em branco), com o botão "Usar 20 °C" e a fonte (Lamberts, Dutra e Pereira, 2014); e temperatura de equilíbrio, sem valor padrão. Em "Mais opções": a forma da média predominante (exponencial com α de 0,6 a 0,9, ou aritmética), os dias (7 a 30) e a temperatura da hora (média do início e do fim, padrão, ou o fim da hora). Campos fora da faixa ficam marcados e a classificação espera. ΔT é aceito de −10 a 10 °C.
+- **Método**, em botões de opção: faixa adaptativa da ASHRAE 55 (seção 8.4, com a aceitabilidade de 80% ou 90% e o acréscimo por ganhos ΔT, com a ordem de grandeza de Papst de Abreu, 2004, na tela); limiares de temperatura (padrão, com 20 °C nos dois campos e a fonte, Lamberts, Dutra e Pereira, 2014; fria abaixo de, quente acima de; depois de editar, um pode ficar em branco), com o botão "Voltar a 20 °C"; e temperatura de equilíbrio, sem valor padrão. Em "Mais opções": a forma da média predominante (exponencial com α de 0,6 a 0,9, ou aritmética), os dias (7 a 30) e a temperatura da hora (média do início e do fim, padrão, ou o fim da hora). Campos fora da faixa ficam marcados e a classificação espera. ΔT é aceito de −10 a 10 °C.
 - **Hipóteses** sempre visíveis, montadas a partir das escolhas (seção 8.6): a classe vem só do ar externo; o método e os valores (na faixa adaptativa, a equação, a aceitabilidade, a média predominante e o aviso de que a faixa é da operativa interna e tende a subestimar as horas quentes; o ΔT ou a falta dele); as horas sem classe; a temperatura da hora; e a base das partes de cada classe.
 - **Partes de cada classe nas horas com sol na janela** da fachada do passo 2, sem a proteção (exposição da hora maior que 0; seção 7.6), contadas e ponderadas pela radiação direta incidente sem proteção, E₀ = DNI · C (seção 9.1): duas barras de 100% (radiação e horas) com o percentual escrito sob cada parte e uma tabela com as horas, os kWh/m² e os percentuais de cada classe (frias, neutras, quentes e sem classe). Linhas com sol na janela e sem DNI contam nas horas e ficam fora da radiação, com aviso. Sem janela no passo 6, usa-se uma janela de 1 × 1 m sem peças (a exposição e a incidência sem proteção não dependem da janela).
-- **Estado no link:** `cm` (método: em branco, `l` limiares, `e` equilíbrio), `ca` (`90`), `cr` (`m`, aritmética), `cal` (α), `cn` (dias), `cg` (ΔT), `tf` e `tq` (limiares), `te` (equilíbrio) e `ct` (`f`, fim da hora), com o texto digitado. O passo abre sozinho quando o link traz uma dessas chaves.
+- **Estado no link:** `cm` (método: em branco, o padrão de 20 °C; `a` faixa adaptativa; `l` limiares digitados; `e` equilíbrio), `ca` (`90`), `cr` (`m`, aritmética), `cal` (α), `cn` (dias), `cg` (ΔT), `tf` e `tq` (limiares), `te` (equilíbrio) e `ct` (`f`, fim da hora), com o texto digitado. Editar um limiar a partir do padrão grava `cm=l` e os dois limiares, para que um campo apagado depois signifique "sem limite". Até a decisão 0024, sem `cm` valia a faixa adaptativa: um link sem `cm` e com uma chave só dela (`ca`, `cr`, `cal`, `cn` ou `cg`) continua abrindo a faixa. O passo abre sozinho quando o link traz uma dessas chaves.
 - **Cálculo:** a classificação (8760 horas) roda na linha principal; a fração ensolarada do ano vem do mesmo worker do mapa mês × hora (seção 7.13), com o local do arquivo.
 
-Conferência de ponta a ponta (`e2e/classificacao.spec.ts`), com EPWs sintéticos: com 22 °C constantes, t_pma = 22 °C e a faixa de 80% vai de 21,12 a 28,12 °C (todas as horas neutras); com ΔT = 8 °C, os limites descem para 13,12 e 20,12 °C (todas quentes); com 15 °C de manhã e 25 °C à tarde e o limiar de 20 °C, a hora das 12 às 13 h vale 20 °C pela média da hora (empate, neutra) e 25 °C pelo fim da hora (quente); as cores lidas no meio de cada parte da barra correspondem às partes da tabela; a temperatura de equilíbrio só classifica com o valor digitado; teclado e axe sem violações. A função que conta as classes nas horas com sol na janela tem casos à mão em `src/core/shading/indicators.test.ts`.
+Conferência de ponta a ponta (`e2e/classificacao.spec.ts`), com EPWs sintéticos: com 22 °C constantes, t_pma = 22 °C e a faixa de 80% vai de 21,12 a 28,12 °C (todas as horas neutras); com ΔT = 8 °C, os limites descem para 13,12 e 20,12 °C (todas quentes); sem nada no link, o método é o limiar de 20 °C, com a fonte; com 15 °C de manhã e 25 °C à tarde e o limiar de 20 °C, a hora das 12 às 13 h vale 20 °C pela média da hora (empate, neutra) e 25 °C pelo fim da hora (quente); as cores lidas no meio de cada parte da barra correspondem às partes da tabela; a temperatura de equilíbrio só classifica com o valor digitado; teclado e axe sem violações. A função que conta as classes nas horas com sol na janela tem casos à mão em `src/core/shading/indicators.test.ts`.
 
 ## Referências
 
