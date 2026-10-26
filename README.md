@@ -13,7 +13,7 @@ Carta solar, transferidor de ângulos e projeto de proteções solares no navega
 - Rosa dos ventos com filtros.
 - Tudo no navegador, sem instalação, inclusive offline.
 
-Roteiro completo: [docs/ROADMAP.md](docs/ROADMAP.md).
+Roteiro completo: [docs/ROADMAP.md](docs/ROADMAP.md). Para manter, publicar e atualizar o programa: [guia do mantenedor](docs/manutencao/guia-do-mantenedor.md).
 
 ## Créditos
 
