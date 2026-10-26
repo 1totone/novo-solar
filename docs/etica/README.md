@@ -35,7 +35,7 @@
 | 8 | Gravar a tela | não | as anotações bastam; gravar acrescenta risco, consentimento e guarda |
 | 9 | Conjunto de dados aberto, com consentimento opcional | sim, sem o perfil | coerente com o princípio "transparente"; sem o perfil, o risco de identificação fica baixo |
 | 10 | Ressarcimento de transporte | tarifa de ida e volta, em dinheiro, com recibo [PREENCHER: valor] | o TCLE precisa dizer como as despesas são cobertas |
-| 11 | Definição operacional do portão 4 | média da SUS ≥ 70, sempre com o IC de 95% | o critério pelo limite inferior do IC exigiria cerca de 100 participantes se a média verdadeira fosse 75 (protocolo, seção 9.2); registrar a escolha numa decisão em `docs/decisoes/` antes da coleta |
+| 11 | Definição operacional do portão 4 | média da SUS ≥ 70, sempre com o IC de 95% (decisão 0026, proposta) | o critério pelo limite inferior do IC exigiria cerca de 100 participantes se a média verdadeira fosse 75 (protocolo, seção 9.2); confirmar ou trocar antes da coleta |
 | 12 | Data de submissão | até 01/12/2026 | parecer até 28/01/2027 sem pendências, ou até cerca de 01/03/2027 com pendências; coleta em abril e maio de 2027 (`05`, seção 2) |
 
 ### 2.2 Campos a preencher
@@ -65,7 +65,7 @@ Os nomes das etapas seguem os manuais do pesquisador da Plataforma Brasil (vers�
 
 ## 4. Lista de conferência antes de enviar
 
-- [ ] Decisões da seção 2.1 tomadas; a do portão 4 registrada em `docs/decisoes/`.
+- [ ] Decisões da seção 2.1 tomadas; a do portão 4 confirmada (decisão 0026).
 - [ ] Nenhum `[PREENCHER]` sobrando nos documentos que vão ao CEP.
 - [ ] Itens da SUS iguais aos da Tabela 1 de Lourenço, Carmona e Lopes (2022), sem os marcadores "a conferir".
 - [ ] Itens "a conferir" das normas conferidos no texto oficial (seção 6).
@@ -92,7 +92,7 @@ Se a instituição proponente for a UFSC, o CEP é o Comitê de Ética em Pesqui
 
 ## 6. O que ficou a conferir
 
-1. **Itens da SUS validada** (Lourenço, Carmona e Lopes, 2022): não consegui ler o artigo; o texto provisório é a tradução livre do F2.9 (`03`, seção E). Bloqueia a submissão.
+1. **Itens da SUS validada** (Lourenço, Carmona e Lopes, 2022): o artigo é de acesso aberto, mas a rede desta sessão não alcança o site da revista nem o Redalyc; o texto provisório é a tradução livre do F2.9 (`03`, seção E). Bloqueia a submissão: copiar a Tabela 1 do artigo (https://www.redalyc.org/journal/741/74172630008/74172630008.pdf ou o site da *Aquichan*).
 2. **Texto oficial da Lei nº 14.874/2024:** art. 14 (prazos e em que dispositivo está o aceite em 10 dias úteis), art. 2º, LIII, e art. 18 (TCLE), art. 63 (alcance); lidos em transcrições.
 3. **Decreto nº 12.651/2025:** art. 35 e parágrafos (ciências humanas e sociais), art. 40 (transição); e se a Inaep já publicou a norma de ciências humanas e sociais, que pode trazer notificação ou análise simplificada para risco baixo.
 4. **Inaep:** Despacho nº 2/2026 (contagem de prazos) e as orientações transitórias; papel da nova Conep do Conselho Nacional de Saúde.
@@ -103,7 +103,7 @@ Se a instituição proponente for a UFSC, o CEP é o Comitê de Ética em Pesqui
 9. **Calendário acadêmico de 2027** da instituição da coleta (na UFSC, 2027.1 previsto de 01/03 a 07/07/2027).
 10. **Licença do artigo da SUS** na página do próprio artigo (a revista publica sob CC BY 4.0).
 11. **Literatura do protocolo:** a porcentagem de Tullis e Stetson (2004) com 12 participantes (90% ou 100%), os adjetivos extremos de Bangor, Kortum e Miller (2009) e as faixas de aceitabilidade de Bangor, Kortum e Miller (2008), lidos em fontes secundárias.
-12. **Respostas de referência que dependem da versão final:** tarefa 6 (70,7%, valor da prévia da Fase 3, a refazer se o padrão da classificação das horas mudar, decisão 0024), tarefas 7 a 10 e a tolerância da hora legal na tarefa 2 (protocolo, seção 11).
+12. **Respostas de referência que dependem da versão final:** tarefas 6 e 7 (60,3%, e 69,2% e 48,9%, valores da prévia da Fase 3 com o limiar de 20 °C da decisão 0024, a refazer se o padrão mudar no portão 3), tarefas 8 a 10 e a tolerância da hora legal na tarefa 2 (protocolo, seção 11).
 
 ## 7. Depois da aprovação
 

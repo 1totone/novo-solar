@@ -21,6 +21,8 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0015](0015-sobreposicao-de-dados.md) | Sobreposição de dados: bordas das células, faixas e leiaute do celular | 2026-10-24 | aceita (faixas de UR e DHI e cores provisórias) |
 | [0016](0016-rosa-dos-ventos.md) | Rosa dos ventos: estações, períodos do dia e setores | 2026-10-24 | aceita (a conferir no portão 2) |
 | [0017](0017-cidades-e-dados-historicos.md) | Cidades, dados recentes e dados históricos do SOL-AR 6.2 | 2026-10-24 | aceita (radiação histórica a confirmar no portão 2) |
+| 0018 a 0025 | Decisões das Fases 3 e 4, nas branches de integração (PRs #35 e #51); entram aqui quando as fases forem integradas | 2026-10-24 a 2026-10-26 | propostas ou aceitas provisoriamente |
+| [0026](0026-criterio-sus-do-portao-4.md) | Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança | 2026-10-26 | proposta (confirmar antes da coleta do F4.9) |
 
 ## Modelo
 
