@@ -57,6 +57,11 @@ export interface PathLabel {
   months: number[];
   x: number;
   y: number;
+  /**
+   * Na cilíndrica, posições candidatas do rótulo ao longo da trajetória (a primeira é x, y): o
+   * rótulo fica na primeira que não cobre outro texto da carta (useLabelLayout).
+   */
+  candidates?: { x: number; y: number }[];
 }
 
 export interface ChartGeometry {
@@ -72,6 +77,8 @@ export const DATE_LABEL_RADIUS = 1.035;
 /** Na cilíndrica, os rótulos das datas ficam logo acima e à direita do meio-dia de cada trajetória. */
 const DATE_LABEL_SHIFT = 0.04;
 const DATE_LABEL_RAISE = 0.018;
+/** Na cilíndrica, deslocamentos tentados ao longo da trajetória, em fração dos pontos dela. */
+const DATE_LABEL_STEPS = [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24];
 /** Horas das linhas horárias (solar e legal). */
 const HOURS = Array.from({ length: 15 }, (_, k) => 5 + k);
 
@@ -109,20 +116,28 @@ function sunsetOf(points: SkyPoint[]): SkyPoint | undefined {
  * trajetória (o meio-dia), onde as trajetórias ficam mais separadas.
  */
 function pathLabels(sky: { date: ChartDate; points: SkyPoint[] }[], p: Projection): PathLabel[] {
-  const groups = new Map<number, { months: number[]; x: number; y: number; n: number }>();
+  const groups = new Map<
+    number,
+    { months: number[]; x: number; y: number; n: number; path: SkyPoint[]; top: number }
+  >();
   for (const path of sky) {
     let c: ChartPoint;
+    let top = -1;
     if (p.kind === 'cylindrical') {
       if (path.points.length === 0) continue;
-      const top = path.points.reduce((a, b) => (b.zenith < a.zenith ? b : a));
-      c = projectDirection(p, top.zenith, top.azimuth);
+      top = path.points.reduce(
+        (best, q, i) => (q.zenith < path.points[best]!.zenith ? i : best),
+        0,
+      );
+      const t = path.points[top]!;
+      c = projectDirection(p, t.zenith, t.azimuth);
     } else {
       const sunset = sunsetOf(path.points);
       if (!sunset) continue;
       c = project(90, sunset.azimuth);
     }
     const key = groupOf(path.date.month);
-    const g = groups.get(key) ?? { months: [], x: 0, y: 0, n: 0 };
+    const g = groups.get(key) ?? { months: [], x: 0, y: 0, n: 0, path: path.points, top };
     g.months.push(path.date.month);
     g.x += c.x;
     g.y += -c.y;
@@ -133,11 +148,17 @@ function pathLabels(sky: { date: ChartDate; points: SkyPoint[] }[], p: Projectio
     .sort(([a], [b]) => a - b)
     .map(([, g]) => {
       if (p.kind === 'cylindrical') {
-        return {
-          months: g.months.sort((a, b) => a - b),
-          x: g.x / g.n + DATE_LABEL_SHIFT,
-          y: g.y / g.n - DATE_LABEL_RAISE,
-        };
+        const x = g.x / g.n + DATE_LABEL_SHIFT;
+        const y = g.y / g.n - DATE_LABEL_RAISE;
+        // Reservas ao longo da primeira trajetória do grupo (as do grupo quase coincidem).
+        const along = DATE_LABEL_STEPS.slice(1).flatMap((f) => {
+          const i = g.top + Math.round(f * g.path.length);
+          const q = g.path[i];
+          if (!q || q.zenith >= 90) return [];
+          const c = projectDirection(p, q.zenith, q.azimuth);
+          return [{ x: c.x + DATE_LABEL_SHIFT, y: -c.y - DATE_LABEL_RAISE }];
+        });
+        return { months: g.months.sort((a, b) => a - b), x, y, candidates: [{ x, y }, ...along] };
       }
       const k = DATE_LABEL_RADIUS / Math.hypot(g.x, g.y);
       return { months: g.months.sort((a, b) => a - b), x: g.x * k, y: g.y * k };

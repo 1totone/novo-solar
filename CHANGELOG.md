@@ -64,6 +64,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Corrigido
 
+- Meses no topo da carta cilíndrica (F4.3) e percentuais das curvas sobre as horas, com várias camadas: os rótulos dos meses ganham posições de reserva ao longo da trajetória e os das curvas, posições logo acima e abaixo da linha, escolhidas pelo mesmo mecanismo das outras camadas. `e2e/rotulos.spec.ts` ganha três casos (cilíndrica com analemas, transferidor e máscara; cilíndrica com curvas; equidistante com curvas e período), que falhavam antes da correção.
 - Rótulos da carta que se atropelavam com várias camadas (inspeção visual da Fase 4): os percentuais das curvas da proteção e os nomes dos ângulos do dimensionamento pelo período passam a ter posições candidatas e ficam na primeira que não cobre outro texto da carta (horas, meses, grade, transferidor). Teste de ponta a ponta `e2e/rotulos.spec.ts` confere, pelos retângulos dos textos na tela, em pixels, que nenhum cobre outro em 6 casos.
 - O arquivo de teste `teste-hora.csv` do F2.8 (486 kB) deixa de ser copiado para o build; um teste confere que só os dados históricos das cidades do catálogo são publicados. Achado 19 da revisão antes do teste com usuários.
 - CSV do SOL-AR salvo pelo Excel em português (ponto e vírgula entre os campos): mensagem própria, que cita o separador e a linha, no lugar de "a linha 2 deveria trazer o local". Achado 12 da revisão antes do teste com usuários.

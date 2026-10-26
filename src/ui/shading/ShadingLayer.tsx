@@ -87,11 +87,20 @@ function pointAt(points: readonly Point[], fraction: number): Point {
 }
 
 /** Frações da linha tentadas para o rótulo, da preferida (o meio) às de reserva. */
-const LABEL_FRACTIONS = [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8, 0.12, 0.88];
+const LABEL_FRACTIONS = [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8, 0.12, 0.88, 0.05, 0.95];
+/** Depois das posições sobre a linha, as mesmas logo acima e logo abaixo dela (unidades da carta). */
+const LABEL_LIFTS = [0, -0.05, 0.05];
 
 /** Posições candidatas de cada rótulo; a escolhida não cobre outro texto (useLabelLayout). */
 const labelCandidates = (lines: readonly (readonly Point[])[]): Point[][] =>
-  lines.map((line) => LABEL_FRACTIONS.map((f) => pointAt(line, f)));
+  lines.map((line) =>
+    LABEL_LIFTS.flatMap((dy) =>
+      LABEL_FRACTIONS.map((f): Point => {
+        const [x, y] = pointAt(line, f);
+        return [x, y + dy];
+      }),
+    ),
+  );
 
 /**
  * Camadas da proteção pelas dimensões na carta (F3.2): região de sombra total (preenchimento leve
