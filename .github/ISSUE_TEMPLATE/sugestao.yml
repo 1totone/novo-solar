@@ -1,0 +1,11 @@
+name: Sugestão
+description: Uma ideia para o SOL-AR, para o ensino ou para o projeto de proteções solares.
+labels: [sugestão]
+body:
+  - type: textarea
+    id: ideia
+    attributes:
+      label: Sugestão
+      description: O que você gostaria de fazer e por quê (em aula, num projeto, numa pesquisa).
+    validations:
+      required: true

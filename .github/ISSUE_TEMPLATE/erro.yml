@@ -1,0 +1,30 @@
+name: Erro
+description: Algo não funciona como deveria na tela, na impressão ou nos arquivos exportados.
+labels: [erro]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por avisar. Não inclua dados pessoais: o SOL-AR não coleta nada e esta página é pública.
+  - type: textarea
+    id: o-que
+    attributes:
+      label: O que aconteceu
+      description: O que você fez, o que esperava e o que viu.
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link da página
+      description: Copie o endereço da página; ele guarda o local, os ângulos e as opções escolhidas.
+  - type: input
+    id: navegador
+    attributes:
+      label: Navegador e sistema
+      placeholder: 'Ex.: Chrome 130 no Windows 11; Safari no iPad'
+  - type: textarea
+    id: arquivo
+    attributes:
+      label: Arquivo climático
+      description: Se usou um arquivo carregado, diga o nome e de onde veio (não é preciso anexar).
