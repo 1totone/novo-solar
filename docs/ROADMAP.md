@@ -6,15 +6,17 @@
 
 **Você está aqui:** Fase 2, passo F2.9 (primeiro teste com usuários). Roteiro, folha de registro e planilha de consolidação prontos em `docs/ux/` (F2.9-*); revisão antes do teste feita em 24/10/2026 (`docs/ux/F2.9-revisao-antes-do-teste.md`), com os 3 problemas de gravidade 3 e 4 corrigidos e os achados 11, 12 e 19, fora do caminho das 9 tarefas (PRs #27 a #29). **Congelamento:** até o teste ser aplicado, a `main` não muda em nada que as 9 tarefas mostram (textos, leiaute, fluxo, tempo de resposta); o achado 9 (células num web worker) está pronto no PR #33, para integrar depois do teste. Material da demonstração do portão 2 em `docs/apresentacoes/portao-2-labeee.md`.
 
-**Fase 3 adiantada** na branch de integração `claude/fase-3-autonomous-work-xwt1mh` (PR #35, em rascunho; prévia em https://1totone.github.io/novo-solar/pr/35/): núcleo de F3.1 a F3.6 e F3.8 com conferência contra o EnergyPlus 26.2, interface de F3.1 a F3.7 (passos 6 e 7 recolhidos abaixo do passo 5 e a aba Vista 3D, com os passos 1 a 5 sem mudança) e o material do portão 3 (`docs/apresentacoes/portao-3-fase-3.md`, na branch). Decisões 0018 a 0024, aceitas provisoriamente; a troca do padrão da classificação das horas para o limiar de 20 °C (0024) está proposta, não aplicada.
+**Fase 3 adiantada** na branch de integração `claude/fase-3-autonomous-work-xwt1mh` (PR #35, em rascunho; prévia em https://1totone.github.io/novo-solar/pr/35/): núcleo de F3.1 a F3.6 e F3.8 com conferência contra o EnergyPlus 26.2, interface de F3.1 a F3.7 (passos 6 e 7 recolhidos abaixo do passo 5 e a aba Vista 3D, com os passos 1 a 5 sem mudança) e o material do portão 3 (`docs/apresentacoes/portao-3-fase-3.md`, na branch). Decisões 0018 a 0024, aceitas provisoriamente; o limiar de 20 °C como padrão da classificação das horas (0024) está aplicado na integração, a confirmar no portão 3. Acabamento de 26/10/2026 (PRs #66 a #69): resultados dos passos 6 e 7 ao lado da carta no computador (decisão 0038), rótulos da carta sem se atropelar, passos 6 e 7 e vista 3D carregados sob demanda com orçamento do JavaScript inicial no CI (0039) e atalho entre passos (0040), todos propostos.
 
-**Fase 4 adiantada** na branch de integração `claude/fase-3-4-integracao-ro4t5b`, que parte da da Fase 3 (PR #51, em rascunho; prévia em https://1totone.github.io/novo-solar/pr/51/, com o roteiro de revisão na descrição): F4.3 projeções e analemas, F4.4 vento avançado, F4.7 arquivo de projeto, F4.6 idiomas, acessibilidade e uso sem internet, F4.8 ajuda, F4.5 modo didático, F4.1 catálogo nacional, F4.2 comparação de climas e a preparação do F4.10 (PRs #53 a #63; decisões 0025 e 0027 a 0036, propostas). Na `main`, o protocolo do teste de usabilidade e o rascunho do pacote do comitê de ética (F4.9, PR #52, decisão 0026). Nenhum passo das Fases 3 e 4 é marcado como feito antes de entrar na `main`; a Fase 5 não começou.
+**Fase 4 adiantada** na branch de integração `claude/fase-3-4-integracao-ro4t5b`, que parte da da Fase 3 (PR #51, em rascunho; prévia em https://1totone.github.io/novo-solar/pr/51/, com o roteiro de revisão na descrição): F4.3 projeções e analemas, F4.4 vento avançado, F4.7 arquivo de projeto, F4.6 idiomas, acessibilidade e uso sem internet, F4.8 ajuda, F4.5 modo didático, F4.1 catálogo nacional, F4.2 comparação de climas e a preparação do F4.10 (PRs #53 a #63; decisões 0025 e 0027 a 0036, propostas). Acabamento de 26/10/2026 (PRs #70 a #75): atualização com a Fase 3, idiomas, ajuda, modo didático e catálogo sob demanda (JavaScript inicial de 699 kB para 472 kB; 220 para 152 kB com gzip), mapa do catálogo ao lado da carta, meses da carta cilíndrica sem se atropelar, guia do mantenedor (`docs/manutencao/guia-do-mantenedor.md`) e relatório de validação consolidado da v1.0 (`docs/validacao/relatorios/F4.9-validacao-consolidada.md`). Na `main`, o protocolo do teste de usabilidade e o rascunho do pacote do comitê de ética (F4.9, PR #52, decisão 0026). Nenhum passo das Fases 3 e 4 é marcado como feito antes de entrar na `main`; a Fase 5 não começou. Ensaio da integração (main + Fase 3 + Fase 4) e plano das versões v0.5, v0.8 e v1.0, com as notas de versão em rascunho: `docs/lancamento/plano-de-integracao-e-versoes.md`.
 
 **Achado que pede atenção** (relatórios do F4.1 e do F4.2, na branch da Fase 4): o tempo da radiação dos arquivos climáticos. Nos TMYx 2011-2025 do Brasil, a radiação vem cerca de 30 min depois da convenção do EPW (descontado o viés das nuvens, de 26 a 34 min em 12 das 14 cidades com TRY); nos BrazFuture conferidos, cerca de 35 min antes do sol com o REMO e 110 min depois com o RegCM. A aplicação avisa e não corrige.
 
 **Parada:** aguardando o Anthony aplicar o teste do F2.9, revisar as prévias das Fases 3 e 4 e conduzir os portões 2 e 3. Depois: resolver ou estacionar os problemas do teste (inclusive os de gravidade 2 da revisão e o PR #33), apresentar o portão 2, integrar a Fase 3 na `main` com as decisões revisadas e, depois do portão 3, a Fase 4.
 
-**Pendências do Anthony** (em ordem de prioridade):
+**Pendências do Anthony** (em ordem de prioridade). **Todas estão na issue [Revisão pendente](https://github.com/1totone/novo-solar/issues/65)**, uma caixa por item, com a recomendação, o que muda se discordar e o link da prévia; marcar a caixa = aceitar a recomendação.
+
+- Revisar pela issue #65 as decisões 0018 a 0041 (as novas desta rodada: 0037, escopo da ponte com NBR 15220-3, INI-C e EnergyPlus, que a decisão 0006 punha na v1.0 e o ROADMAP põe na Fase 5; 0038 a 0040, acabamento; 0041, integrar as fases por merge commit).
 
 - Aplicar o teste com usuários (F2.9) com `docs/ux/F2.9-teste-com-usuarios.md` e trazer as folhas de registro (ou `docs/ux/F2.9-registro.csv` preenchido).
 - Conduzir a demonstração do portão 2 com `docs/apresentacoes/portao-2-labeee.md` (roteiro na seção 10, retorno a registrar na seção 11, proposta de subdomínio na seção 8).
@@ -31,7 +33,7 @@
 - Opcional: conferir no 6.2 real, com `docs/validacao/casos/solar-6.2/teste-hora.csv`, a hora em que ele desenha os dados (relatório do F2.8, seção 6).
 - Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
 
-**Última atualização:** 26/10/2026.
+**Última atualização:** 26/10/2026 (rodada de acabamento).
 
 ---
 
@@ -67,7 +69,7 @@ Servem para desempatar qualquer decisão. Se uma ideia fere um princípio, ela n
 
 ## 3. Escopo
 
-**Dentro:** carta solar e transferidor; máscaras (por ângulos e calculadas pela geometria); sobreposição de dados climáticos; quantificação do efeito do sombreamento; rosa dos ventos; catálogo de arquivos climáticos; ponte com NBR 15220-3, INI-C e EnergyPlus; modo didático.
+**Dentro:** carta solar e transferidor; máscaras (por ângulos e calculadas pela geometria); sobreposição de dados climáticos; quantificação do efeito do sombreamento; rosa dos ventos; catálogo de arquivos climáticos; ponte com NBR 15220-3, INI-C e EnergyPlus; modo didático. Sobre a ponte com NBR 15220-3, INI-C e EnergyPlus: a decisão 0006 a põe na v1.0, e o roteiro (F5.2, F5.3 e F5.6), na v2.0; a decisão 0037 (proposta) resolve a inconsistência.
 
 **Fora:** simulação energética (o EnergyPlus faz isso; nós exportamos para ele); iluminação natural; simulação de ventilação ou CFD; painel climático genérico (o CBE Clima faz isso); contas de usuário e servidor.
 
