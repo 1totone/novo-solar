@@ -1,4 +1,4 @@
-import { forwardRef, useId, useMemo } from 'react';
+import { forwardRef, useId, useMemo, type MouseEvent } from 'react';
 import type { Device, WindowGeometry } from '../../core/shading/geometry';
 import { useI18n } from '../i18n/useI18n';
 import type { Dimension, Drawing, Point2, Shape } from './drawings';
@@ -33,9 +33,13 @@ export const GeometryDrawing = forwardRef<
     size?: { width: string; height: string };
     testId?: string;
     className?: string;
+    /** Ponto da máscara de um ponto (F3.2), marcado no corte e na vista. */
+    point?: { x: number; z: number } | null;
+    /** Clique na janela da vista de fora: novo ponto (x da lateral esquerda de quem está dentro). */
+    onPick?: (point: { x: number; z: number }) => void;
   }
 >(function GeometryDrawing(
-  { window, devices, title, font, parts = 'both', size, testId, className },
+  { window, devices, title, font, parts = 'both', size, testId, className, point, onPick },
   ref,
 ) {
   const { t, formatNumber } = useI18n();
@@ -110,6 +114,29 @@ export const GeometryDrawing = forwardRef<
 
   const showSection = parts !== 'elevation';
   const showElevation = parts !== 'section';
+  const W = window.width;
+  const H = window.height;
+  // Marcador do ponto: círculo com cruz, do tamanho da letra.
+  const marker = (cx: number, cy: number) => (
+    <g className="gd-point" data-testid="gd-point">
+      <circle cx={cx} cy={cy} r={0.45 * font} />
+      <path
+        d={`M${cx - 0.75 * font},${cy}H${cx + 0.75 * font}M${cx},${cy - 0.75 * font}V${cy + 0.75 * font}`}
+      />
+    </g>
+  );
+  const pick = (e: MouseEvent<SVGRectElement>) => {
+    const m = e.currentTarget.ownerSVGElement?.getScreenCTM();
+    if (!m || !onPick) return;
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+    // Vista de fora: X = W − x; y do SVG = −z. Arredondado a 5 cm (o clique tem a precisão de um
+    // pixel, que passa de 1 cm no celular); valores exatos se digitam nos campos.
+    const round = (v: number) => Math.round(v * 20) / 20;
+    onPick({
+      x: round(Math.min(W, Math.max(0, W - (p.x - offset)))),
+      z: round(Math.min(H, Math.max(0, -p.y))),
+    });
+  };
   return (
     <svg
       ref={ref}
@@ -133,6 +160,7 @@ export const GeometryDrawing = forwardRef<
             <ShapeView key={`s${i}`} shape={s} dx={0} />
           ))}
           {marks(section, 0, 's')}
+          {point && marker(0, -point.z)}
           <text
             x={(section.bounds.minX + section.bounds.maxX) / 2}
             y={baseY}
@@ -150,6 +178,18 @@ export const GeometryDrawing = forwardRef<
             <ShapeView key={`e${i}`} shape={s} dx={offset} />
           ))}
           {marks(elevation, offset, 'e')}
+          {point && marker(W - point.x + offset, -point.z)}
+          {onPick && (
+            <rect
+              x={offset}
+              y={-H}
+              width={W}
+              height={H}
+              className="gd-pick"
+              data-testid="gd-pick"
+              onClick={pick}
+            />
+          )}
           <text
             x={(elevation.bounds.minX + elevation.bounds.maxX) / 2 + offset}
             y={baseY}

@@ -916,8 +916,94 @@ fieldset.plain .check {
   .print-protractor-only .sun-chart .sun-paths,
   .print-protractor-only .sun-chart .overlay,
   .print-protractor-only .sun-chart .mask,
+  .print-protractor-only .sun-chart .shading,
   .print-protractor-only .legend {
     display: none !important;
+  }
+}
+
+/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores provisórias até a
+   paleta da Fase 4, decisão 0023). Curva de 0% tracejada e de 100% grossa: o nível não depende só
+   da cor. */
+.sun-chart .contour {
+  fill: none;
+  stroke: #005f73;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .contour.level-0 {
+  stroke-dasharray: 6 3;
+}
+
+.sun-chart .contour.level-100 {
+  stroke-width: 2.5;
+}
+
+.sun-chart .contour-label {
+  font-size: 0.045px;
+  font-weight: 600;
+  fill: #005f73;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.sun-chart .full-shade {
+  fill: rgb(0 95 115 / 18%);
+}
+
+.sun-chart .hatch-full-shade {
+  fill: #005f73;
+}
+
+.sun-chart .hatch-point {
+  fill: #6f42c1;
+}
+
+/* Curvas da geometria anterior enquanto o worker calcula as novas. */
+.sun-chart .shading .stale {
+  opacity: 0.35;
+}
+
+.swatch.contour-line {
+  background: linear-gradient(#005f73, #005f73) center / 100% 2px no-repeat;
+}
+
+.swatch.full-shade {
+  background: rgb(0 95 115 / 18%);
+}
+
+.legend.hatched .swatch.full-shade {
+  background: repeating-linear-gradient(0deg, #005f73 0 2px, transparent 2px 6px);
+}
+
+.swatch.point-mask {
+  background: repeating-linear-gradient(90deg, #6f42c1 0 2px, transparent 2px 6px);
+}
+
+/* Curvas em cálculo no worker: aviso sobre o canto da carta, sem empurrar o que vem abaixo. */
+.chart-view {
+  position: relative;
+}
+
+.shading-pending {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  margin: 0;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  color: #3d444d;
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+@media print {
+  .shading-pending {
+    display: none;
   }
 }
 
@@ -1004,6 +1090,10 @@ fieldset.piece legend {
 }
 
 .piece-grid .field {
+  display: flex;
+  flex-direction: column;
+  /* Rótulos de uma e de duas linhas na mesma fileira: os campos ficam alinhados embaixo. */
+  justify-content: flex-end;
   margin-bottom: 0.5rem;
 }
 
@@ -1106,6 +1196,20 @@ fieldset.piece legend {
 
 .geometry-drawing .gd-title {
   font-weight: 600;
+}
+
+/* Ponto da máscara de um ponto (F3.2), na cor da hachura do ponto na carta. */
+.geometry-drawing .gd-point circle,
+.geometry-drawing .gd-point path {
+  fill: none;
+  stroke: #6f42c1;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-pick {
+  fill: transparent;
+  cursor: crosshair;
 }
 
 .export-only,

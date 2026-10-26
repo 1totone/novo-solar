@@ -67,4 +67,25 @@ export const fase3PtBR = {
     'O SVG sai com o tamanho real na escala escolhida ({width} × {height} cm). A impressão do passo 5 pode incluir os dois desenhos.',
   'geometry.printTitle': 'Corte e vista da proteção, escala 1:{scale}',
   'outputs.includeGeometry': 'Corte e vista da proteção (passo 6), na escala do desenho',
+  'shading.heading': 'Na carta',
+  'shading.noPlates':
+    'Adicione uma peça (ou um recuo do vidro) para ver na carta a sombra que a proteção faz.',
+  'shading.showContours': 'Curvas de 0, 25, 50, 75 e 100% da janela à sombra',
+  'shading.contoursHelp':
+    'Cada curva liga as posições do sol em que a mesma parte da janela fica à sombra; dentro da curva de 100% (área sombreada), a janela inteira está à sombra. Calculado pela geometria exata das peças, para a orientação do passo 2.',
+  'shading.showPoint': 'Máscara de um ponto da janela',
+  'shading.pointX': 'x: da lateral esquerda (m)',
+  'shading.pointZ': 'z: acima do peitoril (m)',
+  'shading.pointHelp':
+    'Posições do sol em que o ponto fica à sombra (hachura violeta na carta). x é medido da lateral esquerda de quem está dentro olhando para fora; na vista de fora, o ponto aparece marcado. Clique na vista para escolher outro ponto.',
+  'shading.pointInvalid':
+    'O ponto precisa estar na janela: x de 0 a {width} m e z de 0 a {height} m.',
+  'shading.pending': 'Calculando as curvas da proteção…',
+  'shading.failed':
+    'Não foi possível calcular as curvas desta proteção. Confira as peças do passo 6; a máscara de um ponto continua valendo.',
+  'shading.legend': 'Proteção pelas dimensões (passo 6)',
+  'shading.legendContours': 'curvas do percentual da janela à sombra',
+  'shading.legendFull': 'janela inteira à sombra (100%)',
+  'shading.legendPoint': 'ponto x = {x} m, z = {z} m à sombra',
+  'shading.pointMarker': 'Ponto da máscara: x = {x} m, z = {z} m',
 } as const;

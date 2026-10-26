@@ -5,7 +5,9 @@ import {
   geometryFromHash,
   newPieceRaw,
   parsePiece,
+  parsePoint,
   piecesPatch,
+  pointPatch,
   PIECE_FIELDS,
 } from './geometryHash';
 
@@ -89,5 +91,41 @@ describe('peças no link', () => {
       expect(raw).toHaveLength(PIECE_FIELDS[code].length);
       expect(parsePiece(formatPiece(code, raw))!.device).not.toBeNull();
     }
+  });
+});
+
+describe('camadas da proteção na carta (F3.2)', () => {
+  const W = { width: 1.2, height: 1 };
+
+  it('curvas aparecem por padrão; cs=0 oculta', () => {
+    expect(geometryFromHash(parseHash('#jl=1,2&ja=1')).contours).toBe(true);
+    expect(geometryFromHash(parseHash('#jl=1,2&ja=1&cs=0')).contours).toBe(false);
+  });
+
+  it('ponto com vírgula decimal, dentro da janela', () => {
+    expect(parsePoint('0,6_0,5', W)).toEqual({
+      raw: { x: '0,6', z: '0,5' },
+      invalid: [],
+      value: { x: 0.6, z: 0.5 },
+    });
+    expect(parsePoint('0_1', W)!.value).toEqual({ x: 0, z: 1 });
+    expect(parsePoint(undefined, W)).toBeNull();
+  });
+
+  it('ponto fora da janela, vazio ou sem janela válida fica sem valor', () => {
+    expect(parsePoint('1,3_0,5', W)!.invalid).toEqual(['x']);
+    expect(parsePoint('0,5_-0,1', W)!.invalid).toEqual(['z']);
+    expect(parsePoint('0,5', W)!.invalid).toEqual(['z']);
+    expect(parsePoint('a_b', W)!.invalid).toEqual(['x', 'z']);
+    expect(parsePoint('0,5_0,5', null)).toEqual({
+      raw: { x: '0,5', z: '0,5' },
+      invalid: [],
+      value: null,
+    });
+  });
+
+  it('ida e volta pelo link', () => {
+    const hash = buildHash({ jl: '1,2', ja: '1', ...pointPatch('0,3 ', '0,8') });
+    expect(geometryFromHash(parseHash(hash)).point!.value).toEqual({ x: 0.3, z: 0.8 });
   });
 });

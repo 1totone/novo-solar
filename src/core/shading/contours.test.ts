@@ -1,10 +1,65 @@
 import { describe, expect, it } from 'vitest';
 import { project, unproject } from '../chart/stereographic';
-import { CONTOUR_LEVELS, contourThreshold, isolines, shadingContours } from './contours';
+import {
+  CONTOUR_LEVELS,
+  contourThreshold,
+  isolineRegion,
+  isolines,
+  shadingChart,
+  shadingContours,
+  type SkyDirection,
+} from './contours';
 import { buildScene } from './geometry';
 import { facadeVector, shadedFraction } from './shadedFraction';
 
 const RAD = Math.PI / 180;
+
+type P2 = readonly [number, number];
+
+/** Ponto dentro da região pela regra par-ímpar (raio para +x). */
+function insideEvenOdd(rings: readonly (readonly P2[])[], x: number, y: number): boolean {
+  let inside = false;
+  for (const ring of rings) {
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [xi, yi] = ring[i]!;
+      const [xj, yj] = ring[j]!;
+      if (yi > y !== yj > y && x < xj + ((y - yi) * (xi - xj)) / (yj - yi)) inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/** Menor distância do ponto aos lados dos anéis. */
+function distanceToRings(rings: readonly (readonly P2[])[], x: number, y: number): number {
+  let min = Infinity;
+  for (const ring of rings) {
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [ax, ay] = ring[j]!;
+      const [bx, by] = ring[i]!;
+      const dx = bx - ax;
+      const dy = by - ay;
+      const len2 = dx * dx + dy * dy;
+      const t = len2 === 0 ? 0 : Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / len2));
+      min = Math.min(min, Math.hypot(x - ax - t * dx, y - ay - t * dy));
+    }
+  }
+  return min;
+}
+
+/** Gerador pseudoaleatório determinístico (LCG de Park e Miller). */
+function random(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+/** Direção do céu no ponto da carta de raio 1 (x para Leste, y para Norte). */
+const chartPoint = (d: SkyDirection): P2 => {
+  const c = project(90 - d.altitude, d.azimuth);
+  return [c.x, c.y];
+};
 
 /** Ângulo azimutal relativo ψ, em (−180°, 180°]. */
 function relative(azimuth: number, orientation: number) {
@@ -159,5 +214,164 @@ describe('curvas de percentual (spec 07, seção 7.5)', () => {
 
   it('sem proteção não há curvas', () => {
     expect(shadingContours(buildScene({ width: 1, height: 1 }, []), 0)).toEqual([]);
+  });
+});
+
+describe('região de sombra total (spec 07, seção 7.5)', () => {
+  const N = 40;
+  // Campos analíticos no quadrado unitário: a região {f ≥ 0} conhecida, com a borda reta entre os
+  // pontos de cruzamento (o erro de posição cai com o quadrado do passo).
+  const disc = (cx: number, cy: number, r: number) => (x: number, y: number) =>
+    r * r - ((x - cx) ** 2 + (y - cy) ** 2);
+  const fields: [string, (x: number, y: number) => number][] = [
+    ['disco no meio (anel fechado)', disc(0.5, 0.5, 0.3)],
+    ['meio disco na borda esquerda', disc(0, 0.5, 0.3)],
+    ['quadrado menos um disco (furo)', (x, y) => -disc(0.5, 0.5, 0.3)(x, y)],
+    ['dois cantos opostos', (x, y) => Math.max(disc(0, 0, 0.4)(x, y), disc(1, 1, 0.4)(x, y))],
+    ['faixa de borda a borda', (_x, y) => 0.1 - Math.abs(y - 0.5)],
+    ['coroa (anel com furo)', (x, y) => 0.15 ** 2 - (Math.hypot(x - 0.5, y - 0.5) - 0.25) ** 2],
+    ['quadrado inteiro', () => 1],
+    [
+      'três cantos e um furo',
+      (x, y) => Math.max(-disc(0.5, 0.5, 0.2)(x, y), 0) - (x < 0.3 && y > 0.7 ? 1 : 0) - 1e-3,
+    ],
+  ];
+  for (const [name, f] of fields) {
+    it(`a regra par-ímpar sobre os anéis dá {f ≥ 0}: ${name}`, () => {
+      const rings = isolineRegion(f, 1, 1, N, N, 0);
+      const next = random(7);
+      let checked = 0;
+      for (let k = 0; k < 4000; k++) {
+        const x = next();
+        const y = next();
+        // A borda reta entre cruzamentos e o salto em degrau do último campo ficam fora do teste.
+        if (rings.length > 0 && distanceToRings(rings, x, y) < 2 / N) continue;
+        expect(insideEvenOdd(rings, x, y), `${name} em (${x}, ${y})`).toBe(f(x, y) >= 0);
+        checked++;
+      }
+      expect(checked).toBeGreaterThan(1500);
+    });
+  }
+
+  it('nada acima do limiar: nenhum anel', () => {
+    expect(isolineRegion(() => -1, 1, 1, N, N, 0)).toEqual([]);
+  });
+
+  it('a borda da região passa pelos mesmos pontos da curva de mesmo nível', () => {
+    const f = disc(0, 0.5, 0.3);
+    const [line] = isolines(f, 1, 1, N, N, [0]);
+    const ring = isolineRegion(f, 1, 1, N, N, 0)[0]!;
+    const onRing = new Set(ring.map(([x, y]) => `${x},${y}`));
+    for (const [x, y] of line!.points) expect(onRing.has(`${x},${y}`)).toBe(true);
+  });
+
+  const scenes = {
+    'brise infinito': {
+      window: { width: 1.5, height: 1.2 },
+      devices: [
+        {
+          kind: 'overhang' as const,
+          depth: 0.8,
+          above: 0.1,
+          extendLeft: Infinity,
+          extendRight: Infinity,
+        },
+      ],
+      orientation: 25,
+    },
+    'brise e aletas': {
+      window: { width: 1.2, height: 1 },
+      devices: [
+        {
+          kind: 'overhang' as const,
+          depth: 0.6,
+          above: 0.1,
+          extendLeft: 0.3,
+          extendRight: 0.3,
+        },
+        { kind: 'fin' as const, side: 'right' as const, depth: 0.4 },
+        { kind: 'fin' as const, side: 'left' as const, depth: 0.4 },
+      ],
+      orientation: 300,
+    },
+    'brise da Figura 22 com recuo do vidro': {
+      window: { width: 2, height: 1, setback: 0.15 },
+      devices: [
+        {
+          kind: 'overhang' as const,
+          depth: 1.28,
+          above: 0,
+          extendLeft: 1.7,
+          extendRight: 1.2,
+        },
+      ],
+      orientation: 30,
+    },
+    // Lâminas que se sobrepõem de frente (0,4 · sen 60° > 0,3) e passam 0,5 m acima da verga: a
+    // normal fica à sombra, e a região passa pelo centro do disco da fachada (a borda degenerada
+    // ρ = 0 da grade). Sem o prolongamento, o topo da janela fica ao sol com qualquer altura.
+    'lâminas verticais fechadas': {
+      window: { width: 1.2, height: 1.4 },
+      devices: [
+        {
+          kind: 'verticalLouvers' as const,
+          count: 5,
+          chord: 0.4,
+          pitch: 0.3,
+          angle: 60,
+          start: 0,
+          extendAbove: 0.5,
+        },
+      ],
+      orientation: 180,
+    },
+  };
+  for (const [name, c] of Object.entries(scenes)) {
+    it(`na carta, a região preenchida é a das direções com 100% da janela à sombra: ${name}`, () => {
+      const scene = buildScene(c.window, c.devices);
+      const chart = shadingChart(scene, c.orientation);
+      const rings = chart.fullShade.map((ring) => ring.map(chartPoint));
+      expect(rings.length, name).toBeGreaterThan(0);
+      // A curva de 100% é borda da região: todos os pontos dela estão nos anéis.
+      const full = chart.contours.filter((l) => l.level === 1);
+      expect(full.length, name).toBeGreaterThan(0);
+      const onRing = new Set(chart.fullShade.flat().map((d) => `${d.altitude},${d.azimuth}`));
+      for (const line of full) {
+        for (const d of line.points) expect(onRing.has(`${d.altitude},${d.azimuth}`)).toBe(true);
+      }
+      const next = random(11);
+      let inside = 0;
+      let checked = 0;
+      for (let k = 0; k < 3000; k++) {
+        const altitude = 0.5 + 89 * next();
+        const azimuth = c.orientation - 89.5 + 179 * next();
+        const d = { altitude, azimuth: ((azimuth % 360) + 360) % 360 };
+        const [x, y] = chartPoint(d);
+        // Margem de 0,01 na carta (0,6° a 1,2°): fora dela, a borda reta não decide nada.
+        if (distanceToRings(rings, x, y) < 0.01) continue;
+        const f = shadedFraction(scene, facadeVector(d.altitude, d.azimuth, c.orientation));
+        const expected = f >= contourThreshold(1);
+        expect(insideEvenOdd(rings, x, y), `${name}: h ${altitude}, a ${azimuth}`).toBe(expected);
+        if (expected) inside++;
+        checked++;
+      }
+      expect(checked, name).toBeGreaterThan(2000);
+      expect(inside, name).toBeGreaterThan(50);
+    });
+  }
+
+  it('as curvas de shadingChart são as de shadingContours', () => {
+    const c = scenes['brise e aletas'];
+    const scene = buildScene(c.window, c.devices);
+    expect(shadingChart(scene, c.orientation).contours).toEqual(
+      shadingContours(scene, c.orientation),
+    );
+  });
+
+  it('sem proteção não há região', () => {
+    expect(shadingChart(buildScene({ width: 1, height: 1 }, []), 0)).toEqual({
+      contours: [],
+      fullShade: [],
+    });
   });
 });

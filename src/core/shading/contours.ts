@@ -54,76 +54,122 @@ export interface Isoline {
 
 const BISECTIONS = 34;
 
+/** Linha como sequência de arestas cortadas da grade; fechada se a última repete a primeira. */
+interface TracedLine {
+  edges: number[];
+  closed: boolean;
+}
+
 /**
- * Isolinhas {f = limiar} de uma função contínua no retângulo [0, xMax] × [0, yMax], por quadrados
- * marchantes numa grade de nx × ny células. A região de dentro é f ≥ limiar; o ponto de cada aresta
- * é refinado por bisseção e a sela é resolvida pelo valor no centro da célula.
+ * Grade de quadrados marchantes de uma função contínua no retângulo [0, xMax] × [0, yMax], com
+ * nx × ny células: os valores nos nós são calculados uma vez e servem a todos os limiares. A região
+ * de dentro é f ≥ limiar; o ponto de cada aresta é refinado por bisseção e a sela é resolvida pelo
+ * valor no centro da célula.
  */
-export function isolines(
-  f: (x: number, y: number) => number,
-  xMax: number,
-  yMax: number,
-  nx: number,
-  ny: number,
-  thresholds: readonly number[],
-): Isoline[] {
-  const xAt = (i: number) => (xMax * i) / nx;
-  const yAt = (j: number) => (yMax * j) / ny;
-  const cols = nx + 1;
-  const grid = new Float64Array(cols * (ny + 1));
-  for (let j = 0; j <= ny; j++) {
-    for (let i = 0; i <= nx; i++) grid[j * cols + i] = f(xAt(i), yAt(j));
+class ContourGrid {
+  private readonly f: (x: number, y: number) => number;
+  private readonly xMax: number;
+  private readonly yMax: number;
+  private readonly nx: number;
+  private readonly ny: number;
+  private readonly cols: number;
+  private readonly grid: Float64Array;
+  private readonly crossings = new Map<number, Map<number, [number, number]>>();
+
+  constructor(
+    f: (x: number, y: number) => number,
+    xMax: number,
+    yMax: number,
+    nx: number,
+    ny: number,
+  ) {
+    this.f = f;
+    this.xMax = xMax;
+    this.yMax = yMax;
+    this.nx = nx;
+    this.ny = ny;
+    this.cols = nx + 1;
+    this.grid = new Float64Array(this.cols * (ny + 1));
+    for (let j = 0; j <= ny; j++) {
+      for (let i = 0; i <= nx; i++) this.grid[j * this.cols + i] = f(this.xAt(i), this.yAt(j));
+    }
   }
-  const value = (i: number, j: number) => grid[j * cols + i]!;
+
+  private xAt(i: number) {
+    return (this.xMax * i) / this.nx;
+  }
+
+  private yAt(j: number) {
+    return (this.yMax * j) / this.ny;
+  }
+
+  private value(i: number, j: number) {
+    return this.grid[j * this.cols + i]!;
+  }
+
   // Arestas: 2·nó para a horizontal (nó, nó à direita), 2·nó + 1 para a vertical (nó, nó acima).
-  const hEdge = (i: number, j: number) => 2 * (j * cols + i);
-  const vEdge = (i: number, j: number) => 2 * (j * cols + i) + 1;
+  private hEdge(i: number, j: number) {
+    return 2 * (j * this.cols + i);
+  }
 
-  const out: Isoline[] = [];
-  for (const threshold of thresholds) {
-    const inside = (v: number) => v >= threshold;
+  private vEdge(i: number, j: number) {
+    return 2 * (j * this.cols + i) + 1;
+  }
 
-    const crossings = new Map<number, [number, number]>();
-    const edgePoint = (key: number): [number, number] => {
-      const cached = crossings.get(key);
-      if (cached) return cached;
-      const vertical = key % 2 === 1;
-      const node = (key - (key % 2)) / 2;
-      const i = node % cols;
-      const j = (node - i) / cols;
-      const x0 = xAt(i);
-      const y0 = yAt(j);
-      const x1 = vertical ? x0 : xAt(i + 1);
-      const y1 = vertical ? yAt(j + 1) : y0;
-      const in0 = inside(value(i, j));
-      let a = 0;
-      let b = 1;
-      for (let k = 0; k < BISECTIONS; k++) {
-        const t = (a + b) / 2;
-        if (inside(f(x0 + t * (x1 - x0), y0 + t * (y1 - y0))) === in0) a = t;
-        else b = t;
-      }
+  /** Nó inicial (i, j) e se a aresta é vertical. */
+  private edgeNode(key: number): [number, number, boolean] {
+    const vertical = key % 2 === 1;
+    const node = (key - (key % 2)) / 2;
+    const i = node % this.cols;
+    return [i, (node - i) / this.cols, vertical];
+  }
+
+  /** Ponto em que a curva do limiar corta a aresta, refinado por bisseção. */
+  point(threshold: number, key: number): [number, number] {
+    let cache = this.crossings.get(threshold);
+    if (!cache) {
+      cache = new Map();
+      this.crossings.set(threshold, cache);
+    }
+    const cached = cache.get(key);
+    if (cached) return cached;
+    const [i, j, vertical] = this.edgeNode(key);
+    const x0 = this.xAt(i);
+    const y0 = this.yAt(j);
+    const x1 = vertical ? x0 : this.xAt(i + 1);
+    const y1 = vertical ? this.yAt(j + 1) : y0;
+    const in0 = this.value(i, j) >= threshold;
+    let a = 0;
+    let b = 1;
+    for (let k = 0; k < BISECTIONS; k++) {
       const t = (a + b) / 2;
-      const p: [number, number] = [x0 + t * (x1 - x0), y0 + t * (y1 - y0)];
-      crossings.set(key, p);
-      return p;
-    };
+      if (this.f(x0 + t * (x1 - x0), y0 + t * (y1 - y0)) >= threshold === in0) a = t;
+      else b = t;
+    }
+    const t = (a + b) / 2;
+    const p: [number, number] = [x0 + t * (x1 - x0), y0 + t * (y1 - y0)];
+    cache.set(key, p);
+    return p;
+  }
 
+  /** Linhas do limiar como sequências de arestas. */
+  trace(threshold: number): TracedLine[] {
+    const inside = (v: number) => v >= threshold;
     // Segmentos de cada célula, como pares de arestas cortadas (cantos c0 a c3 no sentido
     // anti-horário a partir de (i, j); arestas e0 embaixo, e1 à direita, e2 em cima, e3 à esquerda).
     const segments: [number, number][] = [];
-    for (let j = 0; j < ny; j++) {
-      for (let i = 0; i < nx; i++) {
-        const c0 = inside(value(i, j));
-        const c1 = inside(value(i + 1, j));
-        const c2 = inside(value(i + 1, j + 1));
-        const c3 = inside(value(i, j + 1));
+    for (let j = 0; j < this.ny; j++) {
+      for (let i = 0; i < this.nx; i++) {
+        const c0 = inside(this.value(i, j));
+        const c1 = inside(this.value(i + 1, j));
+        const c2 = inside(this.value(i + 1, j + 1));
+        const c3 = inside(this.value(i, j + 1));
         const code = (c0 ? 1 : 0) | (c1 ? 2 : 0) | (c2 ? 4 : 0) | (c3 ? 8 : 0);
         if (code === 0 || code === 15) continue;
-        const e0 = hEdge(i, j);
-        const e1 = vEdge(i + 1, j);
-        const e2 = hEdge(i, j + 1);
-        const e3 = vEdge(i, j);
+        const e0 = this.hEdge(i, j);
+        const e1 = this.vEdge(i + 1, j);
+        const e2 = this.hEdge(i, j + 1);
+        const e3 = this.vEdge(i, j);
         switch (code) {
           case 1:
           case 14:
@@ -153,7 +199,7 @@ export function isolines(
           case 10: {
             // Sela: com o centro do mesmo lado de c0 e c2, as curvas isolam c1 e c3; senão,
             // isolam c0 e c2.
-            const center = inside(f(xAt(i + 0.5), yAt(j + 0.5)));
+            const center = inside(this.f(this.xAt(i + 0.5), this.yAt(j + 0.5)));
             if (center === c0) segments.push([e0, e1], [e2, e3]);
             else segments.push([e3, e0], [e1, e2]);
             break;
@@ -184,16 +230,144 @@ export function isolines(
         edges.push(edge);
       }
     };
+    const lines: TracedLine[] = [];
     for (let s = 0; s < segments.length; s++) {
       if (used[s]) continue;
       used[s] = 1;
       const [a, b] = segments[s]!;
       const forward = follow(b);
       const backward = follow(a);
-      out.push({ threshold, points: [...backward.reverse(), a, b, ...forward].map(edgePoint) });
+      const edges = [...backward.reverse(), a, b, ...forward];
+      lines.push({ edges, closed: edges.length > 2 && edges[0] === edges.at(-1) });
     }
+    return lines;
   }
-  return out;
+
+  /**
+   * Posição k da aresta no contorno do retângulo, percorrido no sentido anti-horário a partir do
+   * nó (0, 0): a aresta k vai do nó de contorno k ao k + 1. Undefined se a aresta é interna.
+   */
+  private perimeterIndex(key: number): number | undefined {
+    const [i, j, vertical] = this.edgeNode(key);
+    const { nx, ny } = this;
+    if (!vertical && j === 0) return i;
+    if (vertical && i === nx) return nx + j;
+    if (!vertical && j === ny) return nx + ny + (nx - 1 - i);
+    if (vertical && i === 0) return 2 * nx + ny + (ny - 1 - j);
+    return undefined;
+  }
+
+  /** Nó (i, j) de posição k no contorno. */
+  private perimeterNode(k: number): [number, number] {
+    const { nx, ny } = this;
+    if (k < nx) return [k, 0];
+    if (k < nx + ny) return [nx, k - nx];
+    if (k < 2 * nx + ny) return [nx - (k - nx - ny), ny];
+    return [0, ny - (k - 2 * nx - ny)];
+  }
+
+  /**
+   * Região {f ≥ limiar} como anéis, para preencher pela regra par-ímpar: as linhas fechadas e, para
+   * as abertas, ciclos que alternam uma linha e o trecho do contorno do retângulo que fica dentro
+   * da região (entre duas pontas de linha vizinhas no contorno, os nós estão todos dentro ou todos
+   * fora). Sem pontas no contorno, o retângulo inteiro entra como anel se o contorno está dentro.
+   */
+  region(threshold: number): [number, number][][] {
+    const lines = this.trace(threshold);
+    const point = (key: number) => this.point(threshold, key);
+    const node = (k: number): [number, number] => {
+      const [i, j] = this.perimeterNode(k);
+      return [this.xAt(i), this.yAt(j)];
+    };
+    const nodeInside = (k: number) => {
+      const [i, j] = this.perimeterNode(k);
+      return this.value(i, j) >= threshold;
+    };
+    const total = 2 * (this.nx + this.ny);
+    const rings: [number, number][][] = [];
+    const ends: { k: number; line: number; first: boolean }[] = [];
+    lines.forEach((line, n) => {
+      if (line.closed) {
+        rings.push(line.edges.map(point));
+        return;
+      }
+      ends.push({ k: this.perimeterIndex(line.edges[0]!)!, line: n, first: true });
+      ends.push({ k: this.perimeterIndex(line.edges.at(-1)!)!, line: n, first: false });
+    });
+    if (ends.length === 0) {
+      if (nodeInside(0)) rings.push(Array.from({ length: total }, (_, k) => node(k)));
+      return rings;
+    }
+    ends.sort((a, b) => a.k - b.k);
+    const position = new Map(ends.map((e, m) => [`${e.line}:${e.first ? 0 : 1}`, m]));
+    const done = new Uint8Array(lines.length);
+    for (const start of ends) {
+      if (done[start.line] || !start.first) continue;
+      const ring: [number, number][] = [];
+      let line = start.line;
+      let first = true;
+      for (;;) {
+        done[line] = 1;
+        const edges = lines[line]!.edges;
+        ring.push(...(first ? edges : [...edges].reverse()).map(point));
+        // Sai pela outra ponta e segue o contorno pelo lado de dentro até a ponta vizinha.
+        const m = position.get(`${line}:${first ? 1 : 0}`)!;
+        const k = ends[m]!.k;
+        let next: (typeof ends)[number];
+        // Para a frente, os nós k + 1 a k'; para trás, os nós k a k' + 1 (k' da ponta vizinha).
+        if (nodeInside((k + 1) % total)) {
+          next = ends[(m + 1) % ends.length]!;
+          const steps = (next.k - k + total) % total;
+          for (let q = 1; q <= steps; q++) ring.push(node((k + q) % total));
+        } else {
+          next = ends[(m - 1 + ends.length) % ends.length]!;
+          const steps = (k - next.k + total) % total;
+          for (let q = 0; q < steps; q++) ring.push(node((k - q + total) % total));
+        }
+        line = next.line;
+        first = next.first;
+        if (line === start.line) break;
+      }
+      rings.push(ring);
+    }
+    return rings;
+  }
+}
+
+/**
+ * Isolinhas {f = limiar} de uma função contínua no retângulo [0, xMax] × [0, yMax], por quadrados
+ * marchantes numa grade de nx × ny células (ContourGrid).
+ */
+export function isolines(
+  f: (x: number, y: number) => number,
+  xMax: number,
+  yMax: number,
+  nx: number,
+  ny: number,
+  thresholds: readonly number[],
+): Isoline[] {
+  const grid = new ContourGrid(f, xMax, yMax, nx, ny);
+  return thresholds.flatMap((threshold) =>
+    grid.trace(threshold).map((line) => ({
+      threshold,
+      points: line.edges.map((e) => grid.point(threshold, e)),
+    })),
+  );
+}
+
+/**
+ * Região {f ≥ limiar} no retângulo [0, xMax] × [0, yMax], como anéis de pontos [x, y] a preencher
+ * pela regra par-ímpar (ContourGrid.region).
+ */
+export function isolineRegion(
+  f: (x: number, y: number) => number,
+  xMax: number,
+  yMax: number,
+  nx: number,
+  ny: number,
+  threshold: number,
+): [number, number][][] {
+  return new ContourGrid(f, xMax, yMax, nx, ny).region(threshold);
 }
 
 /** Raio máximo do disco da fachada: cos θ = MIN_SUN_COSINE. */
@@ -211,23 +385,64 @@ function toSky(d: FacadeVector, orientation: number): SkyDirection {
   return { altitude, azimuth: a < 0 ? a + 360 : a };
 }
 
+export interface ShadingChart {
+  contours: ShadingContour[];
+  /**
+   * Direções com a janela inteira à sombra (f ≥ 1 − 10⁻⁹), como anéis a preencher pela regra
+   * par-ímpar; a borda passa pelos mesmos pontos da curva de 100%.
+   */
+  fullShade: SkyDirection[][];
+}
+
+function chartGrid(scene: Scene, options: ContourOptions) {
+  return new ContourGrid(
+    (phi, rho) => shadedFraction(scene, direction(phi, rho)),
+    Math.PI,
+    RHO_MAX,
+    options.angularSteps ?? 180,
+    options.radialSteps ?? 120,
+  );
+}
+
+function contoursOf(
+  grid: ContourGrid,
+  orientation: number,
+  levels: readonly number[],
+): ShadingContour[] {
+  return levels.flatMap((level) => {
+    const threshold = contourThreshold(level);
+    return grid.trace(threshold).map((line) => ({
+      level,
+      points: line.edges.map((e) => {
+        const [phi, rho] = grid.point(threshold, e);
+        return toSky(direction(phi, rho), orientation);
+      }),
+    }));
+  });
+}
+
 /** Curvas de percentual sombreado de uma cena, na carta da fachada de orientação dada. */
 export function shadingContours(
   scene: Scene,
   orientation: number,
   options: ContourOptions = {},
 ): ShadingContour[] {
-  const levels = options.levels ?? CONTOUR_LEVELS;
-  const lines = isolines(
-    (phi, rho) => shadedFraction(scene, direction(phi, rho)),
-    Math.PI,
-    RHO_MAX,
-    options.angularSteps ?? 180,
-    options.radialSteps ?? 120,
-    levels.map(contourThreshold),
-  );
-  return lines.map((line) => ({
-    level: levels[levels.map(contourThreshold).indexOf(line.threshold)]!,
-    points: line.points.map(([phi, rho]) => toSky(direction(phi, rho), orientation)),
-  }));
+  if (scene.plates.length === 0) return [];
+  return contoursOf(chartGrid(scene, options), orientation, options.levels ?? CONTOUR_LEVELS);
+}
+
+/** Curvas e região de sombra total, com a mesma grade (o que a carta desenha no passo 6). */
+export function shadingChart(
+  scene: Scene,
+  orientation: number,
+  options: ContourOptions = {},
+): ShadingChart {
+  if (scene.plates.length === 0) return { contours: [], fullShade: [] };
+  const grid = chartGrid(scene, options);
+  return {
+    contours: contoursOf(grid, orientation, options.levels ?? CONTOUR_LEVELS),
+    fullShade: grid
+      .region(contourThreshold(1))
+      .map((ring) => ring.map(([phi, rho]) => toSky(direction(phi, rho), orientation))),
+  };
 }

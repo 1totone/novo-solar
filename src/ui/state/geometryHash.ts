@@ -5,6 +5,8 @@ import type { HashState } from './hashState';
  * Janela e peças da proteção pelas dimensões (passo 6, F3.1) no '#' da URL: jl, ja (largura e
  * altura da janela, m), jr (recuo do vidro, m) e pc1 a pc9, uma peça cada, como "tipo_v1_v2_...",
  * com o texto digitado em cada campo (vírgula decimal preservada; "i" é prolongamento infinito).
+ * Camadas na carta (F3.2): cs=0 oculta as curvas de percentual; pt="x_z" liga a máscara de um
+ * ponto da janela (m, da lateral esquerda de quem está dentro e acima do peitoril).
  */
 export const MAX_PIECES = 9;
 
@@ -50,6 +52,14 @@ export interface PieceState {
   device: Device | null;
 }
 
+/** Ponto da máscara de um ponto (F3.2), no plano do vidro. */
+export interface PointState {
+  raw: { x: string; z: string };
+  invalid: ('x' | 'z')[];
+  /** Ponto pronto para o cálculo; null se inválido ou fora da janela. */
+  value: { x: number; z: number } | null;
+}
+
 export interface GeometryState {
   /** Há janela no link (largura e altura digitadas). */
   defined: boolean;
@@ -60,6 +70,10 @@ export interface GeometryState {
   pieces: PieceState[];
   /** Peças válidas, na ordem do link. */
   devices: Device[];
+  /** Curvas de percentual na carta (cs=0 oculta). */
+  contours: boolean;
+  /** Máscara de um ponto (pt); null sem ela. */
+  point: PointState | null;
 }
 
 /** Número digitado com vírgula ou ponto; undefined se vazio. */
@@ -197,8 +211,41 @@ export function geometryFromHash(state: HashState): GeometryState {
     window,
     pieces,
     devices: pieces.flatMap((p) => (p.device ? [p.device] : [])),
+    contours: state.cs !== '0',
+    point: parsePoint(state.pt, window),
   };
 }
+
+/** Ponto "x_z" do link: números de 0 à largura e de 0 à altura da janela. */
+export function parsePoint(
+  text: string | undefined,
+  window: WindowGeometry | null,
+): PointState | null {
+  if (!text) return null;
+  const [xs = '', zs = ''] = text.split('_');
+  const x = parseDecimal(xs);
+  const z = parseDecimal(zs);
+  const invalid: PointState['invalid'] = [];
+  if (x === undefined || Number.isNaN(x) || x < 0 || (window && x > window.width)) {
+    invalid.push('x');
+  }
+  if (z === undefined || Number.isNaN(z) || z < 0 || (window && z > window.height)) {
+    invalid.push('z');
+  }
+  return {
+    raw: { x: xs, z: zs },
+    invalid,
+    value: window && invalid.length === 0 ? { x: x!, z: z! } : null,
+  };
+}
+
+/** Número em metros para o link, com até duas casas e vírgula decimal. */
+export const formatMeters = (v: number) => String(Math.round(v * 100) / 100).replace('.', ',');
+
+/** Patch do link do ponto, com o texto de cada coordenada. */
+export const pointPatch = (x: string, z: string) => ({
+  pt: `${x.trim().replaceAll('_', '')}_${z.trim().replaceAll('_', '')}`,
+});
 
 /** Patch do link que grava a lista de peças em pc1, pc2, ... e apaga as chaves que sobrarem. */
 export function piecesPatch(pieces: readonly { code: PieceCode; raw: readonly string[] }[]) {
@@ -212,7 +259,7 @@ export function piecesPatch(pieces: readonly { code: PieceCode; raw: readonly st
 
 /** Valores iniciais de uma peça nova, para a janela dada (a peça já aparece no desenho). */
 export function newPieceRaw(code: PieceCode, width: number, height: number): string[] {
-  const fmt = (v: number) => String(Math.round(v * 100) / 100).replace('.', ',');
+  const fmt = formatMeters;
   switch (code) {
     case 'b':
       return [fmt(Math.max(0.1, height / 2)), '', '', '', ''];
