@@ -1044,6 +1044,50 @@ fieldset.plain .check {
   margin: 0.5rem 0;
 }
 
+/* F3.4: hipóteses e partes das classes de hora (passo 7). */
+.hypotheses {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.hypotheses li + li {
+  margin-top: 0.3rem;
+}
+
+.class-results .field-label {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.class-bar {
+  display: block;
+  width: 100%;
+  height: 1.4rem;
+}
+
+.class-legend {
+  justify-content: flex-start;
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.85rem;
+}
+
+.swatch.class-cold {
+  background: #3872bc;
+}
+
+.swatch.class-neutral {
+  background: #e5e4e2;
+}
+
+.swatch.class-hot {
+  background: #b94643;
+}
+
+.swatch.class-none {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
 /* Células da sobreposição em cálculo no web worker (achado 9). */
 .overlay-pending {
   margin: 0.25rem 0;

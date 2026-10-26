@@ -17,6 +17,7 @@ import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { timeZoneOffset } from './timeZoneOffset';
 import { GeometryDrawing } from './geometry/GeometryDrawing';
+import { EffectPanel } from './effect/EffectPanel';
 import { GeometryPanel } from './geometry/GeometryPanel';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
@@ -80,6 +81,10 @@ export function App() {
   const geometry = geometryFromHash(hashState);
   // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
   const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
+  // Passo 7 aberto: o link traz uma escolha da classificação das horas.
+  const [effectOpen, setEffectOpen] = useState(() =>
+    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct'].some((k) => hashState[k]),
+  );
   const geometryScale = scaleFromHash(hashState.esc);
   const geometryPrint = geometry.window
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
@@ -236,7 +241,7 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
-    geometryOpen && wind.tab === 'chart' && !hashA ? 'follow' : '',
+    (geometryOpen || effectOpen) && wind.tab === 'chart' && !hashA ? 'follow' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -328,6 +333,15 @@ export function App() {
               onChange={setHashState}
               open={geometryOpen}
               onOpenChange={setGeometryOpen}
+            />
+            <EffectPanel
+              epw={epw}
+              hash={hashState}
+              geometry={geometry}
+              orientation={protractor.orientation}
+              onChange={setHashState}
+              open={effectOpen}
+              onOpenChange={setEffectOpen}
             />
           </div>
           <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
