@@ -83,7 +83,9 @@ export function App() {
   const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
   // Passo 7 aberto: o link traz uma escolha da classificação das horas.
   const [effectOpen, setEffectOpen] = useState(() =>
-    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct'].some((k) => hashState[k]),
+    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct', 'alter1'].some(
+      (k) => hashState[k],
+    ),
   );
   const geometryScale = scaleFromHash(hashState.esc);
   const geometryPrint = geometry.window

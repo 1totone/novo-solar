@@ -11,6 +11,7 @@ import {
 import type { GeometryState } from '../state/geometryHash';
 import type { HashState } from '../state/hashState';
 import { ClassBar } from './ClassBar';
+import { IndicatorsSection } from './IndicatorsSection';
 import { CLASS_ORDER, type ClassName } from './classColors';
 import { useYearEffect } from './useYearEffect';
 
@@ -44,7 +45,7 @@ export function EffectPanel({
   const { t, formatNumber } = useI18n();
   const id = useId();
   const cls = classificationFromHash(hash);
-  const { annual, shares } = useYearEffect(epw, geometry, orientation, cls, open);
+  const { annual, shares, classes } = useYearEffect(epw, geometry, orientation, cls, open);
   const fmt1 = (v: number) => formatNumber(v, 1);
   const pct = (v: number) => formatNumber(Math.round(v * 100));
 
@@ -358,6 +359,16 @@ export function EffectPanel({
                   <p className="note">{t('classes.missingDni', { count: shares.missingDni })}</p>
                 )}
               </div>
+            )}
+            {open && (
+              <IndicatorsSection
+                epw={epw}
+                classes={classes}
+                hash={hash}
+                geometry={geometry}
+                orientation={orientation}
+                onChange={onChange}
+              />
             )}
           </>
         )}

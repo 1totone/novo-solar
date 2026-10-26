@@ -70,6 +70,17 @@ A comparação reproduz o EnergyPlus em Python (DNI interpolada, sol do `SUN3` e
 4. **29 de fevereiro** com a fração ensolarada de 28 de fevereiro.
 5. Só a radiação **direta**; a difusa com o fator de visão do céu fica para o F5.1.
 
+## 9.8 Interface (F3.5)
+
+No passo 7, depois da classificação das horas (spec 08, seção 8.9), com a proteção do passo 6 (janela e ao menos uma peça, ou um recuo do vidro):
+
+- **Dois quadros:** bloqueada nas horas quentes (P_q) e admitida nas horas frias (P_f), cada um com a radiação direta que chegaria ao vidro sem a proteção naquela classe, e a nota "quanto mais perto de 100%, melhor"; "indefinido" quando a classe não recebe radiação direta (seção 9.2). Tabela por classe com Σ E₀, Σ E e Σ B (kWh por m² de janela no ano) e a hipótese de só radiação direta, DNI constante na hora, sem índice único.
+- **Alternativas:** a proteção atual pode ser guardada com um nome (até 6); a tabela traz "Sem proteção" (P_q = 0%, P_f = 100%, sempre), as guardadas e a atual, se ainda não guardada, com P_q, P_f e a situação ("não superada" ou "superada por" e os nomes, pela regra da seção 9.3). Cada guardada pode voltar para o passo 6 ou ser removida. Uma alternativa com janela diferente da atual é marcada: os percentuais e as somas continuam por m² de janela. Um gráfico de dispersão põe cada alternativa no plano (P_f, P_q), com o ideal no canto de cima à direita: não superadas cheias, superadas vazadas, com o nome ao lado.
+- **Estado no link:** `alter1` a `alter6`, cada uma como "nome|largura|altura|recuo|peça1~peça2~...", com o texto das chaves do passo 6.
+- **Cálculo:** a fração ensolarada de cada alternativa vem do worker do ano (seção 7.13 da spec 07), com cache por geometria; a radiação, as somas e a dominância (`dominators`, no núcleo) rodam na linha principal.
+
+Conferência de ponta a ponta (`e2e/indicadores.spec.ts`), com um EPW sintético de manhãs frias (15 °C) e tardes quentes (25 °C), DNI de 600 Wh/m² de dia e o limiar de 20 °C, numa fachada Norte: os percentuais dos quadros batem com as somas da tabela; "Sem proteção" fica com 0% e 100%; ao brise de 0,3 m, uma aleta a oeste (à esquerda de quem olha para o Norte) aumenta P_q e não muda P_f, porque de manhã, antes do meio-dia solar, o sol vem do leste e a sombra da aleta cai fora da janela: o brise sozinho fica "superado"; os pontos do gráfico ficam na posição dos percentuais da tabela, vazado o superado e cheio o outro; usar e remover alternativas; teclado e axe.
+
 ## Referências
 
 - U.S. DOE. *EnergyPlus 26.2.0*, código-fonte: `src/EnergyPlus/WeatherManager.cc` (`SetupInterpolationValues`, interpolação horária dos dados climáticos) e `src/EnergyPlus/HeatBalanceSurfaceManager.cc` (`SurfQRadSWOutIncidentBeam`).

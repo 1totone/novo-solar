@@ -248,7 +248,9 @@ export interface AlternativeResult {
   dominated: boolean;
 }
 
-function dominates(a: BeamIndicators, b: BeamIndicators): boolean {
+type Percentages = Pick<BeamIndicators, 'blockedInHot' | 'admittedInCold'>;
+
+function dominates(a: Percentages, b: Percentages): boolean {
   const pairs: [number | null, number | null][] = [
     [a.blockedInHot, b.blockedInHot],
     [a.admittedInCold, b.admittedInCold],
@@ -279,8 +281,16 @@ export function compareAlternatives(
       classes,
     ),
   }));
-  return results.map((r) => ({
-    ...r,
-    dominated: results.some((o) => o !== r && dominates(o.indicators, r.indicators)),
-  }));
+  const by = dominators(results);
+  return results.map((r, i) => ({ ...r, dominated: by[i]!.length > 0 }));
+}
+
+/**
+ * Para cada alternativa, as que a superam: os dois percentuais pelo menos iguais e um maior, com
+ * percentual indefinido fora da decisão (seção 9.3). Lista vazia: alternativa não superada.
+ */
+export function dominators(items: readonly { id: string; indicators: Percentages }[]): string[][] {
+  return items.map((r) =>
+    items.filter((o) => o !== r && dominates(o.indicators, r.indicators)).map((o) => o.id),
+  );
 }

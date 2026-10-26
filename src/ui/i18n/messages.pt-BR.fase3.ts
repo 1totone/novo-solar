@@ -123,7 +123,8 @@ export const fase3PtBR = {
   'annual.csvHypotheses':
     'Hora legal do arquivo, sem horário de verão; a hora h é o intervalo de h - 1 a h; 6 instantes por hora, no meio de cada intervalo de 10 min; sol pelo SPA; só a geometria (spec 07, seção 7.6).',
   'effect.heading': 'Efeito no ano',
-  'effect.summary': 'Horas quentes e frias com sol na janela, pelo clima do arquivo.',
+  'effect.summary':
+    'Horas quentes e frias, radiação bloqueada e admitida e alternativas, pelo clima do arquivo.',
   'effect.needsData':
     'Este passo usa os dados horários do clima (temperatura e radiação direta). Abra no passo 1 um arquivo climático ou os dados históricos da cidade.',
   'effect.pending': 'Calculando o ano…',
@@ -196,4 +197,54 @@ export const fase3PtBR = {
   'classes.barLabel': '{name}: {share}%',
   'classes.missingDni':
     '{count} horas com sol na janela sem radiação direta no arquivo ficam fora das somas.',
+  'indicators.heading': 'Radiação direta bloqueada e admitida',
+  'indicators.needsGeometry':
+    'Descreva a proteção no passo 6 (janela e ao menos uma peça) para calcular a radiação bloqueada e admitida.',
+  'indicators.needsClasses':
+    'Escolha como classificar as horas (acima) para calcular os indicadores.',
+  'indicators.blockedInHot': 'Bloqueada nas horas quentes',
+  'indicators.admittedInCold': 'Admitida nas horas frias',
+  'indicators.ideal': 'Quanto mais perto de 100%, melhor.',
+  'indicators.ofIncident': 'de {incident} kWh/m² que chegariam ao vidro sem a proteção',
+  'indicators.undefined': 'sem radiação direta nessas horas',
+  'indicators.undefinedValue': 'indefinido',
+  'indicators.tableCaption':
+    'Radiação direta na janela no ano, por classe de hora (kWh por m² de janela)',
+  'indicators.col.incident': 'Sem proteção',
+  'indicators.col.admitted': 'Admitida',
+  'indicators.col.blocked': 'Bloqueada',
+  'indicators.hypotheses':
+    'Só a radiação direta: a DNI do arquivo, constante em cada hora, vezes o cosseno do ângulo de incidência e a fração ensolarada da janela (6 instantes por hora). A difusa e a refletida não entram. As horas neutras e sem classe entram só nas somas. Não há um índice único: juntar os dois percentuais exigiria pesar o calor evitado contra o calor perdido, o que depende do edifício.',
+  'indicators.missingDni': '{count} horas sem radiação direta no arquivo ficam fora das somas.',
+  'alternatives.heading': 'Alternativas',
+  'alternatives.intro':
+    'Guarde a proteção atual do passo 6 e compare com outras, na mesma fachada, clima e classificação. "Sem proteção" fica sempre na tabela, como referência.',
+  'alternatives.name': 'Nome da alternativa',
+  'alternatives.save': 'Guardar a proteção atual',
+  'alternatives.max': 'Até 6 alternativas.',
+  'alternatives.alreadySaved': 'A proteção atual já está guardada como "{name}".',
+  'alternatives.tableCaption':
+    'Alternativas: radiação direta bloqueada nas horas quentes e admitida nas horas frias',
+  'alternatives.col.name': 'Alternativa',
+  'alternatives.col.blocked': 'Bloqueada nas quentes',
+  'alternatives.col.admitted': 'Admitida nas frias',
+  'alternatives.none': 'Sem proteção',
+  'alternatives.current': 'Atual (não guardada)',
+  'alternatives.notDominated': 'não superada',
+  'alternatives.dominatedBy': 'superada por {names}',
+  'alternatives.calculating': 'calculando…',
+  'alternatives.invalid': 'proteção inválida',
+  'alternatives.use': 'Usar no passo 6',
+  'alternatives.useLabel': 'Usar "{name}" no passo 6',
+  'alternatives.remove': 'Remover',
+  'alternatives.removeLabel': 'Remover "{name}"',
+  'alternatives.differentWindow':
+    'Janela diferente da atual: os percentuais e as somas são por m² de janela.',
+  'alternatives.dominanceHelp':
+    'Uma alternativa é superada quando outra bloqueia pelo menos o mesmo nas horas quentes e admite pelo menos o mesmo nas frias, com um dos dois maior.',
+  'alternatives.plot':
+    'Alternativas no plano dos dois percentuais: admitida nas horas frias (horizontal) e bloqueada nas horas quentes (vertical)',
+  'alternatives.plotX': 'admitida nas horas frias (%)',
+  'alternatives.plotY': 'bloqueada nas horas quentes (%)',
+  'alternatives.plotIdeal': 'ideal',
 } as const;

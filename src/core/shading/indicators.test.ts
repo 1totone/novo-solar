@@ -14,6 +14,7 @@ import {
 import {
   beamIndicators,
   compareAlternatives,
+  dominators,
   hourlyBeam,
   referenceHourIndices,
   sunnyClassShares,
@@ -254,6 +255,31 @@ describe('dominância', () => {
     expect(b!.indicators.blockedInHot).toBeCloseTo(0, 12);
     expect(b!.indicators.admittedInCold).toBeCloseTo(1 - (0.5 * t(60) - 0.5), 12);
     expect(rows.map((r) => r.dominated)).toEqual([false, true]);
+  });
+});
+
+describe('quem supera cada alternativa (spec 09, seção 9.3)', () => {
+  const alt = (id: string, blockedInHot: number | null, admittedInCold: number | null) => ({
+    id,
+    indicators: { blockedInHot, admittedInCold },
+  });
+
+  it('supera quem tem os dois percentuais pelo menos iguais e um maior', () => {
+    expect(
+      dominators([
+        alt('A', 0.5, 0.5),
+        alt('B', 0.6, 0.5),
+        alt('C', 0.6, 0.5),
+        alt('D', 0.9, 0.1),
+        alt('E', 0.1, 0.9),
+      ]),
+    ).toEqual([['B', 'C'], [], [], [], []]);
+  });
+
+  it('percentual indefinido (classe sem radiação) não decide; empate dentro da tolerância', () => {
+    expect(dominators([alt('A', null, 0.7), alt('B', null, 0.6)])).toEqual([[], ['A']]);
+    expect(dominators([alt('A', 0.5, 0.5), alt('B', 0.5 + 1e-13, 0.5)])).toEqual([[], []]);
+    expect(dominators([alt('A', null, null), alt('B', 0.2, 0.3)])).toEqual([[], []]);
   });
 });
 
