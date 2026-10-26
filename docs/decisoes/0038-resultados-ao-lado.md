@@ -15,7 +15,7 @@ Na inspeção visual da prévia da Fase 4 (computador de 1366 × 900), o conteú
 2. **No passo fica uma linha**, "Sombra ao longo do ano: ao lado, abaixo da carta. [Ver]"; o botão rola até o resultado e põe o foco no cabeçalho dele. Os controles (método, limiares, peças, período) continuam no passo.
 3. **O painel da direita acompanha a rolagem** com um passo avançado aberto, como já fazia (decisão 0023), e rola por dentro quando a carta e os resultados não cabem na altura da tela.
 4. **No celular, nas abas "Vista 3D" e "Rosa dos ventos" e com o passo fechado**, nada muda: o resultado fica dentro do passo.
-5. **Passos 1 a 5 sem mudança.** O mapa do catálogo do passo 1 (Fase 4) segue a mesma regra, porque o catálogo é uma parte recolhida, fora do caminho básico.
+5. **Passos 1 a 5 sem mudança.** O mapa do catálogo do passo 1 (Fase 4, parte recolhida, fora do caminho básico) também vai para o painel da direita, mas **acima da carta**, à altura do passo 1, que fica no alto da página: abaixo da carta, ele começaria perto do pé da tela. A carta desce enquanto o catálogo está aberto e volta ao fechar.
 6. Sem estado novo no link: o lugar do resultado depende só da largura da tela e da aba.
 
 ## Alternativas consideradas

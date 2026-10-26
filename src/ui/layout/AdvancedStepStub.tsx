@@ -1,5 +1,6 @@
 import { useEffect, useId } from 'react';
 import { useI18n } from '../i18n/useI18n';
+import { rememberFocus, takeFocus } from './focusAfterLoad';
 
 /**
  * Cabeçalho de um passo avançado (6 ou 7) enquanto o código dele não está carregado (decisão
@@ -7,7 +8,7 @@ import { useI18n } from '../i18n/useI18n';
  * demanda e este cabeçalho fica no lugar, com "Carregando…", até o passo chegar.
  */
 export function AdvancedStepStub({
-  n,
+  n = null,
   heading,
   summary,
   testId,
@@ -15,7 +16,8 @@ export function AdvancedStepStub({
   open,
   onOpenChange,
 }: {
-  n: number;
+  /** Número do passo (sem número, um painel do grupo avançado, como o das projeções). */
+  n?: number | null;
   heading: string;
   summary: string;
   testId: string;
@@ -32,13 +34,13 @@ export function AdvancedStepStub({
         onToggle={(e) => {
           const opening = e.currentTarget.open;
           // Quem abriu pelo teclado continua com o foco no resumo do passo carregado.
-          if (opening && e.currentTarget.contains(document.activeElement)) focusAfterLoad = testId;
+          if (opening && e.currentTarget.contains(document.activeElement)) rememberFocus(testId);
           onOpenChange(opening);
         }}
       >
         <summary>
           <h2 id={`${id}-h`}>
-            <span className="step-n">{n}</span>
+            {n !== null && <span className="step-n">{n}</span>}
             {heading}
             <span className="step-badge">{t('advanced.badge')}</span>
           </h2>
@@ -56,17 +58,16 @@ export function AdvancedStepStub({
   );
 }
 
-/** Passo que estava com o foco ao abrir, antes de o código dele chegar. */
-let focusAfterLoad: string | null = null;
-
-/** Devolve o foco ao resumo do passo `testId` quando ele termina de carregar. */
-export function RestoreStepFocus({ testId }: { testId: string }) {
+/**
+ * Devolve o foco ao resumo da parte `testId` quando ela termina de carregar: por padrão, o de um
+ * passo (`section > details > summary`); `summary` troca o seletor.
+ */
+export function RestoreStepFocus({ testId, summary }: { testId: string; summary?: string }) {
   useEffect(() => {
-    if (focusAfterLoad !== testId) return;
-    focusAfterLoad = null;
+    if (!takeFocus(testId)) return;
     document
-      .querySelector<HTMLElement>(`[data-testid="${testId}"] > details > summary`)
+      .querySelector<HTMLElement>(summary ?? `[data-testid="${testId}"] > details > summary`)
       ?.focus({ preventScroll: true });
-  }, [testId]);
+  }, [testId, summary]);
   return null;
 }

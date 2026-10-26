@@ -9,6 +9,7 @@ import {
   type ProjectPoint,
   type Station,
 } from './catalog';
+import { SideSlot } from '../layout/SideResults';
 import { CatalogMap } from './CatalogMap';
 import type { UfMap } from './useCatalog';
 
@@ -241,13 +242,21 @@ export function CatalogSection({
             </div>
           )}
           {map && (
-            <CatalogMap
-              map={map}
-              stations={stations}
-              selectedId={selectedId}
-              point={point}
-              onPoint={(lat, lon) => edit({ lat: String(lat), lon: String(lon) })}
-            />
+            <SideSlot
+              slot="catalog"
+              active={open}
+              step={1}
+              stepName={t('site.heading')}
+              title={t('side.catalog')}
+            >
+              <CatalogMap
+                map={map}
+                stations={stations}
+                selectedId={selectedId}
+                point={point}
+                onPoint={(lat, lon) => edit({ lat: String(lat), lon: String(lon) })}
+              />
+            </SideSlot>
           )}
         </>
       )}

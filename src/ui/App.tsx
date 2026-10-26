@@ -11,12 +11,8 @@ import { projectPointFromHash } from './catalog/catalog';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
 import { exampleFromHash, helpSectionFromHash } from './help/content';
-import { ExampleCard } from './help/ExampleCard';
-import { ExerciseCard } from './didactic/ExerciseCard';
 import { answerRegion, exerciseFromHash, EXERCISES } from './didactic/exercises';
-import { TutorialCard } from './didactic/TutorialCard';
 import { TUTORIAL_STEPS, tutorialStepFromHash } from './didactic/tutorial';
-import { HelpDialog } from './help/HelpDialog';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
 import { OutputsPanel } from './export/OutputsPanel';
@@ -30,7 +26,6 @@ import { SitePanel, type LoadedFile } from './SitePanel';
 import { ProjectSection } from './project/ProjectSection';
 import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
-import { GeometryDrawing } from './geometry/GeometryDrawing';
 import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
 import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
 import { StepNav } from './layout/StepNav';
@@ -58,6 +53,21 @@ const EffectPanel = lazy(() =>
 );
 const View3DPanel = lazy(() =>
   import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
+);
+// Corte e vista da impressão (F3.1): só com uma janela no link.
+const GeometryDrawing = lazy(() =>
+  import('./geometry/GeometryDrawing').then((m) => ({ default: m.GeometryDrawing })),
+);
+// Ajuda e modo didático (F4.8, F4.5): só quando abertos pelo botão ou pelo link.
+const HelpDialog = lazy(() => import('./help/HelpDialog').then((m) => ({ default: m.HelpDialog })));
+const ExampleCard = lazy(() =>
+  import('./help/ExampleCard').then((m) => ({ default: m.ExampleCard })),
+);
+const TutorialCard = lazy(() =>
+  import('./didactic/TutorialCard').then((m) => ({ default: m.TutorialCard })),
+);
+const ExerciseCard = lazy(() =>
+  import('./didactic/ExerciseCard').then((m) => ({ default: m.ExerciseCard })),
 );
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
@@ -151,11 +161,12 @@ export function App() {
   // dos passos 6 e 7 vão para o painel da direita, abaixo da carta.
   const wide = useWideLayout();
   const sideOn = wide && wind.tab === 'chart';
+  const [catalogSlot, setCatalogSlot] = useState<HTMLElement | null>(null);
   const [annualSlot, setAnnualSlot] = useState<HTMLElement | null>(null);
   const [effectSlot, setEffectSlot] = useState<HTMLElement | null>(null);
   const sideSlots = useMemo(
-    () => (sideOn ? { annual: annualSlot, effect: effectSlot } : {}),
-    [sideOn, annualSlot, effectSlot],
+    () => (sideOn ? { catalog: catalogSlot, annual: annualSlot, effect: effectSlot } : {}),
+    [sideOn, catalogSlot, annualSlot, effectSlot],
   );
   // Projeção da carta (F4.3): a moldura dá o tamanho impresso em raios (2,64 nas azimutais).
   const chartOptions = chartOptionsFromHash(hashState);
@@ -544,25 +555,31 @@ export function App() {
               {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
               {(geometryOpen || effectOpen) && <StepNav />}
               {tutorialStep && (
-                <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
+                <Suspense fallback={null}>
+                  <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
+                </Suspense>
               )}
               {exercise && (
-                <ExerciseCard
-                  id={exercise}
-                  site={siteFromHash(EXERCISES[exercise].state).site}
-                  orientation={protractor.orientation}
-                  drawn={protractor.drawn.total}
-                  checked={exerciseChecked}
-                  onChange={setHashState}
-                  onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
-                />
+                <Suspense fallback={null}>
+                  <ExerciseCard
+                    id={exercise}
+                    site={siteFromHash(EXERCISES[exercise].state).site}
+                    orientation={protractor.orientation}
+                    drawn={protractor.drawn.total}
+                    checked={exerciseChecked}
+                    onChange={setHashState}
+                    onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
+                  />
+                </Suspense>
               )}
               {example && (
-                <ExampleCard
-                  id={example}
-                  onClose={() => setHashState({ exemplo: '' })}
-                  onMore={() => setHashState({ ajuda: 'exemplos' })}
-                />
+                <Suspense fallback={null}>
+                  <ExampleCard
+                    id={example}
+                    onClose={() => setHashState({ exemplo: '' })}
+                    onMore={() => setHashState({ ajuda: 'exemplos' })}
+                  />
+                </Suspense>
               )}
               <SitePanel
                 selected={selected}
@@ -687,6 +704,12 @@ export function App() {
                   })}
                 </p>
               </div>
+              {/* O mapa do catálogo (passo 1) fica acima da carta, à altura do passo (decisão 0038). */}
+              {sideOn && (
+                <div className="side-results side-results-top" data-testid="side-results-top">
+                  <div ref={setCatalogSlot} />
+                </div>
+              )}
               <div
                 className="tabs"
                 role="tablist"
@@ -781,18 +804,20 @@ export function App() {
                   <p className="print-title">
                     {t('geometry.printTitle', { scale: geometryScale })}
                   </p>
-                  <GeometryDrawing
-                    window={geometry.window}
-                    devices={geometry.devices}
-                    title={t('geometry.printTitle', { scale: geometryScale })}
-                    font={geometryPrint.font}
-                    size={{
-                      width: `${geometryPrint.width.toFixed(2)}cm`,
-                      height: `${geometryPrint.height.toFixed(2)}cm`,
-                    }}
-                    testId="print-geometry-drawing"
-                    point={geometry.point?.value ?? null}
-                  />
+                  <Suspense fallback={null}>
+                    <GeometryDrawing
+                      window={geometry.window}
+                      devices={geometry.devices}
+                      title={t('geometry.printTitle', { scale: geometryScale })}
+                      font={geometryPrint.font}
+                      size={{
+                        width: `${geometryPrint.width.toFixed(2)}cm`,
+                        height: `${geometryPrint.height.toFixed(2)}cm`,
+                      }}
+                      testId="print-geometry-drawing"
+                      point={geometry.point?.value ?? null}
+                    />
+                  </Suspense>
                 </div>
               )}
             </section>
@@ -848,12 +873,14 @@ export function App() {
       </main>
 
       {helpSection && (
-        <HelpDialog
-          section={helpSection}
-          example={example}
-          onSection={(s) => setHashState({ ajuda: s })}
-          onClose={() => setHashState({ ajuda: '' })}
-        />
+        <Suspense fallback={null}>
+          <HelpDialog
+            section={helpSection}
+            example={example}
+            onSection={(s) => setHashState({ ajuda: s })}
+            onClose={() => setHashState({ ajuda: '' })}
+          />
+        </Suspense>
       )}
 
       <footer className="footer">

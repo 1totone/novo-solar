@@ -4,9 +4,10 @@ import { createContext, useEffect, useState } from 'react';
  * Resultados ao lado (decisão 0038): no computador, com duas colunas e a aba da carta aberta, os
  * resultados pesados dos passos (mapa mês × hora do passo 6, classificação e indicadores do
  * passo 7) aparecem no painel da direita, abaixo da carta, em vez de espremidos na coluna dos
- * passos. No celular, e nas abas da vista 3D e da rosa, ficam onde estavam.
+ * passos; o mapa do catálogo (passo 1), acima da carta. No celular, e nas abas da vista 3D e da
+ * rosa, ficam onde estavam.
  */
-export type SideSlotName = 'annual' | 'effect';
+export type SideSlotName = 'catalog' | 'annual' | 'effect';
 
 type Slots = Partial<Record<SideSlotName, HTMLElement | null>>;
 

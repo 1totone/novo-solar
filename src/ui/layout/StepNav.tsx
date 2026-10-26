@@ -80,8 +80,8 @@ export function StepNav() {
     window.scrollTo({ top: Math.max(0, top) });
     pinned.current = { n, y: window.scrollY };
     // Nos passos recolhidos (6 e 7), o foco vai para o resumo, que abre e fecha o passo.
-    const summary = panel.querySelector<HTMLElement>(':scope > details > summary');
     const heading = panel.querySelector<HTMLElement>('h2');
+    const summary = heading?.closest<HTMLElement>('summary') ?? null;
     if (!summary && heading) heading.tabIndex = -1;
     (summary ?? heading)?.focus({ preventScroll: true });
     setCurrent(n);

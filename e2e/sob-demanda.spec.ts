@@ -36,3 +36,81 @@ test('um link com a janela abre o passo 6 já carregado, com o resumo da geometr
   );
   await expect(page.getByTestId('geometry-panel').locator('details')).toHaveAttribute('open', '');
 });
+
+// Fase 4 (decisão 0039): espanhol e inglês, ajuda, modo didático e catálogo também sob demanda.
+test('o caminho básico não baixa idiomas, ajuda, modo didático nem catálogo', async ({ page }) => {
+  const scripts: string[] = [];
+  page.on('request', (r) => {
+    if (r.resourceType() === 'script') scripts.push(new URL(r.url()).pathname.split('/').pop()!);
+  });
+  await page.goto('./#local=florianopolis&o=30&a1=55');
+  await expect(page.getByTestId('sun-chart')).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  const lazy =
+    /^(messages\.(es|en)|help\.|HelpDialog|ExampleCard|TutorialCard|ExerciseCard|CatalogSection|tmyx-brasil|brasil-ufs)-/;
+  expect(scripts.filter((s) => lazy.test(s))).toEqual([]);
+
+  // A ajuda chega ao abrir, no idioma da interface.
+  await page.getByTestId('help-open').click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  expect(scripts.some((s) => s.startsWith('HelpDialog-'))).toBe(true);
+  expect(scripts.some((s) => s.startsWith('help.pt-BR-'))).toBe(true);
+  expect(scripts.some((s) => s.startsWith('help.en-'))).toBe(false);
+  await page.keyboard.press('Escape');
+
+  // Outro idioma: só o catálogo dele, e a página troca de uma vez.
+  await page.getByTestId('language').selectOption('es');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect(page.getByTestId('help-open')).toHaveText('Ayuda');
+  expect(scripts.some((s) => s.startsWith('messages.es-'))).toBe(true);
+  expect(scripts.some((s) => s.startsWith('messages.en-'))).toBe(false);
+});
+
+test('um navegador em inglês abre direto em inglês, sem passar pelo português', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ locale: 'en-US', serviceWorkers: 'block' });
+  const page = await context.newPage();
+  const seen: string[] = [];
+  page.on('console', () => {});
+  await page.exposeFunction('__seen', (text: string) => seen.push(text));
+  await page.addInitScript(() => {
+    new MutationObserver(() => {
+      const h1 = document.querySelector('.tagline');
+      if (h1?.textContent)
+        (window as unknown as { __seen: (t: string) => void }).__seen(h1.textContent);
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto(new URL('./#local=florianopolis', test.info().project.use.baseURL).href);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.getByTestId('sun-chart')).toBeVisible();
+  // Nenhum texto do cabeçalho apareceu em português antes do inglês.
+  expect(seen.length).toBeGreaterThan(0);
+  expect(seen.every((t) => !t.startsWith('Carta solar, transferidor'))).toBe(true);
+  await context.close();
+});
+
+test('o catálogo chega ao abrir, com o mapa ao lado da carta no computador', async ({
+  page,
+}, info) => {
+  await page.goto('./#local=florianopolis');
+  const catalog = page.getByTestId('catalog');
+  await expect(catalog.locator('summary')).toContainText('579');
+  await catalog.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  const map = page.getByTestId('catalog-map');
+  await expect(map).toBeVisible({ timeout: 20000 });
+  await expect(catalog.locator('summary')).toBeFocused();
+  if (info.project.name === 'computador') {
+    // Acima da carta, no painel da direita, com a largura dele.
+    await expect(page.getByTestId('side-results-top').getByTestId('catalog-map')).toBeVisible();
+    await expect(catalog.getByTestId('catalog-map')).toHaveCount(0);
+    const mapBox = (await map.boundingBox())!;
+    const stepsBox = (await page.locator('.steps').boundingBox())!;
+    expect(mapBox.width).toBeGreaterThan(1.5 * stepsBox.width);
+    const chartBox = (await page.getByTestId('sun-chart').first().boundingBox())!;
+    expect(mapBox.y).toBeLessThan(chartBox.y);
+  } else {
+    await expect(catalog.getByTestId('catalog-map')).toBeVisible();
+  }
+});

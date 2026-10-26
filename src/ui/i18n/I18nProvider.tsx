@@ -5,6 +5,8 @@ import {
   formatDayMonth,
   formatNumber,
   isLocale,
+  isLocaleLoaded,
+  loadLocale,
   translate,
   type Locale,
 } from './i18n';
@@ -33,19 +35,40 @@ export function I18nProvider({
 }) {
   const [chosen, setChosen] = useState<Locale>(() => fixed ?? initialLocale());
   const locale = fixed ?? chosen;
+  // Espanhol e inglês chegam sob demanda (decisão 0039): até chegarem, nada é desenhado, para não
+  // mostrar a página em português e trocar logo depois. Sem o arquivo (sem internet e sem cópia
+  // guardada), segue em português.
+  const [, setArrived] = useState(0);
+  const [failed, setFailed] = useState<Locale | null>(null);
+  const loaded = isLocaleLoaded(locale) || failed === locale;
   useEffect(() => {
-    document.documentElement.lang = locale;
+    if (isLocaleLoaded(locale)) return;
+    let alive = true;
+    loadLocale(locale).then(
+      () => alive && setArrived((n) => n + 1),
+      () => alive && setFailed(locale),
+    );
+    return () => {
+      alive = false;
+    };
   }, [locale]);
+  useEffect(() => {
+    document.documentElement.lang = isLocaleLoaded(locale) ? locale : 'pt-BR';
+  }, [locale, loaded]);
   const value = useMemo<I18n>(
     () => ({
       locale,
       setLocale: (next) => {
-        setChosen(next);
         try {
           window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
         } catch {
           // Sem armazenamento, o idioma vale só nesta página.
         }
+        // Troca depois de o catálogo chegar: a página não pisca no idioma anterior.
+        loadLocale(next).then(
+          () => setChosen(next),
+          () => setChosen(next),
+        );
       },
       t: (key, params) => translate(locale, key, params),
       formatNumber: (n, digits) => formatNumber(locale, n, digits),
@@ -55,5 +78,6 @@ export function I18nProvider({
     }),
     [locale],
   );
+  if (!loaded) return null;
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
