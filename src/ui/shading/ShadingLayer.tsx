@@ -102,6 +102,10 @@ const labelCandidates = (lines: readonly (readonly Point[])[]): Point[][] =>
     ),
   );
 
+/** Posições candidatas de cada rótulo; a escolhida não cobre outro texto (useLabelLayout). */
+const labelCandidates = (lines: readonly (readonly Point[])[]): Point[][] =>
+  lines.map((line) => LABEL_FRACTIONS.map((f) => pointAt(line, f)));
+
 /**
  * Camadas da proteção pelas dimensões na carta (F3.2): região de sombra total (preenchimento leve
  * ou hachura horizontal sobre os dados), máscara de um ponto da janela (hachura vertical violeta)
