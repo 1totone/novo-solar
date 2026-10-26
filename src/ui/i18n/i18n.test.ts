@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { en } from './messages.en';
 import { es } from './messages.es';
 import { ptBR } from './messages.pt-BR';
@@ -8,10 +8,26 @@ import {
   formatDayMonth,
   formatNumber,
   isLocale,
+  isLocaleLoaded,
+  loadLocale,
   LOCALES,
   translate,
   type MessageKey,
 } from './i18n';
+
+// Espanhol e inglês vêm sob demanda (decisão 0039).
+beforeAll(async () => {
+  await loadLocale('es');
+  await loadLocale('en');
+});
+
+describe('carregamento dos idiomas', () => {
+  it('português já carregado; espanhol e inglês depois de loadLocale', () => {
+    expect(isLocaleLoaded('pt-BR')).toBe(true);
+    expect(isLocaleLoaded('es')).toBe(true);
+    expect(isLocaleLoaded('en')).toBe(true);
+  });
+});
 
 describe('translate', () => {
   it('devolve o texto do catálogo do idioma', () => {

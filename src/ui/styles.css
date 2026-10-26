@@ -1983,3 +1983,11 @@ a.btn {
     scroll-padding-bottom: 3.5rem;
   }
 }
+
+/* Mapa do catálogo ao lado (decisão 0038): acima da carta, à altura do passo 1. */
+.side-results-top > div:not(:empty) {
+  margin: 0 0 1rem;
+  padding: 0 0 1rem;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-border);
+}

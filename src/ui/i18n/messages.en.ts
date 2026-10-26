@@ -355,6 +355,7 @@ export const en: Catalog = {
   'side.heading': 'From step {step}, {name}',
   'side.annual': 'Shade over the year',
   'side.effect': 'Hour classification and indicators',
+  'side.catalog': 'Station map',
   'geometry.heading': 'Shading device by dimensions',
   'geometry.summary':
     'Window, overhang, fins and louvers in metres; section, view and shade on the chart.',

@@ -13,9 +13,10 @@ Na revisão do F2.9 (24/10/2026), o JavaScript da aplicação tinha 330 kB (104 
 2. **Carregados sob demanda** (`import()`), cada um no seu bloco:
    - os passos 6 e 7, quando abertos; enquanto recolhidos, a aplicação mostra só o cabeçalho deles (título e resumo, iguais aos do passo), e o foco volta ao resumo quando o passo chega;
    - a aba "Vista 3D" (o Three.js já vinha sob demanda);
-   - na Fase 4: os textos em espanhol e em inglês (só o idioma em uso), a ajuda (ao abrir), o tutorial guiado e os exercícios (com o link deles), o corpo do catálogo nacional (ao abrir) e as opções de projeção.
+   - na Fase 4: os textos em espanhol e em inglês (só o idioma em uso, carregado antes do primeiro desenho, para a página não aparecer em português e trocar), a ajuda (ao abrir, só no idioma da interface), os cartões dos exemplos, do tutorial guiado e dos exercícios (com o link deles), o corpo do catálogo nacional (ao abrir) e o corte e a vista da impressão (com uma janela no link).
+   - Ficam no bloco inicial, por serem pequenos ou usados pela carta a partir do link: o painel "Projeção e linhas horárias" (cerca de 2 kB) e o desenho das projeções, as camadas da Fase 3 e o núcleo da sombra que a carta usa quando o worker falha.
 3. **Orçamento no CI:** `npm run orcamento` soma o JavaScript inicial do `dist/` (o script de entrada, os `modulepreload` e o que eles importam de forma estática) e falha acima do limite. O limite fica alguns kB acima do medido, para que qualquer acréscimo ao caminho básico seja uma escolha explícita (mudar o número no `scripts/orcamento-js.mjs`, no mesmo PR, com o motivo).
-4. **Medida da primeira abertura** com `scripts/desempenho/primeira-abertura.mjs` (Fase 4), no mesmo método da revisão do F2.9, com e sem gzip, como mediana de 5 aberturas com o cache vazio.
+4. **Medida da primeira abertura** com `scripts/desempenho/primeira-abertura.mjs`, no mesmo método da revisão do F2.9, com e sem gzip, como mediana de 5 aberturas com o cache vazio. Resultado em `docs/ux/F4-acabamento-desempenho.md`: na integração da Fase 4, de 699 kB (220 kB com gzip) para 472 kB (152 kB); a carta chega em 3,12 s com gzip, contra 3,40 s antes e 2,55 s na `main`. Orçamento: 480 kB (156 kB com gzip).
 
 ## Alternativas consideradas
 
