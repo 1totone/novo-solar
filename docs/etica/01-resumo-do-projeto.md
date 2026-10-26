@@ -42,16 +42,16 @@ A 466 continua valendo no que a 510 não trata; por exemplo, as duas vias do TCL
 
 ### 0.4 Prazos: a Norma Operacional nº 001/2013 foi superada pela lei
 
-O pedido original era usar a Norma Operacional CNS nº 001/2013 para os prazos. Os prazos dela continuam citados por muitos CEPs, mas a Lei nº 14.874/2024, art. 14, fixou outros, em dias úteis, e a lei prevalece sobre a norma operacional. O resto da norma (organização do protocolo e dos documentos) continua como referência no que for compatível [a conferir com o CEP].
+Muitos CEPs ainda citam os prazos da Norma Operacional CNS nº 001/2013, mas a Lei nº 14.874/2024, art. 14, fixou outros, em dias úteis, e a lei prevalece sobre a norma operacional. O resto da norma (organização do protocolo e dos documentos) continua como referência no que for compatível [a conferir com o CEP].
 
 | Etapa | Norma Operacional nº 001/2013 | Lei nº 14.874/2024, art. 14 |
 |---|---|---|
 | Aceite da documentação (checagem documental) | até 10 dias da submissão | até 10 dias úteis da submissão |
 | Parecer | até 30 dias do aceite | até 30 dias úteis do aceite |
 | Pendências: prazo do pesquisador | 30 dias | 10 dias úteis, prorrogáveis uma vez por igual período, com justificativa; sem resposta, a análise pode ser cancelada |
-| Suspensão do prazo do CEP para pendências | não se aplica | até 20 dias úteis |
-| Parecer depois das pendências | 30 dias | dentro do prazo do parecer, descontada a suspensão |
-| Recurso | não se aplica | 30 dias úteis em cada instância |
+| Suspensão do prazo do CEP enquanto há pendência | sem regra equivalente encontrada | até 20 dias úteis |
+| Parecer depois das pendências | 30 dias depois da resposta | dentro dos 30 dias úteis do parecer, que ficam suspensos enquanto a pendência está aberta |
+| Recurso | não verificado | 30 dias úteis em cada instância |
 
 Fontes: Norma Operacional nº 001/2013 (https://www.gov.br/conselho-nacional-de-saude/pt-br/camaras-tecnicas-e-comissoes/conep/legislacao/norma/norma-operacional-no-001-de-2013.pdf); Lei nº 14.874/2024, art. 14, lido na transcrição do Jusbrasil (https://www.jusbrasil.com.br/topicos/714051105/artigo-14-da-lei-n-14874-de-28-de-maio-de-2024) e no comunicado do CEP/ENSP [a conferir no texto oficial, inclusive em que dispositivo está o aceite em 10 dias úteis]. A Resolução CNS nº 674/2022 criou modalidades de tramitação por tipo de pesquisa (de 15 a 45 dias depois da checagem documental) [a conferir se estão em uso: cópia em https://ses.sp.bvs.br/wp-content/uploads/2022/07/U_RS-MS-CNS-674_060522.pdf].
 
