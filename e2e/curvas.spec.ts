@@ -171,8 +171,18 @@ test.describe('curvas e máscara de um ponto na carta (F3.2)', () => {
     await page.mouse.click(target.x, target.y);
     await expect(page).toHaveURL(/pt=1%2C2_0%2C9/);
     await expect(page.getByTestId('shading-point-x')).toHaveValue('1,2');
-    const [marker] = await svgColors(elevation, [{ x: 0.3, y: -0.9 }], 0.2);
-    expect(isViolet(marker!), `marcador do ponto: ${marker}`).toBe(true);
+    // Pixel mais violeta numa vizinhança de ±2 px do ponto (a cruz tem 2 px, com suavização).
+    const pxPerM = await elevation.evaluate((el) => (el as SVGSVGElement).getScreenCTM()!.a);
+    const near = await svgColors(
+      elevation,
+      Array.from({ length: 25 }, (_, i) => ({
+        x: 0.3 + ((i % 5) - 2) / pxPerM,
+        y: -0.9 + (Math.floor(i / 5) - 2) / pxPerM,
+      })),
+      0.2,
+    );
+    const marker = near.reduce((a, b) => (b[2] - b[1] > a[2] - a[1] ? b : a));
+    expect(isViolet(marker), `marcador do ponto: ${marker}`).toBe(true);
 
     await page.getByTestId('shading-point-toggle').uncheck();
     expect(page.url()).not.toMatch(/pt=/);
