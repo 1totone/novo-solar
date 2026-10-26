@@ -12,7 +12,7 @@
 
 **Achado que pede atenção** (relatórios do F4.1 e do F4.2, na branch da Fase 4): o tempo da radiação dos arquivos climáticos. Nos TMYx 2011-2025 do Brasil, a radiação vem cerca de 30 min depois da convenção do EPW (descontado o viés das nuvens, de 26 a 34 min em 12 das 14 cidades com TRY); nos BrazFuture conferidos, cerca de 35 min antes do sol com o REMO e 110 min depois com o RegCM. A aplicação avisa e não corrige.
 
-**Parada:** aguardando o Anthony aplicar o teste do F2.9, revisar as prévias das Fases 3 e 4 e conduzir os portões 2 e 3. Depois: resolver ou estacionar os problemas do teste (inclusive os de gravidade 2 da revisão e o PR #33), apresentar o portão 2, integrar a Fase 3 na `main` com as decisões revisadas e, depois do portão 3, a Fase 4.
+**Parada:** conferência da issue #65 em 26/10/2026: nenhuma caixa marcada e nenhum comentário, e `docs/ux/F2.9-registro.csv` só com as linhas de exemplo; nada aplicado, decisões 0018 a 0041 continuam como estavam (provisórias ou propostas). Aguardando o Anthony aplicar o teste do F2.9, revisar as prévias das Fases 3 e 4 e conduzir os portões 2 e 3. Depois: resolver ou estacionar os problemas do teste (inclusive os de gravidade 2 da revisão e o PR #33), apresentar o portão 2, integrar a Fase 3 na `main` com as decisões revisadas e, depois do portão 3, a Fase 4.
 
 **Pendências do Anthony** (em ordem de prioridade). **Todas estão na issue [Revisão pendente](https://github.com/1totone/novo-solar/issues/65)**, uma caixa por item, com a recomendação, o que muda se discordar e o link da prévia; marcar a caixa = aceitar a recomendação.
 
@@ -33,7 +33,7 @@
 - Opcional: conferir no 6.2 real, com `docs/validacao/casos/solar-6.2/teste-hora.csv`, a hora em que ele desenha os dados (relatório do F2.8, seção 6).
 - Quando conseguir, fotos dos exemplos de máscara de Bittencourt e de Frota e Schiffer (casos adicionais da literatura; não bloqueiam).
 
-**Última atualização:** 26/10/2026 (rodada de acabamento).
+**Última atualização:** 26/10/2026 (conferência da issue #65, sem itens revisados).
 
 ---
 
