@@ -72,7 +72,7 @@ export const fase3PtBR = {
     'Adicione uma peça (ou um recuo do vidro) para ver na carta a sombra que a proteção faz.',
   'shading.showContours': 'Curvas de 0, 25, 50, 75 e 100% da janela à sombra',
   'shading.contoursHelp':
-    'Cada curva liga as posições do sol em que a mesma parte da janela fica à sombra; dentro da curva de 100% (área sombreada), a janela inteira está à sombra. Calculado pela geometria exata das peças, para a orientação do passo 2.',
+    'Cada curva liga as posições do sol em que a mesma parte da janela fica à sombra; dentro da curva de 100% (área sombreada), a janela inteira está à sombra. Calculado pela geometria exata das peças, para a orientação do passo 2. Com o vidro recuado, qualquer sol fora da normal já põe parte da janela à sombra, e a curva de 0% se reduz à direção da normal no horizonte; com peças encostadas na janela, ela pode se reduzir a uma linha. É o resultado exato.',
   'shading.showPoint': 'Máscara de um ponto da janela',
   'shading.pointX': 'x: da lateral esquerda (m)',
   'shading.pointZ': 'z: acima do peitoril (m)',
