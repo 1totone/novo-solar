@@ -12,6 +12,11 @@ interface Image {
   data: Uint8Array;
 }
 
+/** PNG de uma captura de tela decodificado (largura, altura, canais e bytes). */
+export function decodeScreenshot(png: Buffer): Image {
+  return decodePng(png);
+}
+
 function decodePng(png: Buffer): Image {
   let pos = 8;
   let width = 0;

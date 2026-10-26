@@ -1196,6 +1196,36 @@ fieldset.plain .check {
   padding-left: 1.25rem;
 }
 
+/* F3.7: vista 3D. */
+.view3d-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: flex-end;
+}
+
+.view3d-controls .field {
+  margin-bottom: 0.25rem;
+}
+
+.view3d-canvas {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.view3d-canvas canvas {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  touch-action: none;
+}
+
+.view3d-status {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
 /* Células da sobreposição em cálculo no web worker (achado 9). */
 .overlay-pending {
   margin: 0.25rem 0;

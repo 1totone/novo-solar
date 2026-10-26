@@ -224,17 +224,26 @@ function unionArea(polys: readonly Point[][]): number {
  */
 export function shadedFraction(scene: Scene, s: FacadeVector): number {
   if (!(s.y > 0)) return Number.NaN;
+  const shadows = shadowPolygons(scene, s);
+  if (shadows.length === 0) return 0;
+  return Math.min(1, unionArea(shadows) / (scene.width * scene.height));
+}
+
+/**
+ * Sombra de cada placa no plano do vidro, recortada pela janela, como polígonos convexos de pontos
+ * [x, z] (podem se sobrepor); vazio com o sol atrás da fachada. É o que a vista 3D desenha (F3.7):
+ * a área da união é o percentual sombreado.
+ */
+export function shadowPolygons(scene: Scene, s: FacadeVector): [number, number][][] {
+  if (!(s.y > 0)) return [];
   const kx = s.x / s.y;
   const kz = s.z / s.y;
-  const W = scene.width;
-  const H = scene.height;
   const shadows: Point[][] = [];
   for (const plate of scene.plates) {
-    const poly = shadow(plate, kx, kz, W, H);
+    const poly = shadow(plate, kx, kz, scene.width, scene.height);
     if (poly) shadows.push(poly);
   }
-  if (shadows.length === 0) return 0;
-  return Math.min(1, unionArea(shadows) / (W * H));
+  return shadows;
 }
 
 /**

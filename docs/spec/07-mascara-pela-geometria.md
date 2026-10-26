@@ -216,6 +216,17 @@ No passo 6, a seção "Sombra ao longo do ano" desenha o mapa da seção 7.6 par
 
 Conferência: a coerência da fração ensolarada com a máscara em todas as amostras do ano e os valores contra pvlib e shapely estão em `tests/referencia/fracaoEnsolarada.test.ts`. De ponta a ponta (`e2e/mapa.spec.ts`), numa fachada norte em Florianópolis com o brise infinito: classes de células conhecidas (junho, 12 a 13 h: de 25 a 50%, perto de f = (0,8 · tan 39° − 0,1) / 1,2 ≈ 0,45; janeiro ao meio-dia: 100%; dezembro, 7 a 8 h, e a noite: sem sol na janela), a cor lida no centro de cada uma das 288 células igual à da classe desenhada, a tabela coerente com as classes, as exportações, o cálculo no worker, o teclado e o axe.
 
+## 7.14 Vista 3D (F3.7)
+
+A aba "Vista 3D" (decisão 0023, proposta), entre "Carta solar" e "Rosa dos ventos", mostra a janela, a parede (com o recuo do vidro), as peças, o sol e a sombra no vidro no dia 21 do mês e na hora legal escolhidos, com um botão que anima o dia (10 min a cada 120 ms, das 4 às 20 h). O Three.js (0.186.1, cerca de 580 kB, 145 kB comprimido) só é carregado quando a aba abre. Estado no link: `aba=3d`, `v3m` (mês), `v3h` (hora) e `v3v=f` (vista de frente).
+
+- **A sombra é a do cálculo:** os polígonos da sombra de cada placa no plano do vidro, recortados pela janela (`shadowPolygons`, a mesma função que dá o percentual sombreado da seção 7.3), desenhados em azul-escuro chapado sobre o vidro em azul-claro chapado, sem luz. A luz do sol nas peças e na parede é só ilustrativa. As peças são as próprias placas do cálculo.
+- **Duas vistas:** perspectiva, que se gira com o mouse ou o dedo, e de frente, ortográfica, olhando a fachada de fora (a direita de quem está dentro fica à esquerda, como na vista do passo 6).
+- **Texto ao lado:** data, hora, altura e azimute do sol e a fração à sombra e ensolarada do cálculo (ou "sol atrás da fachada" e "sol abaixo do horizonte").
+- **Referencial:** (x, y, z) da fachada vira (X, Y, Z) = (x, z, −y) no Three.js, uma rotação (sem espelhar a cena).
+
+Conferência de ponta a ponta (`e2e/vista3d.spec.ts`, critério do F3.7): na vista de frente, os pixels do vidro em azul-escuro, divididos pelos do vidro, dão a fração à sombra do cálculo com diferença abaixo de 0,02 em três momentos (Brasília, fachada a 30°, janela de 2,00 × 1,00 m com brise e aleta); na medição de 26/10/2026, as diferenças ficaram de 0,0003 a 0,008 (a maior, com a sombra rente à borda de cima, vem da folga de 3 px nas bordas da contagem). Também o carregamento sob demanda do Three.js, o sol atrás da fachada sem sombra, a animação, o teclado e o axe. A função `shadowPolygons` tem teste de unidade: a área coberta pelos polígonos, numa grade de 300 × 240 pontos, é o percentual sombreado em quatro direções do sol.
+
 ## Referências
 
 - Olgyay, A.; Olgyay, V. *Solar control and shading devices*. Princeton: Princeton University Press, 1957.

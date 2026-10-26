@@ -18,6 +18,7 @@ import { SitePanel, type LoadedFile } from './SitePanel';
 import { timeZoneOffset } from './timeZoneOffset';
 import { GeometryDrawing } from './geometry/GeometryDrawing';
 import { EffectPanel } from './effect/EffectPanel';
+import { View3DPanel } from './view3d/View3DPanel';
 import { GeometryPanel } from './geometry/GeometryPanel';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
@@ -262,6 +263,10 @@ export function App() {
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
         <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
       </div>
+    ) : wind.tab === '3d' ? (
+      <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
+        <View3DPanel hash={hashState} onChange={setHashState} />
+      </div>
     ) : (
       <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
         <ChartView
@@ -365,7 +370,7 @@ export function App() {
               </p>
             </div>
             <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
-              {(['chart', 'rose'] as const).map((tab) => (
+              {(['chart', '3d', 'rose'] as const).map((tab) => (
                 <button
                   key={tab}
                   type="button"
@@ -373,9 +378,11 @@ export function App() {
                   id={`tab-${tab}`}
                   aria-selected={wind.tab === tab}
                   aria-controls={`panel-${tab}`}
-                  onClick={() => setHashState({ aba: tab === 'rose' ? 'rosa' : '' })}
+                  onClick={() =>
+                    setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
+                  }
                 >
-                  {t(tab === 'chart' ? 'tabs.chart' : 'tabs.rose')}
+                  {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
                 </button>
               ))}
             </div>

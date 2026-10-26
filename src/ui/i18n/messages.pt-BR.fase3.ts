@@ -312,4 +312,25 @@ export const fase3PtBR = {
   'sizing.showOnChart': 'Mostrar o período e o sol que determina cada ângulo na carta',
   'sizing.legend': 'período a sombrear',
   'sizing.legendPoints': 'sol que determina cada ângulo',
+  'tabs.view3d': 'Vista 3D',
+  'view3d.needsWindow':
+    'Descreva a janela e as peças no passo 6 ("Proteção pelas dimensões") para ver a proteção em 3D.',
+  'view3d.loading': 'Carregando a vista 3D…',
+  'view3d.failed':
+    'Este navegador não conseguiu abrir a vista 3D (WebGL indisponível). As curvas, o mapa e os indicadores continuam valendo.',
+  'view3d.month': 'Dia',
+  'view3d.dayOption': '21 de {month}',
+  'view3d.hour': 'Hora legal (UTC{timeZone})',
+  'view3d.play': 'Animar o dia',
+  'view3d.pause': 'Parar',
+  'view3d.view': 'Vista',
+  'view3d.perspective': 'Perspectiva (gire com o mouse ou o dedo)',
+  'view3d.front': 'De frente, de fora da fachada',
+  'view3d.status':
+    '{date}, {hour}: sol a {altitude}° de altura e {azimuth}° de azimute; {shaded}% da janela à sombra ({sunlit}% ensolarada).',
+  'view3d.behind': '{date}, {hour}: sol atrás da fachada; a janela não recebe sol direto.',
+  'view3d.night': '{date}, {hour}: sol abaixo do horizonte.',
+  'view3d.note':
+    'A sombra no vidro é a do cálculo (a mesma das curvas, do mapa e dos indicadores), desenhada em azul-escuro; a luz nas peças e na parede é só ilustrativa.',
+  'view3d.label': 'Vista 3D da janela e da proteção. {status}',
 } as const;

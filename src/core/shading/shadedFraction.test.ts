@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildScene } from './geometry';
 import {
+  shadowPolygons,
   facadeVector,
   MIN_SUN_COSINE,
   shadedFraction,
@@ -189,5 +190,58 @@ describe('percentual sombreado: união das sombras', () => {
     expect(sunlitFraction(scene, facadeVector(-5, 10, 0))).toBe(0);
     const s = facadeVector(30, 10, 0);
     expect(sunlitFraction(scene, s)).toBeCloseTo(1 - shadedFraction(scene, s), 15);
+  });
+});
+
+describe('polígonos da sombra na janela (vista 3D, F3.7)', () => {
+  /** Ponto dentro de um polígono convexo ou não (regra par-ímpar). */
+  const inside = (poly: readonly [number, number][], x: number, z: number) => {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, zi] = poly[i]!;
+      const [xj, zj] = poly[j]!;
+      if (zi > z !== zj > z && x < xj + ((z - zj) * (xi - xj)) / (zi - zj)) c = !c;
+    }
+    return c;
+  };
+  const scene = buildScene({ width: 1.5, height: 1.2, setback: 0.1 }, [
+    { kind: 'overhang', depth: 0.6, above: 0.1, extendLeft: 0.3, extendRight: 0.2 },
+    { kind: 'fin', side: 'right', depth: 0.4, offset: 0.1 },
+    { kind: 'horizontalLouvers', count: 2, chord: 0.2, pitch: 0.4, angle: 25, above: -0.4 },
+  ]);
+  for (const [h, psi] of [
+    [40, 20],
+    [60, -35],
+    [15, 70],
+    [75, 5],
+  ] as const) {
+    it(`a área coberta pelos polígonos é o percentual sombreado (h ${h}°, ψ ${psi}°)`, () => {
+      const s = facadeVector(h, psi, 0);
+      const polys = shadowPolygons(scene, s);
+      for (const p of polys) {
+        for (const [x, z] of p) {
+          expect(x).toBeGreaterThanOrEqual(-1e-12);
+          expect(x).toBeLessThanOrEqual(1.5 + 1e-12);
+          expect(z).toBeGreaterThanOrEqual(-1e-12);
+          expect(z).toBeLessThanOrEqual(1.2 + 1e-12);
+        }
+      }
+      // Grade de 300 × 240 pontos no meio de células: a fração coberta, com erro da ordem do passo.
+      let covered = 0;
+      const nx = 300;
+      const nz = 240;
+      for (let i = 0; i < nx; i++) {
+        for (let k = 0; k < nz; k++) {
+          const x = ((i + 0.5) * 1.5) / nx;
+          const z = ((k + 0.5) * 1.2) / nz;
+          if (polys.some((p) => inside(p, x, z))) covered++;
+        }
+      }
+      expect(covered / (nx * nz)).toBeCloseTo(shadedFraction(scene, s), 2);
+    });
+  }
+
+  it('sol atrás da fachada: nenhum polígono', () => {
+    expect(shadowPolygons(scene, facadeVector(30, 120, 0))).toEqual([]);
   });
 });
