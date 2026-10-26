@@ -16,6 +16,13 @@ export default tseslint.config(
     },
   },
   {
+    // Modelo do service worker (F4.6): globais do service worker e os marcadores do build.
+    files: ['scripts/pwa/sw-template.js'],
+    languageOptions: {
+      globals: { ...globals.serviceworker, __VERSION__: 'readonly', __PRECACHE__: 'readonly' },
+    },
+  },
+  {
     files: ['src/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
     rules: {
