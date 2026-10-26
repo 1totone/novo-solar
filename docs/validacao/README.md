@@ -20,6 +20,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - `casos/energyplus/vento.json` e `casos/energyplus/modelos/vento.idf`: vento local de faixas de parede de 1,5 a 40 m nos 5 terrenos do EnergyPlus 26.2.0, F4.4.
   - `casos/vento/rosas-avancadas.json`: 420 rosas com o filtro pela condição térmica e a correção para a altura e o terreno (Python com numpy), F4.4.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
+  - [`relatorios/F4.9-validacao-consolidada.md`](relatorios/F4.9-validacao-consolidada.md): **relatório consolidado da v1.0** (geometria, máscaras, dados, vento, indicadores e didática numa tabela de critério, resultado e referência, com as limitações conhecidas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
   - [`relatorios/F2.2-transferidor.md`](relatorios/F2.2-transferidor.md): transferidor contra o código do SOL-AR 6.2.
@@ -27,12 +28,19 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F2.4-sobreposicao.md`](relatorios/F2.4-sobreposicao.md): cada hora dos EPWs de Florianópolis e Manaus na célula certa, com teste negativo de fuso.
   - [`relatorios/F2.5-rosa-dos-ventos.md`](relatorios/F2.5-rosa-dos-ventos.md): 150 rosas contra um cálculo independente em Python.
   - [`relatorios/F2.6-saidas.md`](relatorios/F2.6-saidas.md): escala da carta impressa (navegador e PDF rasterizado a 600 dpi) e exportações.
+  - [`relatorios/F2.7-dados.md`](relatorios/F2.7-dados.md): CSV do SOL-AR 6.2 contra o módulo `csv` do Python, cidades e dados históricos.
+  - [`relatorios/F2.8-regressao.md`](relatorios/F2.8-regressao.md): regressão contra o SOL-AR 6.2 reconstruído, com as diferenças explicadas.
+  - [`relatorios/F3.2-F3.3-nucleo.md`](relatorios/F3.2-F3.3-nucleo.md): máscara pela geometria e fração ensolarada hora a hora contra shapely, traçado de raios e pvlib.
   - [`relatorios/F3.4-classificacao.md`](relatorios/F3.4-classificacao.md): classificação das horas contra numpy e o pythermalcomfort.
   - [`relatorios/F3.5-memoria-de-calculo.md`](relatorios/F3.5-memoria-de-calculo.md): indicadores calculados à mão em casos simples.
   - [`relatorios/F3.5-indicadores.md`](relatorios/F3.5-indicadores.md): indicadores contra pvlib e shapely e contra o EnergyPlus.
   - [`relatorios/F3.6-dimensionamento-inverso.md`](relatorios/F3.6-dimensionamento-inverso.md): ângulos contra o pvlib, ida e volta, minimalidade e o caso do tutorial da UFU.
+  - [`relatorios/F3.8-energyplus.md`](relatorios/F3.8-energyplus.md): fração ensolarada contra o EnergyPlus 26.2 (arranjo e resultados).
+  - [`relatorios/F4.1-catalogo.md`](relatorios/F4.1-catalogo.md): catálogo nacional e qualidade dos TMYx do Brasil, com o tempo da radiação.
+  - [`relatorios/F4.2-comparacao-de-climas.md`](relatorios/F4.2-comparacao-de-climas.md): diferença entre climas na mesma carta e tempo da radiação de cada arquivo.
   - [`relatorios/F4.3-projecoes.md`](relatorios/F4.3-projecoes.md): analemas contra o pvlib em 9 locais, projeções e transferidor contra fórmulas fechadas, regiões da máscara fora da estereográfica.
   - [`relatorios/F4.4-vento.md`](relatorios/F4.4-vento.md): fator da altura e do terreno contra o EnergyPlus 26.2.0 e 420 rosas com o filtro térmico contra um cálculo em Python.
+  - [`relatorios/F4.8-exemplos.md`](relatorios/F4.8-exemplos.md): números dos exemplos resolvidos da ajuda conferidos pelo núcleo e por traçado de raios.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |

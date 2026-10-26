@@ -56,14 +56,14 @@ Serão escritos no passo de cada módulo, com referências e testes:
 |---|---|---|
 | Posição solar (ângulo zenital e separação angular) | pvlib (NREL SPA) | 0,01° |
 | Nascer, pôr e passagem meridiana | pvlib (SPA) | 10 s |
-| Curvas do transferidor e de máscara em casos analíticos | solução analítica | 0,1° |
+| Curvas do transferidor e de máscara em casos analíticos | solução analítica | 0,01° (spec 01, validação da máscara: borda do brise infinito na curva α) |
 | Coordenadas nas projeções equidistante e cilíndrica | fórmulas da seção 3.5 num script independente, com o pvlib | 10⁻⁶ R |
 | Curvas do transferidor fora da estereográfica | fórmulas fechadas (seção 3.5.2) | 10⁻⁴ R da polilinha |
 | Analemas (sol às H:00 legais) | pvlib, com o instante montado pelo fuso | 0,01° |
 | Máscara pelos ângulos (sombra total e centro da janela) | traçado de raios com janela e placas | nenhuma direção classificada errada (1500 por caso); onde a união das peças não é exata, nenhum falso positivo |
 | Sobreposição: hora do EPW na sua célula | posição do sol no instante da convenção do EPW (Florianópolis e Manaus) | todas dentro da sua célula e fora das outras, com 10⁻⁴ na carta de raio 1 |
-| Percentual sombreado (máscara pela geometria) | área da união com shapely; traçado de raios | 10⁻⁹; 0,01 (grade de 400 × 400) |
+| Percentual sombreado (máscara pela geometria) | área da união com shapely; traçado de raios | 10⁻⁹; 0,002 (400 × 400 células com amostragem estratificada, spec 07, seção 7.8) |
 | Fração ensolarada horária | pvlib e shapely, ano inteiro | 10⁻⁶ |
-| Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* | RMSE ≤ 0,02 |
+| Fração ensolarada horária | EnergyPlus, *Surface Outside Face Sunlit Fraction* | com o mesmo sol: diferença ≤ 5 × 10⁻⁴ por passo; ponta a ponta: RMSE ≤ 0,03 e viés ≤ 0,002 (decisão 0019, proposta; spec 07, seção 7.10) |
 | Estatísticas de vento | cálculo independente em Python | 0,1 ponto percentual (diferença encontrada no F2.5: menor que 10⁻⁶) |
 | Escala de impressão | régua | ±1 mm no raio |
