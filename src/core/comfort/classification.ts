@@ -34,8 +34,24 @@ export type ClassificationMethod =
   | { kind: 'thresholds'; cold: number | null; hot: number | null }
   | { kind: 'balance'; balance: number };
 
-/** Padrão proposto (seção 8.8): faixa adaptativa, 80%, média exponencial com α = 0,8 e 30 dias. */
+/**
+ * Limiar de sombreamento de Lamberts, Dutra e Pereira (2014, p. 91 e Tabela 4-4 da p. 135):
+ * sombrear sempre que o ar passa de 20 °C, num ambiente sem carga térmica interna.
+ */
+export const SHADING_THRESHOLD = 20;
+
+/**
+ * Método padrão (seção 8.8; decisão 0024, aceita provisoriamente): limiar único de 20 °C, acima
+ * quente, abaixo fria, empate neutro.
+ */
 export const DEFAULT_METHOD: ClassificationMethod = {
+  kind: 'thresholds',
+  cold: SHADING_THRESHOLD,
+  hot: SHADING_THRESHOLD,
+};
+
+/** Faixa adaptativa com os valores padrão (seção 8.8): 80%, média exponencial, α = 0,8, 30 dias. */
+export const ADAPTIVE_DEFAULT: Extract<ClassificationMethod, { kind: 'adaptive' }> = {
   kind: 'adaptive',
   acceptability: 80,
   running: { averaging: 'exponential', alpha: 0.8, days: 30 },

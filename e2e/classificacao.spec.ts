@@ -66,7 +66,7 @@ test.describe('passo 7: classificação das horas (F3.4)', () => {
   test('faixa adaptativa: 22 °C constante é neutra; com ΔT = 8 °C, quente (barra e hipóteses)', async ({
     page,
   }) => {
-    await page.goto('./#local=florianopolis&o=0');
+    await page.goto('./#local=florianopolis&o=0&cm=a');
     await loadEpw(page, 'constante22.epw', () => 22);
     const panel = await openStep7(page);
     // t_pma = 22 °C: conforto 0,31 · 22 + 17,8 = 24,62 °C, faixa de 80% de 21,12 a 28,12 °C.
@@ -96,7 +96,7 @@ test.describe('passo 7: classificação das horas (F3.4)', () => {
     await expect(page.getByTestId('classes-results')).toHaveCount(0);
   });
 
-  test('limiares: 20 °C sugerido com a fonte; partes da barra iguais às da tabela (pixels)', async ({
+  test('limiar de 20 °C por padrão, com a fonte; partes da barra iguais às da tabela (pixels)', async ({
     page,
   }) => {
     await page.goto('./#local=florianopolis&o=0');
@@ -104,16 +104,26 @@ test.describe('passo 7: classificação das horas (F3.4)', () => {
     // 13 (12 a 13 h) vale 20 °C e empata (neutra), a manhã é fria e a tarde, quente.
     await loadEpw(page, 'manha-tarde.epw', (_m, _d, h) => (h <= 12 ? 15 : 25));
     const panel = await openStep7(page);
-    await panel.getByTestId('classes-method-thresholds').check();
-    await expect(page).toHaveURL(/cm=l/);
-    await expect(page.getByTestId('classes-incomplete')).toBeVisible();
-    await panel.getByTestId('classes-suggest20').click();
-    await expect(page).toHaveURL(/tf=20/);
-    await expect(page).toHaveURL(/tq=20/);
+    // Padrão (decisão 0024): limiares de 20 °C sem nada no link.
+    await expect(panel.getByTestId('classes-method-thresholds')).toBeChecked();
+    await expect(panel.getByTestId('classes-cold')).toHaveValue('20');
+    await expect(panel.getByTestId('classes-hot')).toHaveValue('20');
+    expect(page.url()).not.toMatch(/cm=/);
     await expect(panel).toContainText('Lamberts, Dutra e Pereira (2014');
-    await expect(page.getByTestId('classes-hypotheses')).toContainText(
-      'hora fria abaixo de 20,0 °C; quente acima de 20,0 °C',
-    );
+    const hypotheses = page.getByTestId('classes-hypotheses');
+    await expect(hypotheses).toContainText('Limiar de 20 °C (padrão)');
+    // Editar um limiar grava os dois no link; apagar um deixa-o sem limite.
+    await panel.getByTestId('classes-cold').fill('18');
+    await expect(page).toHaveURL(/cm=l/);
+    await expect(page).toHaveURL(/tf=18/);
+    await expect(page).toHaveURL(/tq=20/);
+    await expect(hypotheses).toContainText('hora fria abaixo de 18,0 °C; quente acima de 20,0 °C');
+    await panel.getByTestId('classes-cold').fill('');
+    await expect(hypotheses).toContainText('Limiares: sem horas frias; quente acima de 20,0 °C');
+    await panel.getByTestId('classes-suggest20').click();
+    await expect(panel.getByTestId('classes-cold')).toHaveValue('20');
+    expect(page.url()).not.toMatch(/cm=|tf=|tq=/);
+    await expect(hypotheses).toContainText('Limiar de 20 °C (padrão)');
     await expect(page.getByTestId('classes-results')).toBeVisible({ timeout: 20000 });
     const cold = await row(page, 'cold');
     const neutral = await row(page, 'neutral');

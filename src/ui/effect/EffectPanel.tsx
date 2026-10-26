@@ -1,9 +1,10 @@
 import { useId } from 'react';
-import { ADAPTIVE } from '../../core/comfort/classification';
+import { ADAPTIVE, SHADING_THRESHOLD } from '../../core/comfort/classification';
 import type { EpwData } from '../../core/epw/parseEpw';
 import { useI18n } from '../i18n/useI18n';
 import {
   classificationFromHash,
+  fieldPatch,
   methodPatch,
   type ClassificationField,
   type MethodKind,
@@ -14,15 +15,6 @@ import { ClassBar } from './ClassBar';
 import { IndicatorsSection } from './IndicatorsSection';
 import { CLASS_ORDER, type ClassName } from './classColors';
 import { useYearEffect } from './useYearEffect';
-
-const FIELD_KEY: Record<ClassificationField, string> = {
-  alpha: 'cal',
-  days: 'cn',
-  gains: 'cg',
-  cold: 'tf',
-  hot: 'tq',
-  balance: 'te',
-};
 
 /** Passo 7: efeito no ano (F3.4: classificação das horas, com as hipóteses na tela). */
 export function EffectPanel({
@@ -70,7 +62,7 @@ export function EffectPanel({
         }
         aria-invalid={cls.invalid.includes(f)}
         data-testid={`classes-${f}`}
-        onChange={(e) => onChange({ [FIELD_KEY[f]]: e.target.value })}
+        onChange={(e) => onChange(fieldPatch(cls, f, e.target.value))}
       />
     </div>
   );
@@ -119,11 +111,22 @@ export function EffectPanel({
       hypotheses.push(t('classes.h3', { count: shares.byClass.none.hours, hours: shares.hours }));
     }
   } else if (method?.kind === 'thresholds') {
-    const limit = (v: number | null) =>
-      v === null ? t('classes.h2.noLimit') : `${formatNumber(v, 1)} °C`;
-    hypotheses.push(
-      t('classes.h2.thresholds', { cold: limit(method.cold), hot: limit(method.hot) }),
-    );
+    if (method.cold === SHADING_THRESHOLD && method.hot === SHADING_THRESHOLD) {
+      hypotheses.push(t('classes.h2.threshold20'));
+    } else {
+      hypotheses.push(
+        t('classes.h2.thresholds', {
+          cold:
+            method.cold === null
+              ? t('classes.h2.noCold')
+              : t('classes.h2.coldBelow', { value: formatNumber(method.cold, 1) }),
+          hot:
+            method.hot === null
+              ? t('classes.h2.noHot')
+              : t('classes.h2.hotAbove', { value: formatNumber(method.hot, 1) }),
+        }),
+      );
+    }
   } else if (method?.kind === 'balance') {
     hypotheses.push(t('classes.h2.balance', { balance: formatNumber(method.balance, 1) }));
   }
@@ -181,7 +184,7 @@ export function EffectPanel({
                   k,
                   cls.kind === k,
                   t(`classes.method.${k}`),
-                  methodPatch(k),
+                  methodPatch(k, hash),
                   `classes-method-${k}`,
                 ),
               )}
@@ -217,7 +220,7 @@ export function EffectPanel({
                   type="button"
                   className="btn"
                   data-testid="classes-suggest20"
-                  onClick={() => onChange({ tf: '20', tq: '20' })}
+                  onClick={() => onChange({ cm: '', tf: '', tq: '' })}
                 >
                   {t('classes.suggest20')}
                 </button>

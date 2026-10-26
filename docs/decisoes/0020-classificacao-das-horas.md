@@ -1,7 +1,7 @@
 # 0020. Classificação das horas pela temperatura externa (F3.4)
 
 - Data: 2026-10-25
-- Status: proposta (núcleo do F3.4 adiantado antes do portão 2, na branch da Fase 3; a confirmar com o Anthony na integração da Fase 3)
+- Status: proposta (núcleo do F3.4 adiantado antes do portão 2, na branch da Fase 3; a confirmar com o Anthony na integração da Fase 3); item 2 (faixa adaptativa como padrão) substituído pela decisão 0024, aceita provisoriamente em 26/10/2026
 
 ## Contexto
 

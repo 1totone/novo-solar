@@ -1,7 +1,7 @@
 # 0024. Padrão da classificação das horas para o sombreamento: limiar de 20 °C
 
 - Data: 2026-10-25
-- Status: proposta (não aplicada: até o Anthony decidir, o padrão continua a faixa adaptativa da decisão 0020, com o aviso de viés na tela)
+- Status: aceita provisoriamente em 26/10/2026 (aplicada na integração da Fase 3; substitui o item 2 da decisão 0020; a confirmar no portão 3)
 
 ## Contexto
 
@@ -28,3 +28,13 @@ Há uma fonte brasileira citável, do próprio LabEEE, para a necessidade de som
 - O limiar de 20 °C não se adapta ao clima: em Belém e Manaus quase toda hora de sol fica quente (o que é coerente com a necessidade de sombra o ano todo), e em climas frios o limite pode ser baixo demais para o inverno; quem precisar escolhe a faixa adaptativa ou digita outro limite.
 - Sem faixa neutra (só os empates em 20,0 °C ficam neutros, de 1% a 4% das horas com sol), quase toda a radiação entra num dos dois indicadores, e as alternativas ficam comparadas sobre o mesmo total.
 - Se recusada: fica a decisão 0020, com o acréscimo por ganhos, o aviso de viés e a sugestão de 20 °C na tela.
+
+## Aplicação (26/10/2026)
+
+Aceita provisoriamente, com as decisões 0018 a 0023, para seguir com a Fase 4 sem esperar o portão 3:
+
+- `DEFAULT_METHOD` passa a ser o limiar de 20 °C (`SHADING_THRESHOLD`); a faixa adaptativa com os valores padrão fica em `ADAPTIVE_DEFAULT`.
+- No link, `cm` em branco é o padrão de 20 °C e `cm=a` é a faixa adaptativa. Um link sem `cm` e com uma chave só da faixa (`ca`, `cr`, `cal`, `cn`, `cg`) continua abrindo a faixa, como antes. Editar um limiar a partir do padrão grava `cm=l` e os dois limiares.
+- No passo 7, a opção marcada sem nada no link é "Limiares de temperatura (padrão: 20 °C)", com 20 nos dois campos, a fonte e a hipótese "não se adapta ao clima do lugar"; o botão "Voltar a 20 °C" volta ao padrão.
+- Os testes de referência dos indicadores e do viés continuam com a configuração em que as referências foram geradas (faixa adaptativa, explícita no teste).
+- Se o Anthony recusar no portão 3: `DEFAULT_METHOD` volta à faixa adaptativa e `cm` em branco volta a ser a faixa (os links com `cm=a` e `cm=l` continuam valendo).

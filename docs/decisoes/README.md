@@ -23,11 +23,11 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0017](0017-cidades-e-dados-historicos.md) | Cidades, dados recentes e dados históricos do SOL-AR 6.2 | 2026-10-24 | aceita (radiação histórica a confirmar no portão 2) |
 | [0018](0018-mascara-pela-geometria.md) | Máscara pela geometria e fração ensolarada hora a hora | 2026-10-24 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0019](0019-verificacao-energyplus.md) | Critérios da verificação contra o EnergyPlus (F3.8) | 2026-10-24 | proposta (arranjo adiantado; a confirmar na integração da Fase 3) |
-| [0020](0020-classificacao-das-horas.md) | Classificação das horas pela temperatura externa (F3.4) | 2026-10-25 | proposta (núcleo adiantado; revisão crítica de 25/10/2026; a confirmar na integração da Fase 3) |
+| [0020](0020-classificacao-das-horas.md) | Classificação das horas pela temperatura externa (F3.4) | 2026-10-25 | proposta (núcleo adiantado; revisão crítica de 25/10/2026; item 2 substituído pela 0024; a confirmar na integração da Fase 3) |
 | [0021](0021-indicadores-de-sombreamento.md) | Indicadores de sombreamento: radiação direta bloqueada e admitida (F3.5) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0022](0022-dimensionamento-inverso.md) | Dimensionamento inverso: do período a sombrear para os ângulos e as dimensões (F3.6) | 2026-10-25 | proposta (núcleo adiantado; a confirmar na integração da Fase 3) |
 | [0023](0023-interface-da-fase-3.md) | Interface da Fase 3: passos 6 e 7 recolhidos, aba Vista 3D, camadas na carta | 2026-10-25 | proposta (aceita provisoriamente na branch de integração) |
-| [0024](0024-padrao-da-classificacao-das-horas.md) | Padrão da classificação das horas para o sombreamento: limiar de 20 °C (Lamberts, Dutra e Pereira, 2014) | 2026-10-25 | proposta (não aplicada; padrão atual: decisão 0020) |
+| [0024](0024-padrao-da-classificacao-das-horas.md) | Padrão da classificação das horas para o sombreamento: limiar de 20 °C (Lamberts, Dutra e Pereira, 2014) | 2026-10-25 | aceita provisoriamente em 26/10/2026 (aplicada na integração da Fase 3; a confirmar no portão 3) |
 
 ## Modelo
 
