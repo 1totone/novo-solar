@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { onRovingKeyDown } from './a11y/roving';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
@@ -9,6 +9,10 @@ import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
 import { exampleFromHash, helpSectionFromHash } from './help/content';
 import { ExampleCard } from './help/ExampleCard';
+import { ExerciseCard } from './didactic/ExerciseCard';
+import { answerRegion, exerciseFromHash, EXERCISES } from './didactic/exercises';
+import { TutorialCard } from './didactic/TutorialCard';
+import { TUTORIAL_STEPS, tutorialStepFromHash } from './didactic/tutorial';
 import { HelpDialog } from './help/HelpDialog';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
@@ -79,6 +83,11 @@ export function App() {
   // Ajuda (F4.8): ajuda=<parte> abre o diálogo; exemplo=<id> mostra o cartão do exemplo resolvido.
   const helpSection = helpSectionFromHash(hashState);
   const example = exampleFromHash(hashState);
+  // Modo didático (F4.5): tutorial=<etapa> e exercicio=<id> (com conferir=1 depois de conferir).
+  const tutorialStep = tutorialStepFromHash(hashState);
+  const tutorialTarget = tutorialStep ? TUTORIAL_STEPS[tutorialStep - 1]!.target : null;
+  const exercise = exerciseFromHash(hashState);
+  const exerciseChecked = exercise !== null && hashState.conferir === '1';
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const city: City | null = selected.kind === 'city' ? selected.site : null;
@@ -104,6 +113,20 @@ export function App() {
   const [chartOptionsOpen, setChartOptionsOpen] = useState(() =>
     Boolean(hashState.proj || hashState.hl),
   );
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!tutorialTarget) {
+      delete root.dataset.tutorial;
+      return;
+    }
+    root.dataset.tutorial = tutorialTarget;
+    document
+      .querySelector(`[data-step="${tutorialTarget}"]`)
+      ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    return () => {
+      delete root.dataset.tutorial;
+    };
+  }, [tutorialStep, tutorialTarget]);
   const geometryScale = scaleFromHash(hashState.esc);
   const geometryPrint = geometry.window
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
@@ -360,6 +383,7 @@ export function App() {
         <ChartView
           hash={hashState}
           epw={epw}
+          answer={exerciseChecked ? answerRegion(exercise) : null}
           drawing={drawing}
           onDrawingAdd={(v) =>
             drawing && setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
@@ -402,6 +426,20 @@ export function App() {
       <main>
         <div className="workspace">
           <div className="steps">
+            {tutorialStep && (
+              <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
+            )}
+            {exercise && (
+              <ExerciseCard
+                id={exercise}
+                site={siteFromHash(EXERCISES[exercise].state).site}
+                orientation={protractor.orientation}
+                drawn={protractor.drawn.total}
+                checked={exerciseChecked}
+                onChange={setHashState}
+                onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
+              />
+            )}
             {example && (
               <ExampleCard
                 id={example}
@@ -489,7 +527,12 @@ export function App() {
               onOpenChange={setEffectOpen}
             />
           </div>
-          <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
+          <section
+            className={sectionClass}
+            style={printStyle}
+            aria-labelledby="chart-heading"
+            data-step="carta"
+          >
             <h2 id="chart-heading" className="visually-hidden">
               {t('tabs.label')}
             </h2>

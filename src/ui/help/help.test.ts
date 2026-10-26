@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { EXERCISE_IDS } from '../didactic/exercises';
+import { TUTORIAL_STEPS } from '../didactic/tutorial';
 import { geometryFromHash } from '../state/geometryHash';
 import { parseHash } from '../state/hashState';
 import { protractorFromHash } from '../state/protractorHash';
@@ -24,6 +26,13 @@ const LOCALES: [string, HelpContent][] = [
 /** Todas as frases de um conteúdo, para as verificações de texto. */
 function texts(c: HelpContent): string[] {
   return [
+    c.tutorial.title,
+    c.tutorial.intro,
+    ...c.tutorial.steps.flatMap((i) => [i.title, i.text]),
+    c.exercises.intro,
+    c.exercises.metric,
+    ...c.exercises.howTo,
+    ...EXERCISE_IDS.flatMap((id) => [c.exercises.items[id].title, c.exercises.items[id].statement]),
     c.guide.intro,
     ...[...c.guide.steps, ...c.guide.advanced, ...c.guide.tabs].flatMap((i) => [i.title, i.text]),
     ...c.guide.tips,
@@ -51,7 +60,16 @@ function quantities(c: HelpContent, id: (typeof EXAMPLE_IDS)[number]): string[] 
 
 describe('ajuda: mesma estrutura nos três idiomas', () => {
   for (const [locale, c] of LOCALES) {
-    it(`${locale}: guia, exemplos, glossário, perguntas e hipóteses com as mesmas partes`, () => {
+    it(`${locale}: tutorial, exercícios, guia, exemplos, glossário, perguntas e hipóteses com as mesmas partes`, () => {
+      expect(c.tutorial.steps).toHaveLength(TUTORIAL_STEPS.length);
+      expect(c.exercises.howTo).toHaveLength(helpPtBR.exercises.howTo.length);
+      for (const id of EXERCISE_IDS) {
+        // Os ângulos do enunciado são os mesmos nos três idiomas.
+        const angles = (text: string) => text.match(/\d+°/g);
+        expect(angles(c.exercises.items[id].statement), id).toEqual(
+          angles(helpPtBR.exercises.items[id].statement),
+        );
+      }
       expect(c.guide.steps).toHaveLength(helpPtBR.guide.steps.length);
       expect(c.guide.advanced).toHaveLength(helpPtBR.guide.advanced.length);
       expect(c.guide.tabs).toHaveLength(helpPtBR.guide.tabs.length);
@@ -74,6 +92,10 @@ describe('ajuda: mesma estrutura nos três idiomas', () => {
       }
     });
   }
+
+  it('o tutorial em português tem uma etapa para cada etapa do código', () => {
+    expect(helpPtBR.tutorial.steps).toHaveLength(TUTORIAL_STEPS.length);
+  });
 
   it('o glossário define α, β e γ nos três idiomas, com as letras gregas', () => {
     for (const c of [helpPtBR, helpEs, helpEn]) {

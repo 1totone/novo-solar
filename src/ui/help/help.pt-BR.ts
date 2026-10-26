@@ -4,6 +4,78 @@ import type { HelpContent } from './content';
 // são conferidos pelo núcleo em tests/referencia/ajudaExemplos.test.ts; os termos seguem o glossário
 // técnico (docs/i18n/glossario-tecnico.md).
 export const helpPtBR: HelpContent = {
+  tutorial: {
+    title: 'Tutorial guiado',
+    intro:
+      'Oito etapas curtas pelo caminho básico, com o caso de Brasília do tutorial da UFU. Abre numa nova aba; cada etapa realça o painel em que você vai mexer.',
+    steps: [
+      {
+        title: 'Bem-vindo ao SOL-AR',
+        text: 'Você vai desenhar a máscara de um brise para uma janela em Brasília: escolher o local, orientar a fachada, digitar os ângulos e ler os dados sobre a carta. Use "Próxima" para avançar; "Fazer por mim" faz a ação da etapa.',
+      },
+      {
+        title: 'Local',
+        text: 'No passo 1, escolha Brasília na lista de cidades. A carta passa a ser a de Brasília, a 15,9° de latitude Sul.',
+      },
+      {
+        title: 'A carta solar',
+        text: 'O centro da carta é o zênite e o círculo externo, o horizonte. As curvas alaranjadas são as trajetórias do sol, com o mês no poente, e as linhas azuis, as horas solares. Ache a trajetória de junho e a linha das 9 h.',
+      },
+      {
+        title: 'Fachada',
+        text: 'No passo 2, digite 30: a fachada olha para 30°, entre o Norte e o Nordeste. O transferidor gira com ela, e a linha preta da fachada separa o céu que a janela vê do céu atrás dela.',
+      },
+      {
+        title: 'Ângulo α',
+        text: 'No passo 3, digite α = 55°, na referência interna. A região vermelha é a sombra total: com o sol ali, o brise horizontal sombreia a janela inteira.',
+      },
+      {
+        title: 'Limites laterais γ',
+        text: 'Um brise de comprimento finito tem limites dos lados. Digite γ direita = 50° e γ esquerda = 60°: a região vermelha fica limitada à direita e à esquerda de quem está dentro.',
+      },
+      {
+        title: 'Dados sobre a carta',
+        text: 'No passo 1, abra os dados históricos; no passo 4, escolha a temperatura. As células vermelhas são as horas mais quentes; as que ficam sob a hachura vermelha da máscara estão protegidas.',
+      },
+      {
+        title: 'Imprimir e continuar',
+        text: 'No passo 5, imprima a carta em escala (6 cm de raio, como no SOL-AR 6.2) ou salve o projeto. Para continuar, o exemplo resolvido 1 da ajuda confere se estes ângulos bastam, e os exercícios treinam o desenho da máscara.',
+      },
+    ],
+  },
+  exercises: {
+    intro:
+      'Desenhe à mão a máscara de sombra total de uma proteção dada pelos ângulos e compare com a calculada. Cada exercício abre numa nova aba, sem a resposta na carta.',
+    howTo: [
+      'Leia o enunciado no cartão, no alto dos passos.',
+      'Clique em "Começar a desenhar" e marque na carta os vértices da região de sombra total, seguindo as curvas do transferidor; conclua o polígono (pode desenhar mais de um).',
+      'Clique em "Conferir": a máscara calculada aparece hachurada sobre o seu desenho, com a coincidência entre as duas.',
+    ],
+    metric:
+      'A coincidência é a interseção dividida pela união das duas regiões, medida em área do céu diante da fachada (ângulo sólido), e não na área da carta, que aumenta perto do horizonte. Também aparece a coincidência nas horas de sol do ano, que pesa cada parte do céu pela frequência com que o sol passa por ela. Com 90% ou mais, a máscara coincide; de 75% a 90%, quase.',
+    items: {
+      brise: {
+        title: '1. Brise horizontal infinito',
+        statement:
+          'Fachada Norte em Florianópolis, referência interna. Desenhe a sombra total de um brise horizontal infinito com α = 45°.',
+      },
+      'brise-gama': {
+        title: '2. Brise com limites laterais',
+        statement:
+          'Fachada Norte em Florianópolis, referência interna. Desenhe a sombra total de um brise com α = 40°, γ direita = 40° e γ esquerda = 40°.',
+      },
+      aletas: {
+        title: '3. Aletas dos dois lados',
+        statement:
+          'Fachada Oeste em Florianópolis, referência interna. Desenhe a sombra total de duas aletas infinitas, com β direita = 30° e β esquerda = 30°.',
+      },
+      grelha: {
+        title: '4. Grelha',
+        statement:
+          'Fachada a 30° em Brasília, referência interna. Desenhe a sombra total de uma grelha: brise com α = 50° encostado em duas aletas com β direita = 30° e β esquerda = 30°.',
+      },
+    },
+  },
   guide: {
     intro:
       'O SOL-AR desenha a carta solar de um lugar e, sobre ela, o transferidor de ângulos e a máscara de sombra de uma proteção. O caminho básico tem cinco passos; os avançados ficam recolhidos abaixo deles. Tudo o que você escolhe fica no endereço da página: copie o link para guardar ou compartilhar.',

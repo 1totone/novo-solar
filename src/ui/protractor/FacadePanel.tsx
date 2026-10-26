@@ -23,7 +23,7 @@ export function FacadePanel({
   const compass = points[Math.round(o / 22.5) % 16]!;
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`}>
+    <section className="step-panel" aria-labelledby={`${id}-h`} data-step="2">
       <h2 id={`${id}-h`}>
         <span className="step-n">2</span>
         {t('facade.heading')}

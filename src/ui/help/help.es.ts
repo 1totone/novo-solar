@@ -4,6 +4,78 @@ import type { HelpContent } from './content';
 // glosario técnico (docs/i18n/glossario-tecnico.md). Pendiente de revisión por un hablante nativo
 // del área, como el resto de la interfaz en español.
 export const helpEs: HelpContent = {
+  tutorial: {
+    title: 'Tutorial guiado',
+    intro:
+      'Ocho etapas cortas por el camino básico, con el caso de Brasilia del tutorial de la UFU. Se abre en una pestaña nueva; cada etapa resalta el panel en que usted va a trabajar.',
+    steps: [
+      {
+        title: 'Bienvenido a SOL-AR',
+        text: 'Usted va a dibujar la máscara de una protección para una ventana en Brasilia: elegir el lugar, orientar la fachada, escribir los ángulos y leer los datos sobre la carta. Use "Siguiente" para avanzar; "Hacerlo por mí" hace la acción de la etapa.',
+      },
+      {
+        title: 'Ubicación',
+        text: 'En el paso 1, elija Brasilia en la lista de ciudades. La carta pasa a ser la de Brasilia, a 15,9° de latitud Sur.',
+      },
+      {
+        title: 'La carta solar',
+        text: 'El centro de la carta es el cenit y el círculo exterior, el horizonte. Las curvas anaranjadas son las trayectorias del sol, con el mes en el poniente, y las líneas azules, las horas solares. Busque la trayectoria de junio y la línea de las 9 h.',
+      },
+      {
+        title: 'Fachada',
+        text: 'En el paso 2, escriba 30: la fachada mira a 30°, entre el Norte y el Noreste. El transportador gira con ella, y la línea negra de la fachada separa el cielo que la ventana ve del cielo detrás de ella.',
+      },
+      {
+        title: 'Ángulo α',
+        text: 'En el paso 3, escriba α = 55°, en la referencia interna. La región roja es la sombra total: con el sol allí, la protección horizontal sombrea la ventana entera.',
+      },
+      {
+        title: 'Límites laterales γ',
+        text: 'Una protección de longitud finita tiene límites a los lados. Escriba γ derecha = 50° y γ izquierda = 60°: la región roja queda limitada a la derecha y a la izquierda de quien está dentro.',
+      },
+      {
+        title: 'Datos sobre la carta',
+        text: 'En el paso 1, abra los datos históricos; en el paso 4, elija la temperatura. Las celdas rojas son las horas más cálidas; las que quedan bajo el rayado rojo de la máscara están protegidas.',
+      },
+      {
+        title: 'Imprimir y seguir',
+        text: 'En el paso 5, imprima la carta a escala (6 cm de radio, como en el SOL-AR 6.2) o guarde el proyecto. Para seguir, el ejemplo resuelto 1 de la ayuda verifica si estos ángulos bastan, y los ejercicios entrenan el dibujo de la máscara.',
+      },
+    ],
+  },
+  exercises: {
+    intro:
+      'Dibuje a mano la máscara de sombra total de una protección dada por los ángulos y compárela con la calculada. Cada ejercicio se abre en una pestaña nueva, sin la respuesta en la carta.',
+    howTo: [
+      'Lea el enunciado en la tarjeta, arriba de los pasos.',
+      'Haga clic en "Empezar a dibujar" y marque en la carta los vértices de la región de sombra total, siguiendo las curvas del transportador; cierre el polígono (puede dibujar más de uno).',
+      'Haga clic en "Verificar": la máscara calculada aparece rayada sobre su dibujo, con la coincidencia entre las dos.',
+    ],
+    metric:
+      'La coincidencia es la intersección dividida por la unión de las dos regiones, medida en área del cielo delante de la fachada (ángulo sólido), y no en el área de la carta, que crece cerca del horizonte. También aparece la coincidencia en las horas de sol del año, que pesa cada parte del cielo por la frecuencia con que el sol pasa por ella. Con 90% o más, la máscara coincide; de 75% a 90%, casi.',
+    items: {
+      brise: {
+        title: '1. Protección horizontal infinita',
+        statement:
+          'Fachada Norte en Florianópolis, referencia interna. Dibuje la sombra total de una protección horizontal infinita con α = 45°.',
+      },
+      'brise-gama': {
+        title: '2. Protección con límites laterales',
+        statement:
+          'Fachada Norte en Florianópolis, referencia interna. Dibuje la sombra total de una protección con α = 40°, γ derecha = 40° y γ izquierda = 40°.',
+      },
+      aletas: {
+        title: '3. Aletas a los dos lados',
+        statement:
+          'Fachada Oeste en Florianópolis, referencia interna. Dibuje la sombra total de dos aletas infinitas, con β derecha = 30° y β izquierda = 30°.',
+      },
+      grelha: {
+        title: '4. Celosía',
+        statement:
+          'Fachada a 30° en Brasilia, referencia interna. Dibuje la sombra total de una celosía: protección horizontal con α = 50° apoyada en dos aletas con β derecha = 30° y β izquierda = 30°.',
+      },
+    },
+  },
   guide: {
     intro:
       'SOL-AR dibuja la carta solar de un lugar y, sobre ella, el transportador de ángulos y la máscara de sombra de una protección. El camino básico tiene cinco pasos; los avanzados quedan plegados debajo de ellos. Todo lo que usted elige queda en la dirección de la página: copie el enlace para guardar o compartir.',

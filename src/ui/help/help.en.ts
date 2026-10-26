@@ -4,6 +4,78 @@ import type { HelpContent } from './content';
 // the technical glossary (docs/i18n/glossario-tecnico.md). To be reviewed by a native speaker in the
 // field, like the rest of the English interface.
 export const helpEn: HelpContent = {
+  tutorial: {
+    title: 'Guided tutorial',
+    intro:
+      'Eight short stages through the basic path, with the Brasília case of the UFU tutorial. It opens in a new tab; each stage highlights the panel you will work on.',
+    steps: [
+      {
+        title: 'Welcome to SOL-AR',
+        text: 'You will draw the mask of an overhang for a window in Brasília: choose the location, orient the facade, type the angles and read the data on the chart. Use "Next" to move on; "Do it for me" carries out the action of the stage.',
+      },
+      {
+        title: 'Location',
+        text: 'In step 1, choose Brasília in the list of cities. The chart becomes that of Brasília, at latitude 15.9° South.',
+      },
+      {
+        title: 'The sun-path diagram',
+        text: 'The centre of the chart is the zenith and the outer circle, the horizon. The orange curves are the sun paths, with the month at sunset, and the blue lines are the solar hours. Find the June path and the 9:00 line.',
+      },
+      {
+        title: 'Facade',
+        text: 'In step 2, type 30: the facade faces 30°, between North and North-East. The protractor turns with it, and the black facade line separates the sky the window sees from the sky behind it.',
+      },
+      {
+        title: 'Angle α',
+        text: 'In step 3, type α = 55°, in the internal reference. The red region is full shade: with the sun there, the overhang shades the whole window.',
+      },
+      {
+        title: 'Side limits γ',
+        text: 'An overhang of finite length has limits on the sides. Type γ right = 50° and γ left = 60°: the red region is limited to the right and to the left as seen from inside.',
+      },
+      {
+        title: 'Data on the chart',
+        text: 'In step 1, open the historical data; in step 4, choose the temperature. The red cells are the hottest hours; those under the red hatching of the mask are protected.',
+      },
+      {
+        title: 'Print and continue',
+        text: 'In step 5, print the chart to scale (6 cm radius, as in SOL-AR 6.2) or save the project. To continue, worked example 1 in the help checks whether these angles are enough, and the exercises train mask drawing.',
+      },
+    ],
+  },
+  exercises: {
+    intro:
+      'Draw by hand the full-shade mask of a device given by its angles and compare it with the computed one. Each exercise opens in a new tab, without the answer on the chart.',
+    howTo: [
+      'Read the statement on the card, above the steps.',
+      'Click "Start drawing" and mark on the chart the vertices of the full-shade region, following the protractor curves; close the polygon (you can draw more than one).',
+      'Click "Check": the computed mask appears hatched over your drawing, with the agreement between the two.',
+    ],
+    metric:
+      'The agreement is the intersection divided by the union of the two regions, measured in sky area in front of the facade (solid angle), not in chart area, which grows near the horizon. The agreement over the sun hours of the year is also shown; it weighs each part of the sky by how often the sun passes there. With 90% or more, the mask matches; from 75% to 90%, almost.',
+    items: {
+      brise: {
+        title: '1. Infinite overhang',
+        statement:
+          'North facade in Florianópolis, internal reference. Draw the full shade of an infinite overhang with α = 45°.',
+      },
+      'brise-gama': {
+        title: '2. Overhang with side limits',
+        statement:
+          'North facade in Florianópolis, internal reference. Draw the full shade of an overhang with α = 40°, γ right = 40° and γ left = 40°.',
+      },
+      aletas: {
+        title: '3. Fins on both sides',
+        statement:
+          'West facade in Florianópolis, internal reference. Draw the full shade of two infinite fins, with β right = 30° and β left = 30°.',
+      },
+      grelha: {
+        title: '4. Egg-crate',
+        statement:
+          'Facade facing 30° in Brasília, internal reference. Draw the full shade of an egg-crate: an overhang with α = 50° touching two fins with β right = 30° and β left = 30°.',
+      },
+    },
+  },
   guide: {
     intro:
       'SOL-AR draws the sun-path diagram of a place and, over it, the shading protractor and the shading mask of a device. The basic path has five steps; the advanced ones are folded below them. Everything you choose is kept in the page address: copy the link to save or share it.',
