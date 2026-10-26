@@ -42,6 +42,8 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+      - name: Orçamento do JavaScript inicial (decisão 0039)
+        run: npm run orcamento
 
   e2e:
     name: Ponta a ponta (Playwright)

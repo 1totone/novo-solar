@@ -346,6 +346,15 @@ export const en: Catalog = {
   // Phase 3.
   'advanced.group': 'Advanced: shading device by dimensions and effect over the year',
   'advanced.badge': 'advanced',
+  'advanced.loading': 'Loading the step…',
+  'stepNav.label': 'Go to a step',
+  'stepNav.title': 'Steps',
+  'stepNav.go': 'Go to step {n}, {name}',
+  'side.pointer': '{title}: on the right, below the diagram.',
+  'side.go': 'View',
+  'side.heading': 'From step {step}, {name}',
+  'side.annual': 'Shade over the year',
+  'side.effect': 'Hour classification and indicators',
   'geometry.heading': 'Shading device by dimensions',
   'geometry.summary':
     'Window, overhang, fins and louvers in metres; section, view and shade on the chart.',

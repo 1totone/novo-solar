@@ -1,10 +1,11 @@
-import { useId, useMemo, type ReactNode } from 'react';
+import { useId, useMemo, useRef, type ReactNode } from 'react';
 import { makeProjection, projectDirection, type Projection } from '../../core/chart/projection';
 import type { Site } from '../../core/chart/sunChart';
 import { useI18n } from '../i18n/useI18n';
 import type { HourLinesMode } from '../state/chartOptionsHash';
 import { chartGeometry, chartSky, type SvgPoint } from './chartGeometry';
 import { ChartProjectionContext, chartFrame, pathD } from './projectionContext';
+import { useLabelLayout } from './useLabelLayout';
 import './SunChart.css';
 
 const AZIMUTH_LABELS = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
@@ -166,10 +167,14 @@ export function SunChart({
   const stereo = projection.kind === 'stereographic';
   const cylindrical = projection.kind === 'cylindrical';
   const showSolar = hourLines !== 'legal';
+  // Rótulos móveis das camadas (curvas, período) longe dos outros textos da carta.
+  const svgRef = useRef<SVGSVGElement>(null);
+  useLabelLayout(svgRef);
 
   return (
     <ChartProjectionContext.Provider value={projection}>
       <svg
+        ref={svgRef}
         className={`sun-chart ${projection.kind}`}
         viewBox={frame.viewBox.join(' ')}
         role="img"

@@ -84,6 +84,7 @@ O Anthony quer que você conduza o projeto sem pedir permissão a cada ação.
 | `npm run typecheck` | TypeScript (strict) em todos os projetos. |
 | `npm test` | Testes de unidade (Vitest), inclusive os de física. |
 | `npm run build` | Build de produção em `dist/`, com caminhos relativos. |
+| `npm run orcamento` | Soma o JavaScript inicial do `dist/` (com e sem gzip) e falha acima do orçamento (decisão 0039). Rode `npm run build` antes. |
 | `npm run test:e2e` | Playwright no build de produção (`dist/`), servido numa subpasta (`/qualquer/pasta/`), em computador e celular. Rode `npm run build` antes. |
 
 Notas:

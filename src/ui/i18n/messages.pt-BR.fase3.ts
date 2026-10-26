@@ -3,6 +3,7 @@
 export const fase3PtBR = {
   'advanced.group': 'Avançado: proteção pelas dimensões e efeito no ano',
   'advanced.badge': 'avançado',
+  'advanced.loading': 'Carregando o passo…',
   'geometry.heading': 'Proteção pelas dimensões',
   'geometry.summary': 'Janela, brise, aletas e lâminas em metros; corte, vista e sombra na carta.',
   'geometry.summaryDefined': 'Janela de {width} × {height} m · {pieces}',
@@ -337,4 +338,12 @@ export const fase3PtBR = {
   'view3d.note':
     'A sombra no vidro é a do cálculo (a mesma das curvas, do mapa e dos indicadores), desenhada em azul-escuro; a luz nas peças e na parede é só ilustrativa.',
   'view3d.label': 'Vista 3D da janela e da proteção. {status}',
+  'stepNav.label': 'Ir a um passo',
+  'stepNav.title': 'Passos',
+  'stepNav.go': 'Ir ao passo {n}, {name}',
+  'side.pointer': '{title}: ao lado, abaixo da carta.',
+  'side.go': 'Ver',
+  'side.heading': 'Do passo {step}, {name}',
+  'side.annual': 'Sombra ao longo do ano',
+  'side.effect': 'Classificação das horas e indicadores',
 } as const;

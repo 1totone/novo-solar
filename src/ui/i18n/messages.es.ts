@@ -351,6 +351,15 @@ export const es: Catalog = {
   // Fase 3.
   'advanced.group': 'Avanzado: protección por las dimensiones y efecto en el año',
   'advanced.badge': 'avanzado',
+  'advanced.loading': 'Cargando el paso…',
+  'stepNav.label': 'Ir a un paso',
+  'stepNav.title': 'Pasos',
+  'stepNav.go': 'Ir al paso {n}, {name}',
+  'side.pointer': '{title}: al lado, debajo de la carta.',
+  'side.go': 'Ver',
+  'side.heading': 'Del paso {step}, {name}',
+  'side.annual': 'Sombra a lo largo del año',
+  'side.effect': 'Clasificación de las horas e indicadores',
   'geometry.heading': 'Protección por las dimensiones',
   'geometry.summary':
     'Ventana, protección horizontal, aletas y lamas en metros; corte, vista y sombra en la carta.',

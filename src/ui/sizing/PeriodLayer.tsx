@@ -3,6 +3,7 @@ import { projectDirection, projectRing } from '../../core/chart/projection';
 import type { RequiredAngles, SkyPosition } from '../../core/shading/inverse';
 import { ChartClip } from '../chart/ChartClip';
 import { pathD, useChartProjection } from '../chart/projectionContext';
+import { aroundPoint, formatCandidates } from '../chart/labelLayout';
 import { useI18n } from '../i18n/useI18n';
 
 /** Rótulo de cada ângulo na carta: símbolo e lado (d e e em português). */
@@ -78,7 +79,12 @@ export function PeriodMarks({
       {[...marks.values()].map((m) => (
         <g key={`${m.x},${m.y}`} className="period-mark" data-testid="period-mark">
           <circle cx={m.x} cy={m.y} r={0.018} />
-          <text x={m.x + 0.03} y={m.y} className="period-label">
+          <text
+            x={m.x + 0.03}
+            y={m.y}
+            className="period-label"
+            data-candidates={formatCandidates(aroundPoint(m.x, m.y, 0.03, 0.045))}
+          >
             {m.names.join(', ')}
           </text>
         </g>
