@@ -517,6 +517,15 @@ details.more summary {
   fill: var(--mask-partial-hatch);
 }
 
+/* Resposta do exercício (F4.5): hachura escura a 135° sobre o desenho do aluno. */
+.sun-chart .hatch-answer {
+  fill: var(--color-text);
+}
+
+.swatch.answer {
+  background: repeating-linear-gradient(135deg, var(--color-text) 0 2px, transparent 2px 6px);
+}
+
 .swatch.no-data {
   background: repeating-linear-gradient(45deg, #8c959f 0 2px, transparent 2px 5px);
 }
@@ -1713,5 +1722,34 @@ a.btn {
 @media print {
   dialog.help {
     display: none !important;
+  }
+}
+
+/* Modo didático (F4.5): realce do painel da etapa do tutorial e resultado do exercício. */
+:root[data-tutorial='1'] [data-step='1'],
+:root[data-tutorial='2'] [data-step='2'],
+:root[data-tutorial='3'] [data-step='3'],
+:root[data-tutorial='4'] [data-step='4'],
+:root[data-tutorial='5'] [data-step='5'],
+:root[data-tutorial='carta'] [data-step='carta'] {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+
+.tutorial-done {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #1a7f37;
+}
+
+.exercise-score {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media print {
+  :root[data-tutorial] [data-step] {
+    outline: none;
   }
 }

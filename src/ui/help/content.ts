@@ -1,3 +1,4 @@
+import type { ExerciseId } from '../didactic/exercises';
 import { buildHash, type HashState } from '../state/hashState';
 
 /**
@@ -8,7 +9,14 @@ import { buildHash, type HashState } from '../state/hashState';
  */
 
 /** Partes da ajuda, no '#' da URL como ajuda=guia, ajuda=exemplos etc. (não se traduzem). */
-export const HELP_SECTIONS = ['guia', 'exemplos', 'glossario', 'perguntas', 'hipoteses'] as const;
+export const HELP_SECTIONS = [
+  'guia',
+  'exemplos',
+  'exercicios',
+  'glossario',
+  'perguntas',
+  'hipoteses',
+] as const;
 export type HelpSection = (typeof HELP_SECTIONS)[number];
 
 export function helpSectionFromHash(state: HashState): HelpSection | null {
@@ -101,6 +109,15 @@ export interface HelpQuestion {
 }
 
 export interface HelpContent {
+  /** Tutorial guiado (F4.5): uma etapa para cada uma de TUTORIAL_STEPS, na mesma ordem. */
+  tutorial: { title: string; intro: string; steps: HelpItem[] };
+  /** Exercícios de máscara (F4.5). */
+  exercises: {
+    intro: string;
+    howTo: string[];
+    metric: string;
+    items: Record<ExerciseId, { title: string; statement: string }>;
+  };
   guide: {
     intro: string;
     steps: HelpItem[];

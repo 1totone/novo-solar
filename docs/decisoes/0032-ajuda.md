@@ -15,6 +15,8 @@ O ROADMAP pede, no F4.8, guia rápido, glossário, perguntas frequentes e 3 exem
 4. **Cada número dos exemplos é conferido pelo núcleo**, a partir do próprio link do exemplo (`tests/referencia/ajudaExemplos.test.ts`), e o brise afastado também contra o traçado de raios independente do F2.3. Os textos em espanhol e inglês têm de trazer os mesmos ângulos, percentuais e medidas do português (teste).
 5. As hipóteses de cada parte (carta, máscara pelos ângulos, proteção pelas dimensões, dados, classificação e indicadores, vento) ficam reunidas na ajuda, com o mesmo conteúdo das frases curtas de cada passo.
 
+**Atualização (F4.5, decisão 0033):** a ajuda ganhou a parte dos exercícios (`ajuda=exercicios`) e o botão do tutorial guiado no guia rápido; com seis partes, os nomes das abas ficaram curtos (Guia rápido, Exemplos, Exercícios, Glossário, Perguntas, Hipóteses).
+
 ## Alternativas consideradas
 
 - **Manual em PDF ou páginas de documentação fora da aplicação:** mais fácil de imprimir, mas não abre os exemplos no estado certo, não acompanha o idioma escolhido e envelhece separado do código.

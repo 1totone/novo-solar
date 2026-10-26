@@ -54,7 +54,12 @@ export function OutputsPanel({
   const run = async (kind: 'svg' | 'png' | 'csv' | 'copy') => setStatus(await onExport(kind));
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`} data-testid="outputs-panel">
+    <section
+      className="step-panel"
+      aria-labelledby={`${id}-h`}
+      data-testid="outputs-panel"
+      data-step="5"
+    >
       <h2 id={`${id}-h`}>
         <span className="step-n">5</span>
         {t('outputs.heading')}

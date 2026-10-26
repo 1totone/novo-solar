@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
-// F4.8: ajuda (decisão 0032). Diálogo com cinco partes, aberto pelo cabeçalho ou pelo link
+// F4.8: ajuda (decisão 0032). Diálogo com seis partes (a dos exercícios entrou no F4.5), aberto pelo cabeçalho ou pelo link
 // (ajuda=<parte>); exemplos resolvidos que abrem numa nova aba com o cartão do passo a passo.
 
 async function axe(page: Page) {
@@ -56,7 +56,7 @@ test.describe('ajuda (F4.8)', () => {
   }) => {
     await page.goto('./#local=florianopolis&ajuda=perguntas');
     const dialog = page.getByRole('dialog', { name: 'Ajuda' });
-    await expect(dialog.getByRole('tab', { name: 'Perguntas frequentes' })).toHaveAttribute(
+    await expect(dialog.getByRole('tab', { name: 'Perguntas' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
@@ -150,22 +150,23 @@ test.describe('ajuda (F4.8)', () => {
         'aria-selected',
         'true',
       );
-      await en.getByRole('tab', { name: 'Worked examples' }).click();
+      await en.getByRole('tab', { name: 'Examples' }).click();
       await expect(en.getByRole('tabpanel')).toContainText('55° or 57.5°');
     });
   });
 
-  test('axe nas cinco partes; no celular, a ajuda ocupa a tela; não sai na impressão', async ({
+  test('axe nas seis partes; no celular, a ajuda ocupa a tela; não sai na impressão', async ({
     page,
   }) => {
     await page.goto('./#local=florianopolis&ajuda=guia');
     const dialog = page.getByRole('dialog', { name: 'Ajuda' });
     for (const name of [
       'Guia rápido',
-      'Exemplos resolvidos',
+      'Exemplos',
+      'Exercícios',
       'Glossário',
-      'Perguntas frequentes',
-      'Hipóteses e limites',
+      'Perguntas',
+      'Hipóteses',
     ]) {
       await dialog.getByRole('tab', { name }).click();
       await axe(page);

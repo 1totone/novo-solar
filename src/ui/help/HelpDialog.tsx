@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { onRovingKeyDown } from '../a11y/roving';
+import { EXERCISE_IDS, exerciseHref } from '../didactic/exercises';
+import { TUTORIAL_HREF } from '../didactic/tutorial';
 import { useI18n } from '../i18n/useI18n';
 import {
   EXAMPLE_IDS,
@@ -25,11 +27,24 @@ function ItemList({ items }: { items: HelpItem[] }) {
   );
 }
 
-function Guide({ content }: { content: HelpContent['guide'] }) {
+function Guide({
+  content,
+  tutorial,
+}: {
+  content: HelpContent['guide'];
+  tutorial: HelpContent['tutorial'];
+}) {
   const { t } = useI18n();
   return (
     <>
       <p>{content.intro}</p>
+      <h3>{tutorial.title}</h3>
+      <p>{tutorial.intro}</p>
+      <p>
+        <a className="btn primary" href={TUTORIAL_HREF} target="_blank" rel="noopener">
+          {t('tutorial.start')}
+        </a>
+      </p>
       <h3>{t('help.guide.steps')}</h3>
       <ItemList items={content.steps} />
       <h3>{t('help.guide.advanced')}</h3>
@@ -97,6 +112,42 @@ function Examples({
   );
 }
 
+function Exercises({ content }: { content: HelpContent['exercises'] }) {
+  const { t } = useI18n();
+  return (
+    <>
+      <p>{content.intro}</p>
+      <h3>{t('exercise.howTo')}</h3>
+      <ol>
+        {content.howTo.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+      {EXERCISE_IDS.map((id) => {
+        const e = content.items[id];
+        return (
+          <article
+            key={id}
+            className="help-example"
+            aria-labelledby={`help-exercise-${id}`}
+            data-testid={`help-exercise-${id}`}
+          >
+            <h3 id={`help-exercise-${id}`}>{e.title}</h3>
+            <p>{e.statement}</p>
+            <p>
+              <a className="btn" href={exerciseHref(id)} target="_blank" rel="noopener">
+                {t('exercise.open')}
+              </a>
+            </p>
+          </article>
+        );
+      })}
+      <h3>{t('exercise.metric')}</h3>
+      <p>{content.metric}</p>
+    </>
+  );
+}
+
 function Glossary({ content }: { content: HelpContent['glossary'] }) {
   return (
     <>
@@ -149,7 +200,7 @@ function Hypotheses({ content }: { content: HelpContent['hypotheses'] }) {
 }
 
 /**
- * Ajuda (F4.8, decisão 0032): diálogo modal com cinco partes em abas, aberto pelo botão do cabeçalho
+ * Ajuda (F4.8, decisão 0032): diálogo modal com seis partes em abas, aberto pelo botão do cabeçalho
  * ou por um link com ajuda=<parte>. Fecha com Esc, com o botão ou com um clique fora dele.
  */
 export function HelpDialog({
@@ -227,8 +278,9 @@ export function HelpDialog({
           aria-labelledby={`help-tab-${section}`}
           tabIndex={0}
         >
-          {section === 'guia' && <Guide content={content.guide} />}
+          {section === 'guia' && <Guide content={content.guide} tutorial={content.tutorial} />}
           {section === 'exemplos' && <Examples content={content.examples} current={example} />}
+          {section === 'exercicios' && <Exercises content={content.exercises} />}
           {section === 'glossario' && <Glossary content={content.glossary} />}
           {section === 'perguntas' && <Faq content={content.faq} />}
           {section === 'hipoteses' && <Hypotheses content={content.hypotheses} />}

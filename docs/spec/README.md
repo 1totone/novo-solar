@@ -15,6 +15,7 @@
 9. [Indicadores de sombreamento](09-indicadores.md) (proposta): radiação direta incidente na janela por hora, bloqueada nas horas quentes e admitida nas horas frias; comparação entre alternativas; diferenças em relação ao EnergyPlus.
 10. [Dimensionamento inverso](10-dimensionamento-inverso.md) (proposta): do período a sombrear para os ângulos α, β e γ e as dimensões de brise e aletas; subdivisão em lâminas.
 11. [Arquivo de projeto e link](11-arquivo-de-projeto.md) (proposta, decisão 0028): o que o link e o projeto guardam, formato JSON com versão de esquema, abrir, salvar e compatibilidade com os links.
+12. [Modo didático](12-modo-didatico.md) (proposta, decisão 0033): tutorial guiado, exercícios de máscara e a métrica da comparação (índice de Jaccard em ângulo sólido e nas horas de sol).
 
 ## Resumo do que está fixado
 

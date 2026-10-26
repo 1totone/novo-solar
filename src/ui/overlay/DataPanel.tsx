@@ -107,7 +107,12 @@ export function DataPanel({
   const tz = `${timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(timeZone), Number.isInteger(timeZone) ? 0 : 1)}`;
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`} data-testid="data-panel">
+    <section
+      className="step-panel"
+      aria-labelledby={`${id}-h`}
+      data-testid="data-panel"
+      data-step="4"
+    >
       <h2 id={`${id}-h`}>
         <span className="step-n">4</span>
         {t('data.heading')}

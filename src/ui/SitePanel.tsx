@@ -157,7 +157,7 @@ export function SitePanel({ selected, loadedFile, historical, onSelect }: Props)
   }
 
   return (
-    <section className="site-panel step-panel" aria-labelledby="site-heading">
+    <section className="site-panel step-panel" aria-labelledby="site-heading" data-step="1">
       <h2 id="site-heading">
         <span className="step-n">1</span>
         {t('site.heading')}

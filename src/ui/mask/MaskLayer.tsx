@@ -11,10 +11,16 @@ import { BIG, HATCH, MaskBuilder, shortHash } from './maskBuilder';
 export function MaskLayer({
   regions,
   hatched = false,
+  answer = false,
 }: {
   regions: MaskRegions;
   /** Com dados sobre a carta, a máscara vira hachura (45° total, 135° parcial) e deixa ver as cores. */
   hatched?: boolean;
+  /**
+   * Resposta do exercício (F4.5): só a região total, em hachura escura a 135°, por cima do desenho
+   * do aluno (que é a máscara vermelha).
+   */
+  answer?: boolean;
 }) {
   // Os ids mudam com o conteúdo: o Chrome não redesenha direito uma máscara aninhada cujo
   // conteúdo muda mantendo o mesmo id (fica uma mistura do desenho antigo com o novo).
@@ -23,17 +29,20 @@ export function MaskLayer({
   const signature = shortHash(
     JSON.stringify([regions.total, regions.partial, projection.kind, projection.center]),
   );
-  const prefix = `mask${useId().replace(/[^a-zA-Z0-9_-]/g, '')}${signature}`;
+  const prefix = `mask${answer ? 'a' : ''}${useId().replace(/[^a-zA-Z0-9_-]/g, '')}${signature}`;
   const builder = new MaskBuilder(prefix, projection);
   const layers: ReactNode[] = [];
   const hatches: ReactNode[] = [];
-  for (const [kind, region, angle] of [
-    ['total', regions.total, 45],
-    ['partial', regions.partial, 135],
-  ] as const) {
+  const sets = answer
+    ? ([['answer', regions.total, 135]] as const)
+    : ([
+        ['total', regions.total, 45],
+        ['partial', regions.partial, 135],
+      ] as const);
+  for (const [kind, region, angle] of sets) {
     if (region.kind === 'empty') continue;
     const hatchId = `${prefix}-h${kind}`;
-    if (hatched) {
+    if (hatched || answer) {
       // Faixas finas como retângulos (as regras de traço da carta valem para line/circle).
       hatches.push(
         <pattern
@@ -52,8 +61,8 @@ export function MaskLayer({
       <rect
         key={kind}
         {...BIG}
-        className={`mask-${kind}${hatched ? ' hatched' : ''}`}
-        style={hatched ? { fill: `url(#${hatchId})` } : undefined}
+        className={`mask-${kind}${hatched || answer ? ' hatched' : ''}`}
+        style={hatched || answer ? { fill: `url(#${hatchId})` } : undefined}
         mask={`url(#${builder.mask(region)})`}
         data-testid={`mask-${kind}`}
       />,
@@ -64,7 +73,7 @@ export function MaskLayer({
   // vazar a hachura na borda do SVG ao gerar PDF.
   const clipId = `${prefix}-clip`;
   return (
-    <g className="mask" data-testid="mask">
+    <g className="mask" data-testid={answer ? 'mask-answer-layer' : 'mask'}>
       <defs>
         <ChartClip id={clipId} />
         {builder.defs}

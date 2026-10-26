@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { makeProjection } from '../../core/chart/projection';
 import type { EpwData } from '../../core/epw/parseEpw';
-import { maskRegions } from '../../core/mask/mask';
+import { EMPTY, maskRegions, type Region } from '../../core/mask/mask';
 import { buildScene } from '../../core/shading/geometry';
 import { pointMask } from '../../core/shading/pointMask';
 import { useI18n } from '../i18n/useI18n';
@@ -36,11 +36,14 @@ export function ChartView({
   epw,
   drawing,
   onDrawingAdd,
+  answer = null,
 }: {
   hash: HashState;
   epw: EpwData | null;
   drawing?: Drawing | null;
   onDrawingAdd?: (vertex: { altitude: number; azimuth: number }) => void;
+  /** Máscara calculada de um exercício conferido (F4.5), hachurada sobre o desenho do aluno. */
+  answer?: Region | null;
 }) {
   const { t, formatNumber } = useI18n();
   const site = siteFromHash(hash).site;
@@ -115,6 +118,9 @@ export function ChartView({
         overlay={
           <>
             <MaskLayer regions={regions} hatched={showOverlay} />
+            {answer && (
+              <MaskLayer regions={{ total: answer, partial: EMPTY, partialSet: EMPTY }} answer />
+            )}
             {(shown || hasPoint) && (
               <ShadingLayer
                 chart={shown}
@@ -187,7 +193,7 @@ export function ChartView({
           </span>
         </p>
       )}
-      {hasMask && (
+      {(hasMask || answer) && (
         <p
           className={`legend mask-legend${showOverlay ? ' hatched' : ''}`}
           role="group"
@@ -203,6 +209,12 @@ export function ChartView({
             <span className="legend-item">
               <span className="swatch partial" aria-hidden="true" />
               {t('mask.partial')}
+            </span>
+          )}
+          {answer && (
+            <span className="legend-item">
+              <span className="swatch answer" aria-hidden="true" />
+              {t('mask.answer')}
             </span>
           )}
         </p>

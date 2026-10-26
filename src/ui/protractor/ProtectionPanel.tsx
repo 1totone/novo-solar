@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useI18n } from '../i18n/useI18n';
 import type { MessageKey } from '../i18n/i18n';
 import { ANGLE_KEYS, type AngleKey, type ProtractorState } from '../state/protractorHash';
@@ -88,8 +88,13 @@ export function ProtectionPanel({
   // Abre "Mais opções" se o link já traz algum campo avançado ou desenho; depois, quem decide é
   // o usuário (apagar um campo não fecha o painel).
   const [moreOpen, setMoreOpen] = useState(
-    () => ADVANCED_KEYS.some((k) => hash[k]) || Boolean(hash.dt || hash.dp),
+    () => ADVANCED_KEYS.some((k) => hash[k]) || Boolean(hash.dt || hash.dp || hash.exercicio),
   );
+  // Um desenho começado de fora (cartão do exercício, F4.5) abre o painel com os botões dele.
+  const drawingActive = drawing !== null;
+  useEffect(() => {
+    if (drawingActive) setMoreOpen(true);
+  }, [drawingActive]);
 
   const input = (k: AngleKey | null, name: string) => {
     if (!k) return <span />;
@@ -147,7 +152,7 @@ export function ProtectionPanel({
   const partialSet = t('protection.setPartial');
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`}>
+    <section className="step-panel" aria-labelledby={`${id}-h`} data-step="3">
       <h2 id={`${id}-h`}>
         <span className="step-n">3</span>
         {t('protection.heading')}

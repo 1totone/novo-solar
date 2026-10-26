@@ -36,6 +36,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0030](0030-paleta-e-acessibilidade.md) | Paleta da carta conferida para daltonismo e contraste (só as camadas que falharam mudaram), setas do teclado nas abas e grupos de opções, nomes acessíveis dos campos de ângulo (F4.6) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0031](0031-instalavel-e-sem-internet.md) | Instalável e sem internet: manifesto relativo e service worker gerado no build, com a aplicação guardada na instalação e os dados históricos no primeiro uso (F4.6) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 | [0032](0032-ajuda.md) | Ajuda dentro da aplicação: diálogo com guia rápido, exemplos resolvidos do tutorial da UFU (abertos numa nova aba, com cartão), glossário, perguntas frequentes e hipóteses; números conferidos pelo núcleo (F4.8) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
+| [0033](0033-modo-didatico.md) | Modo didático: tutorial guiado de 8 etapas com realce e "Fazer por mim"; exercícios de máscara desenhada à mão, conferidos pelo índice de Jaccard em ângulo sólido e nas horas de sol (F4.5) | 2026-10-26 | proposta (na integração da Fase 4; a confirmar no portão 4) |
 
 ## Modelo
 
