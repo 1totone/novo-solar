@@ -894,6 +894,16 @@ fieldset.plain .check {
   font-size: 0.95rem;
 }
 
+.difference-toggle {
+  margin: 0.5rem 0 0;
+}
+
+.difference-sources {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+
 .cell-table {
   margin-top: 0.5rem;
 }
@@ -928,6 +938,8 @@ fieldset.plain .check {
   .chart-section [role='tabpanel'] > .note,
   .wind-controls,
   .wind-panel details,
+  .difference-toggle,
+  .difference-blocked,
   .language {
     display: none !important;
   }

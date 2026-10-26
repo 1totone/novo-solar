@@ -46,6 +46,8 @@ Assunto: Novo SOL-AR: termos dos arquivos climáticos do LabEEE (INMET e BrazFut
 >
 > Um achado que interessa ao LabEEE, que recomenda os TMYx: na maior parte dos arquivos TMYx 2011-2025 do Brasil, a radiação vem cerca de 30 min depois da convenção do EPW (hora que termina; descontado o efeito das nuvens, que as TRY permitem medir, entre 26 e 34 min em 12 das 14 cidades); no RS e no oeste do PR, cerca de 30 min antes; e em algumas estações, cerca de 90 min depois, entre elas seis de Minas Gerais com fuso −4 no cabeçalho. Os números por estação estão no relatório do F4.1 do repositório. Vou avisar o Crawley e a Lawrie.
 >
+> Outro achado, sobre o BrazFuture (conferi 9 arquivos, cópias do OneBuilding, porque o Zenodo estava bloqueado na rede): o campo de extraterrestre segue a convenção do EPW, mas a radiação global vem cerca de 25 a 46 min antes do sol nas rodadas com o REMO e cerca de 110 min depois nas com o RegCM (relatório do F4.2, seção 4.2). Entre 2010 e 2050 da mesma rodada o tempo é o mesmo, e a comparação dentro da rodada não sofre; a comparação com o TMYx ou com a TRY, sim. A DNI anual do BrazFuture de Florianópolis (MPI-ESM com REMO) é cerca de metade da do TMYx, com a global parecida. Vale conferir o processamento antes de recomendar esses arquivos para estudos de sombreamento.
+>
 > Aviso também que as páginas do labeee.ufsc.br estavam devolvendo erro 500 em 26/10 (os PDFs abriam).
 >
 > Abraço,

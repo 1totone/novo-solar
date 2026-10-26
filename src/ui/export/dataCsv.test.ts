@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CellStats, OverlayCell } from '../../core/overlay/overlay';
+import type { DifferenceStats } from '../../core/overlay/difference';
 import { overlayCsv, windCsv } from './dataCsv';
 
 describe('CSV dos dados mostrados', () => {
@@ -24,6 +25,29 @@ describe('CSV dos dados mostrados', () => {
     );
     expect(lines[3]).toBe('3,01/02,15/02,6,5,6,0,,,,,'); // célula sem dados
     expect(lines[4]).toBe('3,01/02,15/02,14,13,14,15,612.4,120,980,,3');
+  });
+
+  it('diferença entre climas: médias de A e de B, B − A e a faixa da diferença', () => {
+    const cells: OverlayCell[] = [
+      { period: 3, hour: 14, start: 13, end: 14, polygon: [] },
+      { period: 3, hour: 6, start: 5, end: 6, polygon: [] },
+    ];
+    const stats = new Map<string, DifferenceStats>([
+      ['3-14', { n: 15, mean: -1.25, min: -1.25, max: -1.25, a: 26.5, b: 25.25 }],
+    ]);
+    const text = overlayCsv({
+      header: ['Local: X'],
+      cells,
+      stats,
+      mode: 'difference',
+      limits: [-2, -0.5, 0.5, 2],
+    });
+    const lines = text.split('\n');
+    expect(lines[1]).toBe(
+      'periodo,primeiro_dia,ultimo_dia,hora_do_arquivo,inicio_hora_legal,fim_hora_legal,horas,media_a,media_b,diferenca_b_menos_a,faixa',
+    );
+    expect(lines[2]).toBe('3,01/02,15/02,6,5,6,0,,,,');
+    expect(lines[3]).toBe('3,01/02,15/02,14,13,14,15,26.5,25.25,-1.25,2');
   });
 
   it('rosa: setores, classes, total, velocidade e calmaria', () => {

@@ -1,6 +1,8 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { onRovingKeyDown } from './a11y/roving';
-import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
+import type { EpwData } from '../core/epw/hourly';
+import { cellDifference, DIFFERENCE_BANDS, sameLocation } from '../core/overlay/difference';
+import { cellStatistics, OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
 import { chartFrame } from './chart/projectionContext';
@@ -38,7 +40,7 @@ import { ProtectionPanel } from './protractor/ProtectionPanel';
 import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
-import { hashForSite, siteFromHash } from './state/siteHash';
+import { hashForSite, siteFromHash, type SelectedSite } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { classificationFromHash } from './state/classificationHash';
 import { windFromHash } from './state/windHash';
@@ -188,6 +190,27 @@ export function App() {
       ? `TRY, ${t('site.periodTry', { start: c.historical.period[0], end: c.historical.period[1] })}`
       : 'IWEC';
 
+  // Origem dos dados de cada lado da comparação: a mesma frase da impressão.
+  const sourceOf = (sel: SelectedSite | null, file: LoadedFile | null, data: EpwData | null) => {
+    if (!sel || !data) return '';
+    if (sel.kind === 'file' && file) return t('print.sourceFile', { file: file.fileName });
+    if (sel.kind === 'city' && sel.site.historical) {
+      return t('print.sourceHistorical', { what: historicalWhat(sel.site) });
+    }
+    return '';
+  };
+  const sourceA = sourceOf(selectedA, compareFile, epwA);
+  const sourceB = sourceOf(selected, loadedFile, epw);
+  // Diferença B − A na mesma carta (F4.2, `dif=1`, spec 05, seção 5.5): só na carta, com dados
+  // nos dois lados, uma variável no passo 4 e o mesmo local.
+  const differenceAsked = hashA !== null && hashState.dif === '1' && wind.tab === 'chart';
+  let differenceBlocked: 'needData' | 'otherPlace' | null = null;
+  if (differenceAsked) {
+    if (!epw || !epwA || !ov.quantity) differenceBlocked = 'needData';
+    else if (!sameLocation(epw.location, epwA.location)) differenceBlocked = 'otherPlace';
+  }
+  const differenceOn = differenceAsked && differenceBlocked === null;
+
   const csvAvailable =
     wind.tab === 'rose' ? rose !== null : Boolean(ov.cells && ov.stats && ov.quantity);
 
@@ -255,6 +278,32 @@ export function App() {
     }
     if (!ov.cells || !ov.stats || !ov.quantity || !ov.limits || !ov.overlay.key) return null;
     const info = OVERLAY_QUANTITIES[ov.quantity];
+    if (differenceOn && epwA) {
+      const limits = DIFFERENCE_BANDS[ov.quantity];
+      return overlayCsv({
+        header: [
+          ...header(t('csv.cells')),
+          t('difference.print', { a: sourceA, b: sourceB }),
+          t('csv.quantity', {
+            quantity: t(`data.short.${ov.overlay.key}`),
+            unit: info.unit,
+            what: t('difference.csvWhat'),
+          }),
+          t('csv.semester', {
+            semester: t(ov.overlay.semester === 1 ? 'data.semester1' : 'data.semester2'),
+            interval: t(
+              info.timing === 'integrated' ? 'data.intervalIntegrated' : 'data.intervalInstant',
+            ),
+          }),
+          t('csv.bands', { limits: limits.join('; ') }),
+          t('csv.separator'),
+        ],
+        cells: ov.cells,
+        stats: cellDifference(cellStatistics(epwA, ov.quantity), ov.stats),
+        mode: 'difference',
+        limits,
+      });
+    }
     return overlayCsv({
       header: [
         ...header(t('csv.cells')),
@@ -331,7 +380,7 @@ export function App() {
       setHashState({ cmp: buildHash(current).replace(/^#/, '') });
     } else {
       setCompareFile(null);
-      setHashState({ cmp: '' });
+      setHashState({ cmp: '', dif: '' });
     }
   };
 
@@ -356,7 +405,9 @@ export function App() {
     '--chart-span-y': String(frame.span.y),
   } as CSSProperties;
   let source: string;
-  if (epw && selected.kind === 'file' && loadedFile) {
+  if (differenceOn) {
+    source = t('difference.print', { a: sourceA, b: sourceB });
+  } else if (epw && selected.kind === 'file' && loadedFile) {
     source = t('print.sourceFile', { file: loadedFile.fileName });
   } else if (epw && city?.historical) {
     source = t('print.sourceHistorical', { what: historicalWhat(city) });
@@ -386,6 +437,7 @@ export function App() {
         <ChartView
           hash={hashState}
           epw={epw}
+          difference={differenceOn ? epwA : null}
           answer={exerciseChecked ? answerRegion(exercise) : null}
           drawing={drawing}
           onDrawingAdd={(v) =>
@@ -582,7 +634,39 @@ export function App() {
                 </button>
               ))}
             </div>
-            {hashA ? (
+            {hashA && wind.tab === 'chart' && (
+              <p className="difference-toggle">
+                <button
+                  type="button"
+                  className="btn"
+                  aria-pressed={differenceAsked}
+                  data-testid="difference-toggle"
+                  onClick={() => setHashState({ dif: differenceAsked ? '' : '1' })}
+                >
+                  {t('difference.toggle')}
+                </button>
+              </p>
+            )}
+            {differenceBlocked && (
+              <p className="note difference-blocked" data-testid="difference-blocked">
+                {t(`difference.${differenceBlocked}`)}
+              </p>
+            )}
+            {differenceOn && hashA ? (
+              <div className="difference" data-testid="difference-view">
+                <h3 className="compare-label">{t('difference.title')}</h3>
+                <ul className="difference-sources">
+                  <li>
+                    {t('compare.a')}: {siteFromHash(hashA).site.name}. {sourceA}
+                  </li>
+                  <li>
+                    {t('compare.b')}: {site.name}. {sourceB}
+                  </li>
+                </ul>
+                <p className="note">{t('difference.note')}</p>
+                {live}
+              </div>
+            ) : hashA ? (
               <div className="compare" data-testid="compare-view">
                 <div className="compare-col" data-testid="compare-a">
                   <h3 className="compare-label">

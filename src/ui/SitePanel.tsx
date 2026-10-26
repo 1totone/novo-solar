@@ -4,6 +4,7 @@ import { parseSolar62, solar62Header, type Solar62Location } from '../core/epw/p
 import {
   catalogIdFromFileName,
   displayName,
+  LAG_MIN,
   stationWarnings,
   type ProjectPoint,
   type Station,
@@ -17,6 +18,7 @@ import { LocationForm } from './data/LocationForm';
 import { decodeText } from './data/readText';
 import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
+import { fileRadiationLag } from './overlay/radiationLag';
 import type { SelectedSite } from './state/siteHash';
 
 export type { LoadedFile } from './data/climateFile';
@@ -233,6 +235,19 @@ export function SitePanel({
       notices.push(
         t(w.lag > 0 ? 'station.warnLagLate' : 'station.warnLagEarly', {
           minutes: formatNumber(Math.abs(w.lag), 0),
+        }),
+      );
+    }
+  }
+
+  // Outro arquivo carregado (BrazFuture, INMET ou próprio): o tempo da radiação calculado aqui,
+  // pelo mesmo método do catálogo (spec 04, seção 4.3), com o mesmo aviso.
+  if (selected.kind === 'file' && data && stationId === null) {
+    const lag = fileRadiationLag(data);
+    if (lag !== null && Math.abs(lag) >= LAG_MIN) {
+      notices.push(
+        t(lag > 0 ? 'station.warnLagLate' : 'station.warnLagEarly', {
+          minutes: formatNumber(Math.abs(lag), 0),
         }),
       );
     }

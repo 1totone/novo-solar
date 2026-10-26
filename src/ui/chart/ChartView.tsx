@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { makeProjection } from '../../core/chart/projection';
 import type { EpwData } from '../../core/epw/parseEpw';
 import { EMPTY, maskRegions, type Region } from '../../core/mask/mask';
+import { cellDifference, DIFFERENCE_BANDS } from '../../core/overlay/difference';
+import { cellKey, cellStatistics, type OverlayQuantity } from '../../core/overlay/overlay';
 import { buildScene } from '../../core/shading/geometry';
 import { pointMask } from '../../core/shading/pointMask';
 import { useI18n } from '../i18n/useI18n';
@@ -10,6 +12,8 @@ import { MaskLayer } from '../mask/MaskLayer';
 import { CellInfo, OverlayLegend } from '../overlay/OverlayInfo';
 import { OverlayLayer, type CellView } from '../overlay/OverlayLayer';
 import { CellTable } from '../overlay/CellTable';
+import { DIFFERENCE_COLORS } from '../overlay/palettes';
+import { fileRadiationLag } from '../overlay/radiationLag';
 import { DIGITS, useOverlay } from '../overlay/useOverlay';
 import { ProtractorOverlay } from '../protractor/ProtractorOverlay';
 import { ShadingLayer } from '../shading/ShadingLayer';
@@ -26,6 +30,14 @@ import { chartOptionsFromHash } from '../state/chartOptionsHash';
 import { SunChart } from './SunChart';
 import { timeZoneOffset } from '../timeZoneOffset';
 
+const RADIATION: ReadonlySet<OverlayQuantity> = new Set([
+  'globalHorizontal',
+  'directNormal',
+  'diffuseHorizontal',
+]);
+/** Diferença de tempo da radiação entre A e B a partir da qual a tela avisa (min, como no F4.1). */
+const LAG_WARNING_MIN = 15;
+
 /**
  * A carta com todas as camadas (dados, máscara, transferidor, desenho à mão), as legendas e os
  * valores da célula, a partir de um estado do link e do arquivo carregado. Usada na tela, na
@@ -37,6 +49,7 @@ export function ChartView({
   drawing,
   onDrawingAdd,
   answer = null,
+  difference = null,
 }: {
   hash: HashState;
   epw: EpwData | null;
@@ -44,6 +57,8 @@ export function ChartView({
   onDrawingAdd?: (vertex: { altitude: number; azimuth: number }) => void;
   /** Máscara calculada de um exercício conferido (F4.5), hachurada sobre o desenho do aluno. */
   answer?: Region | null;
+  /** Dados de A na comparação de climas (F4.2): as células mostram B − A (spec 05, seção 5.5). */
+  difference?: EpwData | null;
 }) {
   const { t, formatNumber } = useI18n();
   const site = siteFromHash(hash).site;
@@ -59,11 +74,49 @@ export function ChartView({
   const hasMask = regions.total.kind !== 'empty' || regions.partial.kind !== 'empty';
   const ov = useOverlay(epw, hash);
   const [hovered, setHovered] = useState<CellView | null>(null);
-  const showOverlay = Boolean(ov.cells && ov.stats && ov.limits && ov.quantity);
+  // Diferença B − A (F4.2): as médias das células de A na mesma grandeza de B.
+  const statsA = useMemo(
+    () => (difference && ov.quantity ? cellStatistics(difference, ov.quantity) : null),
+    [difference, ov.quantity],
+  );
+  const diffStats = useMemo(
+    () => (statsA && ov.stats ? cellDifference(statsA, ov.stats) : null),
+    [statsA, ov.stats],
+  );
+  const isDifference = diffStats !== null && ov.quantity !== undefined;
+  const stats = isDifference ? diffStats : ov.stats;
+  const limits = isDifference ? DIFFERENCE_BANDS[ov.quantity!] : ov.limits;
+  const colors = isDifference ? DIFFERENCE_COLORS : ov.colors;
+  const cellMode = isDifference ? 'difference' : ov.overlay.mode;
+  const showOverlay = Boolean(ov.cells && stats && limits && ov.quantity);
+  // Resumo da diferença nas células desenhadas e, na radiação, a diferença de tempo entre A e B
+  // (spec 05, seção 5.5).
+  const differenceSummary = useMemo(() => {
+    if (!isDifference || !ov.cells || !diffStats) return null;
+    const keys = new Set(ov.cells.map((c) => cellKey(c.period, c.hour)));
+    const values = [...keys].flatMap((k) => {
+      const s = diffStats.get(k);
+      return s ? [s.mean] : [];
+    });
+    if (values.length === 0) return null;
+    return {
+      n: values.length,
+      mean: values.reduce((a, b) => a + b, 0) / values.length,
+      min: Math.min(...values),
+      max: Math.max(...values),
+    };
+  }, [isDifference, ov.cells, diffStats]);
+  const lagShift = useMemo(() => {
+    if (!isDifference || !epw || !difference || !RADIATION.has(ov.quantity!)) return null;
+    const a = fileRadiationLag(difference);
+    const b = fileRadiationLag(epw);
+    return a === null || b === null ? null : b - a;
+  }, [isDifference, epw, difference, ov.quantity]);
   const formatValue = (v: number) => formatNumber(v, ov.quantity ? DIGITS[ov.quantity] : 0);
+  const formatSigned = (v: number) => `${v > 0 ? '+' : ''}${formatValue(v)}`;
   // Limites e limiar como digitados: sem casas decimais quando inteiros.
   const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
-  const hasNoData = showOverlay && ov.cells!.some((c) => !ov.stats!.has(`${c.period}-${c.hour}`));
+  const hasNoData = showOverlay && ov.cells!.some((c) => !stats!.has(`${c.period}-${c.hour}`));
 
   // Proteção pelas dimensões (passo 6, F3.2): curvas no worker, máscara de um ponto aqui (é leve).
   const geometry = geometryFromHash(hash);
@@ -107,10 +160,10 @@ export function ChartView({
           showOverlay ? (
             <OverlayLayer
               cells={ov.cells!}
-              stats={ov.stats!}
-              limits={ov.limits!}
-              colors={ov.colors}
-              mode={ov.overlay.mode}
+              stats={stats!}
+              limits={limits!}
+              colors={colors}
+              mode={isDifference ? 'mean' : ov.overlay.mode}
               onHover={setHovered}
             />
           ) : undefined
@@ -153,24 +206,45 @@ export function ChartView({
       {showOverlay && (
         <>
           <OverlayLegend
-            limits={ov.overlay.mode === 'frequency' ? ov.limits!.map((v) => v * 100) : ov.limits!}
-            colors={ov.colors}
-            unit={ov.overlay.mode === 'frequency' ? '%' : ov.unit}
+            limits={cellMode === 'frequency' ? limits!.map((v) => v * 100) : limits!}
+            colors={colors}
+            unit={cellMode === 'frequency' ? '%' : ov.unit}
             title={
-              ov.overlay.mode === 'frequency'
-                ? t('legend.frequencyTitle', {
-                    threshold: formatLimit(ov.overlay.threshold),
-                    unit: ov.unit,
-                  })
-                : t(`data.short.${ov.overlay.key!}`)
+              cellMode === 'difference'
+                ? t('difference.legend', { quantity: t(`data.short.${ov.overlay.key!}`) })
+                : cellMode === 'frequency'
+                  ? t('legend.frequencyTitle', {
+                      threshold: formatLimit(ov.overlay.threshold),
+                      unit: ov.unit,
+                    })
+                  : t(`data.short.${ov.overlay.key!}`)
             }
             hasNoData={hasNoData}
             format={formatLimit}
           />
+          {differenceSummary && (
+            <p className="note" data-testid="difference-summary">
+              {t('difference.summary', {
+                n: formatNumber(differenceSummary.n),
+                mean: formatSigned(differenceSummary.mean),
+                min: formatSigned(differenceSummary.min),
+                max: formatSigned(differenceSummary.max),
+                unit: ov.unit,
+              })}
+              {lagShift !== null &&
+                ` ${
+                  Math.abs(lagShift) < LAG_WARNING_MIN
+                    ? t('difference.lagSame')
+                    : t(lagShift > 0 ? 'difference.lagLate' : 'difference.lagEarly', {
+                        minutes: formatNumber(Math.round(Math.abs(lagShift))),
+                      })
+                }`}
+            </p>
+          )}
           <CellInfo
             view={hovered}
             unit={ov.unit}
-            mode={ov.overlay.mode}
+            mode={cellMode}
             threshold={ov.overlay.threshold}
             format={formatValue}
           />
@@ -284,8 +358,8 @@ export function ChartView({
       {showOverlay && (
         <CellTable
           cells={ov.cells!}
-          stats={ov.stats!}
-          mode={ov.overlay.mode}
+          stats={stats!}
+          mode={cellMode}
           unit={ov.unit}
           format={formatValue}
         />

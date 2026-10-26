@@ -951,4 +951,25 @@ export const es: Catalog = {
   'station.futureLink': 'Descargar en Zenodo',
   'print.sourceStation':
     'Coordenadas de la estación {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
+  'difference.toggle': 'Diferencia B − A en la misma carta',
+  'difference.title': 'Diferencia B − A',
+  'difference.note':
+    'Cada celda muestra la media de las horas de B menos la de A, en la misma quincena y hora del archivo; la carta, la máscara y el transportador son los de B. La diferencia mezcla el cambio del clima con las diferencias entre los archivos (cada uno es un año típico, con meses de años distintos, y tiene fuente y método propios), y cada celda tiene solo unas 15 horas de cada archivo: vale el patrón de muchas celdas, no una celda aislada.',
+  'difference.summary': 'Media de las {n} celdas dibujadas: {mean} {unit} (de {min} a {max}).',
+  'difference.lagSame':
+    'En los días despejados, la radiación de A y la de B difieren menos de 15 min en el tiempo.',
+  'difference.lagLate':
+    'En los días despejados, la radiación de B llega unos {minutes} min después que la de A: solo por eso, la diferencia queda negativa por la mañana y positiva por la tarde.',
+  'difference.lagEarly':
+    'En los días despejados, la radiación de B llega unos {minutes} min antes que la de A: solo por eso, la diferencia queda positiva por la mañana y negativa por la tarde.',
+  'difference.needData':
+    'La diferencia necesita datos climáticos en A y en B (datos históricos o archivo cargado) y una variable elegida en el paso 4; por ahora, A y B quedan lado a lado.',
+  'difference.otherPlace':
+    'La diferencia solo vale para el mismo lugar (hasta 0,1° de latitud y de longitud, mismo huso); A y B quedan lado a lado.',
+  'difference.legend': 'B − A: {quantity}',
+  'difference.print': 'Diferencia B − A. A: {a} B: {b}',
+  'difference.csvWhat': 'media de las horas de B menos la de A',
+  'cell.difference': 'B − A: {diff} {unit} (media de A: {a}; de B: {b}).',
+  'cells.captionDifference':
+    'Media de las horas de B menos la de A en cada celda ({unit}); filas: quincenas; columnas: horas del archivo.',
 };

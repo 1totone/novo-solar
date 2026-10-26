@@ -1,3 +1,4 @@
+import type { DifferenceStats } from '../../core/overlay/difference';
 import {
   bandIndex,
   cellKey,
@@ -11,7 +12,10 @@ import { csvDocument } from './csv';
 const day = (d: { month: number; day: number }) =>
   `${String(d.day).padStart(2, '0')}/${String(d.month).padStart(2, '0')}`;
 
-/** Células desenhadas na carta: período, intervalo, estatísticas e faixa. */
+/**
+ * Células desenhadas na carta: período, intervalo, estatísticas e faixa. Na diferença entre dois
+ * climas (F4.2), as médias de A e de B e a diferença B − A no lugar das estatísticas.
+ */
 export function overlayCsv({
   header,
   cells,
@@ -22,7 +26,7 @@ export function overlayCsv({
   header: string[];
   cells: OverlayCell[];
   stats: Map<string, CellStats>;
-  mode: 'mean' | 'frequency';
+  mode: 'mean' | 'frequency' | 'difference';
   /** Limites das faixas em uso (na unidade da grandeza; frações no modo de frequência). */
   limits: readonly number[];
 }): string {
@@ -32,6 +36,19 @@ export function overlayCsv({
       const p = PERIODS[c.period - 1]!;
       const s = stats.get(cellKey(c.period, c.hour));
       const value = s ? (mode === 'frequency' ? s.above : s.mean) : undefined;
+      const values =
+        mode === 'difference'
+          ? [
+              (s as DifferenceStats | undefined)?.a ?? null,
+              (s as DifferenceStats | undefined)?.b ?? null,
+              s?.mean ?? null,
+            ]
+          : [
+              s?.mean ?? null,
+              s?.min ?? null,
+              s?.max ?? null,
+              mode === 'frequency' ? (s?.above ?? null) : null,
+            ];
       return [
         c.period,
         day(p.first),
@@ -40,10 +57,7 @@ export function overlayCsv({
         c.start,
         c.end,
         s?.n ?? 0,
-        s?.mean ?? null,
-        s?.min ?? null,
-        s?.max ?? null,
-        mode === 'frequency' ? (s?.above ?? null) : null,
+        ...values,
         value === undefined ? null : bandIndex(value, limits) + 1,
       ];
     });
@@ -57,10 +71,9 @@ export function overlayCsv({
       'inicio_hora_legal',
       'fim_hora_legal',
       'horas',
-      'media',
-      'minima',
-      'maxima',
-      'fracao_acima_do_limiar',
+      ...(mode === 'difference'
+        ? ['media_a', 'media_b', 'diferenca_b_menos_a']
+        : ['media', 'minima', 'maxima', 'fracao_acima_do_limiar']),
       'faixa',
     ],
     rows,
