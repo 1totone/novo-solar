@@ -1007,6 +1007,43 @@ fieldset.plain .check {
   }
 }
 
+/* F3.3: mapa mês × hora da sombra (1 unidade do SVG = 1 px). */
+.annual-map {
+  position: relative;
+  min-height: 2rem;
+  margin: 0.5rem 0;
+}
+
+.month-hour-map {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.month-hour-map.stale {
+  opacity: 0.35;
+}
+
+.annual-legend {
+  justify-content: flex-start;
+  margin: 0.25rem 0;
+}
+
+.swatch.no-sun {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+.annual-table .data-table td.no-sun {
+  background: repeating-linear-gradient(45deg, #d0d7de 0 1px, #fff 1px 4px);
+}
+
+.export-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
 /* Células da sobreposição em cálculo no web worker (achado 9). */
 .overlay-pending {
   margin: 0.25rem 0;

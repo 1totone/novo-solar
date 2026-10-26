@@ -206,6 +206,16 @@ As curvas de uma geometria levam de 0,2 a 0,6 s num computador (mais num celular
 
 Conferência de ponta a ponta (`e2e/curvas.spec.ts`), com pixels lidos da carta no caso analítico do brise infinito: cada curva de 25 a 100% passa pela altura h com tan h = cos ψ · (e + p · H) / D a ψ = 25° (e não a 3° dela), o preenchimento está dentro da curva de 100% e não entre as de 75% e 100%, e a hachura do ponto do centro da janela fica acima da curva de 50% e não abaixo dela (seção 7.4: é o mesmo critério); também o clique na vista, o cálculo no worker, a impressão, o teclado e o axe.
 
+## 7.13 Mapa mês × hora na interface (F3.3)
+
+No passo 6, a seção "Sombra ao longo do ano" desenha o mapa da seção 7.6 para o local do passo 1, a orientação do passo 2 e a geometria do passo 6: 12 linhas (meses) por 24 colunas (horas do arquivo, em hora legal do fuso do local, sem horário de verão; a coluna h é o intervalo de h − 1 a h). Cada célula tem a cor do percentual da janela à sombra com sol na janela, S = 1 − F̄_e / Ē, em 6 classes com os níveis das curvas da carta: 0%, até 25%, até 50%, até 75%, abaixo de 100% e 100% (0% e 100% com a tolerância de 10⁻⁹ da seção 7.5). As horas sem sol na janela (Ē = 0: noite ou sol atrás da fachada) ficam com hachura cinza. Cada mês tem a sua linha: o mapa separa os meses que a carta junta numa trajetória só (por exemplo, janeiro e novembro).
+
+- **Cores:** rampa de um matiz (OKLCH, matiz 215°, luminosidade de 0,935 a 0,43, passos de pelo menos 0,06, monótona; conferida com o validador de paletas), do claro (0%) ao azul-petróleo das curvas (100%). A ponta clara recua para o fundo, como nos mapas de calor dos dados sobre a carta; a tabela e a dica de cada célula trazem os números. Provisórias até a paleta da Fase 4 (decisão 0023).
+- **Tabela** com os 288 valores (percentual inteiro; célula vazia sem sol na janela) e **exportações:** o mapa em SVG; o mapa em CSV (para cada mês, o percentual à sombra e a fração da hora com sol na janela); e a fração ensolarada hora a hora em CSV (8760 linhas, na ordem do EPW: F_e, E, C_e e C da seção 7.6), com local, geometria, link da configuração e hipóteses no cabeçalho.
+- **Cálculo:** num web worker, só com o passo 6 aberto. As 52 560 posições do sol do ano (quase 1 s num computador) ficam guardadas por local no worker; a sombra de cada geometria leva cerca de 0,1 s. Enquanto calcula, o mapa anterior aparece esmaecido e as exportações ficam desativadas.
+
+Conferência: a coerência da fração ensolarada com a máscara em todas as amostras do ano e os valores contra pvlib e shapely estão em `tests/referencia/fracaoEnsolarada.test.ts`. De ponta a ponta (`e2e/mapa.spec.ts`), numa fachada norte em Florianópolis com o brise infinito: classes de células conhecidas (junho, 12 a 13 h: de 25 a 50%, perto de f = (0,8 · tan 39° − 0,1) / 1,2 ≈ 0,45; janeiro ao meio-dia: 100%; dezembro, 7 a 8 h, e a noite: sem sol na janela), a cor lida no centro de cada uma das 288 células igual à da classe desenhada, a tabela coerente com as classes, as exportações, o cálculo no worker, o teclado e o axe.
+
 ## Referências
 
 - Olgyay, A.; Olgyay, V. *Solar control and shading devices*. Princeton: Princeton University Press, 1957.
