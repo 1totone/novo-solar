@@ -44,6 +44,9 @@ export interface PeriodSample {
   month: number;
   day: number;
   hour: number;
+  /** Direção do sol na carta: altura e azimute (a partir do Norte, horário), graus. */
+  altitude: number;
+  azimuth: number;
   s: FacadeVector;
   /** Ângulo azimutal relativo, positivo à direita de quem olha para fora. */
   psi: number;
@@ -175,6 +178,8 @@ export function periodSamples(
         month,
         day,
         hour,
+        altitude: p.elevation,
+        azimuth: p.azimuth,
         s,
         psi: Math.atan2(s.x, s.y) * DEG,
         profile: Math.atan2(s.z, s.y) * DEG,
@@ -183,6 +188,58 @@ export function periodSamples(
     }
   }
   return { samples, total };
+}
+
+/** Direção do sol na carta (graus). */
+export interface SkyPosition {
+  altitude: number;
+  azimuth: number;
+}
+
+/**
+ * Contorno do período na carta, para desenhar a área do período (seção 10.1): as posições do sol na
+ * hora inicial de cada dia, em ordem de declinação; a trajetória do dia de maior declinação até a
+ * hora final; as posições na hora final, de volta em ordem de declinação; e a trajetória do dia de
+ * menor declinação até o começo. Inclui posições abaixo do horizonte (a carta recorta). Em hora
+ * solar, a área é exata; em hora legal, os lados seguem a equação do tempo de cada dia e podem
+ * fazer zigue-zague entre dias de mesma declinação.
+ */
+export function periodOutline(site: Site, period: ShadingPeriod): SkyPosition[] {
+  const { startHour, endHour } = period;
+  if (!(startHour >= 0 && endHour <= 24 && startHour <= endHour)) {
+    throw new RangeError('hours must satisfy 0 <= startHour <= endHour <= 24');
+  }
+  const solar = (period.timeBase ?? 'solar') === 'solar';
+  const position = ({ month, day }: DayOfYear, hour: number) => {
+    const guess =
+      Date.UTC(REFERENCE_YEAR, month - 1, day) + (hour - site.longitude / 15) * MS_PER_HOUR;
+    const t = solar
+      ? solarTimeInstant(site, hour, guess)
+      : localStandardToUtc(REFERENCE_YEAR, month, day, hour, site.timeZone);
+    return solarPosition(t, site.latitude, site.longitude, site.elevation);
+  };
+  const days = periodDays(period.start, period.end).map((d) => {
+    const first = position(d, startHour);
+    return { d, declination: first.declination, first, last: position(d, endHour) };
+  });
+  days.sort((a, b) => a.declination - b.declination);
+  const sky = (p: { elevation: number; azimuth: number }): SkyPosition => ({
+    altitude: p.elevation,
+    azimuth: p.azimuth,
+  });
+  const steps = Math.max(1, Math.ceil(((endHour - startHour) * 60) / 10));
+  const path = (d: DayOfYear) =>
+    Array.from({ length: steps + 1 }, (_, k) =>
+      sky(position(d, startHour + ((endHour - startHour) * k) / steps)),
+    );
+  const low = days[0]!;
+  const high = days[days.length - 1]!;
+  return [
+    ...days.map((x) => sky(x.first)),
+    ...path(high.d).slice(1, -1),
+    ...[...days].reverse().map((x) => sky(x.last)),
+    ...path(low.d).reverse().slice(1, -1),
+  ];
 }
 
 function extreme(

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { Site } from '../../core/chart/sunChart';
 import { AnnualSection } from '../annual/AnnualSection';
+import { SizingSection } from '../sizing/SizingSection';
+import type { HashState } from '../state/hashState';
 import { downloadBlob, fileSlug, standaloneSvg } from '../export/image';
 import { useI18n } from '../i18n/useI18n';
 import type { MessageKey } from '../i18n/i18n';
@@ -30,6 +32,7 @@ function fieldLabel(code: PieceCode, field: PieceField): MessageKey {
 /** Passo 6: proteção pelas dimensões (F3.1). */
 export function GeometryPanel({
   geometry,
+  hash,
   scale,
   site,
   orientation,
@@ -38,6 +41,8 @@ export function GeometryPanel({
   onOpenChange,
 }: {
   geometry: GeometryState;
+  /** Estado do link (período do dimensionamento e referência dos ângulos do passo 3). */
+  hash: HashState;
   scale: number;
   site: Site & { name: string };
   /** Orientação da fachada (passo 2), para o mapa do ano. */
@@ -403,6 +408,14 @@ export function GeometryPanel({
                   geometry={geometry}
                   orientation={orientation}
                   active={open}
+                />
+                <SizingSection
+                  site={site}
+                  hash={hash}
+                  geometry={geometry}
+                  orientation={orientation}
+                  active={open}
+                  onChange={onChange}
                 />
               </>
             )}

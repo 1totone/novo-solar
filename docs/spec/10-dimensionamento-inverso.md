@@ -115,6 +115,17 @@ O tutorial usa as mesmas fórmulas, com o γ e o α medidos dos pontos de refer�
 5. **Tutorial da UFU com o ano todo**, confirmado pela Figura 13.
 6. **Janela recuada:** peças medidas do plano da fachada; profundidades e cordas descontam o recuo só onde a parede fecha a fresta (o brise e a aleta, não as lâminas de baixo); prolongamentos pelo γ, do lado seguro.
 
+## 10.9 Interface (F3.6)
+
+No passo 6, a seção "Dimensionar pelo período" (decisão 0023, proposta) recebe o período: primeiro e último dia ("dd/mm", passando pelo fim do ano se preciso), primeira e última hora e a base das horas (hora solar verdadeira, padrão, a das linhas da carta, ou hora legal do fuso do local); em opções, o afastamento do brise e o número de lâminas da subdivisão. Começa com o verão (21/10 a 21/2, das 9 às 15 h solares). Estado no link: `dpi`, `dpf`, `dhi`, `dhf`, `dtb` (`l`, hora legal), `dbg` e `dbn`; `dvc=0` tira o período da carta.
+
+- **Saídas:** quantas das posições do sol do período (a cada 5 min) ficam diante da janela; tabela dos ângulos exigidos (seção 10.2), internos com os externos entre parênteses, cada um com o sol que o determina (dia e hora); o brise (profundidade, altura acima da verga, afastamento e prolongamentos; ou o aviso de que a verga da parede já basta), as aletas de cada lado (ou o aviso de que não há sol daquele lado, de que a ombreira basta ou de que a aleta não serve, quando passaria de 3 vezes a largura da janela, o que acontece com o sol passando de frente para a janela) e as lâminas da subdivisão (seção 10.4). Aviso quando o brise passa de 3 vezes a altura da janela ou um prolongamento de 3 vezes a largura.
+- **Na carta:** a área do período em verde (posições do sol nas horas inicial e final de cada dia e as trajetórias dos dias de menor e de maior declinação; `periodOutline`, exata em hora solar) e o sol que determina cada ângulo, marcado com o nome do ângulo, por cima das trajetórias.
+- **Usar:** as peças vão para o passo 6 (substituindo as que havia), com as medidas arredondadas para cima, ao centímetro, para não ficarem menores que as calculadas; os ângulos vão para a sombra total do passo 3, na referência escolhida lá (os de aleta só do lado em que a aleta serve).
+- **Cálculo:** num web worker (`src/ui/sizing/`), com cache: o ano inteiro em hora solar leva cerca de 1 s num computador.
+
+Conferência de ponta a ponta (`e2e/dimensionamento.spec.ts`), com o exemplo de Brasília do tutorial (fachada a 30°, janela de 2,00 × 1,00 m com recuo de 0,15 m, o ano todo, das 9 às 15 h solares): 19 712 das 26 645 posições diante da janela; α de 57,5° (21/6, 9 h), γ direita de 42,2° (21/12, 9 h) e γ esquerda de 58,5° (21/6, 15 h), os valores do relatório do F3.6 (seção 3); brise de 1,42 m com prolongamentos de 1,63 e 0,91 m; aletas que não servem. Na carta, uma grade de pontos separada pelo contorno desenhado (dentro, esverdeados; fora, quase nunca) e o ponto de α sobre a trajetória de 21/6 e a linha das 9 h da própria carta. Usando o brise, o mapa mês × hora do passo 6 fica com 100% à sombra (ou sem sol na janela) das 10 às 14 h legais em todos os meses, horas que ficam dentro do período em qualquer época do ano; os ângulos vão para o passo 3. Também a hora legal, as lâminas, os campos inválidos, o teclado e o axe.
+
 ## Referências
 
 - Bortoli, K. C. R.; Saramago, R. C. P. *Tutorial do programa SOL-AR*. Uberlândia: UFU (p. 9 a 15, exemplo de Brasília).

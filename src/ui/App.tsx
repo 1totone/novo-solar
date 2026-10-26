@@ -329,6 +329,7 @@ export function App() {
             <p className="steps-group">{t('advanced.group')}</p>
             <GeometryPanel
               geometry={geometry}
+              hash={hashState}
               scale={geometryScale}
               site={site}
               orientation={protractor.orientation}

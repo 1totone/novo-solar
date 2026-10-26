@@ -12,6 +12,10 @@ import { CellTable } from '../overlay/CellTable';
 import { DIGITS, useOverlay } from '../overlay/useOverlay';
 import { ProtractorOverlay } from '../protractor/ProtractorOverlay';
 import { ShadingLayer } from '../shading/ShadingLayer';
+import { PeriodArea, PeriodMarks } from '../sizing/PeriodLayer';
+import { useSizing } from '../sizing/sizingClient';
+import { sizingInput } from '../sizing/sizingInput';
+import { sizingFromHash } from '../state/sizingHash';
 import { useShadingChart } from '../shading/useShadingChart';
 import { geometryFromHash } from '../state/geometryHash';
 import type { HashState } from '../state/hashState';
@@ -65,6 +69,11 @@ export function ChartView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [pointKey],
   );
+  // Dimensionamento pelo período (F3.6): a área do período e o sol que determina cada ângulo.
+  const sizing = sizingFromHash(hash);
+  const sized = useSizing(
+    hash.dvc !== '0' ? sizingInput(site, orientation, geometry, sizing) : null,
+  ).result;
   const shown = shading.chart ?? shading.stale;
   const hasContours = Boolean(shown && shown.contours.length > 0);
   const hasFull = Boolean(shown && shown.fullShade.length > 0);
@@ -104,6 +113,7 @@ export function ChartView({
                 hatched={showOverlay}
               />
             )}
+            {sized && sized.sunny > 0 && <PeriodArea outline={sized.outline} />}
             {protractor.show && (
               <ProtractorOverlay
                 orientation={orientation}
@@ -116,9 +126,12 @@ export function ChartView({
           </>
         }
         top={
-          drawing && onDrawingAdd ? (
-            <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />
-          ) : undefined
+          <>
+            {sized && sized.sunny > 0 && (
+              <PeriodMarks angles={sized.angles} showAlphaMax={sizing.gap > 0} />
+            )}
+            {drawing && onDrawingAdd && <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />}
+          </>
         }
       />
       {showOverlay && (
@@ -195,6 +208,23 @@ export function ChartView({
               })}
             </span>
           )}
+        </p>
+      )}
+      {sized && sized.sunny > 0 && (
+        <p
+          className="legend period-legend"
+          role="group"
+          aria-label={t('sizing.heading')}
+          data-testid="period-legend"
+        >
+          <span className="legend-item">
+            <span className="swatch period-area" aria-hidden="true" />
+            {t('sizing.legend')}
+          </span>
+          <span className="legend-item">
+            <span className="swatch period-mark" aria-hidden="true" />
+            {t('sizing.legendPoints')}
+          </span>
         </p>
       )}
       {shading.pending && (
