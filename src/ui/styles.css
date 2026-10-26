@@ -1488,3 +1488,94 @@ fieldset.piece legend {
     display: none;
   }
 }
+
+/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. No computador, fixo no
+   alto da coluna dos passos; no celular, no pé da tela. */
+.step-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+.step-nav-title {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.step-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-nav-n {
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.step-nav-n[aria-current='step'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.step-nav-n:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 51.99rem) {
+  .step-nav {
+    order: 99;
+    top: auto;
+    bottom: 0;
+    justify-content: center;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .step-nav-title {
+    display: none;
+  }
+
+  .step-nav ol {
+    flex-wrap: nowrap;
+  }
+
+  .step-nav-n {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+}
+
+@media print {
+  .step-nav {
+    display: none;
+  }
+}
+
+/* Com a barra no pé da tela do celular, o que for rolado para a vista para acima dela. */
+@media (max-width: 51.99rem) {
+  html:has(.step-nav) {
+    scroll-padding-bottom: 3.5rem;
+  }
+}
