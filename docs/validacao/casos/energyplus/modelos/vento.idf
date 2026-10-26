@@ -1,0 +1,83 @@
+Version, 26.2;
+SimulationControl, No, No, No, No, Yes, No, 1;
+Building, Verificacao F4.4 vento City, 0, City, 0.04, 0.4, MinimalShadowing, 25, 6;
+Timestep, 1;
+RunPeriod, Ano, 1, 1, 2026, 12, 31, 2026, , No, No, No, No, No, No, Hour24;
+GlobalGeometryRules, UpperLeftCorner, Counterclockwise, World;
+Material:NoMass, PAREDE, MediumRough, 1.0, 0.9, 0.7, 0.7;
+Construction, PAREDE, PAREDE;
+Zone, TORRE;
+Output:Variable, Environment, Site Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_1, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 3.0,
+    2.0, 0.0, 0.0,
+    0.0, 0.0, 0.0,
+    0.0, 0.0, 3.0;
+Output:Variable, FRENTE_1, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_2, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 6.0,
+    2.0, 0.0, 3.0,
+    0.0, 0.0, 3.0,
+    0.0, 0.0, 6.0;
+Output:Variable, FRENTE_2, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_3, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 9.0,
+    2.0, 0.0, 6.0,
+    0.0, 0.0, 6.0,
+    0.0, 0.0, 9.0;
+Output:Variable, FRENTE_3, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_4, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 11.0,
+    2.0, 0.0, 9.0,
+    0.0, 0.0, 9.0,
+    0.0, 0.0, 11.0;
+Output:Variable, FRENTE_4, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_5, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 19.0,
+    2.0, 0.0, 11.0,
+    0.0, 0.0, 11.0,
+    0.0, 0.0, 19.0;
+Output:Variable, FRENTE_5, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_6, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 21.0,
+    2.0, 0.0, 19.0,
+    0.0, 0.0, 19.0,
+    0.0, 0.0, 21.0;
+Output:Variable, FRENTE_6, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_7, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 39.0,
+    2.0, 0.0, 21.0,
+    0.0, 0.0, 21.0,
+    0.0, 0.0, 39.0;
+Output:Variable, FRENTE_7, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FRENTE_8, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 41.0,
+    2.0, 0.0, 39.0,
+    0.0, 0.0, 39.0,
+    0.0, 0.0, 41.0;
+Output:Variable, FRENTE_8, Surface Outside Face Outdoor Air Wind Speed, Hourly;
+BuildingSurface:Detailed, FUNDO, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    0.0, 2.0, 41.0,
+    0.0, 2.0, 0.0,
+    2.0, 2.0, 0.0,
+    2.0, 2.0, 41.0;
+BuildingSurface:Detailed, ESQUERDA, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    0.0, 2.0, 41.0,
+    0.0, 2.0, 0.0,
+    0.0, 0.0, 0.0,
+    0.0, 0.0, 41.0;
+BuildingSurface:Detailed, DIREITA, Wall, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    2.0, 0.0, 41.0,
+    2.0, 0.0, 0.0,
+    2.0, 2.0, 0.0,
+    2.0, 2.0, 41.0;
+BuildingSurface:Detailed, COBERTURA, Roof, PAREDE, TORRE, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    0.0, 2.0, 41.0,
+    0.0, 0.0, 41.0,
+    2.0, 0.0, 41.0,
+    2.0, 2.0, 41.0;
+BuildingSurface:Detailed, PISO, Floor, PAREDE, TORRE, , Adiabatic, , NoSun, NoWind, autocalculate, 4,
+    2.0, 2.0, 0.0,
+    2.0, 0.0, 0.0,
+    0.0, 0.0, 0.0,
+    0.0, 2.0, 0.0;

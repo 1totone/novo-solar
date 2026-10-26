@@ -107,3 +107,50 @@ describe('rosa', () => {
     ).toBe(0.5);
   });
 });
+
+describe('condição térmica e correção da velocidade (F4.4, seções 6.3 e 6.7)', () => {
+  const epw = epwOf([
+    [1, 1, 0, 0.4], // calmaria na estação
+    [1, 13, 90, 3], // L, classe 1
+    [1, 14, 95, 5], // L, classe 2
+    [7, 13, 270, 7], // O, classe 3
+  ]);
+  // Classes das linhas (HOUR_CLASS): fria, quente, quente, neutra.
+  const classes = Int8Array.from([-1, 1, 1, 0]);
+
+  it('só as linhas da classe pedida; as demais saem das horas do filtro', () => {
+    const hot = windRose(epw, { sectors: 8, thermal: { classes, keep: 'hot' } });
+    expect([hot.hours, hot.valid, hot.calm]).toEqual([2, 2, 0]);
+    expect(hot.frequency[2]).toEqual([0, 50, 50, 0]);
+    const cold = windRose(epw, { sectors: 8, thermal: { classes, keep: 'cold' } });
+    expect([cold.hours, cold.calm]).toEqual([1, 100]);
+    const neutral = windRose(epw, {
+      sectors: 8,
+      season: 'dez-fev',
+      thermal: { classes, keep: 'neutral' },
+    });
+    expect([neutral.hours, neutral.valid, neutral.calm]).toEqual([0, 0, 0]);
+    expect(neutral.frequency.flat().every((v) => v === 0)).toBe(true);
+    expect(() =>
+      windRose(epw, { sectors: 8, thermal: { classes: classes.slice(1), keep: 'hot' } }),
+    ).toThrow(RangeError);
+  });
+
+  it('o fator multiplica a velocidade antes da calmaria e das classes; a direção não muda', () => {
+    // k = 0,5: 0,4 → 0,2 (calmaria); 3 → 1,5 (classe 0); 5 → 2,5 (classe 1); 7 → 3,5 (classe 1).
+    const half = windRose(epw, { sectors: 8, speedFactor: 0.5 });
+    expect(half.calm).toBe(25);
+    expect(half.frequency[2]).toEqual([25, 25, 0, 0]);
+    expect(half.frequency[6]).toEqual([0, 25, 0, 0]);
+    expect(half.meanSpeed[2]).toBe(2);
+    // k = 1,5: a calmaria da estação (0,4 m/s, direção 0°) passa a 0,6 m/s e conta no Norte.
+    const up = windRose(epw, { sectors: 8, speedFactor: 1.5 });
+    expect(up.calm).toBe(0);
+    expect(up.frequency[0]).toEqual([25, 0, 0, 0]);
+    expect(up.meanSpeed[0]).toBeCloseTo(0.6, 12);
+    // k = 1 dá a rosa sem correção.
+    expect(windRose(epw, { sectors: 16, speedFactor: 1 })).toEqual(windRose(epw, { sectors: 16 }));
+    expect(() => windRose(epw, { sectors: 8, speedFactor: 0 })).toThrow(RangeError);
+    expect(() => windRose(epw, { sectors: 8, speedFactor: NaN })).toThrow(RangeError);
+  });
+});

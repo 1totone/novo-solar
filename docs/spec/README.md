@@ -9,7 +9,7 @@
 3. [Projeções e transferidor](03-projecoes.md): projeção estereográfica, inversa, imagem de círculos máximos, fórmulas das curvas do transferidor, impressão em escala; projeções equidistante e cilíndrica (seção 3.5, proposta, decisão 0025).
 4. [Dados climáticos](04-dados-climaticos.md): EPW (campos, unidades, códigos de ausente, checagens), CSV legado do SOL-AR 6.2, indicadores de qualidade.
 5. [Sobreposição de dados](05-sobreposicao-de-dados.md): células como áreas (quinzenas, semestres pelos solstícios, intervalos de radiação e temperatura, bordas entre quinzenas), cor pela média ou pela frequência acima de um limiar, faixas padrão e pelo arquivo.
-6. [Vento](06-vento.md): rosa dos ventos (calmaria, setores, classes de velocidade, estações e períodos do dia, resolução da velocidade).
+6. [Vento](06-vento.md): rosa dos ventos (calmaria, setores, classes de velocidade, estações e períodos do dia, resolução da velocidade); filtro pela condição térmica e correção para a altura e o terreno (F4.4).
 7. [Máscara pela geometria e fração ensolarada](07-mascara-pela-geometria.md) (proposta): janela, placas e dispositivos; percentual sombreado exato; máscara de um ponto; curvas de 0 a 100%; fração ensolarada hora a hora e mapa mês × hora.
 8. [Classificação das horas](08-classificacao-das-horas.md) (proposta): temperatura da hora, temperatura média predominante do EPW, faixa adaptativa da ASHRAE 55, limiares fixos e temperatura de equilíbrio; hipóteses mostradas.
 9. [Indicadores de sombreamento](09-indicadores.md) (proposta): radiação direta incidente na janela por hora, bloqueada nas horas quentes e admitida nas horas frias; comparação entre alternativas; diferenças em relação ao EnergyPlus.

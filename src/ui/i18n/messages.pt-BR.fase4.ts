@@ -51,4 +51,63 @@ export const fase4PtBR = {
     'linhas horárias em hora solar verdadeira (contínuas) e em hora legal do fuso do arquivo (tracejadas, analemas).',
   'print.scaleRadius': 'Raio da carta: {radius} cm.',
   'print.scaleHeight': 'Altura da carta, de 0° a 90°: {radius} cm.',
+  // F4.4: vento avançado (decisão 0027).
+  'wind.more': 'Mais opções: condição térmica, altura e terreno',
+  'wind.thermal': 'Condição térmica',
+  'wind.thermal.all': 'Todas as horas',
+  'wind.thermal.hot': 'Quentes',
+  'wind.thermal.cold': 'Frias',
+  'wind.thermal.neutral': 'Neutras',
+  'wind.titleThermal.hot': 'horas quentes',
+  'wind.titleThermal.cold': 'horas frias',
+  'wind.titleThermal.neutral': 'horas neutras',
+  'wind.titleCorrection': 'a {height} m, {terrain}',
+  'wind.thermalMethod':
+    'Horas quentes e frias pela temperatura do ar externo, com o método do passo 7 (Efeito no ano): {method} Temperatura da hora: {mode}.',
+  'wind.method.threshold20':
+    'limiar de 20 °C, de Lamberts, Dutra e Pereira (2014): acima, quente; abaixo, fria; em 20 °C, neutra.',
+  'wind.method.thresholds': 'limiares digitados: {cold}; {hot}.',
+  'wind.method.adaptive':
+    'faixa adaptativa da ASHRAE 55, {acceptability}% de aceitabilidade{gains}.',
+  'wind.method.gains': ', com acréscimo por ganhos ΔT = {gains} °C',
+  'wind.method.balance': 'temperatura de equilíbrio de {balance} °C.',
+  'wind.hourTemp.mean': 'média do início e do fim da hora, meia hora antes do vento do arquivo',
+  'wind.hourTemp.end': 'a do fim da hora, o mesmo instante do vento do arquivo',
+  'wind.thermalCounts': 'No arquivo: {hot} horas quentes, {cold} frias e {neutral} neutras{none}.',
+  'wind.thermalNone': ', e {count} sem classe, fora dos filtros',
+  'wind.thermalWhere': 'O método se muda no passo 7, na aba Carta solar.',
+  'wind.thermalUnavailable':
+    'O método do passo 7 (Efeito no ano, na aba Carta solar) está incompleto ou tem um campo inválido: complete-o para filtrar as horas pela condição térmica.',
+  'wind.thermalNotApplied':
+    'O filtro pela condição térmica não está aplicado: o método do passo 7 (Efeito no ano, na aba Carta solar) está incompleto ou tem um campo inválido.',
+  'wind.height': 'Altura acima do solo (m)',
+  'wind.heightHelp': 'De 1 a 200 m; em branco, 10 m, a altura da estação.',
+  'wind.heightInvalid':
+    'Altura fora da faixa (de 1 a 200 m): a rosa mostra o vento da estação, sem correção.',
+  'wind.terrain': 'Terreno em volta',
+  'wind.terrain.country': 'Campo aberto',
+  'wind.terrain.suburbs': 'Subúrbio',
+  'wind.terrain.city': 'Cidade',
+  'wind.terrain.ocean': 'Água',
+  'wind.terrainShort.country': 'campo aberto',
+  'wind.terrainShort.suburbs': 'subúrbio',
+  'wind.terrainShort.city': 'cidade',
+  'wind.terrainShort.ocean': 'água',
+  'wind.terrainHelp.country':
+    'Campo plano e aberto, como em volta da estação (Country no EnergyPlus; α = 0,14, δ = 270 m).',
+  'wind.terrainHelp.suburbs':
+    'Subúrbio, campo rugoso ou arborizado (Suburbs no EnergyPlus; Urban tem os mesmos valores; α = 0,22, δ = 370 m).',
+  'wind.terrainHelp.city': 'Cidade (City no EnergyPlus; α = 0,33, δ = 460 m).',
+  'wind.terrainHelp.ocean':
+    'Vento que chega sobre a água (Ocean no EnergyPlus; α = 0,10, δ = 210 m).',
+  'wind.factor':
+    'A {height} m sobre {terrain}, a velocidade é k = {factor} vezes a da estação (perfil de lei de potência da ASHRAE, o mesmo do EnergyPlus; a estação fica a 10 m, em campo aberto).',
+  'wind.correctionWarning':
+    'Velocidade levada a {height} m sobre {terrain} pelo perfil médio da ASHRAE, como no EnergyPlus (k = {factor}): a direção continua a da estação, e os edifícios e a vegetação em volta (proteção, canalização, esteira) não entram.',
+  'csv.thermal': 'Condição térmica: {thermal}. {method}',
+  'csv.thermalAll': 'Condição térmica: todas as horas',
+  'csv.correction':
+    'Velocidade a {height} m sobre {terrain}: k = {factor} vezes a da estação (perfil de lei de potência da ASHRAE, como no EnergyPlus; estação a 10 m em campo aberto)',
+  'csv.noCorrection': 'Velocidade da estação, sem correção de altura e terreno',
+  'wind.emptyFilter': 'Nenhuma hora válida nesta condição e neste período: a rosa fica vazia.',
 } as const;

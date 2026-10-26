@@ -16,6 +16,9 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - `casos/indicadores/indicadores.json`: radiação direta incidente por classe de hora e percentuais (pvlib, shapely e DNI do EPW), F3.5.
   - `casos/energyplus/indicadores.json`: radiação direta incidente na janela com e sem as placas no EnergyPlus 26.2.0, com a decomposição das diferenças, F3.5.
   - `casos/dimensionamento/angulos.json`: ângulos exigidos no dimensionamento inverso em 5 casos, inclusive o tutorial da UFU (pvlib), F3.6.
+  - `casos/carta/projecoes-analemas.json`: sol às horas legais em 9 locais (pvlib) e pontos das projeções equidistante e cilíndrica e do transferidor por fórmulas fechadas, F4.3.
+  - `casos/energyplus/vento.json` e `casos/energyplus/modelos/vento.idf`: vento local de faixas de parede de 1,5 a 40 m nos 5 terrenos do EnergyPlus 26.2.0, F4.4.
+  - `casos/vento/rosas-avancadas.json`: 420 rosas com o filtro pela condição térmica e a correção para a altura e o terreno (Python com numpy), F4.4.
 - `relatorios/`: relatórios de validação (o que foi comparado, como, resultado e diferenças justificadas).
   - [`relatorios/F1.2-posicao-solar.md`](relatorios/F1.2-posicao-solar.md): SPA contra pvlib e contra o caso publicado.
   - [`relatorios/F1.3-carta-estereografica.md`](relatorios/F1.3-carta-estereografica.md): projeção, trajetórias, linhas horárias e estações.
@@ -28,6 +31,8 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
   - [`relatorios/F3.5-memoria-de-calculo.md`](relatorios/F3.5-memoria-de-calculo.md): indicadores calculados à mão em casos simples.
   - [`relatorios/F3.5-indicadores.md`](relatorios/F3.5-indicadores.md): indicadores contra pvlib e shapely e contra o EnergyPlus.
   - [`relatorios/F3.6-dimensionamento-inverso.md`](relatorios/F3.6-dimensionamento-inverso.md): ângulos contra o pvlib, ida e volta, minimalidade e o caso do tutorial da UFU.
+  - [`relatorios/F4.3-projecoes.md`](relatorios/F4.3-projecoes.md): analemas contra o pvlib em 9 locais, projeções e transferidor contra fórmulas fechadas, regiões da máscara fora da estereográfica.
+  - [`relatorios/F4.4-vento.md`](relatorios/F4.4-vento.md): fator da altura e do terreno contra o EnergyPlus 26.2.0 e 420 rosas com o filtro térmico contra um cálculo em Python.
 - `scripts/`: scripts que geram ou baixam os valores de referência (Python), para que qualquer pessoa reproduza. Dependências em `scripts/requirements.txt`.
 
 | Script | O que faz |
@@ -44,6 +49,9 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | `scripts/indicadores.py` | indicadores do F3.5 com pvlib, shapely e a DNI do EPW |
 | `scripts/energyplus_indicadores.py` | radiação direta incidente na janela no EnergyPlus, com e sem as placas, e decomposição das diferenças |
 | `scripts/dimensionamento_inverso.py` | ângulos exigidos no dimensionamento inverso (F3.6) com o pvlib |
+| `scripts/gerar_projecoes_analemas.py` | analemas em hora legal com o pvlib e pontos das projeções e do transferidor por fórmulas fechadas (F4.3) |
+| `scripts/energyplus_vento.py` | vento local por altura e terreno no EnergyPlus (F4.4; precisa do EnergyPlus 26.2.0, só biblioteca padrão) |
+| `scripts/rosa_vento_avancado.py` | rosas com o filtro pela condição térmica e a correção para a altura e o terreno (F4.4), com numpy e a classificação de `classificacao_horas.py` |
 
 ## Referências independentes
 
@@ -53,7 +61,7 @@ Casos de referência e relatórios. Todo cálculo físico da aplicação precisa
 | Máscaras | traçado de raios com janela e placas reais (máscara pelos ângulos, F2.3) e casos analíticos (ex.: brise horizontal infinito reproduz exatamente a curva α) |
 | Fração ensolarada | EnergyPlus (Surface Outside Face Sunlit Fraction), com ShadowCalculation atualizado a cada passo de tempo |
 | Radiação incidente | EnergyPlus (Surface Outside Face Incident Solar Radiation Rate per Area), explicitando o modelo de céu |
-| Vento | estatísticas calculadas de forma independente em Python |
+| Vento | estatísticas calculadas de forma independente em Python; correção para a altura e o terreno contra o EnergyPlus (Surface Outside Face Outdoor Air Wind Speed) |
 | Regressão | modelo de cálculo do SOL-AR 6.2 e capturas de tela do 6.2 |
 
 ## O que já se sabe do SOL-AR 6.2

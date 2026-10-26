@@ -1,7 +1,6 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
-import { windRose } from '../core/wind/windRose';
 import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
 import { chartFrame } from './chart/projectionContext';
@@ -30,8 +29,10 @@ import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
 import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
+import { classificationFromHash } from './state/classificationHash';
 import { windFromHash } from './state/windHash';
 import { chartOptionsFromHash } from './state/chartOptionsHash';
+import { useMethodSentence, useWindRose } from './wind/useWindRose';
 import { WindPanel } from './wind/WindPanel';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
@@ -102,13 +103,12 @@ export function App() {
   const chartOptions = chartOptionsFromHash(hashState);
   const frame = chartFrame(chartOptions.projection);
   const sourceUrl = city?.sourceUrl;
-  const rose = useMemo(
-    () =>
-      epw && wind.tab === 'rose'
-        ? windRose(epw, { sectors: wind.sectors, season: wind.season, period: wind.period })
-        : null,
-    [epw, wind.tab, wind.sectors, wind.season, wind.period],
-  );
+  // A mesma rosa da tela (filtro térmico e correção do F4.4), para o CSV.
+  const classification = classificationFromHash(hashState);
+  const { rose, thermal: roseThermal } = useWindRose(epw, wind, classification, {
+    active: wind.tab === 'rose',
+  });
+  const roseMethod = useMethodSentence(classification);
   // Comparação: a configuração A fica no link (cmp) e o arquivo dela, na memória.
   const hashA: HashState | null = hashState.cmp ? parseHash(hashState.cmp) : null;
   const epwA = hashA && hasHourlyData(siteFromHash(hashA)) ? compareEpw : null;
@@ -166,6 +166,19 @@ export function App() {
             period: wind.period ?? t('wind.allDay'),
             sectors: String(wind.sectors),
           }),
+          roseThermal
+            ? t('csv.thermal', {
+                thermal: t(`wind.titleThermal.${roseThermal}`),
+                method: roseMethod,
+              })
+            : t('csv.thermalAll'),
+          wind.corrected
+            ? t('csv.correction', {
+                height: String(wind.height),
+                terrain: t(`wind.terrainShort.${wind.terrain}`),
+                factor: wind.speedFactor.toFixed(4),
+              })
+            : t('csv.noCorrection'),
           t('csv.hypotheses'),
         ],
         rose,
@@ -287,7 +300,13 @@ export function App() {
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
-        <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+        <WindPanel
+          epw={epw}
+          wind={wind}
+          classification={classification}
+          sourceUrl={sourceUrl}
+          onChange={setHashState}
+        />
       </div>
     ) : wind.tab === '3d' ? (
       <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
@@ -440,7 +459,13 @@ export function App() {
                     {t('compare.a')}: {describeConfig(hashA, fmt, words)}
                   </h3>
                   {wind.tab === 'rose' ? (
-                    <WindPanel epw={epwA} wind={windFromHash(hashA)} onChange={() => {}} readOnly />
+                    <WindPanel
+                      epw={epwA}
+                      wind={windFromHash(hashA)}
+                      classification={classificationFromHash(hashA)}
+                      onChange={() => {}}
+                      readOnly
+                    />
                   ) : (
                     <ChartView hash={hashA} epw={epwA} />
                   )}
