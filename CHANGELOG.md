@@ -38,6 +38,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Alterado
 
+- Resultados ao lado da carta no computador (decisão 0038, proposta): com a aba da carta, o mapa mês × hora do passo 6 e a classificação, os indicadores e as alternativas do passo 7 passam para o painel da direita, abaixo da carta, com a largura dele; no passo fica uma linha que leva até lá. No celular e nas outras abas, nada muda.
 - Células da sobreposição calculadas num web worker e guardadas por local (não por arquivo): escolher a variável ou trocar o semestre não trava mais a página (a maior tarefa longa da linha principal, num celular emulado com a CPU 4 vezes mais lenta, caiu de 0,8 a 1,0 s para menos de 0,1 s), outro arquivo do mesmo local reaproveita o cálculo, e um aviso "Calculando as células da carta…" aparece enquanto o cálculo roda. Achado 9 da revisão antes do teste com usuários.
 - As 6 cidades de teste dão lugar ao catálogo de cidades; os links antigos continuam abrindo o mesmo local.
 - As mensagens de erro do cabeçalho de arquivos climáticos indicam a linha.
