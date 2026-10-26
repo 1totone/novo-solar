@@ -9,11 +9,11 @@ import { dirname, join, normalize } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 /**
- * Limites do JavaScript inicial, em kB (1 kB = 1000 bytes, como o relatório do Vite). Na
- * integração da Fase 4, provisoriamente o tamanho medido antes do carregamento sob demanda dos
- * idiomas, da ajuda, do modo didático e do catálogo (PR seguinte).
+ * Limites do JavaScript inicial, em kB (1 kB = 1000 bytes, como o relatório do Vite): alguns kB
+ * acima do medido na integração da Fase 4 (472 kB, 152 kB com gzip, em 26/10/2026). Para subir,
+ * mude o número no mesmo PR que acrescenta código ao caminho básico, com o motivo.
  */
-export const BUDGET = { raw: 705, gzip: 222 };
+export const BUDGET = { raw: 480, gzip: 156 };
 
 const dist = process.argv[2] ?? 'dist';
 const html = readFileSync(join(dist, 'index.html'), 'utf8');

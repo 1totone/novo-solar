@@ -1,4 +1,4 @@
-import { useId, useState, type ChangeEvent, type ReactNode } from 'react';
+import { lazy, Suspense, useId, useState, type ChangeEvent, type ReactNode } from 'react';
 import { EPW_FIELD_NAMES, epwPeriodOfRecord, EpwParseError } from '../core/epw/parseEpw';
 import { parseSolar62, solar62Header, type Solar62Location } from '../core/epw/parseSolar62';
 import {
@@ -9,7 +9,6 @@ import {
   type ProjectPoint,
   type Station,
 } from './catalog/catalog';
-import { CatalogSection } from './catalog/CatalogSection';
 import { useCatalog } from './catalog/useCatalog';
 import { CITIES, type City } from './cities';
 import { fileSite, readClimateFile, type LoadedFile } from './data/climateFile';
@@ -18,8 +17,15 @@ import { LocationForm } from './data/LocationForm';
 import { decodeText } from './data/readText';
 import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
+import { RestoreStepFocus } from './layout/AdvancedStepStub';
+import { rememberFocus } from './layout/focusAfterLoad';
 import { fileRadiationLag } from './overlay/radiationLag';
 import type { SelectedSite } from './state/siteHash';
+
+// Catálogo nacional (F4.1): o código da busca e do mapa só chega com o catálogo aberto (decisão 0039).
+const CatalogSection = lazy(() =>
+  import('./catalog/CatalogSection').then((m) => ({ default: m.CatalogSection })),
+);
 
 export type { LoadedFile } from './data/climateFile';
 
@@ -263,6 +269,27 @@ export function SitePanel({
     if (missing.length > 0) notices.push(t('site.noticeMissing', { fields: missing.join('; ') }));
   }
 
+  // Catálogo recolhido: só o resumo, sem baixar o código dele (decisão 0039).
+  const catalogStub = (
+    <details
+      className="catalog"
+      open={catalogOpen}
+      onToggle={(e) => {
+        const opening = e.currentTarget.open;
+        if (opening && e.currentTarget.contains(document.activeElement)) rememberFocus('catalog');
+        setCatalogOpen(opening);
+      }}
+      data-testid="catalog"
+    >
+      <summary>{t('catalog.heading', { count: catalog ? catalog.estacoes.length : 579 })}</summary>
+      {catalogOpen && (
+        <p className="note" role="status">
+          {t('catalog.loading')}
+        </p>
+      )}
+    </details>
+  );
+
   return (
     <section className="site-panel step-panel" aria-labelledby="site-heading" data-step="1">
       <h2 id="site-heading">
@@ -289,35 +316,42 @@ export function SitePanel({
           ))}
         </select>
       </div>
-      <CatalogSection
-        catalog={catalog}
-        map={map}
-        failed={failed}
-        selectedId={selected.kind === 'station' ? selected.id : null}
-        point={projectPoint}
-        current={site}
-        open={catalogOpen}
-        onOpenChange={setCatalogOpen}
-        onPointChange={onProjectPointChange}
-        onChoose={(s) => {
-          setError(null);
-          setPending(null);
-          onSelect(
-            {
-              kind: 'station',
-              id: s.id,
-              site: {
-                name: `${displayName(s)} (${s.uf})`,
-                latitude: s.lat,
-                longitude: s.lon,
-                timeZone: s.fuso,
-                elevation: s.alt,
-              },
-            },
-            null,
-          );
-        }}
-      />
+      {catalogOpen ? (
+        <Suspense fallback={catalogStub}>
+          <CatalogSection
+            catalog={catalog}
+            map={map}
+            failed={failed}
+            selectedId={selected.kind === 'station' ? selected.id : null}
+            point={projectPoint}
+            current={site}
+            open={catalogOpen}
+            onOpenChange={setCatalogOpen}
+            onPointChange={onProjectPointChange}
+            onChoose={(s) => {
+              setError(null);
+              setPending(null);
+              onSelect(
+                {
+                  kind: 'station',
+                  id: s.id,
+                  site: {
+                    name: `${displayName(s)} (${s.uf})`,
+                    latitude: s.lat,
+                    longitude: s.lon,
+                    timeZone: s.fuso,
+                    elevation: s.alt,
+                  },
+                },
+                null,
+              );
+            }}
+          />
+          <RestoreStepFocus testId="catalog" summary='[data-testid="catalog"] > summary' />
+        </Suspense>
+      ) : (
+        catalogStub
+      )}
       {city && (
         <div className="field" data-testid="city-data">
           <span className="field-label">{t('site.cityData')}</span>

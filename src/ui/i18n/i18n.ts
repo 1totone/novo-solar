@@ -1,5 +1,3 @@
-import { en } from './messages.en';
-import { es } from './messages.es';
 import { ptBR } from './messages.pt-BR';
 
 export type MessageKey = keyof typeof ptBR;
@@ -18,7 +16,26 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   en: 'English',
 };
 
-const catalogs: Record<Locale, Catalog> = { 'pt-BR': ptBR, es, en };
+/**
+ * Catálogos já carregados. O português vem com a aplicação; o espanhol e o inglês, sob demanda,
+ * só para quem usa (decisão 0039).
+ */
+const catalogs: Partial<Record<Locale, Catalog>> = { 'pt-BR': ptBR };
+
+const loaders: Record<Exclude<Locale, 'pt-BR'>, () => Promise<Catalog>> = {
+  es: () => import('./messages.es').then((m) => m.es),
+  en: () => import('./messages.en').then((m) => m.en),
+};
+
+export function isLocaleLoaded(locale: Locale): boolean {
+  return catalogs[locale] !== undefined;
+}
+
+/** Carrega o catálogo de um idioma (uma vez); o português já está carregado. */
+export async function loadLocale(locale: Locale): Promise<void> {
+  if (locale === 'pt-BR' || catalogs[locale]) return;
+  catalogs[locale] = await loaders[locale]();
+}
 
 export function isLocale(value: string | undefined | null): value is Locale {
   return typeof value === 'string' && (LOCALES as readonly string[]).includes(value);
@@ -41,7 +58,8 @@ export function translate(
   key: MessageKey,
   params: Record<string, string | number> = {},
 ): string {
-  const template = catalogs[locale][key];
+  // Idioma ainda não carregado: o texto em português, que tem todas as chaves.
+  const template = (catalogs[locale] ?? ptBR)[key];
   return template.replace(/\{(\w+)\}/g, (match, name: string) =>
     name in params ? String(params[name]) : match,
   );

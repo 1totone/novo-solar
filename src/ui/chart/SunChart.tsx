@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/useI18n';
 import type { HourLinesMode } from '../state/chartOptionsHash';
 import { chartGeometry, chartSky, type SvgPoint } from './chartGeometry';
 import { ChartProjectionContext, chartFrame, pathD } from './projectionContext';
+import { formatCandidates } from './labelLayout';
 import { useLabelLayout } from './useLabelLayout';
 import './SunChart.css';
 
@@ -250,6 +251,7 @@ export function SunChart({
               x={l.x}
               y={l.y}
               className={`date-label${cylindrical ? ' cylindrical' : ''}`}
+              data-candidates={l.candidates ? formatCandidates(l.candidates) : undefined}
             >
               {l.months.map((m) => months[m - 1]).join('/')}
             </text>

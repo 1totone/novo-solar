@@ -360,6 +360,7 @@ export const es: Catalog = {
   'side.heading': 'Del paso {step}, {name}',
   'side.annual': 'Sombra a lo largo del año',
   'side.effect': 'Clasificación de las horas e indicadores',
+  'side.catalog': 'Mapa de las estaciones',
   'geometry.heading': 'Protección por las dimensiones',
   'geometry.summary':
     'Ventana, protección horizontal, aletas y lamas en metros; corte, vista y sombra en la carta.',

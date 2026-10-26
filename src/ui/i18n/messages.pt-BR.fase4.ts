@@ -282,4 +282,5 @@ export const fase4PtBR = {
   'cell.difference': 'B − A: {diff} {unit} (média de A: {a}; de B: {b}).',
   'cells.captionDifference':
     'Média das horas de B menos a de A em cada célula ({unit}); linhas: quinzenas; colunas: horas do arquivo.',
+  'side.catalog': 'Mapa das estações',
 } as const;
