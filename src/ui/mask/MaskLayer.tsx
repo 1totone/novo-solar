@@ -1,5 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import type { MaskRegions } from '../../core/mask/mask';
+import { ChartClip } from '../chart/ChartClip';
+import { useChartProjection } from '../chart/projectionContext';
 import { BIG, HATCH, MaskBuilder, shortHash } from './maskBuilder';
 
 /** Máscara de sombra pintada na carta: total em vermelho, parcial em amarelo (decisão 0013). */
@@ -14,9 +16,12 @@ export function MaskLayer({
   // Os ids mudam com o conteúdo: o Chrome não redesenha direito uma máscara aninhada cujo
   // conteúdo muda mantendo o mesmo id (fica uma mistura do desenho antigo com o novo).
   // useId pode ter caracteres que não servem em url(#...).
-  const signature = shortHash(JSON.stringify([regions.total, regions.partial]));
+  const projection = useChartProjection();
+  const signature = shortHash(
+    JSON.stringify([regions.total, regions.partial, projection.kind, projection.center]),
+  );
   const prefix = `mask${useId().replace(/[^a-zA-Z0-9_-]/g, '')}${signature}`;
-  const builder = new MaskBuilder(prefix);
+  const builder = new MaskBuilder(prefix, projection);
   const layers: ReactNode[] = [];
   const hatches: ReactNode[] = [];
   for (const [kind, region, angle] of [
@@ -58,9 +63,7 @@ export function MaskLayer({
   return (
     <g className="mask" data-testid="mask">
       <defs>
-        <clipPath id={clipId}>
-          <circle r={1} />
-        </clipPath>
+        <ChartClip id={clipId} />
         {builder.defs}
         {hatches}
       </defs>

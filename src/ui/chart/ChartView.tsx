@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { makeProjection } from '../../core/chart/projection';
 import type { EpwData } from '../../core/epw/parseEpw';
 import { maskRegions } from '../../core/mask/mask';
 import { buildScene } from '../../core/shading/geometry';
@@ -21,6 +22,7 @@ import { geometryFromHash } from '../state/geometryHash';
 import type { HashState } from '../state/hashState';
 import { protractorFromHash } from '../state/protractorHash';
 import { siteFromHash } from '../state/siteHash';
+import { chartOptionsFromHash } from '../state/chartOptionsHash';
 import { SunChart } from './SunChart';
 import { timeZoneOffset } from '../timeZoneOffset';
 
@@ -45,6 +47,12 @@ export function ChartView({
   const protractor = protractorFromHash(hash);
   const { orientation, reference, angles, partial, drawn } = protractor;
   const regions = maskRegions(orientation, reference, angles, partial, drawn);
+  // Projeção e linhas horárias (F4.3): a cilíndrica fica centrada na normal da fachada.
+  const options = chartOptionsFromHash(hash);
+  const projection = useMemo(
+    () => makeProjection(options.projection, orientation),
+    [options.projection, orientation],
+  );
   const hasMask = regions.total.kind !== 'empty' || regions.partial.kind !== 'empty';
   const ov = useOverlay(epw, hash);
   const [hovered, setHovered] = useState<CellView | null>(null);
@@ -83,6 +91,8 @@ export function ChartView({
     <div className="chart-view">
       <SunChart
         site={site}
+        projection={projection}
+        hourLines={options.hourLines}
         title={t('chart.title', {
           place: site.name,
           latitude: formatNumber(site.latitude, 2),
@@ -159,6 +169,23 @@ export function ChartView({
             format={formatValue}
           />
         </>
+      )}
+      {options.hourLines === 'both' && (
+        <p
+          className="legend hour-lines-legend"
+          role="group"
+          aria-label={t('chartOptions.hourLinesLegend')}
+          data-testid="hour-lines-legend"
+        >
+          <span className="legend-item">
+            <span className="swatch solar-hour-line" aria-hidden="true" />
+            {t('chartOptions.legendSolar')}
+          </span>
+          <span className="legend-item">
+            <span className="swatch legal-hour-line" aria-hidden="true" />
+            {t('chartOptions.legendLegal')}
+          </span>
+        </p>
       )}
       {hasMask && (
         <p

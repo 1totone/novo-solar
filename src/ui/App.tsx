@@ -2,7 +2,9 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { windRose } from '../core/wind/windRose';
+import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
+import { chartFrame } from './chart/projectionContext';
 import type { City } from './cities';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
@@ -29,13 +31,12 @@ import { protractorFromHash } from './state/protractorHash';
 import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { windFromHash } from './state/windHash';
+import { chartOptionsFromHash } from './state/chartOptionsHash';
 import { WindPanel } from './wind/WindPanel';
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
-/** Largura do viewBox da carta em raios: a carta impressa tem 2,64 vezes o raio pedido. */
-const CHART_SPAN = 2.64;
-/** Lado do PNG exportado, em pixels. */
+/** Largura do PNG exportado, em pixels (a altura segue a proporção da carta). */
 const PNG_PIXELS = 2400;
 
 /** Régua de 5 cm impressa ao lado da carta, para conferir a escala. */
@@ -88,11 +89,18 @@ export function App() {
       (k) => hashState[k],
     ),
   );
+  // Opções da carta (F4.3) abertas: o link traz uma projeção ou um tipo de linha horária.
+  const [chartOptionsOpen, setChartOptionsOpen] = useState(() =>
+    Boolean(hashState.proj || hashState.hl),
+  );
   const geometryScale = scaleFromHash(hashState.esc);
   const geometryPrint = geometry.window
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
     : null;
   const wind = windFromHash(hashState);
+  // Projeção da carta (F4.3): a moldura dá o tamanho impresso em raios (2,64 nas azimutais).
+  const chartOptions = chartOptionsFromHash(hashState);
+  const frame = chartFrame(chartOptions.projection);
   const sourceUrl = city?.sourceUrl;
   const rose = useMemo(
     () =>
@@ -205,12 +213,24 @@ export function App() {
     if (kind === 'svg') {
       // A carta sai com o tamanho da impressão (raio pedido); a rosa, sem escala.
       const size =
-        wind.tab === 'rose' ? undefined : `${(print.radiusCm * CHART_SPAN).toFixed(2)}cm`;
+        wind.tab === 'rose'
+          ? undefined
+          : {
+              width: `${(print.radiusCm * frame.span.x).toFixed(2)}cm`,
+              height: `${(print.radiusCm * frame.span.y).toFixed(2)}cm`,
+            };
       const text = standaloneSvg(svg, description, size);
       downloadBlob(new Blob([text], { type: 'image/svg+xml' }), `${base}.svg`);
       return null;
     }
-    const png = await svgToPng(standaloneSvg(svg, description, String(PNG_PIXELS)), PNG_PIXELS);
+    // PNG: 2400 pixels de largura; a carta cilíndrica é mais baixa que larga.
+    const pngHeight =
+      wind.tab === 'rose' ? PNG_PIXELS : Math.round((PNG_PIXELS * frame.span.y) / frame.span.x);
+    const png = await svgToPng(
+      standaloneSvg(svg, description, { width: String(PNG_PIXELS), height: String(pngHeight) }),
+      PNG_PIXELS,
+      pngHeight,
+    );
     if (kind === 'png') {
       downloadBlob(png, `${base}.png`);
       return null;
@@ -244,11 +264,17 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
-    (geometryOpen || effectOpen) && wind.tab === 'chart' && !hashA ? 'follow' : '',
+    (geometryOpen || effectOpen || chartOptionsOpen) && wind.tab === 'chart' && !hashA
+      ? 'follow'
+      : '',
   ]
     .filter(Boolean)
     .join(' ');
-  const printStyle = { '--print-radius': String(print.radiusCm) } as CSSProperties;
+  const printStyle = {
+    '--print-radius': String(print.radiusCm),
+    '--chart-span-x': String(frame.span.x),
+    '--chart-span-y': String(frame.span.y),
+  } as CSSProperties;
   let source: string;
   if (epw && selected.kind === 'file' && loadedFile) {
     source = t('print.sourceFile', { file: loadedFile.fileName });
@@ -278,7 +304,15 @@ export function App() {
           }
         />
         <PrintRuler label={t('print.ruler')} />
-        <p className="note">{t('chart.note')}</p>
+        <p className="note" data-testid="chart-note">
+          {[
+            t(`chart.noteProjection.${chartOptions.projection}`, {
+              orientation: fmt(protractor.orientation),
+            }),
+            t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
+            t(`chart.noteHours.${chartOptions.hourLines}`),
+          ].join(' ')}
+        </p>
       </div>
     );
 
@@ -332,6 +366,14 @@ export function App() {
               geometryAvailable={geometry.window !== null}
             />
             <p className="steps-group">{t('advanced.group')}</p>
+            <ChartOptionsPanel
+              hash={hashState}
+              site={site}
+              placeName={site.name}
+              onChange={setHashState}
+              open={chartOptionsOpen}
+              onOpenChange={setChartOptionsOpen}
+            />
             <GeometryPanel
               geometry={geometry}
               hash={hashState}
@@ -365,7 +407,12 @@ export function App() {
                   timeZone: timeZoneOffset(site.timeZone, formatNumber),
                   source,
                   date: new Date().toLocaleDateString('pt-BR'),
-                  radius: fmt(print.radiusCm),
+                  scale: t(
+                    chartOptions.projection === 'cylindrical'
+                      ? 'print.scaleHeight'
+                      : 'print.scaleRadius',
+                    { radius: fmt(print.radiusCm) },
+                  ),
                 })}
               </p>
             </div>

@@ -1,6 +1,7 @@
 // Textos da interface em português do Brasil (idioma de referência).
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
 import { fase3PtBR } from './messages.pt-BR.fase3';
+import { fase4PtBR } from './messages.pt-BR.fase4';
 
 export const ptBR = {
   'app.name': 'SOL-AR',
@@ -219,7 +220,7 @@ export const ptBR = {
   'outputs.compareStop': 'Fechar a comparação',
   'print.title': 'SOL-AR: {place}',
   'print.details':
-    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. Raio da carta: {radius} cm.',
+    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. {scale}',
   'print.sourceCity':
     'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
   'print.sourceFile': 'Dados do arquivo {file}.',
@@ -337,4 +338,5 @@ export const ptBR = {
   'epw.field.windSpeed': 'velocidade do vento',
   'epw.field.totalSkyCover': 'cobertura do céu',
   ...fase3PtBR,
+  ...fase4PtBR,
 } as const;

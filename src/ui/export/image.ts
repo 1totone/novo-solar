@@ -54,8 +54,8 @@ export function standaloneSvg(
   return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}\n`;
 }
 
-/** PNG quadrado de `pixels` de lado, com fundo branco, a partir do texto SVG. */
-export async function svgToPng(svgText: string, pixels: number): Promise<Blob> {
+/** PNG de `pixels` de largura (e `height` de altura, quadrado por padrão), com fundo branco. */
+export async function svgToPng(svgText: string, pixels: number, height = pixels): Promise<Blob> {
   const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
   try {
     const img = new Image();
@@ -66,11 +66,11 @@ export async function svgToPng(svgText: string, pixels: number): Promise<Blob> {
     });
     const canvas = document.createElement('canvas');
     canvas.width = pixels;
-    canvas.height = pixels;
+    canvas.height = height;
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, pixels, pixels);
-    ctx.drawImage(img, 0, 0, pixels, pixels);
+    ctx.fillRect(0, 0, pixels, height);
+    ctx.drawImage(img, 0, 0, pixels, height);
     return await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('png'))), 'image/png'),
     );

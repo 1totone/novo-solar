@@ -1,16 +1,65 @@
 import { useId, useMemo } from 'react';
+import {
+  projectPath,
+  projectRing,
+  type ChartPoint,
+  type Projection,
+} from '../../core/chart/projection';
 import { project } from '../../core/chart/stereographic';
 import type { Region } from '../../core/mask/mask';
 import type { ShadingChart, SkyDirection } from '../../core/shading/contours';
+import { ChartClip } from '../chart/ChartClip';
+import { useChartProjection } from '../chart/projectionContext';
 import { useI18n } from '../i18n/useI18n';
 import { BIG, HATCH, MaskBuilder, shortHash } from '../mask/maskBuilder';
 
 type Point = [number, number];
 
-/** Direção do céu em coordenadas do SVG da carta (raio 1, y para baixo). */
+/** Direção do céu em coordenadas do SVG da carta estereográfica (raio 1, y para baixo). */
 function svgPoint(d: SkyDirection): Point {
   const c = project(90 - d.altitude, d.azimuth);
   return [c.x, -c.y];
+}
+
+const toDir = (d: SkyDirection) => ({ zenith: 90 - d.altitude, azimuth: d.azimuth });
+const toPoints = (line: ChartPoint[]): Point[] => line.map((q) => [q.x, -q.y]);
+
+/** O pedaço da polilinha com mais pontos dentro da carta (na cilíndrica, entre as cópias). */
+function mainPiece(pieces: ChartPoint[][]): ChartPoint[] {
+  let best = pieces[0] ?? [];
+  let bestCount = -1;
+  for (const piece of pieces) {
+    const count = piece.filter((q) => q.x >= -1 && q.x <= 1).length;
+    if (count > bestCount) {
+      best = piece;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
+/** Curvas e região de 100% na projeção da carta (F4.3); na estereográfica, como antes. */
+function drawChart(chart: ShadingChart, projection: Projection) {
+  if (projection.kind === 'stereographic') {
+    const lines = chart.contours.map((c) => ({ level: c.level, pieces: [c.points.map(svgPoint)] }));
+    return {
+      fill: chart.fullShade.map((ring) => pathOf(ring.map(svgPoint)) + 'Z').join(''),
+      lines,
+      labels: labelPositions(lines.map((l) => l.pieces[0]!)),
+    };
+  }
+  const lines = chart.contours.map((c) => {
+    const pieces = projectPath(projection, c.points.map(toDir), false);
+    return { level: c.level, pieces: pieces.map(toPoints), main: toPoints(mainPiece(pieces)) };
+  });
+  return {
+    fill: chart.fullShade
+      .flatMap((ring) => projectRing(projection, ring.map(toDir)))
+      .map((ring) => pathOf(toPoints(ring)) + 'Z')
+      .join(''),
+    lines,
+    labels: labelPositions(lines.map((l) => l.main)),
+  };
 }
 
 const pathOf = (points: readonly Point[]) =>
@@ -78,28 +127,24 @@ export function ShadingLayer({
   hatched?: boolean;
 }) {
   const { formatNumber } = useI18n();
-  const signature = shortHash(JSON.stringify(point));
+  const projection = useChartProjection();
+  const signature = shortHash(JSON.stringify([point, projection.kind, projection.center]));
   const prefix = `sh${useId().replace(/[^a-zA-Z0-9_-]/g, '')}${signature}`;
   // Coordenadas na carta: refeitas só quando chega outro resultado (não a cada passagem do mouse).
-  const drawn = useMemo(() => {
-    if (!chart) return null;
-    const lines = chart.contours.map((c) => ({ level: c.level, points: c.points.map(svgPoint) }));
-    return {
-      fill: chart.fullShade.map((ring) => pathOf(ring.map(svgPoint)) + 'Z').join(''),
-      lines,
-      labels: labelPositions(lines.map((l) => l.points)),
-    };
-  }, [chart]);
+  const drawn = useMemo(
+    () => (chart ? drawChart(chart, projection) : null),
+    // A projeção é descrita pelo tipo e pelo centro.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chart, projection.kind, projection.center],
+  );
   if (!drawn && !point) return null;
-  const builder = new MaskBuilder(prefix);
+  const builder = new MaskBuilder(prefix, projection);
   const pointMask = point && point.kind !== 'empty' ? builder.mask(point) : null;
   const levelClass = (level: number) => `level-${Math.round(level * 100)}`;
   return (
     <g className="shading" data-testid="shading-layer" data-stale={stale ? 'true' : undefined}>
       <defs>
-        <clipPath id={`${prefix}-clip`}>
-          <circle r={1} />
-        </clipPath>
+        <ChartClip id={`${prefix}-clip`} />
         <pattern
           id={`${prefix}-hfull`}
           patternUnits="userSpaceOnUse"
@@ -140,7 +185,7 @@ export function ShadingLayer({
             {drawn.lines.map((line, i) => (
               <path
                 key={`l${i}`}
-                d={pathOf(line.points)}
+                d={line.pieces.map(pathOf).join('')}
                 className={`contour ${levelClass(line.level)}`}
                 data-level={line.level}
               />
