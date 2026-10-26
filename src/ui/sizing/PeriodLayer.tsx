@@ -3,16 +3,18 @@ import { projectDirection, projectRing } from '../../core/chart/projection';
 import type { RequiredAngles, SkyPosition } from '../../core/shading/inverse';
 import { ChartClip } from '../chart/ChartClip';
 import { pathD, useChartProjection } from '../chart/projectionContext';
+import { useI18n } from '../i18n/useI18n';
 
-const LABELS: [keyof RequiredAngles, string][] = [
-  ['alpha', 'α'],
-  ['alphaMax', 'α2'],
-  ['gammaRight', 'γ d'],
-  ['gammaLeft', 'γ e'],
-  ['betaRight', 'β d'],
-  ['betaLeft', 'β e'],
-  ['finGammaRight', 'γa d'],
-  ['finGammaLeft', 'γa e'],
+/** Rótulo de cada ângulo na carta: símbolo e lado (d e e em português). */
+const LABELS: [keyof RequiredAngles, string, 'right' | 'left' | null][] = [
+  ['alpha', 'α', null],
+  ['alphaMax', 'α2', null],
+  ['gammaRight', 'γ', 'right'],
+  ['gammaLeft', 'γ', 'left'],
+  ['betaRight', 'β', 'right'],
+  ['betaLeft', 'β', 'left'],
+  ['finGammaRight', 'γa', 'right'],
+  ['finGammaLeft', 'γa', 'left'],
 ];
 
 /**
@@ -53,13 +55,16 @@ export function PeriodMarks({
   showAlphaMax: boolean;
 }) {
   const projection = useChartProjection();
+  const { t } = useI18n();
+  const side = { right: t('sides.rightShort'), left: t('sides.leftShort') };
   const svg = (d: SkyPosition) => {
     const c = projectDirection(projection, 90 - d.altitude, d.azimuth);
     return [c.x, -c.y] as const;
   };
   // Pontos repetidos (o mesmo sol determina dois ângulos): um rótulo só, com os dois nomes.
   const marks = new Map<string, { x: number; y: number; names: string[] }>();
-  for (const [key, name] of LABELS) {
+  for (const [key, symbol, s] of LABELS) {
+    const name = s ? `${symbol} ${side[s]}` : symbol;
     const e = angles[key];
     if (!e || (key === 'alphaMax' && !showAlphaMax)) continue;
     const [x, y] = svg(e.sample);

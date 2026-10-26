@@ -13,6 +13,9 @@ export default defineConfig({
   use: {
     baseURL: `http://127.0.0.1:${PORT}${BASE_PATH}`,
     trace: 'retain-on-failure',
+    // A interface segue o idioma do navegador (F4.6): os testes rodam em português, salvo os de
+    // idioma, que trocam o locale.
+    locale: 'pt-BR',
   },
   projects: [
     { name: 'computador', use: { ...devices['Desktop Chrome'] } },

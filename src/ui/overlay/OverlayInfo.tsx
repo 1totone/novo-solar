@@ -2,10 +2,10 @@ import { useI18n } from '../i18n/useI18n';
 import type { CellView } from './OverlayLayer';
 import { periodLabel } from './periodLabel';
 
-/** Hora legal decimal como "13 h" ou "13h30". */
-function clock(h: number): string {
+/** Hora legal decimal como "13 h" ou, na meia hora, pelo relógio do idioma (13h30, 13:30). */
+function clock(h: number, formatClock: (hours: number, minutes: number) => string): string {
   const hh = Math.floor(h) % 24;
-  return Number.isInteger(h) ? `${hh} h` : `${hh}h30`;
+  return Number.isInteger(h) ? `${hh} h` : formatClock(hh, 30);
 }
 
 /** Legenda das faixas: cores e intervalos, com a unidade. */
@@ -65,7 +65,7 @@ export function CellInfo({
   threshold: number;
   format: (v: number) => string;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatClock } = useI18n();
   if (!view) {
     return (
       <p className="note cell-info" data-testid="cell-info">
@@ -79,10 +79,10 @@ export function CellInfo({
     <p className="note cell-info" data-testid="cell-info" aria-live="polite">
       <strong>
         {t('cell.where', {
-          period: periodLabel(cell.period),
+          period: periodLabel(cell.period, t),
           hour: String(cell.hour),
-          start: clock(cell.start),
-          end: clock(cell.end),
+          start: clock(cell.start, formatClock),
+          end: clock(cell.end, formatClock),
         })}
       </strong>{' '}
       {!stats

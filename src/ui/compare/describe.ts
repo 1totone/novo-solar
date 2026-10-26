@@ -9,7 +9,13 @@ import { siteFromHash } from '../state/siteHash';
 export function describeConfig(
   hash: HashState,
   format: (v: number) => string,
-  words: { orientation: (degrees: string) => string; none: string },
+  words: {
+    orientation: (degrees: string) => string;
+    none: string;
+    /** Letras de direita e esquerda (d e e em português). */
+    right: string;
+    left: string;
+  },
 ): string {
   const site = siteFromHash(hash).site.name;
   const p = protractorFromHash(hash);
@@ -22,10 +28,10 @@ export function describeConfig(
     angles.push(`${symbol} ${format(v1)}°${v2 === undefined ? '' : `/${format(v2)}°`}`);
   };
   add('α', p.angles.alpha);
-  add('β d', p.angles.betaRight);
-  add('β e', p.angles.betaLeft);
-  add('γ d', p.angles.gammaRight);
-  add('γ e', p.angles.gammaLeft);
+  add(`β ${words.right}`, p.angles.betaRight);
+  add(`β ${words.left}`, p.angles.betaLeft);
+  add(`γ ${words.right}`, p.angles.gammaRight);
+  add(`γ ${words.left}`, p.angles.gammaLeft);
   parts.push(angles.length > 0 ? angles.join(', ') : words.none);
   return parts.join(' · ');
 }

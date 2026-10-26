@@ -17,7 +17,11 @@ describe('mapa mês × hora: classes e CSV', () => {
       exposure: Array.from({ length: 12 }, () => row(1) as number[]),
       shadedWhenExposed: Array.from({ length: 12 }, (_, m) => row(m === 0 ? null : 0.25)),
     };
-    const lines = mapCsv(map, ['Teste'], 'a,b,c,d,e,f,g,h,i,j,k,l'.split(','))
+    const lines = mapCsv(
+      map,
+      ['Teste', 'Separador: vírgula; decimal: ponto.'],
+      'a,b,c,d,e,f,g,h,i,j,k,l'.split(','),
+    )
       .trimEnd()
       .split('\n');
     expect(lines[0]).toBe('﻿# Teste');
@@ -38,7 +42,9 @@ describe('mapa mês × hora: classes e CSV', () => {
       sunlitIncidence: fill(0.125),
       incidence: fill(0.375),
     };
-    const lines = hourlyCsv(hourly, ['Teste']).trimEnd().split('\n');
+    const lines = hourlyCsv(hourly, ['Teste', 'Separador: vírgula; decimal: ponto.'])
+      .trimEnd()
+      .split('\n');
     expect(lines).toHaveLength(3 + HOURS_PER_YEAR);
     expect(lines[3]).toBe('1,1,1,0.25,0.5,0.125,0.375');
     expect(lines[3 + 24 * 31]).toBe('2,1,1,0.25,0.5,0.125,0.375');

@@ -51,7 +51,7 @@ export function CellTable({
           <tbody>
             {periods.map((p) => (
               <tr key={p}>
-                <th scope="row">{periodLabel(p)}</th>
+                <th scope="row">{periodLabel(p, t)}</th>
                 {hours.map((h) => (
                   <td key={h}>{value(p, h)}</td>
                 ))}

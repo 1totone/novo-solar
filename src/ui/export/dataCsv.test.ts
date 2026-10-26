@@ -12,7 +12,7 @@ describe('CSV dos dados mostrados', () => {
       ['3-14', { n: 15, mean: 612.4, min: 120, max: 980 }],
     ]);
     const text = overlayCsv({
-      header: ['Local: X'],
+      header: ['Local: X', 'Separador: vírgula; decimal: ponto.'],
       cells,
       stats,
       mode: 'mean',
@@ -28,7 +28,7 @@ describe('CSV dos dados mostrados', () => {
 
   it('rosa: setores, classes, total, velocidade e calmaria', () => {
     const text = windCsv({
-      header: [],
+      header: ['Separador: vírgula; decimal: ponto.'],
       rose: {
         sectors: 8,
         hours: 10,
