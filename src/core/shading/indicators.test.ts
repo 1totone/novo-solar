@@ -4,12 +4,19 @@
 import { describe, expect, it } from 'vitest';
 import { HOUR_CLASS } from '../comfort/classification';
 import { buildScene } from './geometry';
-import { HOURS_PER_YEAR, hourIndex, hourlyShading, type SunSamples } from './hourly';
+import {
+  HOURS_PER_YEAR,
+  hourIndex,
+  hourlyShading,
+  type HourlyShading,
+  type SunSamples,
+} from './hourly';
 import {
   beamIndicators,
   compareAlternatives,
   hourlyBeam,
   referenceHourIndices,
+  sunnyClassShares,
   sunUpFraction,
   type EpwRows,
 } from './indicators';
@@ -247,5 +254,76 @@ describe('dominância', () => {
     expect(b!.indicators.blockedInHot).toBeCloseTo(0, 12);
     expect(b!.indicators.admittedInCold).toBeCloseTo(1 - (0.5 * t(60) - 0.5), 12);
     expect(rows.map((r) => r.dominated)).toEqual([false, true]);
+  });
+});
+
+describe('classes nas horas com sol na janela (spec 08, seção 8.6, item 5)', () => {
+  const zeros = () => new Float64Array(HOURS_PER_YEAR);
+  const bare = (): HourlyShading => ({
+    sunlit: zeros(),
+    exposure: zeros(),
+    sunlitIncidence: zeros(),
+    incidence: zeros(),
+  });
+
+  it('conta só as linhas com sol na janela e pondera pela radiação direta incidente sem proteção', () => {
+    const rows = calendar();
+    const shading = bare();
+    const classes = new Int8Array(HOURS_PER_YEAR).fill(HOUR_CLASS.hot);
+    const incident = new Float64Array(HOURS_PER_YEAR);
+    const [a, b, c, d, e] = [
+      hourIndex(1, 10, 12),
+      hourIndex(6, 1, 9),
+      hourIndex(6, 1, 10),
+      hourIndex(7, 4, 15),
+      hourIndex(12, 31, 3),
+    ];
+    // Quente, 300 Wh/m²; fria com sol em meia hora, 100; neutra com DNI nula; sem classe, 50.
+    shading.exposure[a] = 1;
+    incident[a] = 300;
+    shading.exposure[b] = 0.5;
+    classes[b] = HOUR_CLASS.cold;
+    incident[b] = 100;
+    shading.exposure[c] = 1;
+    classes[c] = HOUR_CLASS.neutral;
+    shading.exposure[d] = 1;
+    classes[d] = HOUR_CLASS.none;
+    incident[d] = 50;
+    // Hora quente sem sol na janela (noite): fora da contagem.
+    classes[e] = HOUR_CLASS.hot;
+    const s = sunnyClassShares(classes, shading, rows, incident);
+    expect(s).toEqual({
+      hours: 4,
+      incident: 450,
+      missingDni: 0,
+      byClass: {
+        hot: { hours: 1, incident: 300 },
+        cold: { hours: 1, incident: 100 },
+        neutral: { hours: 1, incident: 0 },
+        none: { hours: 1, incident: 50 },
+      },
+    });
+  });
+
+  it('linha sem DNI conta a hora e fica fora da radiação; 29/02 usa a exposição de 28/02', () => {
+    const rows = calendar(true);
+    const shading = bare();
+    const i28 = hourIndex(2, 28, 13);
+    shading.exposure[i28] = 1;
+    const classes = new Int8Array(8784).fill(HOUR_CLASS.cold);
+    const incident = new Float64Array(8784);
+    incident[i28] = 200; // 28/02
+    incident[i28 + 24] = NaN; // 29/02, sem DNI
+    const s = sunnyClassShares(classes, shading, rows, incident);
+    expect(s.hours).toBe(2);
+    expect(s.missingDni).toBe(1);
+    expect(s.byClass.cold).toEqual({ hours: 2, incident: 200 });
+    expect(s.incident).toBe(200);
+  });
+
+  it('recusa classes, radiação e linhas de tamanhos diferentes', () => {
+    expect(() =>
+      sunnyClassShares(new Int8Array(10), bare(), calendar(), new Float64Array(HOURS_PER_YEAR)),
+    ).toThrow(RangeError);
   });
 });

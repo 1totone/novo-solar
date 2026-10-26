@@ -122,4 +122,78 @@ export const fase3PtBR = {
   'annual.csvLink': 'Configuração (link): {url}',
   'annual.csvHypotheses':
     'Hora legal do arquivo, sem horário de verão; a hora h é o intervalo de h - 1 a h; 6 instantes por hora, no meio de cada intervalo de 10 min; sol pelo SPA; só a geometria (spec 07, seção 7.6).',
+  'effect.heading': 'Efeito no ano',
+  'effect.summary': 'Horas quentes e frias com sol na janela, pelo clima do arquivo.',
+  'effect.needsData':
+    'Este passo usa os dados horários do clima (temperatura e radiação direta). Abra no passo 1 um arquivo climático ou os dados históricos da cidade.',
+  'effect.pending': 'Calculando o ano…',
+  'effect.noWindow':
+    'Sem janela no passo 6, as horas com sol na janela são as da fachada do passo 2, sem proteção.',
+  'classes.heading': 'Horas quentes e frias',
+  'classes.method': 'Como classificar as horas',
+  'classes.method.adaptive': 'Faixa adaptativa da ASHRAE 55 (padrão)',
+  'classes.method.thresholds': 'Limiares de temperatura',
+  'classes.method.balance': 'Temperatura de equilíbrio',
+  'classes.acceptability': 'Aceitabilidade',
+  'classes.gains': 'Acréscimo por ganhos, ΔT (°C)',
+  'classes.gainsHelp':
+    'A faixa vale para a temperatura operativa interna. Com ΔT, cada hora é comparada como se o interior estivesse ΔT acima do ar externo. Em casas ocupadas e ventiladas naturalmente, a temperatura interna ficou de 0 a 2,7 °C acima da média externa das horas anteriores em Florianópolis e de 0,2 a 4,0 °C em Curitiba (Papst de Abreu, 2004).',
+  'classes.more': 'Mais opções',
+  'classes.averaging': 'Temperatura média predominante (t_pma)',
+  'classes.averaging.exponential': 'média exponencial',
+  'classes.averaging.arithmetic': 'média aritmética',
+  'classes.averagingDetail.exponential': 'média exponencial (α = {alpha}, {days} dias)',
+  'classes.averagingDetail.arithmetic': 'média aritmética de {days} dias',
+  'classes.alpha': 'α (0,6 a 0,9)',
+  'classes.days': 'Dias anteriores (7 a 30)',
+  'classes.hourTemp': 'Temperatura da hora',
+  'classes.hourTemp.mean': 'Média do início e do fim da hora (padrão)',
+  'classes.hourTemp.end': 'Fim da hora (o valor do arquivo)',
+  'classes.cold': 'Hora fria abaixo de (°C)',
+  'classes.hot': 'Hora quente acima de (°C)',
+  'classes.thresholdsHelp': 'Deixe um em branco para não ter horas frias ou quentes.',
+  'classes.suggest20': 'Usar 20 °C',
+  'classes.suggest20Source':
+    'Sugestão com fonte: sombrear sempre que o ar passar de 20 °C, critério de Lamberts, Dutra e Pereira (2014, p. 91 e 135) para ambiente sem carga térmica interna; com carga interna, use um limite menor.',
+  'classes.balance': 'Temperatura de equilíbrio (°C)',
+  'classes.balanceHelp':
+    'Temperatura externa acima da qual os ganhos passam a ser excesso: T_eq = T_int − Q / UA. Depende do edifício e não tem valor padrão (não há valor por tipologia com fonte).',
+  'classes.invalid': 'Há campos inválidos (em vermelho).',
+  'classes.incomplete': 'Digite o valor para classificar as horas.',
+  'classes.hypotheses': 'Hipóteses',
+  'classes.h1':
+    'A classe vem só da temperatura do ar externo, um indicador aproximado da necessidade de sombra: ganhos internos, envoltória, massa térmica, ventilação e o próprio sol na janela não entram.',
+  'classes.h2.adaptive':
+    'Faixa adaptativa da ASHRAE 55-2023, {acceptability}% de aceitabilidade: conforto = 0,31 · t_pma + 17,8 °C, mais ou menos {half} °C, com t_pma pela {averaging}. A faixa vale para a temperatura operativa interna de ambientes naturalmente condicionados; aqui é comparada com o ar externo, o que tende a subestimar as horas quentes.',
+  'classes.h2.gains': 'Acréscimo por ganhos: os limites descem ΔT = {gains} °C.',
+  'classes.h2.noGains': 'Sem acréscimo por ganhos (ΔT = 0): a classe é a do ar externo.',
+  'classes.h2.thresholds':
+    'Limiares: hora fria abaixo de {cold}; quente acima de {hot}; entre eles, neutra.',
+  'classes.h2.noLimit': 'sem limite',
+  'classes.h2.balance':
+    'Temperatura de equilíbrio de {balance} °C: acima, hora quente; abaixo, fria; igual, neutra.',
+  'classes.h3':
+    'Horas sem classe (t_pma fora da faixa de aplicação da norma, de 10 a 33,5 °C): {count} das {hours} horas com sol na janela.',
+  'classes.h4.mean':
+    'Temperatura da hora: média do início e do fim da hora, o instante do meio, como o sol e a radiação da hora.',
+  'classes.h4.end':
+    'Temperatura da hora: a do fim da hora (o valor do arquivo), meia hora depois do sol do meio da hora.',
+  'classes.h5':
+    'As partes de cada classe são das {hours} horas com sol na janela da fachada a {orientation}° (sem a proteção), contadas e pela radiação direta incidente (DNI · cos θ), e não das 8760 horas do ano: as noites não pesam no sombreamento.',
+  'classes.tableCaption':
+    'Horas com sol na janela e radiação direta incidente sem proteção (DNI · cos θ, kWh por m² de janela no ano), por classe',
+  'classes.col.class': 'Classe',
+  'classes.col.hours': 'Horas',
+  'classes.col.share': '%',
+  'classes.col.radiation': 'kWh/m²',
+  'classes.radiationShares': 'Parte da radiação direta das horas com sol na janela',
+  'classes.hoursShares': 'Parte das horas com sol na janela',
+  'classes.class.hot': 'Quentes',
+  'classes.class.neutral': 'Neutras',
+  'classes.class.cold': 'Frias',
+  'classes.class.none': 'Sem classe',
+  'classes.bar': 'Parte de cada classe na radiação direta das horas com sol na janela',
+  'classes.barLabel': '{name}: {share}%',
+  'classes.missingDni':
+    '{count} horas com sol na janela sem radiação direta no arquivo ficam fora das somas.',
 } as const;

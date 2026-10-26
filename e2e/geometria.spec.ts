@@ -36,7 +36,7 @@ async function openStep6(page: Page) {
 }
 
 test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
-  test('o fluxo básico não muda: passo 6 recolhido no fim, sem chaves novas no link', async ({
+  test('o fluxo básico não muda: passos 6 e 7 recolhidos no fim, sem chaves novas no link', async ({
     page,
   }) => {
     await page.goto('./#local=florianopolis');
@@ -48,9 +48,13 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
       /4\s*Dados sobre a carta/,
       /5\s*Imprimir e exportar/,
       /6\s*Proteção pelas dimensões/,
+      /7\s*Efeito no ano/,
     ]);
     const panel = page.getByTestId('geometry-panel');
     await expect(panel.locator('details')).not.toHaveAttribute('open');
+    await expect(page.getByTestId('effect-panel').locator('details').first()).not.toHaveAttribute(
+      'open',
+    );
     await expect(page.getByTestId('geometry-start')).toBeHidden();
     await expect(page.getByTestId('geometry-summary')).toContainText('Janela, brise');
     expect(page.url()).not.toMatch(/jl=|pc1=/);

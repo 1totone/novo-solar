@@ -103,6 +103,18 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 8. **Percentuais das classes sobre as horas com sol na janela**, contados e ponderados pela radiação.
 9. **Limiar de 20 °C** (Lamberts, Dutra e Pereira, 2014) oferecido como sugestão com fonte no método de limiares; a decisão 0024 (proposta) recomenda torná-lo o padrão.
 
+## 8.9 Interface (F3.4)
+
+O passo 7, "Efeito no ano" (decisão 0023, proposta), recolhido depois do passo 6, classifica as horas do arquivo aberto no passo 1 (arquivo carregado ou dados históricos da cidade); sem dados horários, ele pede os dados. A seção "Horas quentes e frias" tem:
+
+- **Método**, em botões de opção: faixa adaptativa da ASHRAE 55 (padrão, seção 8.4, com a aceitabilidade de 80% ou 90% e o acréscimo por ganhos ΔT, com a ordem de grandeza de Papst de Abreu, 2004, na tela); limiares de temperatura (fria abaixo de, quente acima de; um pode ficar em branco), com o botão "Usar 20 °C" e a fonte (Lamberts, Dutra e Pereira, 2014); e temperatura de equilíbrio, sem valor padrão. Em "Mais opções": a forma da média predominante (exponencial com α de 0,6 a 0,9, ou aritmética), os dias (7 a 30) e a temperatura da hora (média do início e do fim, padrão, ou o fim da hora). Campos fora da faixa ficam marcados e a classificação espera. ΔT é aceito de −10 a 10 °C.
+- **Hipóteses** sempre visíveis, montadas a partir das escolhas (seção 8.6): a classe vem só do ar externo; o método e os valores (na faixa adaptativa, a equação, a aceitabilidade, a média predominante e o aviso de que a faixa é da operativa interna e tende a subestimar as horas quentes; o ΔT ou a falta dele); as horas sem classe; a temperatura da hora; e a base das partes de cada classe.
+- **Partes de cada classe nas horas com sol na janela** da fachada do passo 2, sem a proteção (exposição da hora maior que 0; seção 7.6), contadas e ponderadas pela radiação direta incidente sem proteção, E₀ = DNI · C (seção 9.1): duas barras de 100% (radiação e horas) com o percentual escrito sob cada parte e uma tabela com as horas, os kWh/m² e os percentuais de cada classe (frias, neutras, quentes e sem classe). Linhas com sol na janela e sem DNI contam nas horas e ficam fora da radiação, com aviso. Sem janela no passo 6, usa-se uma janela de 1 × 1 m sem peças (a exposição e a incidência sem proteção não dependem da janela).
+- **Estado no link:** `cm` (método: em branco, `l` limiares, `e` equilíbrio), `ca` (`90`), `cr` (`m`, aritmética), `cal` (α), `cn` (dias), `cg` (ΔT), `tf` e `tq` (limiares), `te` (equilíbrio) e `ct` (`f`, fim da hora), com o texto digitado. O passo abre sozinho quando o link traz uma dessas chaves.
+- **Cálculo:** a classificação (8760 horas) roda na linha principal; a fração ensolarada do ano vem do mesmo worker do mapa mês × hora (seção 7.13), com o local do arquivo.
+
+Conferência de ponta a ponta (`e2e/classificacao.spec.ts`), com EPWs sintéticos: com 22 °C constantes, t_pma = 22 °C e a faixa de 80% vai de 21,12 a 28,12 °C (todas as horas neutras); com ΔT = 8 °C, os limites descem para 13,12 e 20,12 °C (todas quentes); com 15 °C de manhã e 25 °C à tarde e o limiar de 20 °C, a hora das 12 às 13 h vale 20 °C pela média da hora (empate, neutra) e 25 °C pelo fim da hora (quente); as cores lidas no meio de cada parte da barra correspondem às partes da tabela; a temperatura de equilíbrio só classifica com o valor digitado; teclado e axe sem violações. A função que conta as classes nas horas com sol na janela tem casos à mão em `src/core/shading/indicators.test.ts`.
+
 ## Referências
 
 - ANSI/ASHRAE. *Standard 55-2023: Thermal Environmental Conditions for Human Occupancy*. Atlanta: ASHRAE, 2023 (modelo adaptativo; texto não consultado diretamente, ver seção 8.4).

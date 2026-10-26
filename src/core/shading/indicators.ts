@@ -176,6 +176,66 @@ export function beamIndicators(beam: HourlyBeam, classes: Int8Array): BeamIndica
   };
 }
 
+export interface SunnyClassShares {
+  /** Linhas com sol na janela (exposição da hora maior que 0, sem a proteção). */
+  hours: number;
+  /** Σ E₀ nessas linhas (Wh/m²), sem as linhas sem DNI. */
+  incident: number;
+  /** Linhas com sol na janela e sem DNI: contam nas horas, não na radiação. */
+  missingDni: number;
+  /** Horas e radiação direta incidente sem proteção (Wh/m²) de cada classe, nessas linhas. */
+  byClass: Record<'hot' | 'cold' | 'neutral' | 'none', { hours: number; incident: number }>;
+}
+
+/**
+ * Parte de cada classe nas horas com sol na janela, contada e ponderada pela radiação direta
+ * incidente sem proteção (spec 08, seção 8.6, item 5): as noites e as horas de sol atrás da fachada
+ * não pesam no sombreamento. `incident` é o E₀ de cada linha (hourlyBeam).
+ */
+export function sunnyClassShares(
+  classes: Int8Array,
+  shading: HourlyShading,
+  rows: EpwRows,
+  incident: ArrayLike<number>,
+): SunnyClassShares {
+  const n = rows.month.length;
+  if (classes.length !== n || incident.length !== n) {
+    throw new RangeError('classes, incident radiation and rows must have the same length');
+  }
+  const index = referenceHourIndices(rows.month, rows.day, rows.hour);
+  const byClass = {
+    hot: { hours: 0, incident: 0 },
+    cold: { hours: 0, incident: 0 },
+    neutral: { hours: 0, incident: 0 },
+    none: { hours: 0, incident: 0 },
+  };
+  let hours = 0;
+  let total = 0;
+  let missingDni = 0;
+  for (let r = 0; r < n; r++) {
+    if (!(shading.exposure[index[r]!]! > 0)) continue;
+    hours++;
+    const c = classes[r];
+    const t =
+      c === HOUR_CLASS.hot
+        ? byClass.hot
+        : c === HOUR_CLASS.cold
+          ? byClass.cold
+          : c === HOUR_CLASS.neutral
+            ? byClass.neutral
+            : byClass.none;
+    t.hours++;
+    const e0 = incident[r]!;
+    if (Number.isNaN(e0)) {
+      missingDni++;
+      continue;
+    }
+    t.incident += e0;
+    total += e0;
+  }
+  return { hours, incident: total, missingDni, byClass };
+}
+
 export interface Alternative {
   id: string;
   scene: Scene;
