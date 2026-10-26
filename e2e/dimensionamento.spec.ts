@@ -109,8 +109,10 @@ test.describe('passo 6: dimensionamento pelo período (F3.6)', () => {
     }
     expect(inside.length).toBeGreaterThan(40);
     const green = ([r, g, b]: [number, number, number]) => g - r > 12 && g - b > 8 && r > 150;
-    const inColors = await svgColors(chart, inside, 0.4);
-    const outColors = await svgColors(chart, outside, 0.4);
+    // Mediana de um bloco de 5 × 5 px: ignora as linhas finas da carta (grade, trajetórias e horas)
+    // que cruzam a área; com a grade de 3:1 (decisão 0030), a amostra de um pixel só caía nelas.
+    const inColors = await svgColors(chart, inside, 2);
+    const outColors = await svgColors(chart, outside, 2);
     const share = (cs: [number, number, number][]) => cs.filter(green).length / cs.length;
     expect(share(inColors)).toBeGreaterThan(0.6);
     expect(share(outColors)).toBeLessThan(0.05);
