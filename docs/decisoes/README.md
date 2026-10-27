@@ -52,6 +52,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0046](0046-desenho-dos-angulos.md) | Desenho de onde se mede cada ângulo no passo 3: α no corte, β na planta e γ na vista, um por vez, seguindo o campo em foco, com o valor digitado nas duas referências; AVS e AHS só na ajuda e no glossário (item d da 0044) | 2026-10-27 | proposta |
 | [0047](0047-fontes-de-dados.md) | Fontes de dados no passo 1: "Dados horários" com os dados do SOL-AR 6.2 e os arquivos carregados do mesmo lugar (que não somem ao trocar de cidade), "Pintar na carta" ali mesmo e "Comparar com outros dados" com a diferença B − A (itens e, f e h da 0044) | 2026-10-27 | proposta |
 | [0048](0048-zip-direto.md) | Abrir o .zip do TMYx direto no navegador, pelo fflate (MIT, cerca de 5 kB, só quando se escolhe um .zip); só o .epw de dentro é lido (item g da 0044) | 2026-10-27 | proposta |
+| [0049](0049-compartilhar.md) | Botão "Compartilhar" no cabeçalho: copia o link e diz o que ele reabre (e que os arquivos carregados não vão nele), com o link à vista para copiar à mão (item i da 0044) | 2026-10-27 | proposta |
 
 ## Modelo
 

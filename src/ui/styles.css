@@ -1626,10 +1626,29 @@ fieldset.piece legend {
 
 /* Ajuda e exemplos resolvidos (F4.8) */
 .header-tools {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1rem;
+}
+
+/* "Compartilhar" (decisão 0049): o link e o que ele reabre, logo abaixo do botão. */
+.share-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 40;
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0.75rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+}
+
+.share-panel p {
+  margin: 0 0 0.5rem;
 }
 
 /* Altura fixa: o diálogo não muda de tamanho ao trocar de parte. */

@@ -1069,4 +1069,16 @@ export const es: Catalog = {
   'site.zip.manyEpw': 'El .zip tiene más de un archivo .epw: descomprímalo y cargue el que quiera.',
   'site.zip.corrupt':
     'No se pudo abrir el .zip: el archivo parece incompleto o dañado. Descárguelo de nuevo.',
+  // Compartir (decisión 0049).
+  'share.button': 'Compartir',
+  'share.copied':
+    'Enlace copiado. Abre este mismo análisis: el lugar, la fachada, los ángulos, los datos elegidos y las opciones de la carta.',
+  'share.manual':
+    'El navegador no permitió copiar: seleccione el enlace de abajo y cópielo. Abre este mismo análisis.',
+  'share.how':
+    'Todo queda en la propia dirección, después del "#": nada se guarda en un servidor, y el enlace cambia con cada ajuste.',
+  'share.file':
+    'El archivo climático cargado no va en el enlace: quien lo abra necesita cargar el mismo archivo (o abrir el proyecto guardado en el paso 5).',
+  'share.label': 'Enlace de este análisis',
+  'share.close': 'Cerrar',
 };

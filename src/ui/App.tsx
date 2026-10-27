@@ -26,6 +26,7 @@ import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
 import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
 import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
+import { ShareButton } from './layout/ShareButton';
 import { StepNav } from './layout/StepNav';
 import { initialStep, revealStep, type StepId } from './layout/steps';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
@@ -603,6 +604,7 @@ export function App() {
         <div className="header-row">
           <h1>{t('app.name')}</h1>
           <div className="header-tools">
+            <ShareButton hasFile={selected.kind === 'file' || selectedA?.kind === 'file'} />
             <button
               type="button"
               className="btn"

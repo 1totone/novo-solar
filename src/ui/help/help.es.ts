@@ -78,7 +78,7 @@ export const helpEs: HelpContent = {
   },
   guide: {
     intro:
-      'SOL-AR dibuja la carta solar de un lugar y, sobre ella, el transportador de ángulos y la máscara de sombra de una protección. El camino básico tiene cinco pasos, uno abierto a la vez: haga clic o toque en el título de un paso para abrirlo; cerrado, muestra en una línea lo que ya se eligió. Los avanzados quedan plegados debajo de ellos. Todo lo que usted elige queda en la dirección de la página: copie el enlace para guardar o compartir.',
+      'SOL-AR dibuja la carta solar de un lugar y, sobre ella, el transportador de ángulos y la máscara de sombra de una protección. El camino básico tiene cinco pasos, uno abierto a la vez: haga clic o toque en el título de un paso para abrirlo; cerrado, muestra en una línea lo que ya se eligió. Los avanzados quedan plegados debajo de ellos. Todo lo que usted elige queda en la dirección de la página: el botón "Compartir", arriba, copia el enlace, que reabre el mismo análisis.',
     steps: [
       {
         title: '1. Ubicación',
@@ -431,7 +431,7 @@ export const helpEs: HelpContent = {
     {
       question: '¿De dónde vienen los datos climáticos? ¿Puedo usar mi archivo?',
       answer:
-        'Las ciudades de la lista tienen los datos históricos del SOL-AR 6.2 (TRY o IWEC). El catálogo del paso 1 tiene las 579 estaciones de Brasil con archivo TMYx 2011 a 2025 (Climate.OneBuilding.org), con mapa, calidad de cada archivo y el enlace para descargarlo. Puede cargar cualquier EPW o CSV del SOL-AR: el archivo se lee en su navegador y no se envía a ningún lugar. El origen, el período y los avisos de calidad aparecen en el paso 1.',
+        'Las ciudades de la lista tienen los datos históricos del SOL-AR 6.2 (TRY o IWEC). El catálogo del paso 1 tiene las 579 estaciones de Brasil con archivo TMYx 2011 a 2025 (Climate.OneBuilding.org), con mapa, calidad de cada archivo y el enlace para descargarlo. Puede cargar cualquier EPW, el .zip del TMYx sin descomprimir o un CSV del SOL-AR: el archivo se lee en su navegador y no se envía a ningún lugar. El origen, el período y los avisos de calidad aparecen en el paso 1.',
     },
     {
       question: '¿Cómo comparar el clima de antes con el de hoy, o con el futuro?',
@@ -446,7 +446,7 @@ export const helpEs: HelpContent = {
     {
       question: '¿Cómo guardar y compartir un estudio?',
       answer:
-        'La dirección de la página guarda las elecciones: copie el enlace. Los archivos climáticos cargados no caben en el enlace; para guardarlos junto, use "Guardar proyecto" en el paso 5, que graba un archivo para abrir después con "Abrir proyecto".',
+        'La dirección de la página guarda las elecciones: el botón "Compartir", arriba, copia el enlace. Los archivos climáticos cargados no caben en el enlace; para guardarlos junto, use "Guardar proyecto" en el paso 5, que graba un archivo para abrir después con "Abrir proyecto".',
     },
     {
       question: '¿Funciona sin internet? ¿Algún dato mío sale de la computadora?',
