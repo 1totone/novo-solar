@@ -225,6 +225,16 @@ export const helpEs: HelpContent = {
             'Las dos formas de SOL-AR de medir los ángulos; externo = 90° − interno. La interna es la predeterminada y coincide con el AVS y el AHS de la INI-C.',
         },
         {
+          term: 'AVS (ángulo vertical de sombreado)',
+          definition:
+            'Nombre de la INI-C brasileña (Inmetro, 2020) para el ángulo de la protección horizontal: entre el plano vertical en la base del vidrio y el plano que pasa por el extremo más lejano de la protección. Es el α en la referencia interna, la predeterminada del programa.',
+        },
+        {
+          term: 'AHS (ángulo horizontal de sombreado)',
+          definition:
+            'Nombre de la INI-C para el ángulo de las aletas: entre el plano de la fachada y el plano que pasa por el extremo más lejano de la aleta y por el borde opuesto de la ventana. Es el β en la referencia interna.',
+        },
+        {
           term: 'Índices 1 y 2',
           definition:
             'Para la protección separada de la pared: el índice 1 llega al borde exterior; el 2, al interior, con el α2 medido desde el dintel. La sombra total queda entre las dos curvas, porque la ranura deja pasar el sol.',

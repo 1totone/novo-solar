@@ -50,4 +50,24 @@ export const redesenhoPtBR = {
   'readout.legalAt': '{time} em {date}',
   'readout.hint':
     'Passe o mouse sobre a carta, ou toque nela, para ler a altura, o azimute e quando o sol passa pelo ponto.',
+  // Desenho dos ângulos (decisão 0046, item d da 0044).
+  'angles.heading': 'Onde se mede cada ângulo (referência {reference})',
+  'angles.section': 'α no corte',
+  'angles.plan': 'β na planta',
+  'angles.view': 'γ na vista',
+  'angles.inside': 'interior',
+  'angles.outside': 'exterior',
+  'angles.alphaDesc':
+    'Corte da janela: {angle}, do peitoril até a aresta externa do brise, medido {from}.',
+  'angles.betaDesc':
+    'Planta da janela: β de cada aleta, da aresta oposta da janela até a ponta da aleta, medido {from}.',
+  'angles.gammaDesc':
+    'Vista de dentro para fora: γ de cada lado do brise, do canto inferior do mesmo lado até a ponta do brise, medido {from}.',
+  'angles.fromFacade': 'a partir do plano da fachada',
+  'angles.fromHorizontal': 'a partir da horizontal',
+  'angles.fromNormal': 'a partir da normal da fachada',
+  'angles.fromVertical': 'a partir da vertical',
+  'angles.internal': 'interna',
+  'angles.external': 'externa',
+  'angles.choose': 'Desenho do ângulo',
 } as const;

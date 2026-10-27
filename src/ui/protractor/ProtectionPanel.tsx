@@ -6,6 +6,8 @@ import type { HashState } from '../state/hashState';
 import { DrawingControls } from '../mask/DrawingControls';
 import type { Drawing } from '../mask/DrawingLayer';
 import { onRovingKeyDown } from '../a11y/roving';
+import { AngleDiagrams } from './AngleDiagrams';
+import { viewOfKey, type AngleView } from './angleView';
 
 interface Row {
   label: MessageKey;
@@ -95,6 +97,8 @@ export function ProtectionPanel({
     if (drawingActive) setMoreOpen(true);
   }, [drawingActive]);
 
+  // Desenho do ângulo em foco (decisão 0046): α no corte, β na planta, γ na vista.
+  const [view, setView] = useState<AngleView>('alpha');
   const input = (k: AngleKey | null, name: string) => {
     if (!k) return <span />;
     const invalid = state.invalid.includes(k);
@@ -108,6 +112,10 @@ export function ProtectionPanel({
         data-testid={`angle-${k}`}
         value={hash[k] ?? ''}
         onChange={(e) => onChange({ [k]: e.target.value })}
+        onFocus={() => {
+          const v = viewOfKey(k);
+          if (v) setView(v);
+        }}
       />
     );
   };
@@ -186,6 +194,17 @@ export function ProtectionPanel({
         {t('protection.totalSet')}
       </h3>
       {grid(TOTAL.first, totalSet)}
+      <h3 className="sub-heading">
+        {t('angles.heading', {
+          reference: t(state.reference === 'internal' ? 'angles.internal' : 'angles.external'),
+        })}
+      </h3>
+      <AngleDiagrams
+        reference={state.reference}
+        angles={state.angles}
+        view={view}
+        onViewChange={setView}
+      />
       <p className="note">{t('protection.sidesHelp')}</p>
       <p className="note">{t('protection.totalHelp')}</p>
       {state.invalid.length > 0 && (

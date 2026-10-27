@@ -52,7 +52,7 @@ export const en: Catalog = {
   'protection.internal': 'Internal',
   'protection.external': 'External',
   'protection.referenceHelpInternal':
-    'Internal: α and β measured from the facade plane, γ from the vertical (α = AVS and β = AHS of the Brazilian INI-C).',
+    'Internal: α and β measured from the facade plane, γ from the vertical.',
   'protection.referenceHelpExternal':
     'External: α measured from the horizontal (vertical shadow angle), β from the normal (horizontal shadow angle), γ from the horizontal (external = 90° − internal).',
   'protection.left': 'Left',
@@ -62,8 +62,7 @@ export const en: Catalog = {
   'protection.beta': 'β (vertical fins)',
   'protection.gamma': 'γ (side limits)',
   'protection.totalSet': 'Full shade (100%)',
-  'protection.totalHelp':
-    'α measured from the base of the window, β from the edge opposite the fin, γ from the bottom corner on the same side. In the red region, the whole window is shaded.',
+  'protection.totalHelp': 'In the red region of the chart, the whole window is shaded.',
   'protection.more': 'More options',
   'protection.index2': 'Indices 2 (device set away from the wall)',
   'protection.index2Help':
@@ -1020,4 +1019,24 @@ export const en: Catalog = {
   'readout.legalAt': '{time} on {date}',
   'readout.hint':
     'Move the mouse over the chart, or tap it, to read the altitude, the azimuth and when the sun passes through the point.',
+  // Drawing of the angles (decision 0046, item d of 0044).
+  'angles.heading': 'Where each angle is measured ({reference} reference)',
+  'angles.section': 'α in section',
+  'angles.plan': 'β in plan',
+  'angles.view': 'γ in view',
+  'angles.inside': 'inside',
+  'angles.outside': 'outside',
+  'angles.alphaDesc':
+    'Section of the window: {angle}, from the sill to the outer edge of the overhang, measured {from}.',
+  'angles.betaDesc':
+    'Plan of the window: β of each fin, from the opposite edge of the window to the tip of the fin, measured {from}.',
+  'angles.gammaDesc':
+    'View from inside looking out: γ on each side of the overhang, from the lower corner on the same side to the tip of the overhang, measured {from}.',
+  'angles.fromFacade': 'from the facade plane',
+  'angles.fromHorizontal': 'from the horizontal',
+  'angles.fromNormal': 'from the facade normal',
+  'angles.fromVertical': 'from the vertical',
+  'angles.internal': 'internal',
+  'angles.external': 'external',
+  'angles.choose': 'Drawing of the angle',
 };

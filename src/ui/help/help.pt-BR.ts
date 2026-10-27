@@ -225,6 +225,16 @@ export const helpPtBR: HelpContent = {
             'As duas formas do SOL-AR de medir os ângulos; externo = 90° − interno. A interna é a padrão e coincide com o AVS e o AHS da INI-C.',
         },
         {
+          term: 'AVS (ângulo vertical de sombreamento)',
+          definition:
+            'Nome da INI-C (Inmetro, 2020) para o ângulo do brise horizontal: entre o plano vertical na base do vidro e o plano que passa pela extremidade mais distante da proteção. É o α na referência interna, a padrão do programa.',
+        },
+        {
+          term: 'AHS (ângulo horizontal de sombreamento)',
+          definition:
+            'Nome da INI-C para o ângulo das aletas: entre o plano da fachada e o plano que passa pela extremidade mais distante da aleta e pela aresta oposta da janela. É o β na referência interna.',
+        },
+        {
           term: 'Índices 1 e 2',
           definition:
             'Para o brise afastado da parede: o índice 1 vai até a aresta externa; o 2, até a interna, com o α2 medido da verga. A sombra total fica entre as duas curvas, porque a fresta deixa o sol passar.',
