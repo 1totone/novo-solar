@@ -1,6 +1,6 @@
 # 8. Classificação das horas
 
-**Status:** proposta (núcleo de cálculo do F3.4), 25/10/2026; padrão trocado para o limiar de 20 °C em 26/10/2026 (decisão 0024, aceita provisoriamente). Escrita antes do portão 2, numa branch separada, sem interface. As escolhas que dependem do Anthony estão na seção 8.8 e nas decisões 0020 e 0024, cada uma com a recomendação adotada no código enquanto isso.
+**Status:** proposta (núcleo de cálculo do F3.4), 25/10/2026; padrão trocado para o limiar de 20 °C em 26/10/2026 (decisão 0024, aceita por delegação na pré-revisão do Claude de 27/10/2026; validação por colegas pendente). Escrita antes do portão 2, numa branch separada, sem interface. As escolhas que dependem do Anthony estão na seção 8.8 e nas decisões 0020 e 0024, cada uma com a recomendação adotada no código enquanto isso.
 
 Cada hora do arquivo climático recebe uma classe: **quente** (a sombra é desejada), **fria** (o sol é desejado), **neutra** ou **sem classe**. A classificação é a entrada dos indicadores do F3.5 (radiação direta bloqueada nas horas quentes e admitida nas horas frias).
 
@@ -94,7 +94,7 @@ Hipóteses que a interface deve mostrar junto da classificação (F3.4, *pronto 
 ## 8.8 Escolhas propostas (decisões 0020 e 0024)
 
 1. **Temperatura da hora:** média de T(h − 1) e T(h), com a do fim da hora como opção.
-2. **Limiar de 20 °C como método padrão** (decisão 0024, aceita provisoriamente em 26/10/2026, no lugar do item 2 da decisão 0020): T_fria = T_quente = 20 °C, empate neutro, com a fonte na tela (Lamberts, Dutra e Pereira, 2014). A **faixa adaptativa** continua como alternativa, com 80% de aceitabilidade por padrão; fora de 10 °C ≤ t_pma ≤ 33,5 °C, horas sem classe.
+2. **Limiar de 20 °C como método padrão** (decisão 0024, aceita por delegação na pré-revisão do Claude de 27/10/2026, no lugar do item 2 da decisão 0020): T_fria = T_quente = 20 °C, empate neutro, com a fonte na tela (Lamberts, Dutra e Pereira, 2014). A **faixa adaptativa** continua como alternativa, com 80% de aceitabilidade por padrão; fora de 10 °C ≤ t_pma ≤ 33,5 °C, horas sem classe.
 3. **Média predominante exponencial**, α = 0,8, 30 dias, normalizada; aritmética de 7 a 30 dias como opção; ano cíclico; média diária com pelo menos 18 horas.
 4. **Temperatura de equilíbrio sem valor padrão**; nenhuma tabela por tipologia sem fonte citável. Os limiares fixos têm o padrão de 20 °C do item 2.
 5. **Empates** com os limites são neutros.

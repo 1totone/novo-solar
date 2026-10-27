@@ -1,7 +1,7 @@
 # 0018. Máscara pela geometria e fração ensolarada hora a hora
 
 - Data: 2026-10-24
-- Status: proposta (núcleo do F3.2 e do F3.3 adiantado antes do portão 2; a confirmar com o Anthony na integração da Fase 3)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 1 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
@@ -9,7 +9,7 @@ O Anthony pediu, enquanto aplica o teste com usuários do F2.9, que o núcleo de
 
 A máscara pelos ângulos (decisão 0014, spec 01, seção 1.6) é exata só com uma peça ou com a grelha, e a sombra parcial é o critério do centro. A máscara pela geometria resolve as duas coisas, mas exige escolhas que a spec v0 não fixava. A spec 07 descreve o modelo e os algoritmos; as escolhas estão abaixo.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Placas finas.** Proteções são polígonos planos convexos de espessura nula, diante do vidro, como as superfícies de sombreamento do EnergyPlus. Espessura, se importar, com mais placas.
 2. **Percentual exato.** O percentual sombreado é a área da união das sombras projetadas na janela, calculada sem aproximação (faixas verticais), e não a amostragem em grade da spec v0. A grade fica como referência de teste.

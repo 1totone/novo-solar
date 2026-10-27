@@ -1,13 +1,13 @@
 # 0040. Atalho entre passos com os passos avançados abertos
 
 - Data: 2026-10-26
-- Status: proposta (na integração da Fase 3; a confirmar com o Anthony no portão 3, com a decisão 0023)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 24 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3.
 
 ## Contexto
 
 Na inspeção visual da prévia da Fase 4, com os passos 6 e 7 abertos, a página passava de 7.900 px no computador (1366 × 900), e voltar do passo 7 ao passo 2 ou 4 exigia rolar várias telas. No caminho básico (passos 1 a 5, sem passo avançado aberto), a página é curta e o problema não existe; o atalho não pode complicar esse caminho (princípio 1).
 
-## Decisão (proposta)
+## Decisão
 
 1. **Uma barra "Passos 1 2 3 4 5 6 7"** que **só aparece com o passo 6 ou o 7 aberto**. No caminho básico, nada muda na tela.
 2. **No computador**, a barra fica fixa no alto da coluna dos passos; **no celular**, fixa no pé da tela (o alto já é da carta), com botões de 40 px.
