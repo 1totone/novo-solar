@@ -12,6 +12,11 @@ interface Image {
   data: Uint8Array;
 }
 
+/** PNG de uma captura de tela decodificado (largura, altura, canais e bytes). */
+export function decodeScreenshot(png: Buffer): Image {
+  return decodePng(png);
+}
+
 function decodePng(png: Buffer): Image {
   let pos = 8;
   let width = 0;
@@ -90,27 +95,47 @@ function classify(img: Image, cx: number, cy: number, scale: number): Tint {
   return 'none';
 }
 
+/** Projeção da carta nos testes (F4.3): estereográfica, equidistante ou cilíndrica com o centro. */
+export type TestProjection =
+  { kind: 'stereographic' } | { kind: 'equidistant' } | { kind: 'cylindrical'; center: number };
+
 /**
  * Tom da máscara em cada direção do céu (altura e azimute em graus), lido de uma captura de tela
- * da carta. A posição na tela vem da projeção estereográfica e da matriz do próprio SVG.
+ * da carta. A posição na tela vem das fórmulas da projeção (spec 03, seções 3.1 e 3.5), escritas
+ * aqui de novo, e da matriz do próprio SVG.
  */
 export async function maskTints(
   page: Page,
   directions: { altitude: number; azimuth: number }[],
+  projection: TestProjection = { kind: 'stereographic' },
 ): Promise<Tint[]> {
   const chart = page.getByTestId('sun-chart');
   await chart.scrollIntoViewIfNeeded();
   const box = await chart.boundingBox();
   if (!box) throw new Error('carta não visível');
-  const points = await chart.evaluate((svg, dirs) => {
-    const m = (svg as SVGSVGElement).getScreenCTM()!;
-    return dirs.map(({ altitude, azimuth }) => {
-      const r = Math.tan(((90 - altitude) * Math.PI) / 180 / 2);
-      const a = (azimuth * Math.PI) / 180;
-      const p = new DOMPoint(r * Math.sin(a), -r * Math.cos(a)).matrixTransform(m);
-      return { x: p.x, y: p.y };
-    });
-  }, directions);
+  const points = await chart.evaluate(
+    (svg, { dirs, proj }) => {
+      const m = (svg as SVGSVGElement).getScreenCTM()!;
+      return dirs.map(({ altitude, azimuth }) => {
+        let x: number;
+        let y: number;
+        if (proj.kind === 'cylindrical') {
+          const psi = ((((azimuth - proj.center + 180) % 360) + 360) % 360) - 180;
+          x = psi / 180;
+          y = altitude / 90;
+        } else {
+          const z = 90 - altitude;
+          const r = proj.kind === 'equidistant' ? z / 90 : Math.tan((z * Math.PI) / 180 / 2);
+          const a = (azimuth * Math.PI) / 180;
+          x = r * Math.sin(a);
+          y = r * Math.cos(a);
+        }
+        const p = new DOMPoint(x, -y).matrixTransform(m);
+        return { x: p.x, y: p.y };
+      });
+    },
+    { dirs: directions, proj: projection },
+  );
   const shot = decodePng(await chart.screenshot());
   const scale = shot.width / box.width;
   return points.map((p) =>
@@ -121,11 +146,12 @@ export async function maskTints(
 /**
  * Cor mediana (RGB) de um bloco de 7 × 7 px (CSS) em pontos de um SVG qualquer, dados em
  * coordenadas do próprio SVG (as do viewBox). Serve para conferir que um desenho aparece de fato,
- * e não só que o elemento existe.
+ * e não só que o elemento existe. `halfPx` muda o tamanho do bloco (1 dá 3 × 3 px, para linhas).
  */
 export async function svgColors(
   svg: Locator,
   points: { x: number; y: number }[],
+  halfPx = 3.5,
 ): Promise<[number, number, number][]> {
   await svg.scrollIntoViewIfNeeded();
   const box = await svg.boundingBox();
@@ -139,7 +165,7 @@ export async function svgColors(
   }, points);
   const img = decodePng(await svg.screenshot());
   const scale = img.width / box.width;
-  const half = Math.round(3.5 * scale);
+  const half = Math.round(halfPx * scale);
   return screen.map((p) => {
     const cx = Math.round((p.x - box.x) * scale);
     const cy = Math.round((p.y - box.y) * scale);

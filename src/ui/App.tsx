@@ -1,35 +1,78 @@
-import { useMemo, useState, type CSSProperties } from 'react';
-import type { EpwData } from '../core/epw/parseEpw';
-import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
-import { windRose } from '../core/wind/windRose';
+import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { onRovingKeyDown } from './a11y/roving';
+import type { EpwData } from '../core/epw/hourly';
+import { cellDifference, DIFFERENCE_BANDS, sameLocation } from '../core/overlay/difference';
+import { cellStatistics, OVERLAY_QUANTITIES } from '../core/overlay/overlay';
+import { ChartOptionsPanel } from './chart/ChartOptionsPanel';
 import { ChartView } from './chart/ChartView';
+import { chartFrame } from './chart/projectionContext';
 import type { City } from './cities';
+import { projectPointFromHash } from './catalog/catalog';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
+import { exampleFromHash, helpSectionFromHash } from './help/content';
+import { answerRegion, exerciseFromHash, EXERCISES } from './didactic/exercises';
+import { TUTORIAL_STEPS, tutorialStepFromHash } from './didactic/tutorial';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
 import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
+import { LanguageSelect } from './i18n/LanguageSelect';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
+import { ProjectSection } from './project/ProjectSection';
+import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
+import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
+import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
+import { StepNav } from './layout/StepNav';
+import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
+import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
-import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
+import { hashForSite, siteFromHash, type SelectedSite } from './state/siteHash';
 import { useHashState } from './state/useHashState';
+import { classificationFromHash } from './state/classificationHash';
 import { windFromHash } from './state/windHash';
+import { chartOptionsFromHash } from './state/chartOptionsHash';
+import { useMethodSentence, useWindRose } from './wind/useWindRose';
 import { WindPanel } from './wind/WindPanel';
+
+// Fora do caminho básico, carregados sob demanda (decisão 0039): os passos 6 e 7, só quando
+// abertos, e a aba da vista 3D, só quando escolhida.
+const GeometryPanel = lazy(() =>
+  import('./geometry/GeometryPanel').then((m) => ({ default: m.GeometryPanel })),
+);
+const EffectPanel = lazy(() =>
+  import('./effect/EffectPanel').then((m) => ({ default: m.EffectPanel })),
+);
+const View3DPanel = lazy(() =>
+  import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
+);
+// Corte e vista da impressão (F3.1): só com uma janela no link.
+const GeometryDrawing = lazy(() =>
+  import('./geometry/GeometryDrawing').then((m) => ({ default: m.GeometryDrawing })),
+);
+// Ajuda e modo didático (F4.8, F4.5): só quando abertos pelo botão ou pelo link.
+const HelpDialog = lazy(() => import('./help/HelpDialog').then((m) => ({ default: m.HelpDialog })));
+const ExampleCard = lazy(() =>
+  import('./help/ExampleCard').then((m) => ({ default: m.ExampleCard })),
+);
+const TutorialCard = lazy(() =>
+  import('./didactic/TutorialCard').then((m) => ({ default: m.TutorialCard })),
+);
+const ExerciseCard = lazy(() =>
+  import('./didactic/ExerciseCard').then((m) => ({ default: m.ExerciseCard })),
+);
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
-/** Largura do viewBox da carta em raios: a carta impressa tem 2,64 vezes o raio pedido. */
-const CHART_SPAN = 2.64;
-/** Lado do PNG exportado, em pixels. */
+/** Largura do PNG exportado, em pixels (a altura segue a proporção da carta). */
 const PNG_PIXELS = 2400;
 
 /** Régua de 5 cm impressa ao lado da carta, para conferir a escala. */
@@ -54,13 +97,22 @@ function PrintRuler({ label }: { label: string }) {
 }
 
 export function App() {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatDate } = useI18n();
   const [hashState, setHashState] = useHashState();
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
   const [drawing, setDrawing] = useState<Drawing | null>(null);
   const [print, setPrint] = useState<PrintOptions>(DEFAULT_PRINT);
-  const [compareEpw, setCompareEpw] = useState<EpwData | null>(null);
+  // Arquivo carregado da configuração A da comparação (só quando a A usa um arquivo).
+  const [compareFile, setCompareFile] = useState<LoadedFile | null>(null);
   const aboutOpen = hashState.painel === 'sobre';
+  // Ajuda (F4.8): ajuda=<parte> abre o diálogo; exemplo=<id> mostra o cartão do exemplo resolvido.
+  const helpSection = helpSectionFromHash(hashState);
+  const example = exampleFromHash(hashState);
+  // Modo didático (F4.5): tutorial=<etapa> e exercicio=<id> (com conferir=1 depois de conferir).
+  const tutorialStep = tutorialStepFromHash(hashState);
+  const tutorialTarget = tutorialStep ? TUTORIAL_STEPS[tutorialStep - 1]!.target : null;
+  const exercise = exerciseFromHash(hashState);
+  const exerciseChecked = exercise !== null && hashState.conferir === '1';
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const city: City | null = selected.kind === 'city' ? selected.site : null;
@@ -73,21 +125,96 @@ export function App() {
         ? historical.data
         : null;
   const ov = useOverlay(epw, hashState);
-  const wind = windFromHash(hashState);
-  const sourceUrl = city?.sourceUrl;
-  const rose = useMemo(
-    () =>
-      epw && wind.tab === 'rose'
-        ? windRose(epw, { sectors: wind.sectors, season: wind.season, period: wind.period })
-        : null,
-    [epw, wind.tab, wind.sectors, wind.season, wind.period],
+  const geometry = geometryFromHash(hashState);
+  // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
+  const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
+  // Passo 7 aberto: o link traz uma escolha da classificação das horas.
+  const [effectOpen, setEffectOpen] = useState(() =>
+    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct', 'alter1'].some(
+      (k) => hashState[k],
+    ),
   );
-  // Comparação: a configuração A fica no link (cmp) e o arquivo dela, na memória.
+  // Opções da carta (F4.3) abertas: o link traz uma projeção ou um tipo de linha horária.
+  const [chartOptionsOpen, setChartOptionsOpen] = useState(() =>
+    Boolean(hashState.proj || hashState.hl),
+  );
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!tutorialTarget) {
+      delete root.dataset.tutorial;
+      return;
+    }
+    root.dataset.tutorial = tutorialTarget;
+    document
+      .querySelector(`[data-step="${tutorialTarget}"]`)
+      ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    return () => {
+      delete root.dataset.tutorial;
+    };
+  }, [tutorialStep, tutorialTarget]);
+  const geometryScale = scaleFromHash(hashState.esc);
+  const geometryPrint = geometry.window
+    ? paperDrawing(geometry.window, geometry.devices, geometryScale)
+    : null;
+  const wind = windFromHash(hashState);
+  // Resultados ao lado (decisão 0038): no computador, com a aba da carta, os resultados pesados
+  // dos passos 6 e 7 vão para o painel da direita, abaixo da carta.
+  const wide = useWideLayout();
+  const sideOn = wide && wind.tab === 'chart';
+  const [catalogSlot, setCatalogSlot] = useState<HTMLElement | null>(null);
+  const [annualSlot, setAnnualSlot] = useState<HTMLElement | null>(null);
+  const [effectSlot, setEffectSlot] = useState<HTMLElement | null>(null);
+  const sideSlots = useMemo(
+    () => (sideOn ? { catalog: catalogSlot, annual: annualSlot, effect: effectSlot } : {}),
+    [sideOn, catalogSlot, annualSlot, effectSlot],
+  );
+  // Projeção da carta (F4.3): a moldura dá o tamanho impresso em raios (2,64 nas azimutais).
+  const chartOptions = chartOptionsFromHash(hashState);
+  const frame = chartFrame(chartOptions.projection);
+  const sourceUrl = city?.sourceUrl;
+  // A mesma rosa da tela (filtro térmico e correção do F4.4), para o CSV.
+  const classification = classificationFromHash(hashState);
+  const { rose, thermal: roseThermal } = useWindRose(epw, wind, classification, {
+    active: wind.tab === 'rose',
+  });
+  const roseMethod = useMethodSentence(classification);
+  // Comparação: a configuração A fica no link (cmp); os dados dela vêm do próprio link (dados
+  // históricos de uma cidade) ou do arquivo carregado guardado na memória (ou no projeto, F4.7).
   const hashA: HashState | null = hashState.cmp ? parseHash(hashState.cmp) : null;
-  const epwA = hashA && hasHourlyData(siteFromHash(hashA)) ? compareEpw : null;
+  const selectedA = hashA ? siteFromHash(hashA) : null;
+  const historicalA = useHistorical(
+    selectedA?.kind === 'city' ? selectedA.site : null,
+    selectedA?.kind === 'city' && selectedA.historical,
+  );
+  const epwA =
+    selectedA?.kind === 'file'
+      ? (compareFile?.data ?? null)
+      : historicalA.status === 'ready'
+        ? historicalA.data
+        : null;
+  const liveFile = selected.kind === 'file' ? loadedFile : null;
+  const project = useProjectActions({
+    hash: hashState,
+    setHash: setHashState,
+    placeName: site.name,
+    liveFile,
+    compareFile: selectedA?.kind === 'file' ? compareFile : null,
+    print,
+    onOpened: (opened) => {
+      setLoadedFile(opened.liveFile);
+      setCompareFile(opened.compareFile);
+      setPrint(opened.print);
+      setDrawing(null);
+    },
+  });
+  const projectFiles = [liveFile, selectedA?.kind === 'file' ? compareFile : null].filter(
+    (f, i, all): f is LoadedFile => f !== null && all.indexOf(f) === i,
+  );
   const words = {
     orientation: (degrees: string) => t('compare.orientation', { degrees }),
     none: t('compare.none'),
+    right: t('sides.rightShort'),
+    left: t('sides.leftShort'),
   };
   const fmt = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
   // Origem dos dados históricos em poucas palavras (impressão e CSV).
@@ -95,6 +222,27 @@ export function App() {
     c.historical?.period
       ? `TRY, ${t('site.periodTry', { start: c.historical.period[0], end: c.historical.period[1] })}`
       : 'IWEC';
+
+  // Origem dos dados de cada lado da comparação: a mesma frase da impressão.
+  const sourceOf = (sel: SelectedSite | null, file: LoadedFile | null, data: EpwData | null) => {
+    if (!sel || !data) return '';
+    if (sel.kind === 'file' && file) return t('print.sourceFile', { file: file.fileName });
+    if (sel.kind === 'city' && sel.site.historical) {
+      return t('print.sourceHistorical', { what: historicalWhat(sel.site) });
+    }
+    return '';
+  };
+  const sourceA = sourceOf(selectedA, compareFile, epwA);
+  const sourceB = sourceOf(selected, loadedFile, epw);
+  // Diferença B − A na mesma carta (F4.2, `dif=1`, spec 05, seção 5.5): só na carta, com dados
+  // nos dois lados, uma variável no passo 4 e o mesmo local.
+  const differenceAsked = hashA !== null && hashState.dif === '1' && wind.tab === 'chart';
+  let differenceBlocked: 'needData' | 'otherPlace' | null = null;
+  if (differenceAsked) {
+    if (!epw || !epwA || !ov.quantity) differenceBlocked = 'needData';
+    else if (!sameLocation(epw.location, epwA.location)) differenceBlocked = 'otherPlace';
+  }
+  const differenceOn = differenceAsked && differenceBlocked === null;
 
   const csvAvailable =
     wind.tab === 'rose' ? rose !== null : Boolean(ov.cells && ov.stats && ov.quantity);
@@ -139,7 +287,21 @@ export function App() {
             period: wind.period ?? t('wind.allDay'),
             sectors: String(wind.sectors),
           }),
+          roseThermal
+            ? t('csv.thermal', {
+                thermal: t(`wind.titleThermal.${roseThermal}`),
+                method: roseMethod,
+              })
+            : t('csv.thermalAll'),
+          wind.corrected
+            ? t('csv.correction', {
+                height: String(wind.height),
+                terrain: t(`wind.terrainShort.${wind.terrain}`),
+                factor: wind.speedFactor.toFixed(4),
+              })
+            : t('csv.noCorrection'),
           t('csv.hypotheses'),
+          t('csv.separator'),
         ],
         rose,
         sectorNames: t('compass.points')
@@ -149,6 +311,32 @@ export function App() {
     }
     if (!ov.cells || !ov.stats || !ov.quantity || !ov.limits || !ov.overlay.key) return null;
     const info = OVERLAY_QUANTITIES[ov.quantity];
+    if (differenceOn && epwA) {
+      const limits = DIFFERENCE_BANDS[ov.quantity];
+      return overlayCsv({
+        header: [
+          ...header(t('csv.cells')),
+          t('difference.print', { a: sourceA, b: sourceB }),
+          t('csv.quantity', {
+            quantity: t(`data.short.${ov.overlay.key}`),
+            unit: info.unit,
+            what: t('difference.csvWhat'),
+          }),
+          t('csv.semester', {
+            semester: t(ov.overlay.semester === 1 ? 'data.semester1' : 'data.semester2'),
+            interval: t(
+              info.timing === 'integrated' ? 'data.intervalIntegrated' : 'data.intervalInstant',
+            ),
+          }),
+          t('csv.bands', { limits: limits.join('; ') }),
+          t('csv.separator'),
+        ],
+        cells: ov.cells,
+        stats: cellDifference(cellStatistics(epwA, ov.quantity), ov.stats),
+        mode: 'difference',
+        limits,
+      });
+    }
     return overlayCsv({
       header: [
         ...header(t('csv.cells')),
@@ -164,6 +352,7 @@ export function App() {
           ),
         }),
         t('csv.bands', { limits: ov.limits.join('; ') }),
+        t('csv.separator'),
       ],
       cells: ov.cells,
       stats: ov.stats,
@@ -186,12 +375,24 @@ export function App() {
     if (kind === 'svg') {
       // A carta sai com o tamanho da impressão (raio pedido); a rosa, sem escala.
       const size =
-        wind.tab === 'rose' ? undefined : `${(print.radiusCm * CHART_SPAN).toFixed(2)}cm`;
+        wind.tab === 'rose'
+          ? undefined
+          : {
+              width: `${(print.radiusCm * frame.span.x).toFixed(2)}cm`,
+              height: `${(print.radiusCm * frame.span.y).toFixed(2)}cm`,
+            };
       const text = standaloneSvg(svg, description, size);
       downloadBlob(new Blob([text], { type: 'image/svg+xml' }), `${base}.svg`);
       return null;
     }
-    const png = await svgToPng(standaloneSvg(svg, description, String(PNG_PIXELS)), PNG_PIXELS);
+    // PNG: 2400 pixels de largura; a carta cilíndrica é mais baixa que larga.
+    const pngHeight =
+      wind.tab === 'rose' ? PNG_PIXELS : Math.round((PNG_PIXELS * frame.span.y) / frame.span.x);
+    const png = await svgToPng(
+      standaloneSvg(svg, description, { width: String(PNG_PIXELS), height: String(pngHeight) }),
+      PNG_PIXELS,
+      pngHeight,
+    );
     if (kind === 'png') {
       downloadBlob(png, `${base}.png`);
       return null;
@@ -208,11 +409,11 @@ export function App() {
     if (start) {
       const current = { ...hashState };
       delete current.cmp;
-      setCompareEpw(epw);
+      setCompareFile(liveFile);
       setHashState({ cmp: buildHash(current).replace(/^#/, '') });
     } else {
-      setCompareEpw(null);
-      setHashState({ cmp: '' });
+      setCompareFile(null);
+      setHashState({ cmp: '', dif: '' });
     }
   };
 
@@ -225,144 +426,403 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
+    (geometryOpen || effectOpen || chartOptionsOpen) && wind.tab === 'chart' && !hashA
+      ? 'follow'
+      : '',
   ]
     .filter(Boolean)
     .join(' ');
-  const printStyle = { '--print-radius': String(print.radiusCm) } as CSSProperties;
+  const printStyle = {
+    '--print-radius': String(print.radiusCm),
+    '--chart-span-x': String(frame.span.x),
+    '--chart-span-y': String(frame.span.y),
+  } as CSSProperties;
   let source: string;
-  if (epw && selected.kind === 'file' && loadedFile) {
+  if (differenceOn) {
+    source = t('difference.print', { a: sourceA, b: sourceB });
+  } else if (epw && selected.kind === 'file' && loadedFile) {
     source = t('print.sourceFile', { file: loadedFile.fileName });
   } else if (epw && city?.historical) {
     source = t('print.sourceHistorical', { what: historicalWhat(city) });
   } else if (city) {
     source = t('print.sourceCity', { station: city.station });
+  } else if (selected.kind === 'station') {
+    source = t('print.sourceStation', { station: site.name });
   } else source = '';
+
+  // Passos 6 e 7 recolhidos: só o cabeçalho, sem carregar o código do passo (decisão 0039).
+  const piecesText =
+    geometry.devices.length > 0
+      ? t('geometry.piecesCount', { count: geometry.devices.length })
+      : t('geometry.noPieces');
+  const geometryStub = (
+    <AdvancedStepStub
+      n={6}
+      heading={t('geometry.heading')}
+      summary={
+        geometry.window
+          ? t('geometry.summaryDefined', {
+              width: formatNumber(geometry.window.width, 2),
+              height: formatNumber(geometry.window.height, 2),
+              pieces: piecesText,
+            })
+          : t('geometry.summary')
+      }
+      testId="geometry-panel"
+      summaryTestId="geometry-summary"
+      open={geometryOpen}
+      onOpenChange={setGeometryOpen}
+    />
+  );
+  const effectStub = (
+    <AdvancedStepStub
+      n={7}
+      heading={t('effect.heading')}
+      summary={t('effect.summary')}
+      testId="effect-panel"
+      open={effectOpen}
+      onOpenChange={setEffectOpen}
+    />
+  );
 
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
-        <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+        <WindPanel
+          epw={epw}
+          wind={wind}
+          classification={classification}
+          sourceUrl={sourceUrl}
+          onChange={setHashState}
+        />
+      </div>
+    ) : wind.tab === '3d' ? (
+      <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
+        <Suspense fallback={<p className="note">{t('view3d.loading')}</p>}>
+          <View3DPanel hash={hashState} onChange={setHashState} />
+        </Suspense>
       </div>
     ) : (
       <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
         <ChartView
           hash={hashState}
           epw={epw}
+          difference={differenceOn ? epwA : null}
+          answer={exerciseChecked ? answerRegion(exercise) : null}
           drawing={drawing}
           onDrawingAdd={(v) =>
             drawing && setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
           }
         />
         <PrintRuler label={t('print.ruler')} />
-        <p className="note">{t('chart.note')}</p>
+        <p className="note" data-testid="chart-note">
+          {[
+            t(`chart.noteProjection.${chartOptions.projection}`, {
+              orientation: fmt(protractor.orientation),
+            }),
+            t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
+            t(`chart.noteHours.${chartOptions.hourLines}`),
+          ].join(' ')}
+        </p>
       </div>
     );
 
   return (
     <div className="page">
       <header className="header">
-        <h1>{t('app.name')}</h1>
+        <div className="header-row">
+          <h1>{t('app.name')}</h1>
+          <div className="header-tools">
+            <button
+              type="button"
+              className="btn"
+              aria-haspopup="dialog"
+              data-testid="help-open"
+              onClick={() => setHashState({ ajuda: 'guia' })}
+            >
+              {t('help.open')}
+            </button>
+            <LanguageSelect />
+          </div>
+        </div>
         <p className="tagline">{t('app.tagline')}</p>
       </header>
 
       <main>
-        <div className="workspace">
-          <div className="steps">
-            <SitePanel
-              selected={selected}
-              loadedFile={selected.kind === 'file' ? loadedFile : null}
-              historical={historical}
-              onSelect={(next, file) => {
-                setLoadedFile(file);
-                setHashState(hashForSite(next));
-              }}
-            />
-            <FacadePanel
-              state={protractor}
-              rawOrientation={hashState.o ?? ''}
-              onChange={setHashState}
-            />
-            <ProtectionPanel
-              state={protractor}
-              hash={hashState}
-              onChange={setHashState}
-              drawing={drawing}
-              onDrawingChange={setDrawing}
-            />
-            <DataPanel
-              overlay={ov.overlay}
-              hasData={epw !== null}
-              sourceUrl={sourceUrl}
-              limits={ov.quantityLimits}
-              timeZone={site.timeZone}
-              onChange={setHashState}
-            />
-            <OutputsPanel
-              print={print}
-              onPrintChange={setPrint}
-              onPrint={() => window.print()}
-              onExport={onExport}
-              csvAvailable={csvAvailable}
-              comparing={hashA !== null}
-              onCompare={onCompare}
-            />
-          </div>
-          <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
-            <h2 id="chart-heading" className="visually-hidden">
-              {t('tabs.label')}
-            </h2>
-            <div className="print-header">
-              <p className="print-title">{t('print.title', { place: site.name })}</p>
-              <p className="print-details">
-                {t('print.details', {
-                  latitude: formatNumber(site.latitude, 3),
-                  longitude: formatNumber(site.longitude, 3),
-                  timeZone: timeZoneOffset(site.timeZone, formatNumber),
-                  source,
-                  date: new Date().toLocaleDateString('pt-BR'),
-                  radius: fmt(print.radiusCm),
-                })}
-              </p>
+        <SideResultsProvider value={sideSlots}>
+          <div className="workspace">
+            <div className="steps">
+              {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
+              {(geometryOpen || effectOpen) && <StepNav />}
+              {tutorialStep && (
+                <Suspense fallback={null}>
+                  <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
+                </Suspense>
+              )}
+              {exercise && (
+                <Suspense fallback={null}>
+                  <ExerciseCard
+                    id={exercise}
+                    site={siteFromHash(EXERCISES[exercise].state).site}
+                    orientation={protractor.orientation}
+                    drawn={protractor.drawn.total}
+                    checked={exerciseChecked}
+                    onChange={setHashState}
+                    onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
+                  />
+                </Suspense>
+              )}
+              {example && (
+                <Suspense fallback={null}>
+                  <ExampleCard
+                    id={example}
+                    onClose={() => setHashState({ exemplo: '' })}
+                    onMore={() => setHashState({ ajuda: 'exemplos' })}
+                  />
+                </Suspense>
+              )}
+              <SitePanel
+                selected={selected}
+                loadedFile={selected.kind === 'file' ? loadedFile : null}
+                historical={historical}
+                onSelect={(next, file) => {
+                  setLoadedFile(file);
+                  setHashState(hashForSite(next));
+                }}
+                projectPoint={projectPointFromHash(hashState.perto)}
+                onProjectPointChange={(value) => setHashState({ perto: value })}
+              />
+              <FacadePanel
+                state={protractor}
+                rawOrientation={hashState.o ?? ''}
+                onChange={setHashState}
+              />
+              <ProtectionPanel
+                state={protractor}
+                hash={hashState}
+                onChange={setHashState}
+                drawing={drawing}
+                onDrawingChange={setDrawing}
+              />
+              <DataPanel
+                overlay={ov.overlay}
+                hasData={epw !== null}
+                sourceUrl={sourceUrl}
+                limits={ov.quantityLimits}
+                timeZone={site.timeZone}
+                onChange={setHashState}
+              />
+              <OutputsPanel
+                print={print}
+                onPrintChange={setPrint}
+                onPrint={() => window.print()}
+                onExport={onExport}
+                csvAvailable={csvAvailable}
+                comparing={hashA !== null}
+                onCompare={onCompare}
+                geometryAvailable={geometry.window !== null}
+              >
+                <ProjectSection
+                  onSave={project.save}
+                  onOpen={project.open}
+                  onCopyLink={project.copyLink}
+                  fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
+                  fileSizeMb={
+                    projectFiles.length > 0
+                      ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
+                      : null
+                  }
+                />
+              </OutputsPanel>
+              <p className="steps-group">{t('advanced.group')}</p>
+              <ChartOptionsPanel
+                hash={hashState}
+                site={site}
+                placeName={site.name}
+                onChange={setHashState}
+                open={chartOptionsOpen}
+                onOpenChange={setChartOptionsOpen}
+              />
+              {geometryOpen ? (
+                <Suspense fallback={geometryStub}>
+                  <GeometryPanel
+                    geometry={geometry}
+                    hash={hashState}
+                    scale={geometryScale}
+                    site={site}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={geometryOpen}
+                    onOpenChange={setGeometryOpen}
+                  />
+                  <RestoreStepFocus testId="geometry-panel" />
+                </Suspense>
+              ) : (
+                geometryStub
+              )}
+              {effectOpen ? (
+                <Suspense fallback={effectStub}>
+                  <EffectPanel
+                    epw={epw}
+                    hash={hashState}
+                    geometry={geometry}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={effectOpen}
+                    onOpenChange={setEffectOpen}
+                  />
+                  <RestoreStepFocus testId="effect-panel" />
+                </Suspense>
+              ) : (
+                effectStub
+              )}
             </div>
-            <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
-              {(['chart', 'rose'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  role="tab"
-                  id={`tab-${tab}`}
-                  aria-selected={wind.tab === tab}
-                  aria-controls={`panel-${tab}`}
-                  onClick={() => setHashState({ aba: tab === 'rose' ? 'rosa' : '' })}
-                >
-                  {t(tab === 'chart' ? 'tabs.chart' : 'tabs.rose')}
-                </button>
-              ))}
-            </div>
-            {hashA ? (
-              <div className="compare" data-testid="compare-view">
-                <div className="compare-col" data-testid="compare-a">
-                  <h3 className="compare-label">
-                    {t('compare.a')}: {describeConfig(hashA, fmt, words)}
-                  </h3>
-                  {wind.tab === 'rose' ? (
-                    <WindPanel epw={epwA} wind={windFromHash(hashA)} onChange={() => {}} readOnly />
-                  ) : (
-                    <ChartView hash={hashA} epw={epwA} />
-                  )}
+            <section
+              className={sectionClass}
+              style={printStyle}
+              aria-labelledby="chart-heading"
+              data-step="carta"
+            >
+              <h2 id="chart-heading" className="visually-hidden">
+                {t('tabs.label')}
+              </h2>
+              <div className="print-header">
+                <p className="print-title">{t('print.title', { place: site.name })}</p>
+                <p className="print-details">
+                  {t('print.details', {
+                    latitude: formatNumber(site.latitude, 3),
+                    longitude: formatNumber(site.longitude, 3),
+                    timeZone: timeZoneOffset(site.timeZone, formatNumber),
+                    source,
+                    date: formatDate(new Date()),
+                    scale: t(
+                      chartOptions.projection === 'cylindrical'
+                        ? 'print.scaleHeight'
+                        : 'print.scaleRadius',
+                      { radius: fmt(print.radiusCm) },
+                    ),
+                  })}
+                </p>
+              </div>
+              {/* O mapa do catálogo (passo 1) fica acima da carta, à altura do passo (decisão 0038). */}
+              {sideOn && (
+                <div className="side-results side-results-top" data-testid="side-results-top">
+                  <div ref={setCatalogSlot} />
                 </div>
-                <div className="compare-col" data-testid="compare-b">
-                  <h3 className="compare-label">
-                    {t('compare.b')}: {describeConfig(hashState, fmt, words)}
-                  </h3>
+              )}
+              <div
+                className="tabs"
+                role="tablist"
+                aria-label={t('tabs.label')}
+                onKeyDown={(e) => onRovingKeyDown(e, 'tab')}
+              >
+                {(['chart', '3d', 'rose'] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    role="tab"
+                    id={`tab-${tab}`}
+                    tabIndex={wind.tab === tab ? 0 : -1}
+                    aria-selected={wind.tab === tab}
+                    aria-controls={`panel-${tab}`}
+                    onClick={() =>
+                      setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
+                    }
+                  >
+                    {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
+                  </button>
+                ))}
+              </div>
+              {hashA && wind.tab === 'chart' && (
+                <p className="difference-toggle">
+                  <button
+                    type="button"
+                    className="btn"
+                    aria-pressed={differenceAsked}
+                    data-testid="difference-toggle"
+                    onClick={() => setHashState({ dif: differenceAsked ? '' : '1' })}
+                  >
+                    {t('difference.toggle')}
+                  </button>
+                </p>
+              )}
+              {differenceBlocked && (
+                <p className="note difference-blocked" data-testid="difference-blocked">
+                  {t(`difference.${differenceBlocked}`)}
+                </p>
+              )}
+              {differenceOn && hashA ? (
+                <div className="difference" data-testid="difference-view">
+                  <h3 className="compare-label">{t('difference.title')}</h3>
+                  <ul className="difference-sources">
+                    <li>
+                      {t('compare.a')}: {siteFromHash(hashA).site.name}. {sourceA}
+                    </li>
+                    <li>
+                      {t('compare.b')}: {site.name}. {sourceB}
+                    </li>
+                  </ul>
+                  <p className="note">{t('difference.note')}</p>
                   {live}
                 </div>
-              </div>
-            ) : (
-              live
-            )}
-          </section>
-        </div>
+              ) : hashA ? (
+                <div className="compare" data-testid="compare-view">
+                  <div className="compare-col" data-testid="compare-a">
+                    <h3 className="compare-label">
+                      {t('compare.a')}: {describeConfig(hashA, fmt, words)}
+                    </h3>
+                    {wind.tab === 'rose' ? (
+                      <WindPanel
+                        epw={epwA}
+                        wind={windFromHash(hashA)}
+                        classification={classificationFromHash(hashA)}
+                        onChange={() => {}}
+                        readOnly
+                      />
+                    ) : (
+                      <ChartView hash={hashA} epw={epwA} />
+                    )}
+                  </div>
+                  <div className="compare-col" data-testid="compare-b">
+                    <h3 className="compare-label">
+                      {t('compare.b')}: {describeConfig(hashState, fmt, words)}
+                    </h3>
+                    {live}
+                  </div>
+                </div>
+              ) : (
+                live
+              )}
+              {sideOn && (
+                <div className="side-results" data-testid="side-results">
+                  <div ref={setAnnualSlot} />
+                  <div ref={setEffectSlot} />
+                </div>
+              )}
+              {geometry.window && geometryPrint && print.geometry && (
+                <div className="print-geometry" data-testid="print-geometry">
+                  <p className="print-title">
+                    {t('geometry.printTitle', { scale: geometryScale })}
+                  </p>
+                  <Suspense fallback={null}>
+                    <GeometryDrawing
+                      window={geometry.window}
+                      devices={geometry.devices}
+                      title={t('geometry.printTitle', { scale: geometryScale })}
+                      font={geometryPrint.font}
+                      size={{
+                        width: `${geometryPrint.width.toFixed(2)}cm`,
+                        height: `${geometryPrint.height.toFixed(2)}cm`,
+                      }}
+                      testId="print-geometry-drawing"
+                      point={geometry.point?.value ?? null}
+                    />
+                  </Suspense>
+                </div>
+              )}
+            </section>
+          </div>
+        </SideResultsProvider>
 
         <section className="status" aria-labelledby="status-title">
           <h2 id="status-title">{t('status.title')}</h2>
@@ -376,6 +836,9 @@ export function App() {
             </li>
             <li>
               <a href="./wireframes/">{t('status.wireframesLink')}</a>
+            </li>
+            <li>
+              <a href="./wireframes/fase-3.html">{t('status.wireframes3Link')}</a>
             </li>
           </ul>
         </section>
@@ -408,6 +871,17 @@ export function App() {
           </section>
         )}
       </main>
+
+      {helpSection && (
+        <Suspense fallback={null}>
+          <HelpDialog
+            section={helpSection}
+            example={example}
+            onSection={(s) => setHashState({ ajuda: s })}
+            onClose={() => setHashState({ ajuda: '' })}
+          />
+        </Suspense>
+      )}
 
       <footer className="footer">
         {t('footer.build', {

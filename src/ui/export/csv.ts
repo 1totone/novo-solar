@@ -16,6 +16,10 @@ function round(v: number): number {
   return Math.round(v * 1e6) / 1e6;
 }
 
+/**
+ * Documento CSV. O cabeçalho termina com a frase do separador no idioma da interface
+ * (csv.separator): vírgula entre os campos e ponto decimal em qualquer idioma.
+ */
 export function csvDocument(
   header: string[],
   columns: string[],
@@ -23,7 +27,6 @@ export function csvDocument(
 ): string {
   const lines = [
     ...header.map((h) => `# ${h}`),
-    '# Separador: vírgula; decimal: ponto.',
     columns.map(csvField).join(','),
     ...rows.map((r) => r.map(csvField).join(',')),
   ];

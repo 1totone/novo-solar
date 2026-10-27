@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { useI18n } from '../i18n/useI18n';
 import type { PrintOptions } from './printOptions';
 
@@ -11,6 +11,8 @@ export function OutputsPanel({
   csvAvailable,
   comparing,
   onCompare,
+  geometryAvailable = false,
+  children,
 }: {
   print: PrintOptions;
   onPrintChange: (next: PrintOptions) => void;
@@ -19,10 +21,22 @@ export function OutputsPanel({
   csvAvailable: boolean;
   comparing: boolean;
   onCompare: (start: boolean) => void;
+  /** Há corte e vista no passo 6 para imprimir. */
+  geometryAvailable?: boolean;
+  /** Seção "Projeto" (F4.7), no fim do passo. */
+  children?: ReactNode;
 }) {
   const { t } = useI18n();
   const id = useId();
   const [radiusText, setRadiusText] = useState(String(print.radiusCm).replace('.', ','));
+  // O raio pode mudar por fora (projeto aberto, F4.7): o campo acompanha.
+  const [shownRadius, setShownRadius] = useState(print.radiusCm);
+  if (print.radiusCm !== shownRadius) {
+    setShownRadius(print.radiusCm);
+    if (Number(radiusText.replace(',', '.')) !== print.radiusCm) {
+      setRadiusText(String(print.radiusCm).replace('.', ','));
+    }
+  }
   const [status, setStatus] = useState<string | null>(null);
   const radius = Number(radiusText.replace(',', '.'));
   const radiusValid =
@@ -40,7 +54,12 @@ export function OutputsPanel({
   const run = async (kind: 'svg' | 'png' | 'csv' | 'copy') => setStatus(await onExport(kind));
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`} data-testid="outputs-panel">
+    <section
+      className="step-panel"
+      aria-labelledby={`${id}-h`}
+      data-testid="outputs-panel"
+      data-step="5"
+    >
       <h2 id={`${id}-h`}>
         <span className="step-n">5</span>
         {t('outputs.heading')}
@@ -84,6 +103,7 @@ export function OutputsPanel({
         {check('data', t('outputs.includeData'))}
         {check('legend', t('outputs.includeLegend'))}
         {check('protractorOnly', t('outputs.protractorOnly'))}
+        {geometryAvailable && check('geometry', t('outputs.includeGeometry'))}
       </fieldset>
       <button type="button" className="btn primary" onClick={onPrint}>
         {t('outputs.print')}
@@ -121,6 +141,7 @@ export function OutputsPanel({
         {comparing ? t('outputs.compareStop') : t('outputs.compare')}
       </button>
       <p className="note">{t('outputs.compareHelp')}</p>
+      {children}
     </section>
   );
 }

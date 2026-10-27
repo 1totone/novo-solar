@@ -1,0 +1,87 @@
+! SOL-AR: protecao solar da janela, objetos para o seu modelo do EnergyPlus.
+! Gerado por SOL-AR (teste de referencia do F5.2), para o EnergyPlus 26.2.
+! Local: manaus. Fachada: normal externa a 225 graus do Norte.
+! Janela (vidro): 1.2 x 1 m, recuada 0.1 m da fachada.
+! Peca 1 (brise horizontal): Shading:Zone:Detailed.
+! Peca 2 (laminas verticais): Shading:Building:Detailed.
+! Recuo do vidro: verga, peitoril e ombreiras como Shading:Zone:Detailed; a parede fica no plano do vidro.
+! Esquerda e direita dos objetos por projecao: vistas de fora, como no EnergyPlus.
+! Janela: JANELA; parede: PAREDE_FRENTE.
+! Vertices no referencial da janela colada. Com GlobalGeometryRules Relative, os Shading:Building:Detailed precisam do deslocamento da origem da zona.
+
+Shading:Zone:Detailed,
+  JANELA Recuo verga,         !- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  12.5, -3.25, 5,             !- X,Y,Z Vertex 1 {m}
+  11.651471863, -2.401471863, 5,!- X,Y,Z Vertex 2 {m}
+  11.580761184, -2.472182541, 5,!- X,Y,Z Vertex 3 {m}
+  12.429289322, -3.320710678, 5;!- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo peitoril,      !- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  12.5, -3.25, 4,             !- X,Y,Z Vertex 1 {m}
+  11.651471863, -2.401471863, 4,!- X,Y,Z Vertex 2 {m}
+  11.580761184, -2.472182541, 4,!- X,Y,Z Vertex 3 {m}
+  12.429289322, -3.320710678, 4;!- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo ombreira esquerda,!- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  12.5, -3.25, 4,             !- X,Y,Z Vertex 1 {m}
+  12.429289322, -3.320710678, 4,!- X,Y,Z Vertex 2 {m}
+  12.429289322, -3.320710678, 5,!- X,Y,Z Vertex 3 {m}
+  12.5, -3.25, 5;             !- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo ombreira direita,!- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  11.651471863, -2.401471863, 4,!- X,Y,Z Vertex 1 {m}
+  11.580761184, -2.472182541, 4,!- X,Y,Z Vertex 2 {m}
+  11.580761184, -2.472182541, 5,!- X,Y,Z Vertex 3 {m}
+  11.651471863, -2.401471863, 5;!- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Brise 1,             !- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  12.641421356, -3.532842712, 5,!- X,Y,Z Vertex 1 {m}
+  11.36862915, -2.260050506, 5,!- X,Y,Z Vertex 2 {m}
+  11.01507576, -2.613603897, 5,!- X,Y,Z Vertex 3 {m}
+  12.287867966, -3.886396103, 5;!- X,Y,Z Vertex 4 {m}
+
+Shading:Building:Detailed,
+  JANELA Laminas verticais 2 placa 1,!- Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  12.252512627, -3.214644661, 4,!- X,Y,Z Vertex 1 {m}
+  12.079307546, -3.314644661, 4,!- X,Y,Z Vertex 2 {m}
+  12.079307546, -3.314644661, 5.1,!- X,Y,Z Vertex 3 {m}
+  12.252512627, -3.214644661, 5.1;!- X,Y,Z Vertex 4 {m}
+
+Shading:Building:Detailed,
+  JANELA Laminas verticais 2 placa 2,!- Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  11.969669914, -2.931801948, 4,!- X,Y,Z Vertex 1 {m}
+  11.796464833, -3.031801948, 4,!- X,Y,Z Vertex 2 {m}
+  11.796464833, -3.031801948, 5.1,!- X,Y,Z Vertex 3 {m}
+  11.969669914, -2.931801948, 5.1;!- X,Y,Z Vertex 4 {m}
+
+Shading:Building:Detailed,
+  JANELA Laminas verticais 2 placa 3,!- Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  11.686827202, -2.648959236, 4,!- X,Y,Z Vertex 1 {m}
+  11.513622121, -2.748959236, 4,!- X,Y,Z Vertex 2 {m}
+  11.513622121, -2.748959236, 5.1,!- X,Y,Z Vertex 3 {m}
+  11.686827202, -2.648959236, 5.1;!- X,Y,Z Vertex 4 {m}

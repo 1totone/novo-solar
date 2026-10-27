@@ -9,6 +9,7 @@ import {
   type DataKey,
   type OverlayState,
 } from '../state/overlayHash';
+import { onRovingKeyDown } from '../a11y/roving';
 
 const LABEL: Record<DataKey, MessageKey> = {
   tbs: 'data.tbs',
@@ -106,7 +107,12 @@ export function DataPanel({
   const tz = `${timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(timeZone), Number.isInteger(timeZone) ? 0 : 1)}`;
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`} data-testid="data-panel">
+    <section
+      className="step-panel"
+      aria-labelledby={`${id}-h`}
+      data-testid="data-panel"
+      data-step="4"
+    >
       <h2 id={`${id}-h`}>
         <span className="step-n">4</span>
         {t('data.heading')}
@@ -143,12 +149,18 @@ export function DataPanel({
             <>
               <div className="field">
                 <span className="field-label">{t('data.semester')}</span>
-                <div className="segmented" role="radiogroup" aria-label={t('data.semester')}>
+                <div
+                  className="segmented"
+                  role="radiogroup"
+                  aria-label={t('data.semester')}
+                  onKeyDown={(e) => onRovingKeyDown(e, 'radio')}
+                >
                   {([1, 2] as const).map((sem) => (
                     <button
                       key={sem}
                       type="button"
                       role="radio"
+                      tabIndex={overlay.semester === sem ? 0 : -1}
                       aria-checked={overlay.semester === sem}
                       onClick={() => onChange({ sem: sem === 2 ? '2' : '' })}
                     >

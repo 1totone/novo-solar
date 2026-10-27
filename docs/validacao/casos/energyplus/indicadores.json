@@ -1,0 +1,727 @@
+{
+ "gerado_por": "docs/validacao/scripts/energyplus_indicadores.py",
+ "energyplus": "26.2.0",
+ "passos_por_hora": 6,
+ "cenas": [
+  {
+   "cena": "brise-norte",
+   "local": "florianopolis",
+   "orientacao": 0.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 223,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 27.052595,
+      "admitida": 5.027867
+     },
+     "frias": {
+      "incidente": 157.762327,
+      "admitida": 82.591735
+     },
+     "todas": {
+      "incidente": 479.82458,
+      "admitida": 186.228461
+     },
+     "bloqueado_nas_quentes": 0.81414476,
+     "admitido_nas_frias": 0.52352001
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 27.052595,
+      "admitida": 5.027865
+     },
+     "frias": {
+      "incidente": 157.762327,
+      "admitida": 82.591736
+     },
+     "todas": {
+      "incidente": 479.82458,
+      "admitida": 186.228459
+     },
+     "bloqueado_nas_quentes": 0.8141448,
+     "admitido_nas_frias": 0.52352002
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 27.499029,
+      "admitida": 5.263202
+     },
+     "frias": {
+      "incidente": 155.558282,
+      "admitida": 80.851456
+     },
+     "todas": {
+      "incidente": 480.323312,
+      "admitida": 186.293944
+     },
+     "bloqueado_nas_quentes": 0.80860409,
+     "admitido_nas_frias": 0.51975025
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 27.91726,
+      "admitida": 5.294332
+     },
+     "frias": {
+      "incidente": 155.061935,
+      "admitida": 80.496616
+     },
+     "todas": {
+      "incidente": 480.614461,
+      "admitida": 186.433885
+     },
+     "bloqueado_nas_quentes": 0.81035632,
+     "admitido_nas_frias": 0.51912557
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 28.355681,
+      "admitida": 5.206896
+     },
+     "frias": {
+      "incidente": 154.262746,
+      "admitida": 80.707927
+     },
+     "todas": {
+      "incidente": 481.020433,
+      "admitida": 186.479479
+     },
+     "bloqueado_nas_quentes": 0.81637204,
+     "admitido_nas_frias": 0.52318482
+    }
+   }
+  },
+  {
+   "cena": "grelha-oeste",
+   "local": "manaus",
+   "orientacao": 270.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 320,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 313.661914,
+      "admitida": 202.369756
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 427.220026,
+      "admitida": 275.502198
+     },
+     "bloqueado_nas_quentes": 0.35481566,
+     "admitido_nas_frias": null
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 313.661914,
+      "admitida": 202.369747
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 427.220026,
+      "admitida": 275.502187
+     },
+     "bloqueado_nas_quentes": 0.35481568,
+     "admitido_nas_frias": null
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 324.07748,
+      "admitida": 211.983112
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 441.214715,
+      "admitida": 288.313416
+     },
+     "bloqueado_nas_quentes": 0.34588756,
+     "admitido_nas_frias": null
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 324.113904,
+      "admitida": 212.027903
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 441.203316,
+      "admitida": 288.310634
+     },
+     "bloqueado_nas_quentes": 0.34582287,
+     "admitido_nas_frias": null
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 314.940623,
+      "admitida": 203.409239
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 428.742977,
+      "admitida": 276.75069
+     },
+     "bloqueado_nas_quentes": 0.35413464,
+     "admitido_nas_frias": null
+    }
+   }
+  },
+  {
+   "cena": "laminas-sudeste-recuo",
+   "local": "porto-alegre",
+   "orientacao": 135.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 723,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 4.160104,
+      "admitida": 0.352064
+     },
+     "frias": {
+      "incidente": 111.133625,
+      "admitida": 29.131478
+     },
+     "todas": {
+      "incidente": 221.769696,
+      "admitida": 46.091138
+     },
+     "bloqueado_nas_quentes": 0.91537127,
+     "admitido_nas_frias": 0.26213019
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 4.160104,
+      "admitida": 0.35206
+     },
+     "frias": {
+      "incidente": 111.133625,
+      "admitida": 29.131516
+     },
+     "todas": {
+      "incidente": 221.769696,
+      "admitida": 46.091131
+     },
+     "bloqueado_nas_quentes": 0.9153722,
+     "admitido_nas_frias": 0.26213053
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 4.179491,
+      "admitida": 0.353761
+     },
+     "frias": {
+      "incidente": 105.762431,
+      "admitida": 26.862948
+     },
+     "todas": {
+      "incidente": 215.179216,
+      "admitida": 43.316722
+     },
+     "bloqueado_nas_quentes": 0.915358,
+     "admitido_nas_frias": 0.25399329
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 4.155083,
+      "admitida": 0.351432
+     },
+     "frias": {
+      "incidente": 105.906654,
+      "admitida": 26.899491
+     },
+     "todas": {
+      "incidente": 215.095626,
+      "admitida": 43.355665
+     },
+     "bloqueado_nas_quentes": 0.91542127,
+     "admitido_nas_frias": 0.25399245
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 4.590725,
+      "admitida": 0.3885
+     },
+     "frias": {
+      "incidente": 108.445229,
+      "admitida": 28.387855
+     },
+     "todas": {
+      "incidente": 221.831894,
+      "admitida": 45.884546
+     },
+     "bloqueado_nas_quentes": 0.91537278,
+     "admitido_nas_frias": 0.26177136
+    }
+   }
+  },
+  {
+   "cena": "laminas-verticais-leste",
+   "local": "belem",
+   "orientacao": 90.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 356,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 14.610074,
+      "admitida": 9.609877
+     },
+     "frias": {
+      "incidente": 0.008646,
+      "admitida": 0.00673
+     },
+     "todas": {
+      "incidente": 440.928166,
+      "admitida": 245.327252
+     },
+     "bloqueado_nas_quentes": 0.34224307,
+     "admitido_nas_frias": 0.77842519
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 14.610074,
+      "admitida": 9.609876
+     },
+     "frias": {
+      "incidente": 0.008646,
+      "admitida": 0.00673
+     },
+     "todas": {
+      "incidente": 440.928166,
+      "admitida": 245.327174
+     },
+     "bloqueado_nas_quentes": 0.34224318,
+     "admitido_nas_frias": 0.77841438
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 14.70177,
+      "admitida": 9.677436
+     },
+     "frias": {
+      "incidente": 0.004629,
+      "admitida": 0.003598
+     },
+     "todas": {
+      "incidente": 425.892869,
+      "admitida": 236.746566
+     },
+     "bloqueado_nas_quentes": 0.34175026,
+     "admitido_nas_frias": 0.77719938
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 14.705859,
+      "admitida": 9.662533
+     },
+     "frias": {
+      "incidente": 0.004634,
+      "admitida": 0.003581
+     },
+     "todas": {
+      "incidente": 425.967202,
+      "admitida": 237.303342
+     },
+     "bloqueado_nas_quentes": 0.34294674,
+     "admitido_nas_frias": 0.77274527
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 17.1689,
+      "admitida": 11.262434
+     },
+     "frias": {
+      "incidente": 0.004664,
+      "admitida": 0.0036
+     },
+     "todas": {
+      "incidente": 440.17026,
+      "admitida": 245.388095
+     },
+     "bloqueado_nas_quentes": 0.34402119,
+     "admitido_nas_frias": 0.77196464
+    }
+   }
+  },
+  {
+   "cena": "brise-afastado-aletas",
+   "local": "concepcion",
+   "orientacao": 20.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 1767,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "frias": {
+      "incidente": 607.454296,
+      "admitida": 326.782936
+     },
+     "todas": {
+      "incidente": 873.971873,
+      "admitida": 473.089136
+     },
+     "bloqueado_nas_quentes": null,
+     "admitido_nas_frias": 0.53795477
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "frias": {
+      "incidente": 607.454296,
+      "admitida": 326.782937
+     },
+     "todas": {
+      "incidente": 873.971873,
+      "admitida": 473.08914
+     },
+     "bloqueado_nas_quentes": null,
+     "admitido_nas_frias": 0.53795477
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "frias": {
+      "incidente": 605.976213,
+      "admitida": 325.709423
+     },
+     "todas": {
+      "incidente": 873.202459,
+      "admitida": 472.071515
+     },
+     "bloqueado_nas_quentes": null,
+     "admitido_nas_frias": 0.53749539
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "frias": {
+      "incidente": 605.563182,
+      "admitida": 325.878627
+     },
+     "todas": {
+      "incidente": 873.692754,
+      "admitida": 472.4149
+     },
+     "bloqueado_nas_quentes": null,
+     "admitido_nas_frias": 0.53814141
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "frias": {
+      "incidente": 605.477007,
+      "admitida": 326.605685
+     },
+     "todas": {
+      "incidente": 877.672122,
+      "admitida": 475.189392
+     },
+     "bloqueado_nas_quentes": null,
+     "admitido_nas_frias": 0.53941881
+    }
+   }
+  },
+  {
+   "cena": "placas-livres-sul",
+   "local": "florianopolis",
+   "orientacao": 180.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 223,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 2.939226,
+      "admitida": 0.089377
+     },
+     "frias": {
+      "incidente": 6.151294,
+      "admitida": 3.147364
+     },
+     "todas": {
+      "incidente": 31.790941,
+      "admitida": 9.275869
+     },
+     "bloqueado_nas_quentes": 0.96959153,
+     "admitido_nas_frias": 0.51165886
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 2.939226,
+      "admitida": 0.089371
+     },
+     "frias": {
+      "incidente": 6.151294,
+      "admitida": 3.147364
+     },
+     "todas": {
+      "incidente": 31.790941,
+      "admitida": 9.275861
+     },
+     "bloqueado_nas_quentes": 0.96959363,
+     "admitido_nas_frias": 0.51165889
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 3.118584,
+      "admitida": 0.110895
+     },
+     "frias": {
+      "incidente": 5.62089,
+      "admitida": 2.825026
+     },
+     "todas": {
+      "incidente": 31.770484,
+      "admitida": 8.8593
+     },
+     "bloqueado_nas_quentes": 0.96444058,
+     "admitido_nas_frias": 0.50259415
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 3.028648,
+      "admitida": 0.105382
+     },
+     "frias": {
+      "incidente": 5.700033,
+      "admitida": 2.854607
+     },
+     "todas": {
+      "incidente": 31.683495,
+      "admitida": 8.824002
+     },
+     "bloqueado_nas_quentes": 0.96520492,
+     "admitido_nas_frias": 0.50080543
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 2.812268,
+      "admitida": 0.085221
+     },
+     "frias": {
+      "incidente": 5.934499,
+      "admitida": 3.012243
+     },
+     "todas": {
+      "incidente": 31.525993,
+      "admitida": 9.121776
+     },
+     "bloqueado_nas_quentes": 0.96969656,
+     "admitido_nas_frias": 0.5075817
+    }
+   }
+  },
+  {
+   "cena": "grelha-laminas-nordeste",
+   "local": "manaus",
+   "orientacao": 45.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 320,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 52.862001,
+      "admitida": 1.660949
+     },
+     "frias": {
+      "incidente": 5.496035,
+      "admitida": 2.35696
+     },
+     "todas": {
+      "incidente": 311.250478,
+      "admitida": 64.892609
+     },
+     "bloqueado_nas_quentes": 0.96857953,
+     "admitido_nas_frias": 0.42884742
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 52.862001,
+      "admitida": 1.66095
+     },
+     "frias": {
+      "incidente": 5.496035,
+      "admitida": 2.356961
+     },
+     "todas": {
+      "incidente": 311.250478,
+      "admitida": 64.892636
+     },
+     "bloqueado_nas_quentes": 0.96857951,
+     "admitido_nas_frias": 0.42884746
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 53.108062,
+      "admitida": 1.676749
+     },
+     "frias": {
+      "incidente": 4.809594,
+      "admitida": 2.008034
+     },
+     "todas": {
+      "incidente": 302.117642,
+      "admitida": 60.768595
+     },
+     "bloqueado_nas_quentes": 0.9684276,
+     "admitido_nas_frias": 0.41750592
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 52.674906,
+      "admitida": 1.650203
+     },
+     "frias": {
+      "incidente": 4.792038,
+      "admitida": 1.992758
+     },
+     "todas": {
+      "incidente": 301.471862,
+      "admitida": 60.581329
+     },
+     "bloqueado_nas_quentes": 0.96867193,
+     "admitido_nas_frias": 0.41584764
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 55.897885,
+      "admitida": 1.960379
+     },
+     "frias": {
+      "incidente": 4.832575,
+      "admitida": 2.061973
+     },
+     "todas": {
+      "incidente": 310.299881,
+      "admitida": 64.076812
+     },
+     "bloqueado_nas_quentes": 0.96492928,
+     "admitido_nas_frias": 0.42668204
+    }
+   }
+  },
+  {
+   "cena": "recuo-noroeste",
+   "local": "belem",
+   "orientacao": 315.0,
+   "dni_interpolacao_dif_max_w_m2": 0.0,
+   "passos_com_dni_zerada_pelo_sol": 356,
+   "contabilidade_dif_max_w_m2": 0.0,
+   "passos": {
+    "S0": {
+     "quentes": {
+      "incidente": 253.773,
+      "admitida": 120.871029
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 384.71925,
+      "admitida": 180.571973
+     },
+     "bloqueado_nas_quentes": 0.52370414,
+     "admitido_nas_frias": null
+    },
+    "S1": {
+     "quentes": {
+      "incidente": 253.773,
+      "admitida": 120.870977
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 384.71925,
+      "admitida": 180.571882
+     },
+     "bloqueado_nas_quentes": 0.52370435,
+     "admitido_nas_frias": null
+    },
+    "S2": {
+     "quentes": {
+      "incidente": 260.885821,
+      "admitida": 125.389807
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 396.91482,
+      "admitida": 188.198421
+     },
+     "bloqueado_nas_quentes": 0.51936902,
+     "admitido_nas_frias": null
+    },
+    "S3": {
+     "quentes": {
+      "incidente": 259.761762,
+      "admitida": 124.480492
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 395.864441,
+      "admitida": 187.366761
+     },
+     "bloqueado_nas_quentes": 0.52078978,
+     "admitido_nas_frias": null
+    },
+    "S4": {
+     "quentes": {
+      "incidente": 253.121607,
+      "admitida": 119.873757
+     },
+     "frias": {
+      "incidente": 0.0,
+      "admitida": 0.0
+     },
+     "todas": {
+      "incidente": 385.709191,
+      "admitida": 181.026964
+     },
+     "bloqueado_nas_quentes": 0.52641832,
+     "admitido_nas_frias": null
+    }
+   }
+  }
+ ]
+}

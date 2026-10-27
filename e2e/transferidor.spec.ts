@@ -27,7 +27,7 @@ test.describe('transferidor', () => {
     expect(r45).toBeCloseTo(Math.SQRT2, 6);
 
     // Referência externa: o mesmo número passa a ser medido a partir da horizontal.
-    await page.getByLabel('α', { exact: true }).fill('60');
+    await page.getByLabel('α (brise horizontal), sombra total').fill('60');
     await page.getByRole('radio', { name: 'Externa' }).click();
     const r60 = Number(await chart.getByTestId('curve-alpha--1').getAttribute('r'));
     expect(r60).toBeCloseTo(2, 6);

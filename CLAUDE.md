@@ -15,6 +15,7 @@ Mapa dos documentos:
 - `docs/spec/`: especificação técnica (convenções, fórmulas, algoritmos, tolerâncias).
 - `docs/validacao/`: casos de referência e relatórios de validação.
 - `docs/referencias/diagnostico-solar-6.2.md`: engenharia reversa do SOL-AR 6.2 (interface, fórmulas, dados e erros conhecidos).
+- `docs/manutencao/guia-do-mantenedor.md`: guia para quem mantém o programa (LabEEE): arquitetura, publicação, dados, traduções, validação e versões.
 - `docs/ideias.md`: estacionamento de ideias fora da fase atual.
 
 ## Princípios (desempate de qualquer decisão)
@@ -69,7 +70,7 @@ O Anthony quer que você conduza o projeto sem pedir permissão a cada ação.
 ## Ambiente (sessões do Claude Code na nuvem)
 
 - Node 22 já instalado. Dependências com `npm ci` (ou `npm install` enquanto não houver lockfile).
-- Git: o push funciona pelo proxy da sessão; não é possível enviar tags nem apagar branches. A criação de releases pela API também é bloqueada nas sessões na nuvem; as releases saem do workflow `release.yml` a partir do `CHANGELOG.md` (decisão 0012): no PR do portão aprovado, mova "Não lançado" para a seção `## [X.Y.Z] - AAAA-MM-DD (vX.Y, Nome)` e atualize a versão no `package.json`.
+- Git: o push funciona pelo proxy da sessão; não é possível enviar tags nem apagar branches. A criação de releases pela API também é bloqueada nas sessões na nuvem; as releases saem do workflow `release.yml` a partir do `CHANGELOG.md` (decisão 0012): no PR do portão aprovado, mova "Não lançado" para a seção `## [X.Y.Z] - AAAA-MM-DD (vX.Y, Nome)` e atualize a versão no `package.json` e no `CITATION.cff` (com `date-released`; o teste `tests/metadados.test.ts` confere).
 - Se a rede da sessão bloquear o download de navegadores do Playwright ou de arquivos climáticos, peça ao Anthony para liberar os domínios no ambiente (ROADMAP, seção 7) e, enquanto isso, rode esses testes no CI.
 
 ## Comandos
@@ -84,6 +85,7 @@ O Anthony quer que você conduza o projeto sem pedir permissão a cada ação.
 | `npm run typecheck` | TypeScript (strict) em todos os projetos. |
 | `npm test` | Testes de unidade (Vitest), inclusive os de física. |
 | `npm run build` | Build de produção em `dist/`, com caminhos relativos; em `dist/teste/`, a página do teste do F2.9 sem moderador (build próprio, decisão 0042). |
+| `npm run orcamento` | Soma o JavaScript inicial do `dist/` (com e sem gzip) e falha acima do orçamento (decisão 0039). Rode `npm run build` antes. |
 | `npm run test:e2e` | Playwright no build de produção (`dist/`), servido numa subpasta (`/qualquer/pasta/`), em computador e celular. Rode `npm run build` antes. |
 
 Notas:

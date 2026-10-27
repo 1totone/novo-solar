@@ -1,5 +1,9 @@
 // Textos da interface em português do Brasil (idioma de referência).
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
+import { fase3PtBR } from './messages.pt-BR.fase3';
+import { fase4PtBR } from './messages.pt-BR.fase4';
+import { fase5PtBR } from './messages.pt-BR.fase5';
+
 export const ptBR = {
   'app.name': 'SOL-AR',
   'app.tagline':
@@ -10,6 +14,7 @@ export const ptBR = {
   'status.oldVersionLink': 'SOL-AR 6.2 no site do LabEEE',
   'status.roadmapLink': 'Acompanhe o desenvolvimento',
   'status.wireframesLink': 'Esboço das próximas telas (wireframes da Fase 2)',
+  'status.wireframes3Link': 'Proposta das telas da Fase 3 (wireframes da Fase 3)',
   'about.toggleOpen': 'Sobre',
   'about.toggleClose': 'Fechar "Sobre"',
   'about.title': 'Sobre',
@@ -23,6 +28,7 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'chart.overlayPending': 'Calculando as células da carta…',
   'chart.north': 'N',
   'chart.east': 'L',
   'chart.south': 'S',
@@ -68,11 +74,17 @@ export const ptBR = {
   'protection.combinedHelp':
     'Grelha (brise encostado nas aletas, mesma profundidade, junto à parede): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
   'protection.partialSet': 'Sombra parcial (50%)',
-  'protection.partialShort': 'parcial',
   'protection.partialHelp':
     'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos e sem fresta; nos outros casos, é uma aproximação.',
   'protection.invalid': 'Use um valor de 0° a 90°.',
-  'protection.fieldLabel': '{angle} {side} {index}',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'brise horizontal',
+  'protection.desc.beta': 'brises verticais',
+  'protection.desc.gamma': 'limites laterais',
+  'protection.desc.finTop': 'topo das aletas',
+  'protection.setTotal': 'sombra total',
+  'protection.setPartial': 'sombra parcial',
   'draw.heading': 'Desenhar à mão',
   'draw.help':
     'Como no SOL-AR 6.2: marque na carta os vértices de uma região de sombra. O desenho se soma à máscara calculada e fica guardado no link.',
@@ -215,7 +227,7 @@ export const ptBR = {
   'outputs.compareStop': 'Fechar a comparação',
   'print.title': 'SOL-AR: {place}',
   'print.details':
-    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. Raio da carta: {radius} cm.',
+    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. {scale}',
   'print.sourceCity':
     'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
   'print.sourceFile': 'Dados do arquivo {file}.',
@@ -332,4 +344,7 @@ export const ptBR = {
   'epw.field.windDirection': 'direção do vento',
   'epw.field.windSpeed': 'velocidade do vento',
   'epw.field.totalSkyCover': 'cobertura do céu',
+  ...fase3PtBR,
+  ...fase4PtBR,
+  ...fase5PtBR,
 } as const;

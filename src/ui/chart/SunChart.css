@@ -19,9 +19,10 @@
   stroke-width: 1.5;
 }
 
+/* Grade com pelo menos 3:1 sobre o branco (achado 17 da revisão do F2.9; WCAG 1.4.11). */
 .sun-chart .altitude,
 .sun-chart .azimuth {
-  stroke: var(--color-border);
+  stroke: var(--chart-grid);
   stroke-width: 0.75;
 }
 
@@ -68,4 +69,43 @@
   text-anchor: end;
   font-size: 0.042px;
   fill: var(--color-sun-text);
+}
+
+/* F4.3: projeções equidistante e cilíndrica (caminhos no lugar de polilinhas) e analemas. */
+.sun-chart path.sun-path,
+.sun-chart path.hour-line,
+.sun-chart .legal-hour-line {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .legal-hour-line {
+  stroke: var(--chart-legal);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.sun-chart .legal-hour-label {
+  fill: var(--chart-legal);
+  font-size: 0.05px;
+  font-weight: 600;
+}
+
+.sun-chart .zenith-edge,
+.sun-chart .side-edge {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+
+.sun-chart .altitude-label.cylindrical {
+  text-anchor: end;
+}
+
+.sun-chart .date-label.cylindrical {
+  text-anchor: start;
+}
+
+.sun-chart .protractor path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
 }

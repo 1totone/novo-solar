@@ -1,14 +1,16 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { EpwData } from '../../core/epw/parseEpw';
+import type { Site } from '../../core/chart/sunChart';
 import {
   cellStatistics,
   filePercentiles,
-  overlayCells,
   OVERLAY_QUANTITIES,
+  type OverlayCell,
   type OverlayQuantity,
 } from '../../core/overlay/overlay';
 import type { HashState } from '../state/hashState';
 import { overlayFromHash, QUANTITY_OF } from '../state/overlayHash';
+import { cellsKey, peekCells, requestCells } from './cellsClient';
 import { FREQUENCY_COLORS, FREQUENCY_LIMITS, QUANTITY_COLORS } from './palettes';
 
 /** Casas decimais de cada grandeza na interface. */
@@ -22,7 +24,7 @@ export const DIGITS: Record<OverlayQuantity, number> = {
 
 const round = (v: number, digits: number) => Math.round(v * 10 ** digits) / 10 ** digits;
 
-// Cache por arquivo: a carta da tela, a da comparação e a exportação usam os mesmos cálculos.
+// Cache por arquivo das estatísticas e faixas (as células têm cache por local, em cellsClient).
 const cache = new WeakMap<EpwData, Map<string, unknown>>();
 function cached<T>(epw: EpwData, key: string, compute: () => T): T {
   let m = cache.get(epw);
@@ -47,13 +49,33 @@ export function useOverlay(epw: EpwData | null, hash: HashState) {
   const threshold = overlay.mode === 'frequency' ? overlay.threshold : undefined;
   const bandSource = overlay.bands.source;
 
-  const cells = useMemo(() => {
-    if (!epw || !timing) return null;
-    const { latitude, longitude, elevation, timeZone } = epw.location;
-    return cached(epw, `cells:${semester}:${timing}`, () =>
-      overlayCells({ latitude, longitude, elevation, timeZone }, semester, timing),
-    );
-  }, [epw, semester, timing]);
+  // Células do local, calculadas num web worker; enquanto não chegam, `pending` fica verdadeiro.
+  const site: Site | null = epw
+    ? {
+        latitude: epw.location.latitude,
+        longitude: epw.location.longitude,
+        elevation: epw.location.elevation,
+        timeZone: epw.location.timeZone,
+      }
+    : null;
+  const key = site && timing ? cellsKey(site, semester, timing) : null;
+  const [loaded, setLoaded] = useState<{ key: string; cells: OverlayCell[] } | null>(null);
+  useEffect(() => {
+    if (!site || !timing || !key) return;
+    // Já no cache: a renderização usa peekCells, sem outra renderização ao resolver a promessa.
+    if (peekCells(site, semester, timing)) return;
+    let alive = true;
+    void requestCells(site, semester, timing).then((cells) => {
+      if (alive) setLoaded({ key, cells });
+    });
+    return () => {
+      alive = false;
+    };
+    // `site` é recriado a cada render; a chave já o representa.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  const cells =
+    key === null ? null : loaded?.key === key ? loaded.cells : peekCells(site!, semester, timing!);
 
   const stats = useMemo(
     () =>
@@ -84,6 +106,8 @@ export function useOverlay(epw: EpwData | null, hash: HashState) {
   return {
     overlay,
     quantity,
+    /** Células ainda em cálculo (o painel mostra "calculando"). */
+    pending: key !== null && cells === null,
     unit: info?.unit ?? '',
     cells,
     stats,

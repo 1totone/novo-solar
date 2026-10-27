@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { makeProjection } from '../../core/chart/projection';
 import { chartGeometry, DATE_LABEL_RADIUS } from './chartGeometry';
 
 const recife = { latitude: -8.126, longitude: -34.924, elevation: 10.1, timeZone: -3 };
@@ -59,5 +60,24 @@ describe('rótulos das datas nas trajetórias', () => {
     }).pathLabels;
     expect(labels.some((l) => l.months.includes(6))).toBe(false);
     expect(labels.some((l) => l.months.includes(12))).toBe(false);
+  });
+});
+
+describe('rótulos das datas na cilíndrica', () => {
+  const site = { latitude: -27.67, longitude: -48.547, elevation: 6, timeZone: -3 };
+  it('têm reservas ao longo da trajetória, a primeira no meio-dia, como antes', () => {
+    const labels = chartGeometry(site, makeProjection('cylindrical', 90)).pathLabels;
+    expect(labels.length).toBe(7);
+    for (const l of labels) {
+      expect(l.candidates!.length).toBeGreaterThan(4);
+      expect(l.candidates![0]).toEqual({ x: l.x, y: l.y });
+      // Todas acima do horizonte da carta (y < 0 no SVG) e distintas.
+      for (const c of l.candidates!) expect(c.y).toBeLessThan(0);
+      expect(new Set(l.candidates!.map((c) => `${c.x},${c.y}`)).size).toBe(l.candidates!.length);
+    }
+  });
+
+  it('as azimutais continuam sem reservas (rótulo fixo no poente)', () => {
+    expect(chartGeometry(site).pathLabels.every((l) => l.candidates === undefined)).toBe(true);
   });
 });

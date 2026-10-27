@@ -8,6 +8,24 @@
   --color-surface: #f6f8fa;
   --color-border: #d0d7de;
   --color-bg: #ffffff;
+  /* Cores da carta (F4.6, decisão 0030), conferidas para daltonismo e contraste em
+     tests/acessibilidade/paleta.test.ts: linhas e textos contra o branco e entre si (simulação de Machado,
+     Oliveira e Fernandes, 2009). A trajetória do sol é --color-sun; as linhas horárias,
+     --color-accent; o desenho à mão, --color-text. */
+  --chart-grid: #8c959f;
+  --chart-protractor: #8250df;
+  --chart-protractor-text: #6639ba;
+  --chart-legal: #a01642;
+  --chart-contour: #4493a1;
+  --chart-contour-text: #2d6e7a;
+  --chart-contour-fill: rgb(68 147 161 / 20%);
+  --chart-period: #1c500e;
+  --chart-period-fill: rgb(45 164 78 / 22%);
+  --chart-point: #6f42c1;
+  --mask-total: rgb(207 34 46 / 35%);
+  --mask-partial: rgb(227 179 65 / 45%);
+  --mask-total-hatch: #a40e26;
+  --mask-partial-hatch: #b5820c;
   color-scheme: light;
   font-family:
     system-ui,
@@ -160,6 +178,16 @@ a:focus-visible {
   overflow-wrap: anywhere;
 }
 
+/* Origem, avisos e qualidade: textos longos, na largura toda do painel (F4.1). */
+.site-info dt.wide,
+.site-info dd.wide {
+  grid-column: 1 / -1;
+}
+
+.site-info dt.wide {
+  margin-top: 0.25rem;
+}
+
 /* Selo dos dados históricos (F2.7) e lista de avisos sobre os dados. */
 .badge {
   display: inline-block;
@@ -310,7 +338,7 @@ details.more summary {
 
 .sun-chart .pt-grid circle,
 .sun-chart .pt-grid line {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-opacity: 0.25;
   stroke-width: 0.5;
 }
@@ -331,18 +359,20 @@ details.more summary {
 }
 
 .sun-chart .pt-curve {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-width: 2.25;
 }
 
 .sun-chart .pt-label {
-  fill: #6639ba;
+  fill: var(--chart-protractor-text);
   font-size: 0.06px;
   font-weight: 600;
 }
 
+/* Curvas da sombra parcial: a cor do transferidor, tracejadas e mais finas, com o rótulo em itálico
+   (F4.6). O dourado de antes ficava a ΔE 5 da trajetória do sol, mesmo sem daltonismo. */
 .sun-chart .pt-curve.partial {
-  stroke: #9a6700;
+  stroke: var(--chart-protractor);
   stroke-width: 1.75;
   stroke-dasharray: 6 4;
 }
@@ -356,16 +386,17 @@ details.more summary {
 }
 
 .sun-chart .pt-label.partial {
-  fill: #7d4e00;
+  font-style: italic;
 }
 
-/* Máscara: total vermelha, parcial amarela (decisão 0013; paleta para daltonismo na Fase 4). */
+/* Máscara: total vermelha, parcial amarela (decisão 0013), conferidas para daltonismo (decisão 0030);
+   com dados sobre a carta, hachuras a 45° e 135°. */
 .sun-chart .mask-total {
-  fill: rgb(207 34 46 / 35%);
+  fill: var(--mask-total);
 }
 
 .sun-chart .mask-partial {
-  fill: rgb(227 179 65 / 45%);
+  fill: var(--mask-partial);
 }
 
 .swatch {
@@ -381,11 +412,11 @@ details.more summary {
 }
 
 .swatch.total {
-  background: rgb(207 34 46 / 35%);
+  background: var(--mask-total);
 }
 
 .swatch.partial {
-  background: rgb(227 179 65 / 45%);
+  background: var(--mask-partial);
 }
 
 .legend {
@@ -489,11 +520,20 @@ details.more summary {
 }
 
 .sun-chart .hatch-total {
-  fill: #a40e26;
+  fill: var(--mask-total-hatch);
 }
 
 .sun-chart .hatch-partial {
-  fill: #7d4e00;
+  fill: var(--mask-partial-hatch);
+}
+
+/* Resposta do exercício (F4.5): hachura escura a 135° sobre o desenho do aluno. */
+.sun-chart .hatch-answer {
+  fill: var(--color-text);
+}
+
+.swatch.answer {
+  background: repeating-linear-gradient(135deg, var(--color-text) 0 2px, transparent 2px 6px);
 }
 
 .swatch.no-data {
@@ -501,11 +541,15 @@ details.more summary {
 }
 
 .legend.hatched .swatch.total {
-  background: repeating-linear-gradient(45deg, #a40e26 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(45deg, var(--mask-total-hatch) 0 2px, transparent 2px 6px);
 }
 
 .legend.hatched .swatch.partial {
-  background: repeating-linear-gradient(135deg, #7d4e00 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--mask-partial-hatch) 0 2px,
+    transparent 2px 6px
+  );
 }
 
 .overlay-legend .legend-title {
@@ -570,6 +614,11 @@ details.more summary {
     max-height: 42vh;
     aspect-ratio: 1;
     margin-top: 0.25rem;
+  }
+
+  .chart-section .sun-chart.cylindrical {
+    width: 100%;
+    aspect-ratio: 2.28 / 1.36;
   }
 
   #panel-chart > .note:last-child {
@@ -673,6 +722,52 @@ details.more summary {
 
 .wind-controls .field {
   margin-bottom: 0.5rem;
+}
+
+/* Idioma (F4.6) */
+.header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.language {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language select {
+  min-height: 40px;
+  font: inherit;
+}
+
+/* Arquivo de projeto (F4.7) */
+input.manual-link {
+  width: 100%;
+  min-height: 40px;
+  font: inherit;
+  margin-top: 0.25rem;
+}
+
+/* Vento avançado (F4.4) */
+.wind-more {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.wind-more .field {
+  margin: 0.5rem 0;
+}
+
+.field input.wind-height {
+  max-width: 8rem;
+}
+
+.segmented button:disabled {
+  cursor: not-allowed;
+  text-decoration: line-through;
 }
 
 .wind-rose {
@@ -799,6 +894,16 @@ fieldset.plain .check {
   font-size: 0.95rem;
 }
 
+.difference-toggle {
+  margin: 0.5rem 0 0;
+}
+
+.difference-sources {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+
 .cell-table {
   margin-top: 0.5rem;
 }
@@ -832,7 +937,10 @@ fieldset.plain .check {
   .cell-table,
   .chart-section [role='tabpanel'] > .note,
   .wind-controls,
-  .wind-panel details {
+  .wind-panel details,
+  .difference-toggle,
+  .difference-blocked,
+  .language {
     display: none !important;
   }
 
@@ -862,10 +970,11 @@ fieldset.plain .check {
     font-size: 9pt;
   }
 
-  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura). */
+  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura); na cilíndrica,
+     a faixa de 0° a 90° tem a altura pedida (F4.3). */
   .chart-section .sun-chart {
-    width: calc(var(--print-radius) * 2.64cm) !important;
-    height: calc(var(--print-radius) * 2.64cm) !important;
+    width: calc(var(--print-radius) * var(--chart-span-x, 2.64) * 1cm) !important;
+    height: calc(var(--print-radius) * var(--chart-span-y, 2.64) * 1cm) !important;
     max-width: none !important;
     max-height: none !important;
     margin: 0 auto;
@@ -916,7 +1025,969 @@ fieldset.plain .check {
   .print-protractor-only .sun-chart .sun-paths,
   .print-protractor-only .sun-chart .overlay,
   .print-protractor-only .sun-chart .mask,
+  .print-protractor-only .sun-chart .shading,
   .print-protractor-only .legend {
     display: none !important;
   }
+}
+
+/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores da decisão 0030).
+   Curva de 0% tracejada e de 100% grossa: o nível não depende só da cor. O azul-petróleo escuro de
+   antes ficava a ΔE 6 das linhas horárias. */
+.sun-chart .contour {
+  fill: none;
+  stroke: var(--chart-contour);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .contour.level-0 {
+  stroke-dasharray: 6 3;
+}
+
+.sun-chart .contour.level-100 {
+  stroke-width: 2.5;
+}
+
+.sun-chart .contour-label {
+  font-size: 0.045px;
+  font-weight: 600;
+  fill: var(--chart-contour-text);
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.sun-chart .full-shade {
+  fill: var(--chart-contour-fill);
+}
+
+.sun-chart .hatch-full-shade {
+  fill: var(--chart-contour-text);
+}
+
+.sun-chart .hatch-point {
+  fill: var(--chart-point);
+}
+
+/* Curvas da geometria anterior enquanto o worker calcula as novas. */
+.sun-chart .shading .stale {
+  opacity: 0.35;
+}
+
+.swatch.contour-line {
+  background: linear-gradient(var(--chart-contour), var(--chart-contour)) center / 100% 2px
+    no-repeat;
+}
+
+.swatch.full-shade {
+  background: var(--chart-contour-fill);
+}
+
+.legend.hatched .swatch.full-shade {
+  background: repeating-linear-gradient(0deg, var(--chart-contour-text) 0 2px, transparent 2px 6px);
+}
+
+.swatch.point-mask {
+  background: repeating-linear-gradient(90deg, var(--chart-point) 0 2px, transparent 2px 6px);
+}
+
+/* Curvas em cálculo no worker: aviso sobre o canto da carta, sem empurrar o que vem abaixo. */
+.chart-view {
+  position: relative;
+}
+
+.shading-pending {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  margin: 0;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  color: #3d444d;
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+@media print {
+  .shading-pending {
+    display: none;
+  }
+}
+
+/* F3.3: mapa mês × hora da sombra (1 unidade do SVG = 1 px). */
+.annual-map {
+  position: relative;
+  min-height: 2rem;
+  margin: 0.5rem 0;
+}
+
+.month-hour-map {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.month-hour-map.stale {
+  opacity: 0.35;
+}
+
+.annual-legend {
+  justify-content: flex-start;
+  margin: 0.25rem 0;
+}
+
+.swatch.no-sun {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+.annual-table .data-table td.no-sun {
+  background: repeating-linear-gradient(45deg, #d0d7de 0 1px, #fff 1px 4px);
+}
+
+.export-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+/* F3.4: hipóteses e partes das classes de hora (passo 7). */
+.hypotheses {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.hypotheses li + li {
+  margin-top: 0.3rem;
+}
+
+.class-results .field-label {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.class-bar {
+  display: block;
+  width: 100%;
+  height: 1.4rem;
+}
+
+.class-legend {
+  justify-content: flex-start;
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.85rem;
+}
+
+.swatch.class-cold {
+  background: #3872bc;
+}
+
+.swatch.class-neutral {
+  background: #e5e4e2;
+}
+
+.swatch.class-hot {
+  background: #b94643;
+}
+
+.swatch.class-none {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+/* F3.5: indicadores e alternativas (passo 7). */
+.indicator-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.indicator-tile {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.indicator-tile p {
+  margin: 0;
+}
+
+.tile-label,
+.tile-note {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.tile-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.btn.small {
+  min-height: 32px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.note.block {
+  display: block;
+  font-weight: 400;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.indicators .data-table th,
+.indicators .data-table td {
+  padding: 0.25rem 0.35rem;
+  font-size: 0.85rem;
+}
+
+.alternatives-table tr.current th {
+  text-decoration: underline;
+}
+
+.alternatives-plot {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU; o contorno
+   escureceu na decisão 0030 para não se confundir com a trajetória do sol em deuteranopia). */
+.sun-chart .period-area {
+  fill: var(--chart-period-fill);
+  stroke: var(--chart-period);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-mark circle {
+  fill: #1b1f24;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-label {
+  font-size: 0.045px;
+  font-weight: 700;
+  fill: #1b1f24;
+  text-anchor: start;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.swatch.period-area {
+  background: var(--chart-period-fill);
+  border-color: var(--chart-period);
+}
+
+.swatch.period-mark {
+  border-radius: 50%;
+  background: #1b1f24;
+}
+
+.sizing-fins {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+/* F3.7: vista 3D. */
+.view3d-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: flex-end;
+}
+
+.view3d-controls .field {
+  margin-bottom: 0.25rem;
+}
+
+.view3d-canvas {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.view3d-canvas canvas {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  touch-action: none;
+}
+
+.view3d-status {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Células da sobreposição em cálculo no web worker (achado 9). */
+.overlay-pending {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+/* Fase 3: passos avançados recolhidos (decisão 0023). */
+.steps-group {
+  margin: 0.25rem 0 -0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.advanced-step > details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.advanced-step > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-step > details > summary:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.advanced-step > details > summary h2 {
+  margin: 0;
+}
+
+.advanced-step > details > summary h2::after {
+  content: '▸';
+  margin-left: auto;
+  color: var(--color-accent);
+}
+
+.advanced-step > details[open] > summary h2::after {
+  content: '▾';
+}
+
+.advanced-step > details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+.step-badge {
+  padding: 0 0.45rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.step-summary {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+fieldset.piece {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+fieldset.piece legend {
+  padding: 0 0.25rem;
+  font-weight: 600;
+}
+
+.piece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: 0 0.6rem;
+}
+
+.piece-grid .field {
+  display: flex;
+  flex-direction: column;
+  /* Rótulos de uma e de duas linhas na mesma fileira: os campos ficam alinhados embaixo. */
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.piece-grid label {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.add-piece {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.add-piece select {
+  min-height: 44px;
+  font: inherit;
+}
+
+.geometry-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.geometry-drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.geometry-drawing path {
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-wall {
+  fill: #eaeef2;
+  stroke: #8c959f;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-glass {
+  fill: #ddf4ff;
+  stroke: #0969da;
+  stroke-width: 1.5;
+}
+
+.geometry-drawing .gd-glass.gd-edge {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.geometry-drawing .gd-piece {
+  fill: #1b1f24;
+  fill-opacity: 0.85;
+  stroke: #1b1f24;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-piece.gd-edge {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: square;
+}
+
+.geometry-drawing .gd-beyond {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1.25;
+  stroke-dasharray: 4 3;
+}
+
+.geometry-drawing .gd-angle path {
+  fill: none;
+  stroke: #6639ba;
+  stroke-width: 1.25;
+  stroke-dasharray: 6 4;
+}
+
+.geometry-drawing .gd-angle text {
+  fill: #6639ba;
+  font-weight: 600;
+}
+
+.geometry-drawing .gd-dim path {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1;
+}
+
+.geometry-drawing text {
+  fill: var(--color-text);
+  font-family: inherit;
+}
+
+.geometry-drawing .gd-title {
+  font-weight: 600;
+}
+
+/* Ponto da máscara de um ponto (F3.2), na cor da hachura do ponto na carta. */
+.geometry-drawing .gd-point circle,
+.geometry-drawing .gd-point path {
+  fill: none;
+  stroke: #6f42c1;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-pick {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.export-only,
+.print-geometry {
+  display: none;
+}
+
+/* Com um passo avançado aberto, a carta acompanha a rolagem no computador (decisão 0023). */
+@media (min-width: 52rem) {
+  .chart-section.follow {
+    position: sticky;
+    top: 0.5rem;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+}
+
+@media print {
+  .print-geometry {
+    display: block;
+    break-before: page;
+  }
+
+  .print-geometry .geometry-drawing {
+    border: 0;
+  }
+}
+
+/* F4.3: legenda das linhas horárias solares e legais. */
+.swatch.solar-hour-line,
+.swatch.legal-hour-line {
+  width: 1.2rem;
+  height: 0;
+  border-top: 2px solid var(--color-accent);
+  background: none;
+}
+
+.swatch.legal-hour-line {
+  border-top: 2px dashed var(--chart-legal);
+}
+
+/* Ajuda e exemplos resolvidos (F4.8) */
+.header-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+/* Altura fixa: o diálogo não muda de tamanho ao trocar de parte. */
+dialog.help {
+  width: min(52rem, calc(100vw - 2rem));
+  max-width: none;
+  height: min(46rem, calc(100dvh - 2rem));
+  max-height: none;
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+}
+
+dialog.help::backdrop {
+  background: rgb(27 31 36 / 45%);
+}
+
+.help-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.help-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+.help-head h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.help-tabs {
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+.help-tabs button {
+  padding: 0.25rem 0.6rem;
+}
+
+.help-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.25rem 1rem 1rem;
+}
+
+.help-body:focus-visible,
+.help-faq summary:focus-visible,
+a.btn:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.help-body h3 {
+  margin: 1.1rem 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--color-accent);
+}
+
+.help-body h4 {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.help-items {
+  margin: 0;
+}
+
+.help-items > div {
+  margin-bottom: 0.6rem;
+}
+
+.help-items dt {
+  font-weight: 600;
+}
+
+.help-items dd {
+  margin: 0.1rem 0 0;
+}
+
+.help-example {
+  margin-top: 1rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.help-faq details {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.help-faq summary {
+  min-height: 32px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-faq p {
+  margin: 0.4rem 0 0.2rem;
+}
+
+/* No celular, a ajuda ocupa a tela inteira. */
+@media (max-width: 40rem) {
+  dialog.help {
+    width: 100vw;
+    height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.example-card {
+  padding: 0.75rem 0.9rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+}
+
+.example-card-label {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.example-card h2 {
+  margin: 0.1rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.example-card ol {
+  padding-left: 1.25rem;
+}
+
+.example-card li {
+  margin-bottom: 0.35rem;
+}
+
+@media print {
+  dialog.help {
+    display: none !important;
+  }
+}
+
+/* Modo didático (F4.5): realce do painel da etapa do tutorial e resultado do exercício. */
+:root[data-tutorial='1'] [data-step='1'],
+:root[data-tutorial='2'] [data-step='2'],
+:root[data-tutorial='3'] [data-step='3'],
+:root[data-tutorial='4'] [data-step='4'],
+:root[data-tutorial='5'] [data-step='5'],
+:root[data-tutorial='carta'] [data-step='carta'] {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+
+.tutorial-done {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #1a7f37;
+}
+
+.exercise-score {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media print {
+  :root[data-tutorial] [data-step] {
+    outline: none;
+  }
+}
+
+/* Catálogo nacional de estações (F4.1) */
+.catalog {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.catalog > summary {
+  min-height: 32px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.station-list {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.station-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.station-choice[aria-pressed='true'] {
+  border: 2px solid var(--color-accent);
+}
+
+.station-choice:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.station-name {
+  font-weight: 600;
+}
+
+.catalog-map {
+  margin: 0.5rem 0 0;
+}
+
+.catalog-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.catalog-map .ufs path {
+  fill: var(--color-surface);
+  stroke: var(--chart-grid);
+  stroke-width: 0.08;
+}
+
+.catalog-map .stations circle {
+  fill: var(--color-accent);
+}
+
+.catalog-map .stations circle.era5 {
+  fill: var(--color-muted);
+}
+
+.catalog-map .selected {
+  fill: none;
+  stroke: var(--color-sun);
+  stroke-width: 0.25;
+}
+
+.catalog-map .project-point {
+  fill: none;
+  stroke: var(--chart-legal);
+  stroke-width: 0.3;
+}
+
+/* Resultados ao lado (decisão 0038): no computador, os resultados pesados dos passos 6 e 7
+   ficam no painel da direita, abaixo da carta; no passo, uma linha leva até eles. */
+.side-results > div:not(:empty) {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.side-result-heading {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.side-result-heading:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.side-pointer {
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+@media print {
+  .side-results {
+    display: none;
+  }
+}
+
+/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. No computador, fixo no
+   alto da coluna dos passos; no celular, no pé da tela. */
+.step-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+.step-nav-title {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.step-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-nav-n {
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.step-nav-n[aria-current='step'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.step-nav-n:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 51.99rem) {
+  .step-nav {
+    order: 99;
+    top: auto;
+    bottom: 0;
+    justify-content: center;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .step-nav-title {
+    display: none;
+  }
+
+  .step-nav ol {
+    flex-wrap: nowrap;
+  }
+
+  .step-nav-n {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+}
+
+@media print {
+  .step-nav {
+    display: none;
+  }
+}
+
+/* Com a barra no pé da tela do celular, o que for rolado para a vista para acima dela. */
+@media (max-width: 51.99rem) {
+  html:has(.step-nav) {
+    scroll-padding-bottom: 3.5rem;
+  }
+}
+
+/* Mapa do catálogo ao lado (decisão 0038): acima da carta, à altura do passo 1. */
+.side-results-top > div:not(:empty) {
+  margin: 0 0 1rem;
+  padding: 0 0 1rem;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-border);
 }

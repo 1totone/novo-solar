@@ -1,0 +1,1027 @@
+// Textos de la interfaz en español (F4.6, decisión 0029). Las mismas claves del portugués; los
+// términos técnicos siguen docs/i18n/glossario-tecnico.md. Traducción a revisar por un hablante
+// nativo del área antes de la v1.0.
+import type { Catalog } from './i18n';
+
+export const es: Catalog = {
+  'app.name': 'SOL-AR',
+  'app.tagline':
+    'Carta solar, transportador de ángulos y diseño de protecciones solares en el navegador, con datos climáticos actuales.',
+  'status.title': 'En construcción',
+  'status.body':
+    'Esta es la vista previa de la nueva versión de Analysis SOL-AR, del LabEEE/UFSC. Mientras no se publique, use la versión 6.2, disponible en el sitio del LabEEE.',
+  'status.oldVersionLink': 'SOL-AR 6.2 en el sitio del LabEEE',
+  'status.roadmapLink': 'Siga el desarrollo',
+  'status.wireframesLink': 'Bocetos de las próximas pantallas (wireframes de la Fase 2)',
+  'status.wireframes3Link': 'Propuesta de las pantallas de la Fase 3 (wireframes de la Fase 3)',
+  'about.toggleOpen': 'Acerca de',
+  'about.toggleClose': 'Cerrar "Acerca de"',
+  'about.title': 'Acerca de',
+  'about.originalTitle': 'Versión original (Analysis SOL-AR 6.2, LabEEE/UFSC)',
+  'about.originalResearch':
+    'Investigación y desarrollo: Roberto Lamberts y Alexandra Albuquerque Maciel',
+  'about.originalProgramming': 'Programación: Edson T. Ono',
+  'about.newTitle': 'Nueva versión',
+  'about.newAuthor': 'Anthony Aliardi, a pedido del Prof. Roberto Lamberts',
+  'about.newAi': 'Desarrollo asistido por IA (Claude, Anthropic)',
+  'about.newMaintenance': 'Mantenimiento futuro: LabEEE/UFSC',
+  'about.license': 'Código abierto bajo la licencia MIT.',
+  'footer.build': 'Versión {version} · {label} · {commit}',
+  'chart.overlayPending': 'Calculando las celdas de la carta…',
+  'chart.north': 'N',
+  'chart.east': 'E',
+  'chart.south': 'S',
+  'chart.west': 'O',
+  'chart.title':
+    'Carta solar de {place}, latitud {latitude}°, longitud {longitude}°, huso UTC{timeZone}',
+  'chart.heading': 'Carta solar',
+  'chart.note':
+    'Proyección estereográfica, Norte arriba. Trayectorias en los solsticios, los equinoccios y el día 21 de los demás meses, con el mes en la puesta del sol (ene/nov: 21 de enero y 21 de noviembre, casi la misma trayectoria); líneas horarias en hora solar verdadera.',
+  'chart.monthsShort': 'ene,feb,mar,abr,may,jun,jul,ago,sep,oct,nov,dic',
+  'compass.points': 'N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSO,SO,OSO,O,ONO,NO,NNO',
+  'facade.heading': 'Fachada',
+  'facade.orientation': 'Orientación de la fachada (acimut de la normal exterior)',
+  'facade.orientationHelp':
+    'Grados desde el Norte, en sentido horario; acepta cualquier valor, incluso negativo (−30° = 330°).',
+  'facade.orientationInvalid': 'Escriba un número en grados.',
+  'facade.normalized': 'Normal exterior: {degrees}° ({compass})',
+  'facade.showProtractor': 'Mostrar el transportador sobre la carta',
+  'protection.heading': 'Protección',
+  'protection.reference': 'Referencia de los ángulos',
+  'protection.internal': 'Interna',
+  'protection.external': 'Externa',
+  'protection.referenceHelpInternal':
+    'Interna: α y β medidos desde el plano de la fachada, γ desde la vertical (α = AVS y β = AHS de la norma brasileña INI-C).',
+  'protection.referenceHelpExternal':
+    'Externa: α medido desde la horizontal (ángulo de sombra vertical), β desde la normal (ángulo de sombra horizontal), γ desde la horizontal (externo = 90° − interno).',
+  'protection.left': 'Izquierda',
+  'protection.right': 'Derecha',
+  'protection.sidesHelp': 'Izquierda y derecha de quien está dentro mirando hacia afuera.',
+  'protection.alpha': 'α (protección horizontal)',
+  'protection.beta': 'β (aletas verticales)',
+  'protection.gamma': 'γ (límites laterales)',
+  'protection.totalSet': 'Sombra total (100%)',
+  'protection.totalHelp':
+    'α medido desde la base de la ventana, β desde la arista opuesta a la aleta, γ desde la esquina inferior del mismo lado. En la región roja, toda la ventana queda a la sombra.',
+  'protection.more': 'Más opciones',
+  'protection.index2': 'Índices 2 (protección separada de la pared)',
+  'protection.index2Help':
+    'La sombra queda entre la curva 1 (arista exterior) y la 2 (arista interior); la rendija junto a la pared deja pasar el sol. En la sombra total, α2 se mide desde el dintel y β2 desde la arista de la ventana del mismo lado. γ2 se dibuja como en SOL-AR 6.2, pero no cambia la máscara: los dos extremos de la arista lateral dan el mismo γ.',
+  'protection.finTop': 'γ de las aletas',
+  'protection.finTopHelp':
+    'Extremo superior de una aleta de altura limitada, medido desde la esquina superior opuesta de la ventana; por encima de esta curva el sol pasa sobre la aleta.',
+  'protection.combinedHelp':
+    'Rejilla (protección horizontal unida a las aletas, con la misma profundidad, junto a la pared): deje γ y γ de las aletas en blanco, porque las uniones cierran las rendijas. Con piezas separadas, la región roja puede ser menor que la sombra total real, porque distintas partes de la ventana pueden quedar sombreadas por distintas piezas.',
+  'protection.partialSet': 'Sombra parcial (50%)',
+  'protection.partialHelp':
+    'Los mismos ángulos medidos desde el centro de la ventana (curvas discontinuas). En la región amarilla el centro queda a la sombra, lo que equivale a por lo menos la mitad de la ventana con protecciones y aletas largas y sin rendija; en los demás casos, es una aproximación.',
+  'protection.invalid': 'Use un valor de 0° a 90°.',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'protección horizontal',
+  'protection.desc.beta': 'aletas verticales',
+  'protection.desc.gamma': 'límites laterales',
+  'protection.desc.finTop': 'extremo superior de las aletas',
+  'protection.setTotal': 'sombra total',
+  'protection.setPartial': 'sombra parcial',
+  'draw.heading': 'Dibujo a mano alzada',
+  'draw.help':
+    'Como en SOL-AR 6.2: marque en la carta los vértices de una región de sombra. El dibujo se suma a la máscara calculada y queda guardado en el enlace.',
+  'draw.start': 'Empezar a dibujar',
+  'draw.kind': 'Tipo de sombra del dibujo',
+  'draw.total': 'Total',
+  'draw.partial': 'Parcial',
+  'draw.helpActive':
+    'Haga clic en la carta para marcar los vértices ({count} hasta ahora) y termine con 3 o más.',
+  'draw.undo': 'Deshacer punto',
+  'draw.finish': 'Cerrar polígono',
+  'draw.stop': 'Dejar de dibujar',
+  'draw.clear': 'Borrar los dibujos',
+  'data.heading': 'Datos sobre la carta',
+  'data.needFile':
+    'Para colorear la carta con los datos horarios, abra en el paso 1 los datos de la ciudad o cargue un archivo climático; el enlace guarda solo las coordenadas de un archivo.',
+  'data.sourceLink': 'Descargar el archivo reciente de esta ciudad (TMYx, Climate.OneBuilding.org)',
+  'data.variable': 'Variable',
+  'data.none': 'Ninguna',
+  'data.tbs': 'Temperatura de bulbo seco (°C)',
+  'data.ur': 'Humedad relativa (%)',
+  'data.ghi': 'Radiación global horizontal (Wh/m²)',
+  'data.dni': 'Radiación directa normal (Wh/m²)',
+  'data.dhi': 'Radiación difusa horizontal (Wh/m²)',
+  'data.short.tbs': 'Temperatura de bulbo seco',
+  'data.short.ur': 'Humedad relativa',
+  'data.short.ghi': 'Radiación global horizontal',
+  'data.short.dni': 'Radiación directa normal',
+  'data.short.dhi': 'Radiación difusa horizontal',
+  'data.semester': 'Período',
+  'data.semester1': '22/dic a 21/jun',
+  'data.semester2': '22/jun a 21/dic',
+  'data.bands': 'Intervalos ({unit})',
+  'data.bandLimit': 'Límite {n} de los intervalos',
+  'data.bandsInvalid': 'Use 4 valores en orden creciente.',
+  'data.bandsLinkInvalid':
+    'Los intervalos del enlace no eran válidos; se usan los intervalos por defecto.',
+  'data.bandsDefault': 'Intervalos por defecto',
+  'data.bandsFile': 'Intervalos según el archivo',
+  'data.bandsDefault62': 'Intervalos por defecto: los de SOL-AR 6.2.',
+  'data.bandsDefaultNew': 'Intervalos por defecto propuestos (SOL-AR 6.2 no tenía esta variable).',
+  'data.bandsFileWarning':
+    'Intervalos según los percentiles 20, 40, 60 y 80 de este archivo, en las horas con sol: relativos a él y no comparables entre ciudades.',
+  'data.cellHelp':
+    'Cada celda es un área: los días de una quincena y el intervalo de una hora del archivo ({interval}), en hora oficial con el huso del archivo (UTC{tz}). Color: {what}.',
+  'data.intervalIntegrated': 'de h − 1 a h, energía integrada en la hora',
+  'data.intervalInstant': 'de h − 0,5 a h + 0,5, valor medido en el instante h',
+  'data.colorMean': 'media de las horas de la celda',
+  'data.colorFrequency': 'fracción de las horas de la celda por encima del umbral',
+  'data.more': 'Más opciones',
+  'data.frequency': 'Colorear por la frecuencia de horas por encima de un umbral',
+  'data.threshold': 'Umbral ({unit})',
+  'data.thresholdHelp':
+    'La frecuencia de horas cálidas indica mejor que la media la necesidad de sombra. La temperatura exterior es un indicador aproximado de esa necesidad.',
+  'legend.upTo': 'hasta {v}',
+  'legend.between': '{a} a {b}',
+  'legend.above': 'más de {v}',
+  'legend.noData': 'sin datos',
+  'legend.frequencyTitle': 'Horas por encima de {threshold} {unit}',
+  'cell.hint': 'Pase el cursor sobre una celda, o tóquela, para ver los valores.',
+  'cell.hintTouch': 'Toque una celda para ver los valores.',
+  'cell.where': '{period}, hora {hour} del archivo ({start} a {end}):',
+  'cell.mean': 'media {mean} {unit} (mínima {min}, máxima {max}; {n} horas).',
+  'cell.above': '{count} de {n} horas por encima de {threshold} {unit} ({percent}%).',
+  'cell.noData': 'sin valores en el archivo.',
+  'tabs.label': 'Resultados',
+  'tabs.chart': 'Carta solar',
+  'tabs.rose': 'Rosa de los vientos',
+  'wind.needFile':
+    'Para ver la rosa de los vientos, abra en el paso 1 los datos de la ciudad o cargue un archivo climático; el enlace guarda solo las coordenadas de un archivo.',
+  'wind.show': 'Mostrar',
+  'wind.frequency': 'Frecuencia',
+  'wind.speed': 'Velocidad',
+  'wind.sectors': 'Sectores',
+  'wind.season': 'Estación',
+  'wind.year': 'Año',
+  'wind.summer': 'Verano',
+  'wind.autumn': 'Otoño',
+  'wind.winter': 'Invierno',
+  'wind.spring': 'Primavera',
+  'wind.months.dezfev': 'dic a feb',
+  'wind.months.marmai': 'mar a may',
+  'wind.months.junago': 'jun a ago',
+  'wind.months.setnov': 'sep a nov',
+  'wind.period': 'Período del día',
+  'wind.allDay': 'Todo el día',
+  'wind.dawn': 'Madrugada',
+  'wind.morning': 'Mañana',
+  'wind.afternoon': 'Tarde',
+  'wind.night': 'Noche',
+  'wind.title': 'Rosa de los vientos de {place}: {season}, {period}',
+  'wind.legendTitle': 'Velocidad (m/s)',
+  'wind.classRange': '{a} a {b}',
+  'wind.classAbove': '{a} o más',
+  'wind.speedNote':
+    'Longitud de cada sector: velocidad media de las horas sin calma que vienen de él (m/s).',
+  'wind.info':
+    '{valid} horas válidas de {hours} en el filtro ({missing} sin dirección o velocidad). Calmas (por debajo de 0,5 m/s): {calm}% de las horas, en el centro. Resolución de la velocidad en el archivo: {resolution} m/s. Horas del archivo: madrugada 1 a 6, mañana 7 a 12, tarde 13 a 18, noche 19 a 24.',
+  'wind.resolutionWarning':
+    'La velocidad del archivo viene en pasos de {resolution} m/s: los valores exactos de 0,5, 2, 4 y 6 m/s caen siempre en la clase superior, y las clases quedan sesgadas.',
+  'wind.stationWarning':
+    'Viento medido en la estación meteorológica (en general en un aeropuerto, a 10 m de altura): no representa el flujo en el terreno. Cada sector apunta hacia la dirección de donde viene el viento.',
+  'wind.table': 'Tabla de la rosa',
+  'wind.sector': 'Sector',
+  'wind.total': 'Total (%)',
+  'wind.meanSpeed': 'Velocidad media (m/s)',
+  'wind.calm': 'Calma',
+  'wind.noHours': 'sin horas',
+  'cells.table': 'Tabla de los valores de las celdas',
+  'cells.captionMean':
+    'Media de las horas de cada celda ({unit}); filas: quincenas; columnas: horas del archivo.',
+  'cells.captionFrequency':
+    'Porcentaje de las horas de cada celda por encima del umbral; filas: quincenas; columnas: horas del archivo.',
+  'cells.period': 'Quincena',
+  'outputs.heading': 'Imprimir y exportar',
+  'outputs.radius': 'Radio de la carta impresa (cm)',
+  'outputs.radiusHelp': 'Valor por defecto de SOL-AR 6.2: 6 cm.',
+  'outputs.radiusInvalid': 'Use un radio de 2 a 20 cm.',
+  'outputs.paperNote':
+    'Con {radius} cm de radio, la carta tiene {width} cm de ancho, con los rótulos: en una hoja A4 vertical cabe hasta 7 cm de radio; para más, elija A3 en el cuadro de impresión.',
+  'outputs.include': 'Incluir en la impresión',
+  'outputs.includeProtractor': 'Transportador',
+  'outputs.includeMask': 'Máscara',
+  'outputs.includeData': 'Datos',
+  'outputs.includeLegend': 'Leyenda y origen de los datos',
+  'outputs.protractorOnly': 'Solo el transportador, para imprimir en transparencia',
+  'outputs.print': 'Imprimir o guardar en PDF',
+  'outputs.printHelp':
+    'En el cuadro de impresión, use escala del 100% (sin "ajustar a la página"); para PDF, elija "Guardar como PDF". La regla impresa junto a la carta permite comprobar la escala.',
+  'outputs.export': 'Exportar',
+  'outputs.exportHelp': 'Exporta lo que está en pantalla: la carta o la rosa de los vientos.',
+  'outputs.csv': 'CSV de los datos mostrados',
+  'outputs.csvNone':
+    'Para exportar CSV, muestre datos en la carta (paso 4) o abra la rosa de los vientos con un archivo cargado.',
+  'outputs.copy': 'Copiar imagen',
+  'outputs.copied': 'Imagen copiada al portapapeles.',
+  'outputs.copyFailed': 'El navegador no permitió copiar la imagen; use la exportación en PNG.',
+  'outputs.compare': 'Comparar lado a lado',
+  'outputs.compareHelp':
+    'Guarda la configuración actual como A; los cambios siguientes valen solo para B. Sirve para comparar protecciones, orientaciones, ciudades o archivos.',
+  'outputs.compareStop': 'Cerrar la comparación',
+  'print.title': 'SOL-AR: {place}',
+  'print.details':
+    'Latitud {latitude}°, longitud {longitude}°, huso UTC{timeZone}. {source} Impreso el {date}. {scale}',
+  'print.sourceCity':
+    'Coordenadas de la estación {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
+  'print.sourceFile': 'Datos del archivo {file}.',
+  'print.sourceHistorical': 'Datos históricos de SOL-AR 6.2 ({what}).',
+  'print.ruler': 'Regla de 5 cm',
+  'compare.a': 'A',
+  'compare.b': 'B (editable)',
+  'compare.orientation': 'fachada {degrees}°',
+  'compare.none': 'sin protección',
+  'csv.title': 'SOL-AR (nueva versión): {what}',
+  'csv.cells': 'celdas de la carta solar',
+  'csv.rose': 'rosa de los vientos',
+  'csv.site': 'Ubicación: {place}; latitud {latitude}; longitud {longitude}; huso UTC{timeZone}',
+  'csv.file': 'Archivo: {file} ({hours} horas)',
+  'csv.historical': 'Datos históricos de SOL-AR 6.2: {file} ({hours} horas); {what}',
+  'csv.quantity': 'Variable: {quantity} ({unit}); valor de cada celda: {what}',
+  'csv.semester':
+    'Semestre: {semester}; celdas: quincena x hora del archivo; {interval}; hora oficial del huso del archivo',
+  'csv.bands': 'Intervalos (límites): {limits}',
+  'csv.filters': 'Filtros: {season}; {period}; {sectors} sectores',
+  'csv.hypotheses':
+    'Calma por debajo de 0.5 m/s; porcentajes sobre las horas válidas del filtro; velocidad media de las horas sin calma; viento medido en la estación',
+  'mask.legend': 'Leyenda de la máscara',
+  'mask.total': 'sombra total (100%)',
+  'mask.partial': 'sombra parcial (50%)',
+  'site.heading': 'Ubicación',
+  'site.cityLabel': 'Ciudad',
+  'site.fileOption': 'Archivo: {name}',
+  'site.cityData': 'Datos climáticos de la ciudad',
+  'site.openHistorical': 'Abrir datos históricos (SOL-AR 6.2)',
+  'site.closeHistorical': 'Cerrar datos históricos',
+  'site.recentLink': 'Descargar datos recientes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
+  'site.recentHelp': 'Descomprima el archivo descargado y cargue el .epw abajo.',
+  'site.loadingHistorical': 'Abriendo los datos históricos…',
+  'site.historicalError':
+    'No fue posible abrir los datos históricos. Revise la conexión e intente de nuevo.',
+  'site.fileLabel': 'O cargue un archivo climático (EPW o CSV de SOL-AR)',
+  'site.fileHelp': 'El archivo se lee solo en su navegador; nada se envía por internet.',
+  'site.unknownFormat':
+    'Formato no reconocido: cargue un archivo EPW o un CSV de SOL-AR (extensión .csv).',
+  'site.latitude': 'Latitud',
+  'site.longitude': 'Longitud',
+  'site.timeZone': 'Huso',
+  'site.elevation': 'Elevación',
+  'site.source': 'Origen',
+  'site.sourceCity':
+    'Coordenadas, huso y elevación de la estación {station} (OMM {wmo}), del archivo TMYx 2011 a 2025; ningún dato horario abierto.',
+  'site.historicalBadge': 'datos históricos',
+  'site.sourceTry':
+    'SOL-AR 6.2: año climático de referencia (TRY) de la estación del aeropuerto, de Goulart, Lamberts y Firmino (1998).',
+  'site.sourceIwec': 'SOL-AR 6.2: archivo IWEC (ASHRAE) de la estación del aeropuerto.',
+  'site.sourceFile': 'Archivo {file}: {hours} horas.',
+  'site.sourceFileLeap': 'Archivo {file}: {hours} horas (incluye el 29 de febrero).',
+  'site.sourceCsv': 'Archivo {file}, en el formato de SOL-AR 6.2: {hours} horas.',
+  'site.period': 'Período',
+  'site.periodTry': 'año de referencia elegido entre {start} y {end}',
+  'site.periodRecord': '{start} a {end} (período de registro informado en el archivo)',
+  'site.periodUnknown': 'no informado en el archivo',
+  'site.notices': 'Avisos',
+  'site.noticeModelled':
+    'Radiación estimada por un modelo: los registros de origen no tienen radiación.',
+  'site.noticeLag':
+    'El modelo de la radiación puso el sol en la longitud de Florianópolis: aquí la radiación llega unos {minutes} min después del sol real.',
+  'site.noticeLead':
+    'El modelo de la radiación puso el sol en la longitud de Florianópolis: aquí la radiación llega unos {minutes} min antes del sol real.',
+  'site.noticeInconsistent':
+    'La radiación global contradice la extraterrestre del propio archivo en {hours} horas (radiación sin sol o mayor que la extraterrestre).',
+  'site.noticeMissing': 'Valores ausentes: {fields}.',
+  'site.missingField': '{field} ({hours} h)',
+  'site.sourceLink':
+    'Coordenadas, huso y elevación del enlace; el archivo no está cargado en esta sesión.',
+  'site.comments': 'Comentario del archivo',
+  'site.readError': 'No fue posible leer el archivo.',
+  'epw.error.missingLocation':
+    'El archivo no parece ser un EPW: la primera línea debería empezar con LOCATION y tener 10 campos.',
+  'epw.error.missingCsvLocation':
+    'El archivo CSV no tiene encabezado de ubicación; indique la ubicación.',
+  'epw.error.invalidCsvHeader':
+    'El archivo no parece ser un CSV de SOL-AR: la línea {line} debería traer la ubicación (nombre, latitud, longitud, huso y elevación).',
+  'epw.error.semicolonCsv':
+    'El archivo usa punto y coma entre los campos (línea {line}), como lo guarda Excel en algunos idiomas. El CSV de SOL-AR usa coma entre los campos y punto como separador decimal: use el archivo original o guárdelo de nuevo en ese formato.',
+  'epw.error.invalidLatitude':
+    'Latitud no válida en el encabezado (línea {line}): debe estar entre −90° y 90°.',
+  'epw.error.invalidLongitude':
+    'Longitud no válida en el encabezado (línea {line}): debe estar entre −180° y 180°.',
+  'epw.error.invalidTimeZone':
+    'Huso horario no válido en el encabezado (línea {line}): debe estar entre −12 h y +14 h.',
+  'epw.error.invalidElevation': 'Elevación no válida en el encabezado (línea {line}).',
+  'epw.error.tooFewFields': 'Línea {line}: faltan campos; un EPW tiene 35 campos por hora.',
+  'csv.error.tooFewFields':
+    'Línea {line}: faltan campos; un CSV de SOL-AR tiene 19 campos por hora.',
+  'epw.error.invalidNumber': 'Línea {line}: valor no numérico en el campo "{field}".',
+  'epw.error.invalidSequence':
+    'Línea {line}: la secuencia de mes, día y hora está rota (hora faltante, repetida o fuera de orden).',
+  'epw.error.invalidHourCount':
+    'El archivo no tiene un año completo: se esperan 8760 horas (u 8784 con el 29 de febrero).',
+  'epw.error.negativeRadiation': 'Línea {line}: radiación negativa en el campo "{field}".',
+  'locationForm.intro':
+    'El archivo {file} no tiene encabezado de ubicación (como los archivos que venían con SOL-AR 6.2). Indique la ubicación de los datos; el huso es necesario para poner cada hora en la carta.',
+  'locationForm.useCity': 'Usar la ubicación de {city}',
+  'locationForm.name': 'Nombre de la ubicación',
+  'locationForm.latitude': 'Latitud (°, negativa al Sur)',
+  'locationForm.longitude': 'Longitud (°, negativa al Oeste)',
+  'locationForm.timeZone': 'Huso de los datos (h respecto de UTC, p. ej.: −3)',
+  'locationForm.elevation': 'Elevación (m)',
+  'locationForm.invalid': 'Escriba un número entre {min} y {max}.',
+  'locationForm.open': 'Abrir los datos',
+  'locationForm.cancel': 'Cancelar',
+  'epw.field.dryBulb': 'temperatura de bulbo seco',
+  'epw.field.dewPoint': 'temperatura de punto de rocío',
+  'epw.field.relativeHumidity': 'humedad relativa',
+  'epw.field.pressure': 'presión atmosférica',
+  'epw.field.extraterrestrialHorizontal': 'radiación extraterrestre horizontal',
+  'epw.field.globalHorizontal': 'radiación global horizontal',
+  'epw.field.directNormal': 'radiación directa normal',
+  'epw.field.diffuseHorizontal': 'radiación difusa horizontal',
+  'epw.field.windDirection': 'dirección del viento',
+  'epw.field.windSpeed': 'velocidad del viento',
+  'epw.field.totalSkyCover': 'cobertura del cielo',
+
+  // Fase 3.
+  'advanced.group': 'Avanzado: protección por las dimensiones y efecto en el año',
+  'advanced.badge': 'avanzado',
+  'advanced.loading': 'Cargando el paso…',
+  'stepNav.label': 'Ir a un paso',
+  'stepNav.title': 'Pasos',
+  'stepNav.go': 'Ir al paso {n}, {name}',
+  'side.pointer': '{title}: al lado, debajo de la carta.',
+  'side.go': 'Ver',
+  'side.heading': 'Del paso {step}, {name}',
+  'side.annual': 'Sombra a lo largo del año',
+  'side.effect': 'Clasificación de las horas e indicadores',
+  'side.catalog': 'Mapa de las estaciones',
+  'geometry.heading': 'Protección por las dimensiones',
+  'geometry.summary':
+    'Ventana, protección horizontal, aletas y lamas en metros; corte, vista y sombra en la carta.',
+  'geometry.summaryDefined': 'Ventana de {width} × {height} m · {pieces}',
+  'geometry.piecesCount': '{count} pieza(s)',
+  'geometry.noPieces': 'sin piezas',
+  'geometry.start': 'Empezar con una ventana de 1,20 × 1,00 m',
+  'geometry.intro':
+    'Describa la ventana y las piezas por sus dimensiones. El cálculo usa la geometría exacta (placas delgadas delante del vidrio) y es el que comparamos con EnergyPlus.',
+  'geometry.window': 'Ventana',
+  'geometry.width': 'Ancho de la ventana (m)',
+  'geometry.height': 'Alto de la ventana (m)',
+  'geometry.setback': 'Retranqueo del vidrio (m)',
+  'geometry.setbackHelp':
+    'Distancia del vidrio al plano exterior de la fachada (muro grueso). Las piezas se miden desde ese plano.',
+  'geometry.windowInvalid':
+    'Use números positivos para el ancho y el alto, y cero o más para el retranqueo.',
+  'geometry.pieces': 'Piezas',
+  'geometry.addType': 'Tipo de pieza',
+  'geometry.add': 'Agregar pieza',
+  'geometry.maxPieces': 'Hasta 9 piezas.',
+  'geometry.remove': 'Quitar',
+  'geometry.removeLabel': 'Quitar la pieza {n}, {name}',
+  'geometry.pieceLegend': '{n}. {name}',
+  'geometry.piecesInvalid':
+    'Hay campos no válidos (en rojo); la pieza solo entra en el dibujo y en el cálculo cuando todos son correctos.',
+  'geometry.sidesHelp':
+    'Izquierda y derecha de quien está dentro mirando hacia afuera. Prolongación infinita: escriba i o ∞.',
+  'geometry.type.b': 'Protección horizontal',
+  'geometry.type.ad': 'Aleta a la derecha',
+  'geometry.type.ae': 'Aleta a la izquierda',
+  'geometry.type.lh': 'Lamas horizontales',
+  'geometry.type.lv': 'Lamas verticales',
+  'geometry.field.depth': 'Profundidad (m)',
+  'geometry.field.above.b': 'Altura sobre el dintel (m)',
+  'geometry.field.above.lh': 'Altura de la 1.ª lama sobre el dintel (m)',
+  'geometry.field.gap': 'Separación de la fachada (m)',
+  'geometry.field.extendLeft': 'Prolongación a la izquierda (m)',
+  'geometry.field.extendRight': 'Prolongación a la derecha (m)',
+  'geometry.field.offset': 'Distancia al lado de la ventana (m)',
+  'geometry.field.extendAbove': 'Prolongación sobre el dintel (m)',
+  'geometry.field.extendBelow': 'Prolongación bajo el alféizar (m)',
+  'geometry.field.count': 'Número de lamas',
+  'geometry.field.chord': 'Ancho de cada lama (m)',
+  'geometry.field.pitch': 'Distancia entre lamas (m)',
+  'geometry.field.angle.lh': 'Inclinación (°, + borde exterior hacia abajo)',
+  'geometry.field.angle.lv': 'Rotación (°, + borde exterior hacia la derecha)',
+  'geometry.field.start': 'Posición de la 1.ª lama desde el lado izquierdo (m)',
+  'geometry.drawingTitle':
+    'Corte por el centro de la ventana y vista desde afuera: ventana de {width} × {height} m, {pieces}',
+  'geometry.section': 'Corte (centro de la ventana)',
+  'geometry.elevation': 'Vista desde afuera',
+  'geometry.elevationHelp':
+    'En la vista desde afuera, el lado derecho de quien está dentro aparece a la izquierda del dibujo.',
+  'geometry.angle.alpha': 'α {value}°',
+  'geometry.angle.gammaRight': 'γ der. {value}°',
+  'geometry.angle.gammaLeft': 'γ izq. {value}°',
+  'geometry.anglesHelp':
+    'α desde el alféizar, en el vidrio, hasta la arista exterior de la protección; γ desde la esquina inferior del mismo lado hasta el extremo de la protección (ángulos internos, medidos desde el plano de la fachada).',
+  'geometry.scale': 'Escala del dibujo exportado e impreso',
+  'geometry.export': 'Exportar corte y vista (SVG)',
+  'geometry.exportHelp':
+    'El SVG sale con el tamaño real en la escala elegida ({width} × {height} cm). La impresión del paso 5 puede incluir los dos dibujos.',
+  'geometry.printTitle': 'Corte y vista de la protección, escala 1:{scale}',
+  'outputs.includeGeometry': 'Corte y vista de la protección (paso 6), en la escala del dibujo',
+  'shading.heading': 'En la carta',
+  'shading.noPlates':
+    'Agregue una pieza (o un retranqueo del vidrio) para ver en la carta la sombra que produce la protección.',
+  'shading.showContours': 'Curvas de 0, 25, 50, 75 y 100% de la ventana a la sombra',
+  'shading.contoursHelp':
+    'Cada curva une las posiciones del sol en que la misma parte de la ventana queda a la sombra; dentro de la curva de 100% (área sombreada), toda la ventana está a la sombra. Calculado con la geometría exacta de las piezas, para la orientación del paso 2. Con el vidrio retranqueado, cualquier sol fuera de la normal ya pone parte de la ventana a la sombra, y la curva de 0% se reduce a la dirección de la normal en el horizonte; con piezas unidas a la ventana, puede reducirse a una línea. Es el resultado exacto.',
+  'shading.showPoint': 'Máscara de un punto de la ventana',
+  'shading.pointX': 'x: desde el lado izquierdo (m)',
+  'shading.pointZ': 'z: sobre el alféizar (m)',
+  'shading.pointHelp':
+    'Posiciones del sol en que el punto queda a la sombra (rayado violeta en la carta). x se mide desde el lado izquierdo de quien está dentro mirando hacia afuera; en la vista desde afuera, el punto aparece marcado. Haga clic en la vista para elegir otro punto.',
+  'shading.pointInvalid':
+    'El punto debe estar en la ventana: x de 0 a {width} m y z de 0 a {height} m.',
+  'shading.pending': 'Calculando las curvas de la protección…',
+  'shading.failed':
+    'No fue posible calcular las curvas de esta protección. Revise las piezas del paso 6; la máscara de un punto sigue siendo válida.',
+  'shading.legend': 'Protección por las dimensiones (paso 6)',
+  'shading.legendContours': 'curvas del porcentaje de la ventana a la sombra',
+  'shading.legendFull': 'toda la ventana a la sombra (100%)',
+  'shading.legendPoint': 'punto x = {x} m, z = {z} m a la sombra',
+  'shading.pointMarker': 'Punto de la máscara: x = {x} m, z = {z} m',
+  'annual.heading': 'Sombra a lo largo del año',
+  'annual.intro':
+    'Porcentaje de la ventana a la sombra en cada mes y hora, en los instantes con sol en la ventana (media de los días del mes). Cada mes tiene su fila: en la carta, meses como enero y noviembre comparten la misma trayectoria.',
+  'annual.hypotheses':
+    'Hora oficial (UTC{timeZone}), sin horario de verano, como en el archivo climático: la columna 9 es de las 8 a las 9 h. Sol cada 10 minutos (6 instantes por hora), por el SPA. Solo la geometría: no considera nubes ni el clima.',
+  'annual.needsPieces':
+    'Agregue una pieza (o un retranqueo del vidrio) para ver la sombra a lo largo del año.',
+  'annual.pending': 'Calculando el mapa del año…',
+  'annual.failed': 'No fue posible calcular el mapa de esta protección. Revise las piezas.',
+  'annual.mapTitle':
+    'Mapa mes × hora de la ventana a la sombra con sol en la ventana: {place}, fachada a {orientation}°, {pieces}',
+  'annual.hourAxis': 'hora oficial (UTC{timeZone})',
+  'annual.monthsLong':
+    'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre',
+  'annual.cell':
+    '{month}, {from} a {to} h: {shaded}% de la ventana a la sombra; sol en la ventana el {exposure}% de la hora',
+  'annual.cellNoSun': '{month}, {from} a {to} h: sin sol en la ventana',
+  'annual.legend': 'Ventana a la sombra, con sol en la ventana',
+  'annual.range': '{from} a {to}%',
+  'annual.noSun': 'sin sol en la ventana',
+  'annual.table': 'Tabla del mapa',
+  'annual.tableCaption':
+    'Porcentaje de la ventana a la sombra con sol en la ventana, por mes y hora oficial (la columna 9 es de las 8 a las 9 h). Celda vacía: sin sol en la ventana.',
+  'annual.month': 'Mes',
+  'annual.exportSvg': 'Exportar el mapa (SVG)',
+  'annual.exportCsv': 'Exportar el mapa (CSV)',
+  'annual.exportHourly': 'Exportar hora a hora (CSV, 8760 h)',
+  'annual.csvMap': 'mapa mes × hora de la ventana a la sombra',
+  'annual.csvHourly': 'fracción soleada hora a hora',
+  'annual.csvGeometry':
+    'Fachada a {orientation}°; ventana de {width} × {height} m, retranqueo del vidrio {setback} m; {pieces}',
+  'annual.csvLink': 'Configuración (enlace): {url}',
+  'annual.csvHypotheses':
+    'Hora oficial del archivo, sin horario de verano; la hora h es el intervalo de h - 1 a h; 6 instantes por hora, en el centro de cada intervalo de 10 min; sol por el SPA; solo la geometría (spec 07, sección 7.6).',
+  'effect.heading': 'Efecto en el año',
+  'effect.summary':
+    'Horas cálidas y frías, radiación bloqueada y admitida y alternativas, según el clima del archivo.',
+  'effect.needsData':
+    'Este paso usa los datos horarios del clima (temperatura y radiación directa). Abra en el paso 1 un archivo climático o los datos históricos de la ciudad.',
+  'effect.pending': 'Calculando el año…',
+  'effect.noWindow':
+    'Sin ventana en el paso 6, las horas con sol en la ventana son las de la fachada del paso 2, sin protección.',
+  'classes.heading': 'Horas cálidas y frías',
+  'classes.method': 'Cómo clasificar las horas',
+  'classes.method.adaptive': 'Rango adaptativo de ASHRAE 55',
+  'classes.method.thresholds': 'Umbrales de temperatura (por defecto: 20 °C)',
+  'classes.method.balance': 'Temperatura de equilibrio',
+  'classes.acceptability': 'Aceptabilidad',
+  'classes.gains': 'Incremento por ganancias, ΔT (°C)',
+  'classes.gainsHelp':
+    'El rango vale para la temperatura operativa interior. Con ΔT, cada hora se compara como si el interior estuviera ΔT por encima del aire exterior. En casas ocupadas y ventiladas naturalmente, la temperatura interior estuvo de 0 a 2,7 °C por encima de la media exterior de las horas anteriores en Florianópolis y de 0,2 a 4,0 °C en Curitiba (Papst de Abreu, 2004).',
+  'classes.more': 'Más opciones',
+  'classes.averaging': 'Temperatura media exterior predominante (t_pma)',
+  'classes.averaging.exponential': 'media exponencial',
+  'classes.averaging.arithmetic': 'media aritmética',
+  'classes.averagingDetail.exponential': 'media exponencial (α = {alpha}, {days} días)',
+  'classes.averagingDetail.arithmetic': 'media aritmética de {days} días',
+  'classes.alpha': 'α (0,6 a 0,9)',
+  'classes.days': 'Días anteriores (7 a 30)',
+  'classes.hourTemp': 'Temperatura de la hora',
+  'classes.hourTemp.mean': 'Media del inicio y del fin de la hora (por defecto)',
+  'classes.hourTemp.end': 'Fin de la hora (el valor del archivo)',
+  'classes.cold': 'Hora fría por debajo de (°C)',
+  'classes.hot': 'Hora cálida por encima de (°C)',
+  'classes.thresholdsHelp': 'Deje uno en blanco para no tener horas frías o cálidas.',
+  'classes.suggest20': 'Volver a 20 °C',
+  'classes.suggest20Source':
+    'Por defecto: sombrear siempre que el aire supere 20 °C, criterio de Lamberts, Dutra y Pereira (2014, p. 91 y 135) para un ambiente sin carga térmica interna; con carga interna, use un límite menor.',
+  'classes.balance': 'Temperatura de equilibrio (°C)',
+  'classes.balanceHelp':
+    'Temperatura exterior por encima de la cual las ganancias pasan a ser exceso: T_eq = T_int − Q / UA. Depende del edificio y no tiene valor por defecto (no hay un valor por tipología con fuente).',
+  'classes.invalid': 'Hay campos no válidos (en rojo).',
+  'classes.incomplete': 'Escriba el valor para clasificar las horas.',
+  'classes.hypotheses': 'Hipótesis',
+  'classes.h1':
+    'La clase viene solo de la temperatura del aire exterior, un indicador aproximado de la necesidad de sombra: las ganancias internas, la envolvente, la masa térmica, la ventilación y el propio sol en la ventana no entran.',
+  'classes.h2.adaptive':
+    'Rango adaptativo de ASHRAE 55-2023, {acceptability}% de aceptabilidad: confort = 0,31 · t_pma + 17,8 °C, más o menos {half} °C, con t_pma por la {averaging}. El rango vale para la temperatura operativa interior de ambientes acondicionados naturalmente; aquí se compara con el aire exterior, lo que tiende a subestimar las horas cálidas.',
+  'classes.h2.gains': 'Incremento por ganancias: los límites bajan ΔT = {gains} °C.',
+  'classes.h2.noGains': 'Sin incremento por ganancias (ΔT = 0): la clase es la del aire exterior.',
+  'classes.h2.thresholds': 'Umbrales: {cold}; {hot}; entre ellos, neutra.',
+  'classes.h2.coldBelow': 'hora fría por debajo de {value} °C',
+  'classes.h2.noCold': 'sin horas frías',
+  'classes.h2.hotAbove': 'cálida por encima de {value} °C',
+  'classes.h2.noHot': 'sin horas cálidas',
+  'classes.h2.threshold20':
+    'Umbral de 20 °C (por defecto): por encima, la hora pide sombra; por debajo, sol; en 20 °C, neutra. Es el criterio de sombreado de Lamberts, Dutra y Pereira (2014) para un ambiente sin carga térmica interna; con carga interna, la sombra es deseable por debajo de 20 °C, y el límite debe ser menor. No se adapta al clima del lugar.',
+  'classes.h2.balance':
+    'Temperatura de equilibrio de {balance} °C: por encima, hora cálida; por debajo, fría; igual, neutra.',
+  'classes.h3':
+    'Horas sin clase (t_pma fuera del rango de aplicación de la norma, de 10 a 33,5 °C): {count} de las {hours} horas con sol en la ventana.',
+  'classes.h4.mean':
+    'Temperatura de la hora: media del inicio y del fin de la hora, el instante del medio, como el sol y la radiación de la hora.',
+  'classes.h4.end':
+    'Temperatura de la hora: la del fin de la hora (el valor del archivo), media hora después del sol del centro de la hora.',
+  'classes.h5':
+    'Las partes de cada clase son de las {hours} horas con sol en la ventana de la fachada a {orientation}° (sin la protección), contadas y ponderadas por la radiación directa incidente (DNI · cos θ), y no de las 8760 horas del año: las noches no pesan en el sombreado.',
+  'classes.tableCaption':
+    'Horas con sol en la ventana y radiación directa incidente sin protección (DNI · cos θ, kWh por m² de ventana en el año), por clase',
+  'classes.col.class': 'Clase',
+  'classes.col.hours': 'Horas',
+  'classes.col.share': '%',
+  'classes.col.radiation': 'kWh/m²',
+  'classes.radiationShares': 'Parte de la radiación directa de las horas con sol en la ventana',
+  'classes.hoursShares': 'Parte de las horas con sol en la ventana',
+  'classes.class.hot': 'Cálidas',
+  'classes.class.neutral': 'Neutras',
+  'classes.class.cold': 'Frías',
+  'classes.class.none': 'Sin clase',
+  'classes.bar': 'Parte de cada clase en la radiación directa de las horas con sol en la ventana',
+  'classes.barLabel': '{name}: {share}%',
+  'classes.missingDni':
+    '{count} horas con sol en la ventana sin radiación directa en el archivo quedan fuera de las sumas.',
+  'indicators.heading': 'Radiación directa bloqueada y admitida',
+  'indicators.needsGeometry':
+    'Describa la protección en el paso 6 (ventana y al menos una pieza) para calcular la radiación bloqueada y admitida.',
+  'indicators.needsClasses':
+    'Elija cómo clasificar las horas (arriba) para calcular los indicadores.',
+  'indicators.blockedInHot': 'Bloqueada en las horas cálidas',
+  'indicators.admittedInCold': 'Admitida en las horas frías',
+  'indicators.ideal': 'Cuanto más cerca de 100%, mejor.',
+  'indicators.ofIncident': 'de {incident} kWh/m² que llegarían al vidrio sin la protección',
+  'indicators.undefined': 'sin radiación directa en esas horas',
+  'indicators.undefinedValue': 'indefinido',
+  'indicators.tableCaption':
+    'Radiación directa en la ventana en el año, por clase de hora (kWh por m² de ventana)',
+  'indicators.col.incident': 'Sin protección',
+  'indicators.col.admitted': 'Admitida',
+  'indicators.col.blocked': 'Bloqueada',
+  'indicators.hypotheses':
+    'Solo la radiación directa: la DNI del archivo, constante en cada hora, por el coseno del ángulo de incidencia y la fracción soleada de la ventana (6 instantes por hora). La difusa y la reflejada no entran. Las horas neutras y sin clase entran solo en las sumas. No hay un índice único: juntar los dos porcentajes exigiría ponderar el calor evitado contra el calor perdido, lo que depende del edificio.',
+  'indicators.missingDni':
+    '{count} horas sin radiación directa en el archivo quedan fuera de las sumas.',
+  'alternatives.heading': 'Alternativas',
+  'alternatives.intro':
+    'Guarde la protección actual del paso 6 y compárela con otras, en la misma fachada, clima y clasificación. "Sin protección" queda siempre en la tabla, como referencia.',
+  'alternatives.name': 'Nombre de la alternativa',
+  'alternatives.save': 'Guardar la protección actual',
+  'alternatives.max': 'Hasta 6 alternativas.',
+  'alternatives.alreadySaved': 'La protección actual ya está guardada como "{name}".',
+  'alternatives.tableCaption':
+    'Alternativas: radiación directa bloqueada en las horas cálidas y admitida en las horas frías',
+  'alternatives.col.name': 'Alternativa',
+  'alternatives.col.blocked': 'Bloqueada en las cálidas',
+  'alternatives.col.admitted': 'Admitida en las frías',
+  'alternatives.none': 'Sin protección',
+  'alternatives.current': 'Actual (no guardada)',
+  'alternatives.notDominated': 'no superada',
+  'alternatives.dominatedBy': 'superada por {names}',
+  'alternatives.calculating': 'calculando…',
+  'alternatives.invalid': 'protección no válida',
+  'alternatives.use': 'Usar en el paso 6',
+  'alternatives.useLabel': 'Usar "{name}" en el paso 6',
+  'alternatives.remove': 'Quitar',
+  'alternatives.removeLabel': 'Quitar "{name}"',
+  'alternatives.differentWindow':
+    'Ventana distinta de la actual: los porcentajes y las sumas son por m² de ventana.',
+  'alternatives.dominanceHelp':
+    'Una alternativa queda superada cuando otra bloquea por lo menos lo mismo en las horas cálidas y admite por lo menos lo mismo en las frías, con uno de los dos mayor.',
+  'alternatives.plot':
+    'Alternativas en el plano de los dos porcentajes: admitida en las horas frías (horizontal) y bloqueada en las horas cálidas (vertical)',
+  'alternatives.plotX': 'admitida en las horas frías (%)',
+  'alternatives.plotY': 'bloqueada en las horas cálidas (%)',
+  'alternatives.plotIdeal': 'ideal',
+  'sizing.heading': 'Dimensionar por el período',
+  'sizing.intro':
+    'Indique cuándo la ventana debe quedar toda a la sombra: el programa encuentra los ángulos que necesita la protección, con el sol que determina cada uno, y las dimensiones de la protección horizontal y de las aletas que dan esos ángulos.',
+  'sizing.start': 'Empezar con el verano austral (21/10 a 21/2, de las 9 a las 15 h solares)',
+  'sizing.from': 'Primer día (dd/mm)',
+  'sizing.to': 'Último día (dd/mm)',
+  'sizing.fromHour': 'Desde la hora',
+  'sizing.toHour': 'Hasta la hora',
+  'sizing.timeBase': 'Horas en',
+  'sizing.timeBase.solar': 'hora solar verdadera (la de las líneas de la carta)',
+  'sizing.timeBase.legal': 'hora oficial (UTC{timeZone})',
+  'sizing.gap': 'Separación de la protección horizontal (m)',
+  'sizing.count': 'Lamas en la subdivisión',
+  'sizing.optionsHelp':
+    'Con separación, la altura de la protección sobre el dintel sale del sol más alto del período (α2), para cerrar la rendija. Con más de una lama, la pieza se divide manteniendo los ángulos.',
+  'sizing.invalid':
+    'Hay campos no válidos (en rojo): días como 21/12, horas de 0 a 24 (la primera antes de la última), separación de 0 o más y de 1 a 20 lamas.',
+  'sizing.pending': 'Calculando el período…',
+  'sizing.failed': 'No fue posible dimensionar para este período.',
+  'sizing.samples':
+    '{sunny} de las {total} posiciones del sol del período (cada 5 minutos) quedan delante de la ventana.',
+  'sizing.noSun': 'El sol no llega a la ventana en el período: no hay nada que sombrear.',
+  'sizing.anglesCaption':
+    'Ángulos exigidos: internos, medidos desde el plano de la fachada (entre paréntesis, los externos)',
+  'sizing.col.angle': 'Ángulo',
+  'sizing.col.value': 'Valor',
+  'sizing.col.sample': 'Sol que lo determina',
+  'sizing.angle.alpha': 'α de la protección horizontal',
+  'sizing.angle.alphaMax': 'α2 de la protección separada',
+  'sizing.angle.gammaRight': 'γ de la protección horizontal, derecha',
+  'sizing.angle.gammaLeft': 'γ de la protección horizontal, izquierda',
+  'sizing.angle.betaRight': 'β de la aleta, derecha',
+  'sizing.angle.betaLeft': 'β de la aleta, izquierda',
+  'sizing.angle.finGammaRight': 'γ del extremo de la aleta, derecha',
+  'sizing.angle.finGammaLeft': 'γ del extremo de la aleta, izquierda',
+  'sizing.sampleAt': '{date}, {hour}',
+  'sizing.overhang': 'Protección horizontal',
+  'sizing.overhangDims':
+    'Profundidad de {depth} m, {above} m sobre el dintel, separación de {gap} m; prolongaciones de {left} m a la izquierda y {right} m a la derecha.',
+  'sizing.setbackSuffices':
+    'El dintel del muro (retranqueo del vidrio) ya sombrea el período: no hace falta protección horizontal.',
+  'sizing.fins': 'Aletas',
+  'sizing.fin':
+    'Aleta a la {side}: profundidad de {depth} m, prolongación de {above} m sobre el dintel.',
+  'sizing.finNone': 'Sin sol por la {side} en el período: sin aleta de ese lado.',
+  'sizing.finUseless':
+    'Aleta a la {side}: no sirve para este período. El sol pasa casi de frente a la ventana (β externo de {beta}), y la aleta tendría que ser enorme; use la protección horizontal o acorte el período.',
+  'sizing.finSetback': 'La jamba del muro ya sombrea el sol por la {side}: sin aleta de ese lado.',
+  'sizing.right': 'derecha',
+  'sizing.left': 'izquierda',
+  'sizing.louvers':
+    '{count} lamas horizontales de {chord} m cada {pitch} m, la primera {above} m sobre el dintel.',
+  'sizing.finLouvers': '{count} lamas verticales de {chord} m cada {pitch} m.',
+  'sizing.tooBig':
+    'La protección horizontal sale demasiado grande para la ventana (el sol queda casi rasante a la fachada en el período). Acorte el período o combine otras piezas.',
+  'sizing.useOverhang': 'Usar la protección horizontal en el paso 6',
+  'sizing.useAll': 'Usar la protección horizontal y las aletas en el paso 6',
+  'sizing.useLouvers': 'Usar las lamas horizontales en el paso 6',
+  'sizing.useFinLouvers': 'Usar las lamas verticales en el paso 6',
+  'sizing.useAngles': 'Usar los ángulos en el paso 3',
+  'sizing.useHelp':
+    'Las piezas reemplazan las del paso 6; los ángulos van a la sombra total del paso 3, en la referencia elegida allí.',
+  'sizing.showOnChart': 'Mostrar en la carta el período y el sol que determina cada ángulo',
+  'sizing.legend': 'período a sombrear',
+  'sizing.legendPoints': 'sol que determina cada ángulo',
+  'tabs.view3d': 'Vista 3D',
+  'view3d.needsWindow':
+    'Describa la ventana y las piezas en el paso 6 ("Protección por las dimensiones") para ver la protección en 3D.',
+  'view3d.loading': 'Cargando la vista 3D…',
+  'view3d.failed':
+    'Este navegador no pudo abrir la vista 3D (WebGL no disponible). Las curvas, el mapa y los indicadores siguen siendo válidos.',
+  'view3d.month': 'Día',
+  'view3d.dayOption': '21 de {month}',
+  'view3d.hour': 'Hora oficial (UTC{timeZone})',
+  'view3d.play': 'Animar el día',
+  'view3d.pause': 'Detener',
+  'view3d.view': 'Vista',
+  'view3d.perspective': 'Perspectiva (gire con el ratón o con el dedo)',
+  'view3d.front': 'De frente, desde afuera de la fachada',
+  'view3d.status':
+    '{date}, {hour}: sol a {altitude}° de altura y {azimuth}° de acimut; {shaded}% de la ventana a la sombra ({sunlit}% soleada).',
+  'view3d.behind': '{date}, {hour}: sol detrás de la fachada; la ventana no recibe sol directo.',
+  'view3d.night': '{date}, {hour}: sol bajo el horizonte.',
+  'view3d.note':
+    'La sombra en el vidrio es la del cálculo (la misma de las curvas, del mapa y de los indicadores), dibujada en azul oscuro; la luz en las piezas y en el muro es solo ilustrativa.',
+  'view3d.label': 'Vista 3D de la ventana y de la protección. {status}',
+
+  // Fase 4.
+  'chartOptions.heading': 'Proyección y líneas horarias',
+  'chartOptions.summary':
+    'Carta estereográfica, equidistante o cilíndrica; líneas horarias en hora solar u oficial (analemas).',
+  'chartOptions.summaryDefined': '{projection} · {hours}',
+  'chartOptions.projection': 'Proyección de la carta',
+  'chartOptions.projection.stereographic': 'Estereográfica (por defecto, como en SOL-AR 6.2)',
+  'chartOptions.projection.equidistant': 'Equidistante',
+  'chartOptions.projection.cylindrical': 'Cilíndrica (la vista desde la ventana)',
+  'chartOptions.projectionShort.stereographic': 'Estereográfica',
+  'chartOptions.projectionShort.equidistant': 'Equidistante',
+  'chartOptions.projectionShort.cylindrical': 'Cilíndrica',
+  'chartOptions.projectionHelp.stereographic':
+    'Transforma circunferencias en circunferencias: las curvas del transportador son arcos, como en el método enseñado.',
+  'chartOptions.projectionHelp.equidistant':
+    'La distancia al centro es proporcional al ángulo cenital: 1° vale lo mismo en toda la carta. Las curvas del transportador dejan de ser arcos de circunferencia y se trazan punto a punto.',
+  'chartOptions.projectionHelp.cylindrical':
+    'Acimut en la horizontal y altura en la vertical, con la normal de la fachada del paso 2 en el centro: la carta cambia cuando cambia la fachada. El cenit es el borde superior; la escala vertical es el doble de la horizontal.',
+  'chartOptions.hourLines': 'Líneas horarias',
+  'chartOptions.hourLines.solar': 'Hora solar verdadera (por defecto)',
+  'chartOptions.hourLines.legal': 'Hora oficial del huso del archivo (analemas)',
+  'chartOptions.hourLines.both': 'Las dos',
+  'chartOptions.hoursShort.solar': 'hora solar',
+  'chartOptions.hoursShort.legal': 'hora oficial',
+  'chartOptions.hoursShort.both': 'hora solar y oficial',
+  'chartOptions.legalHelp':
+    'La línea de una hora oficial es el lugar del sol a esa hora del reloj a lo largo del año: un "8" (analema). En {place}, solo por la longitud, la hora solar va {longitude} min {direction} del reloj; la ecuación del tiempo suma de −14 a +16 min a lo largo del año. Al mediodía oficial, la hora solar va de {min} ({minDate}) a {max} ({maxDate}).',
+  'chartOptions.behind': 'por detrás',
+  'chartOptions.ahead': 'por delante',
+  'chartOptions.hourLinesLegend': 'Líneas horarias',
+  'chartOptions.legendSolar': 'hora solar',
+  'chartOptions.legendLegal': 'hora oficial (analema)',
+  'chartOptions.printScale':
+    'En la impresión a escala, el radio pedido en el paso 5 es el radio del horizonte en las cartas estereográfica y equidistante y la altura de la franja de 0° a 90° en la cilíndrica.',
+  'chart.noteProjection.stereographic': 'Proyección estereográfica, Norte arriba.',
+  'chart.noteProjection.equidistant':
+    'Proyección equidistante, Norte arriba: la distancia al centro es proporcional al ángulo cenital.',
+  'chart.noteProjection.cylindrical':
+    'Proyección cilíndrica centrada en la normal de la fachada ({orientation}°): acimut en la horizontal, altura en la vertical, cenit en el borde superior.',
+  'chart.noteDates':
+    'Trayectorias en los solsticios, los equinoccios y el día 21 de los demás meses, con el mes en la puesta del sol (ene/nov: 21 de enero y 21 de noviembre, casi la misma trayectoria);',
+  'chart.noteDatesTop':
+    'Trayectorias en los solsticios, los equinoccios y el día 21 de los demás meses, con el mes sobre el punto más alto de cada una (ene/nov: 21 de enero y 21 de noviembre, casi la misma trayectoria);',
+  'chart.noteHours.solar': 'líneas horarias en hora solar verdadera.',
+  'chart.noteHours.legal':
+    'líneas horarias en hora oficial del huso del archivo (analemas: el sol a la misma hora del reloj a lo largo del año).',
+  'chart.noteHours.both':
+    'líneas horarias en hora solar verdadera (continuas) y en hora oficial del huso del archivo (discontinuas, analemas).',
+  'print.scaleRadius': 'Radio de la carta: {radius} cm.',
+  'print.scaleHeight': 'Altura de la carta, de 0° a 90°: {radius} cm.',
+  'wind.more': 'Más opciones: condición térmica, altura y terreno',
+  'wind.thermal': 'Condición térmica',
+  'wind.thermal.all': 'Todas las horas',
+  'wind.thermal.hot': 'Cálidas',
+  'wind.thermal.cold': 'Frías',
+  'wind.thermal.neutral': 'Neutras',
+  'wind.titleThermal.hot': 'horas cálidas',
+  'wind.titleThermal.cold': 'horas frías',
+  'wind.titleThermal.neutral': 'horas neutras',
+  'wind.titleCorrection': 'a {height} m, {terrain}',
+  'wind.thermalMethod':
+    'Horas cálidas y frías según la temperatura del aire exterior, con el método del paso 7 (Efecto en el año): {method} Temperatura de la hora: {mode}.',
+  'wind.method.threshold20':
+    'umbral de 20 °C, de Lamberts, Dutra y Pereira (2014): por encima, cálida; por debajo, fría; en 20 °C, neutra.',
+  'wind.method.thresholds': 'umbrales escritos: {cold}; {hot}.',
+  'wind.method.adaptive':
+    'rango adaptativo de ASHRAE 55, {acceptability}% de aceptabilidad{gains}.',
+  'wind.method.gains': ', con incremento por ganancias ΔT = {gains} °C',
+  'wind.method.balance': 'temperatura de equilibrio de {balance} °C.',
+  'wind.hourTemp.mean':
+    'media del inicio y del fin de la hora, media hora antes del viento del archivo',
+  'wind.hourTemp.end': 'la del fin de la hora, el mismo instante del viento del archivo',
+  'wind.thermalCounts':
+    'En el archivo: {hot} horas cálidas, {cold} frías y {neutral} neutras{none}.',
+  'wind.thermalNone': ', y {count} sin clase, fuera de los filtros',
+  'wind.thermalWhere': 'El método se cambia en el paso 7, en la pestaña Carta solar.',
+  'wind.thermalUnavailable':
+    'El método del paso 7 (Efecto en el año, en la pestaña Carta solar) está incompleto o tiene un campo no válido: complételo para filtrar las horas por la condición térmica.',
+  'wind.thermalNotApplied':
+    'El filtro por la condición térmica no está aplicado: el método del paso 7 (Efecto en el año, en la pestaña Carta solar) está incompleto o tiene un campo no válido.',
+  'wind.height': 'Altura sobre el suelo (m)',
+  'wind.heightHelp': 'De 1 a 200 m; en blanco, 10 m, la altura de la estación.',
+  'wind.heightInvalid':
+    'Altura fuera del rango (de 1 a 200 m): la rosa muestra el viento de la estación, sin corrección.',
+  'wind.terrain': 'Terreno alrededor',
+  'wind.terrain.country': 'Campo abierto',
+  'wind.terrain.suburbs': 'Suburbio',
+  'wind.terrain.city': 'Ciudad',
+  'wind.terrain.ocean': 'Agua',
+  'wind.terrainShort.country': 'campo abierto',
+  'wind.terrainShort.suburbs': 'suburbio',
+  'wind.terrainShort.city': 'ciudad',
+  'wind.terrainShort.ocean': 'agua',
+  'wind.terrainHelp.country':
+    'Campo llano y abierto, como alrededor de la estación (Country en EnergyPlus; α = 0,14, δ = 270 m).',
+  'wind.terrainHelp.suburbs':
+    'Suburbio, campo rugoso o arbolado (Suburbs en EnergyPlus; Urban tiene los mismos valores; α = 0,22, δ = 370 m).',
+  'wind.terrainHelp.city': 'Ciudad (City en EnergyPlus; α = 0,33, δ = 460 m).',
+  'wind.terrainHelp.ocean':
+    'Viento que llega sobre el agua (Ocean en EnergyPlus; α = 0,10, δ = 210 m).',
+  'wind.factor':
+    'A {height} m sobre {terrain}, la velocidad es k = {factor} veces la de la estación (perfil de ley potencial de ASHRAE, el mismo de EnergyPlus; la estación está a 10 m, en campo abierto).',
+  'wind.correctionWarning':
+    'Velocidad llevada a {height} m sobre {terrain} por el perfil medio de ASHRAE, como en EnergyPlus (k = {factor}): la dirección sigue siendo la de la estación, y los edificios y la vegetación alrededor (protección, canalización, estela) no entran.',
+  'csv.thermal': 'Condición térmica: {thermal}. {method}',
+  'csv.thermalAll': 'Condición térmica: todas las horas',
+  'csv.correction':
+    'Velocidad a {height} m sobre {terrain}: k = {factor} veces la de la estación (perfil de ley potencial de ASHRAE, como en EnergyPlus; estación a 10 m en campo abierto)',
+  'csv.noCorrection': 'Velocidad de la estación, sin corrección de altura y terreno',
+  'wind.emptyFilter':
+    'Ninguna hora válida en esta condición y en este período: la rosa queda vacía.',
+  'project.heading': 'Proyecto',
+  'project.save': 'Guardar proyecto',
+  'project.open': 'Abrir proyecto',
+  'project.copyLink': 'Copiar enlace',
+  'project.help':
+    'El enlace guarda el análisis: ubicación, fachada, protección, datos, opciones y pasos 6 y 7. El proyecto (.json) guarda también el archivo climático cargado desde la computadora y las opciones de impresión. Nada se envía por internet.',
+  'project.helpFile': 'Con {file}, el proyecto tendrá unos {size} MB.',
+  'project.saved': 'Proyecto guardado: {file}.',
+  'project.opened': 'Proyecto abierto: {file}, guardado el {date}{climate}.',
+  'project.openedClimate': ', con el archivo climático {name}',
+  'project.unknownDate': 'fecha desconocida',
+  'project.notProject': 'El archivo {file} no es un proyecto de SOL-AR; nada cambió.',
+  'project.newer':
+    'El proyecto {file} se guardó en una versión más nueva de la aplicación (esquema {schema}); nada cambió. Use la versión más nueva de SOL-AR para abrirlo.',
+  'project.invalid': 'El proyecto {file} está incompleto o fue modificado ({field}); nada cambió.',
+  'project.field.schema': 'versión del esquema',
+  'project.field.state': 'estado del análisis',
+  'project.field.climateFile': 'archivo climático',
+  'project.field.compareClimateFile': 'archivo climático de la comparación',
+  'project.climateError':
+    'No fue posible leer el archivo climático del proyecto {file}; nada cambió. {error}',
+  'project.linkCopied': 'Enlace copiado.',
+  'project.linkManual': 'No fue posible copiar: seleccione y copie el enlace de abajo.',
+  'project.linkLabel': 'Enlace de este estado',
+  'language.label': 'Idioma',
+  'sides.rightShort': 'd',
+  'sides.leftShort': 'i',
+  'period.sameMonth': '{from} a {to}/{month}',
+  'period.twoMonths': '{from}/{fromMonth} a {to}/{toMonth}',
+  'sizing.solarHour': '{hour} solar',
+  'csv.separator': 'Separador: coma; decimal: punto.',
+
+  // F4.8: ayuda y ejemplos resueltos (decisión 0032).
+  'help.open': 'Ayuda',
+  'help.title': 'Ayuda',
+  'help.close': 'Cerrar la ayuda',
+  'help.sections': 'Partes de la ayuda',
+  'help.section.guia': 'Guía rápida',
+  'help.section.exemplos': 'Ejemplos',
+  'help.section.exercicios': 'Ejercicios',
+  'help.section.glossario': 'Glosario',
+  'help.section.perguntas': 'Preguntas',
+  'help.section.hipoteses': 'Hipótesis',
+  'help.guide.steps': 'El camino básico',
+  'help.guide.advanced': 'Avanzado (plegado debajo del paso 5)',
+  'help.guide.tabs': 'Pestañas',
+  'help.guide.tips': 'Consejos',
+  'help.example.open': 'Abrir el ejemplo en una pestaña nueva',
+  'help.example.steps': 'Paso a paso',
+  'help.example.lesson': 'Qué aprender',
+  'example.label': 'Ejemplo resuelto {n} de {total}',
+  'example.close': 'Cerrar el ejemplo',
+  'example.more': 'Ver el ejemplo en la ayuda',
+  // F4.5: tutorial guiado y ejercicios de máscara (decisión 0033).
+  'tutorial.start': 'Empezar el tutorial guiado en una pestaña nueva',
+  'tutorial.label': 'Tutorial, etapa {n} de {total}',
+  'tutorial.done': 'Hecho.',
+  'tutorial.doIt': 'Hacerlo por mí',
+  'tutorial.previous': 'Anterior',
+  'tutorial.next': 'Siguiente',
+  'tutorial.finish': 'Terminar el tutorial',
+  'tutorial.close': 'Salir del tutorial',
+  'exercise.open': 'Abrir el ejercicio en una pestaña nueva',
+  'exercise.howTo': 'Cómo hacerlo',
+  'exercise.metric': 'Cómo se mide la coincidencia',
+  'exercise.label': 'Ejercicio {n} de {total}',
+  'exercise.drawn': 'Polígonos dibujados: {count}.',
+  'exercise.startDrawing': 'Empezar a dibujar',
+  'exercise.check': 'Verificar',
+  'exercise.redo': 'Borrar el dibujo e intentar de nuevo',
+  'exercise.close': 'Salir del ejercicio',
+  'exercise.pending': 'Verificando…',
+  'exercise.failed': 'No se pudo verificar el dibujo.',
+  'exercise.shape': 'Coincidencia con la máscara calculada: {value}%',
+  'exercise.good': 'La máscara coincide con la calculada.',
+  'exercise.almost': 'Casi: vea las diferencias en la carta.',
+  'exercise.retry': 'Revise las curvas del transportador y dibuje de nuevo.',
+  'exercise.missed': 'Sombra que faltó: {value}% de la máscara calculada.',
+  'exercise.extra': 'Sombra de más: {value}% del tamaño de la máscara calculada.',
+  'exercise.sun': 'Coincidencia en las horas de sol del año: {value}%.',
+  'exercise.legend': 'En la carta, el rayado negro es la máscara calculada; el rojo, su dibujo.',
+  'exercise.orientationChanged':
+    'La orientación cambió: la comparación sigue con la fachada a {orientation}°, la del ejercicio.',
+  'mask.answer': 'máscara calculada (respuesta del ejercicio)',
+  // F4.1: catálogo nacional de estaciones (decisión 0034).
+  'catalog.heading': 'Catálogo nacional: {count} estaciones (TMYx 2011 a 2025)',
+  'catalog.intro':
+    'Estaciones de Brasil con archivo TMYx 2011 a 2025 en Climate.OneBuilding.org, con los datos de cada archivo y la calidad verificada por nosotros. El archivo se descarga del sitio oficial y se carga aquí.',
+  'catalog.loading': 'Cargando el catálogo…',
+  'catalog.failed': 'No se pudo abrir el catálogo.',
+  'catalog.search': 'Buscar estación (ciudad, aeropuerto o estado)',
+  'catalog.resultsLabel': 'Estaciones encontradas',
+  'catalog.results': '{count} estaciones encontradas.',
+  'catalog.noResults': 'Ninguna estación con ese nombre.',
+  'catalog.more': 'Y {count} más: refine la búsqueda.',
+  'catalog.years': '{count} años',
+  'catalog.point': 'Lugar de la obra (opcional)',
+  'catalog.pointHelp':
+    'Haga clic en el mapa o escriba las coordenadas para ver las estaciones más cercanas, con la distancia y el desnivel.',
+  'catalog.pointLat': 'Latitud (°, negativa al Sur)',
+  'catalog.pointLon': 'Longitud (°, negativa al Oeste)',
+  'catalog.pointAlt': 'Altitud (m)',
+  'catalog.pointUseCurrent': 'Usar la ubicación actual',
+  'catalog.pointClear': 'Borrar el lugar de la obra',
+  'catalog.nearest': 'Estaciones más cercanas al lugar de la obra',
+  'catalog.distance': 'a {km} km',
+  'catalog.dzAbove': '{m} m más arriba',
+  'catalog.dzBelow': '{m} m más abajo',
+  'catalog.map': 'Mapa de las estaciones del catálogo. Haga clic para marcar el lugar de la obra.',
+  'catalog.mapCredit':
+    'Mapa: Natural Earth (dominio público). Estaciones: Climate.OneBuilding.org.',
+  'station.option': 'Estación: {name}',
+  'station.source':
+    'Estación {name} ({uf}), archivo TMYx 2011 a 2025 de Climate.OneBuilding.org (mediciones del NCEI ISD y radiación del ERA5); ningún dato horario abierto.',
+  'station.sourceEra5':
+    'Punto {name} ({uf}), archivo TMYx 2011 a 2025 de Climate.OneBuilding.org hecho solo con el reanálisis ERA5; ningún dato horario abierto.',
+  'station.download': 'Descargar el archivo de esta estación (Climate.OneBuilding.org)',
+  'station.downloadHelp':
+    'Descomprima el archivo descargado y cargue el .epw en el campo de arriba.',
+  'station.period': '{start} a {end} ({years} años de datos)',
+  'station.quality': 'Calidad del archivo',
+  'station.q.missing': 'valores ausentes: {count}',
+  'station.q.calm': 'calma: {pct}% de las horas',
+  'station.q.kt':
+    'horas con índice de claridad por encima de 0,8 (radiación global demasiado alta para el cielo): {count}',
+  'station.q.closure':
+    'cierre GHI = DNI · cos z + DHI: en el 95% de las horas de sol, diferencia de hasta {wh} Wh/m²',
+  'station.q.radiation':
+    'radiación en el año: global {ghi}, directa normal {dni} y difusa {dhi} kWh/m²',
+  'station.q.temperature': 'temperatura: mínima {min}, media {mean} y máxima {max} °C',
+  'station.warnReanalysis':
+    'Solo reanálisis (ERA5): el archivo no tiene datos medidos en una estación.',
+  'station.warnFewYears':
+    'Solo {years} años de datos: el año típico representa menos el clima del lugar.',
+  'station.warnFar': 'La estación está a {km} km del lugar de la obra.',
+  'station.warnLagLate':
+    'La radiación del archivo llega unos {minutes} min después del sol (días despejados): las celdas de radiación y los indicadores del paso 7 usan la radiación tal como está en el archivo.',
+  'station.warnLagEarly':
+    'La radiación del archivo llega unos {minutes} min antes del sol (días despejados): las celdas de radiación y los indicadores del paso 7 usan la radiación tal como está en el archivo.',
+  'station.q.lag':
+    'tiempo de la radiación respecto al sol, en los días despejados: {minutes} min (positivo: después del sol; incertidumbre de hasta unos 10 min, por las nubes)',
+  'station.warnAbove':
+    'La estación está {m} m más arriba que el lugar de la obra: la temperatura y el viento pueden ser distintos.',
+  'station.warnBelow':
+    'La estación está {m} m más abajo que el lugar de la obra: la temperatura y el viento pueden ser distintos.',
+  'station.warnUf': 'El nombre del archivo dice {fileUf}, pero las coordenadas caen en {uf}.',
+  'station.futureLabel': 'Archivos futuros',
+  'station.future':
+    'Hay archivos futuros para esta estación (BrazFuture, LabEEE e INPE: años 2010, 2050 y 2090, dos escenarios, seis modelos), bajo la licencia CC BY 4.0.',
+  'station.futureLink': 'Descargar en Zenodo',
+  'print.sourceStation':
+    'Coordenadas de la estación {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
+  'difference.toggle': 'Diferencia B − A en la misma carta',
+  'difference.title': 'Diferencia B − A',
+  'difference.note':
+    'Cada celda muestra la media de las horas de B menos la de A, en la misma quincena y hora del archivo; la carta, la máscara y el transportador son los de B. La diferencia mezcla el cambio del clima con las diferencias entre los archivos (cada uno es un año típico, con meses de años distintos, y tiene fuente y método propios), y cada celda tiene solo unas 15 horas de cada archivo: vale el patrón de muchas celdas, no una celda aislada.',
+  'difference.summary': 'Media de las {n} celdas dibujadas: {mean} {unit} (de {min} a {max}).',
+  'difference.lagSame':
+    'En los días despejados, la radiación de A y la de B difieren menos de 15 min en el tiempo.',
+  'difference.lagLate':
+    'En los días despejados, la radiación de B llega unos {minutes} min después que la de A: solo por eso, la diferencia queda negativa por la mañana y positiva por la tarde.',
+  'difference.lagEarly':
+    'En los días despejados, la radiación de B llega unos {minutes} min antes que la de A: solo por eso, la diferencia queda positiva por la mañana y negativa por la tarde.',
+  'difference.needData':
+    'La diferencia necesita datos climáticos en A y en B (datos históricos o archivo cargado) y una variable elegida en el paso 4; por ahora, A y B quedan lado a lado.',
+  'difference.otherPlace':
+    'La diferencia solo vale para el mismo lugar (hasta 0,1° de latitud y de longitud, mismo huso); A y B quedan lado a lado.',
+  'difference.legend': 'B − A: {quantity}',
+  'difference.print': 'Diferencia B − A. A: {a} B: {b}',
+  'difference.csvWhat': 'media de las horas de B menos la de A',
+  'cell.difference': 'B − A: {diff} {unit} (media de A: {a}; de B: {b}).',
+  'cells.captionDifference':
+    'Media de las horas de B menos la de A en cada celda ({unit}); filas: quincenas; columnas: horas del archivo.',
+  // F5.2: exportación a EnergyPlus y CAD (spec 13, decisión 0043).
+  'energyplus.heading': 'EnergyPlus y CAD',
+  'energyplus.intro':
+    'La ventana y las piezas para EnergyPlus 26.2, y el corte y la vista para CAD. El alero y el par de aletas adosados a la fachada salen como objetos por proyección; el resto, como placas: adosadas (Shading:Zone:Detailed) o separadas de la fachada (Shading:Building:Detailed).',
+  'energyplus.windowName': 'Nombre de la ventana en su modelo',
+  'energyplus.wallName': 'Nombre del muro (superficie base)',
+  'energyplus.nameInvalid': 'Use nombres sin coma, punto y coma ni "!", de hasta 90 caracteres.',
+  'energyplus.paste': 'Opcional: pegue el objeto FenestrationSurface:Detailed de su ventana',
+  'energyplus.pasteHelp':
+    'Con la ventana pegada, los nombres vienen de ella y las placas salen en su posición en su modelo. Sin ella, la ventana queda con la esquina inferior izquierda (vista desde dentro) en el origen y la fachada del paso 2.',
+  'energyplus.order': 'Orden de los vértices en su modelo (GlobalGeometryRules)',
+  'energyplus.order.ccw': 'Antihorario (predeterminado)',
+  'energyplus.order.cw': 'Horario',
+  'energyplus.pasteOk':
+    'Ventana {name}, en el muro {wall}: {width} × {height} m, normal exterior a {azimuth}°.',
+  'energyplus.pasteError.notFenestration':
+    'No se encontró un objeto FenestrationSurface:Detailed en el texto pegado.',
+  'energyplus.pasteError.fieldCount':
+    'El objeto pegado tiene menos campos que un FenestrationSurface:Detailed.',
+  'energyplus.pasteError.notFourVertices': 'La ventana debe tener 4 vértices.',
+  'energyplus.pasteError.badNumber': 'Una de las coordenadas de los vértices no es un número.',
+  'energyplus.pasteError.notPlanar': 'Los vértices no están en un plano (más de 1 mm fuera).',
+  'energyplus.pasteError.notVertical':
+    'La ventana no es vertical; la exportación vale para ventanas en muros verticales.',
+  'energyplus.pasteError.notRectangle': 'La ventana pegada no es un rectángulo.',
+  'energyplus.warnSize':
+    'La ventana pegada mide {width} × {height} m; la del paso 6, {width6} × {height6} m. Las piezas salen con las medidas del paso 6.',
+  'energyplus.warnAzimuth':
+    'La normal de la ventana pegada está a {azimuth}°, y la fachada del paso 2, a {orientation}°. Si su modelo tiene Building North Axis distinto de 0, es lo esperado.',
+  'energyplus.plan': 'En qué se convierte cada pieza',
+  'energyplus.planReveal': 'Retranqueo del vidrio: {types}',
+  'energyplus.planPiece': 'Pieza {n}: {types}',
+  'energyplus.capped':
+    'Pieza {n}: prolongación infinita exportada con {length} m; la sombra en la ventana es la misma mientras el sol esté a más de 2,9° del plano de la fachada.',
+  'energyplus.objects': 'Objetos para su modelo (.idf)',
+  'energyplus.model': 'Modelo para verificar (.idf)',
+  'energyplus.dxf': 'Corte y vista (.dxf)',
+  'energyplus.objectsHelp':
+    'Objetos: para pegar en su IDF. Izquierda y derecha de los objetos por proyección se ven desde fuera, como en EnergyPlus.',
+  'energyplus.modelHelp':
+    'Modelo para verificar: una zona mínima que corre sola con el EPW del lugar y da la fracción soleada de la ventana en cada paso de tiempo (la misma del mapa del año, con el sol de EnergyPlus).',
+  'energyplus.dxfHelp': 'Corte y vista: DXF R12 en metros, lado a lado, con capas separadas.',
+};

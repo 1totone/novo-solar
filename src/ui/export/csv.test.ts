@@ -13,7 +13,11 @@ describe('CSV exportado', () => {
   });
 
   it('cabeçalho com # e a convenção de separador e decimal', () => {
-    const text = csvDocument(['Local: Teste'], ['a', 'b'], [[1, 2.25]]);
+    const text = csvDocument(
+      ['Local: Teste', 'Separador: vírgula; decimal: ponto.'],
+      ['a', 'b'],
+      [[1, 2.25]],
+    );
     expect(
       text.startsWith('﻿# Local: Teste\n# Separador: vírgula; decimal: ponto.\na,b\n1,2.25\n'),
     ).toBe(true);

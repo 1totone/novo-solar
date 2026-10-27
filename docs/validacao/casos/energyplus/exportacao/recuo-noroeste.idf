@@ -1,0 +1,261 @@
+! SOL-AR: modelo minimo para conferir a fracao ensolarada da janela no EnergyPlus.
+! Gerado por SOL-AR (teste de referencia do F5.2), para o EnergyPlus 26.2.
+! Local: belem. Fachada: normal externa a 315 graus do Norte.
+! Janela (vidro): 1 x 1 m, recuada 0.3 m da fachada.
+! Recuo do vidro: verga, peitoril e ombreiras como Shading:Zone:Detailed; a parede fica no plano do vidro.
+! Esquerda e direita dos objetos por projecao: vistas de fora, como no EnergyPlus.
+! Rode com o EPW do local; a saida Surface Outside Face Sunlit Fraction da janela sai a cada passo de tempo.
+! Zona em caixa atras da fachada, com materiais sem massa: o modelo serve so para a sombra.
+
+Version,
+  26.2;                       !- Version Identifier
+
+SimulationControl,
+  No,                         !- Do Zone Sizing Calculation
+  No,                         !- Do System Sizing Calculation
+  No,                         !- Do Plant Sizing Calculation
+  No,                         !- Run Simulation for Sizing Periods
+  Yes,                        !- Run Simulation for Weather File Run Periods
+  No,                         !- Do HVAC Sizing Simulation for Sizing Periods
+  1;                          !- Maximum Number of HVAC Sizing Simulation Passes
+
+Building,
+  SOL-AR conferencia,         !- Name
+  0,                          !- North Axis {deg}
+  Suburbs,                    !- Terrain
+  0.04,                       !- Loads Convergence Tolerance Value {W}
+  0.4,                        !- Temperature Convergence Tolerance Value {deltaC}
+  FullExterior,               !- Solar Distribution
+  25,                         !- Maximum Number of Warmup Days
+  6;                          !- Minimum Number of Warmup Days
+
+ShadowCalculation,
+  PolygonClipping,            !- Shading Calculation Method
+  Timestep,                   !- Shading Calculation Update Frequency Method
+  1,                          !- Shading Calculation Update Frequency
+  15000,                      !- Maximum Figures in Shadow Overlap Calculations
+  SutherlandHodgman,          !- Polygon Clipping Algorithm
+  512,                        !- Pixel Counting Resolution
+  SimpleSkyDiffuseModeling,   !- Sky Diffuse Modeling Algorithm
+  No,                         !- Output External Shading Calculation Results
+  No,                         !- Disable Self-Shading Within Shading Zone Groups
+  No;                         !- Disable Self-Shading From Shading Zone Groups to Other Zones
+
+Timestep,
+  6;                          !- Number of Timesteps per Hour
+
+RunPeriod,
+  Ano,                        !- Name
+  1,                          !- Begin Month
+  1,                          !- Begin Day of Month
+  2026,                       !- Begin Year
+  12,                         !- End Month
+  31,                         !- End Day of Month
+  2026,                       !- End Year
+  ,                           !- Day of Week for Start Day
+  No,                         !- Use Weather File Holidays and Special Days
+  No,                         !- Use Weather File Daylight Saving Period
+  No,                         !- Apply Weekend Holiday Rule
+  No,                         !- Use Weather File Rain Indicators
+  No,                         !- Use Weather File Snow Indicators
+  No,                         !- Treat Weather as Actual
+  Hour24;                     !- First Hour Interpolation Starting Values
+
+Site:Location,
+  belem,                      !- Name
+  -1.379,                     !- Latitude {deg}
+  -48.476,                    !- Longitude {deg}
+  -3,                         !- Time Zone {hr}
+  16.5;                       !- Elevation {m}
+
+GlobalGeometryRules,
+  UpperLeftCorner,            !- Starting Vertex Position
+  Counterclockwise,           !- Vertex Entry Direction
+  World;                      !- Coordinate System
+
+Material:NoMass,
+  PAREDE,                     !- Name
+  MediumRough,                !- Roughness
+  1,                          !- Thermal Resistance {m2-K/W}
+  0.9,                        !- Thermal Absorptance
+  0.7,                        !- Solar Absorptance
+  0.7;                        !- Visible Absorptance
+
+Construction,
+  PAREDE,                     !- Name
+  PAREDE;                     !- Outside Layer
+
+WindowMaterial:SimpleGlazingSystem,
+  VIDRO,                      !- Name
+  5.8,                        !- U-Factor {W/m2-K}
+  0.8,                        !- Solar Heat Gain Coefficient
+  0.85;                       !- Visible Transmittance
+
+Construction,
+  VIDRO,                      !- Name
+  VIDRO;                      !- Outside Layer
+
+Zone,
+  SALA;                       !- Name
+
+BuildingSurface:Detailed,
+  PAREDE_FRENTE,              !- Name
+  Wall,                       !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Outdoors,                   !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  SunExposed,                 !- Sun Exposure
+  WindExposed,                !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  1.414213562, 1.414213562, 2,!- X,Y,Z Vertex 1 {m}
+  1.414213562, 1.414213562, -1,!- X,Y,Z Vertex 2 {m}
+  -0.707106781, -0.707106781, -1,!- X,Y,Z Vertex 3 {m}
+  -0.707106781, -0.707106781, 2;!- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  FUNDO,                      !- Name
+  Wall,                       !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Outdoors,                   !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  SunExposed,                 !- Sun Exposure
+  WindExposed,                !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  2.121320344, -3.535533906, 2,!- X,Y,Z Vertex 1 {m}
+  2.121320344, -3.535533906, -1,!- X,Y,Z Vertex 2 {m}
+  4.242640687, -1.414213562, -1,!- X,Y,Z Vertex 3 {m}
+  4.242640687, -1.414213562, 2;!- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  LATERAL_DIREITA,            !- Name
+  Wall,                       !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Outdoors,                   !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  SunExposed,                 !- Sun Exposure
+  WindExposed,                !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  4.242640687, -1.414213562, 2,!- X,Y,Z Vertex 1 {m}
+  4.242640687, -1.414213562, -1,!- X,Y,Z Vertex 2 {m}
+  1.414213562, 1.414213562, -1,!- X,Y,Z Vertex 3 {m}
+  1.414213562, 1.414213562, 2;!- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  LATERAL_ESQUERDA,           !- Name
+  Wall,                       !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Outdoors,                   !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  SunExposed,                 !- Sun Exposure
+  WindExposed,                !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  -0.707106781, -0.707106781, 2,!- X,Y,Z Vertex 1 {m}
+  -0.707106781, -0.707106781, -1,!- X,Y,Z Vertex 2 {m}
+  2.121320344, -3.535533906, -1,!- X,Y,Z Vertex 3 {m}
+  2.121320344, -3.535533906, 2;!- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  COBERTURA,                  !- Name
+  Roof,                       !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Outdoors,                   !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  SunExposed,                 !- Sun Exposure
+  WindExposed,                !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  -0.707106781, -0.707106781, 2,!- X,Y,Z Vertex 1 {m}
+  2.121320344, -3.535533906, 2,!- X,Y,Z Vertex 2 {m}
+  4.242640687, -1.414213562, 2,!- X,Y,Z Vertex 3 {m}
+  1.414213562, 1.414213562, 2;!- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  PISO,                       !- Name
+  Floor,                      !- Surface Type
+  PAREDE,                     !- Construction Name
+  SALA,                       !- Zone Name
+  ,                           !- Space Name
+  Adiabatic,                  !- Outside Boundary Condition
+  ,                           !- Outside Boundary Condition Object
+  NoSun,                      !- Sun Exposure
+  NoWind,                     !- Wind Exposure
+  autocalculate,              !- View Factor to Ground
+  4,                          !- Number of Vertices
+  1.414213562, 1.414213562, -1,!- X,Y,Z Vertex 1 {m}
+  4.242640687, -1.414213562, -1,!- X,Y,Z Vertex 2 {m}
+  2.121320344, -3.535533906, -1,!- X,Y,Z Vertex 3 {m}
+  -0.707106781, -0.707106781, -1;!- X,Y,Z Vertex 4 {m}
+
+FenestrationSurface:Detailed,
+  JANELA,                     !- Name
+  Window,                     !- Surface Type
+  VIDRO,                      !- Construction Name
+  PAREDE_FRENTE,              !- Building Surface Name
+  ,                           !- Outside Boundary Condition Object
+  autocalculate,              !- View Factor to Ground
+  ,                           !- Frame and Divider Name
+  1,                          !- Multiplier
+  4,                          !- Number of Vertices
+  0.707106781, 0.707106781, 1,!- X,Y,Z Vertex 1 {m}
+  0.707106781, 0.707106781, 0,!- X,Y,Z Vertex 2 {m}
+  0, 0, 0,                    !- X,Y,Z Vertex 3 {m}
+  0, 0, 1;                    !- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo verga,         !- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  0, 0, 1,                    !- X,Y,Z Vertex 1 {m}
+  0.707106781, 0.707106781, 1,!- X,Y,Z Vertex 2 {m}
+  0.494974747, 0.919238816, 1,!- X,Y,Z Vertex 3 {m}
+  -0.212132034, 0.212132034, 1;!- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo peitoril,      !- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  0, 0, 0,                    !- X,Y,Z Vertex 1 {m}
+  0.707106781, 0.707106781, 0,!- X,Y,Z Vertex 2 {m}
+  0.494974747, 0.919238816, 0,!- X,Y,Z Vertex 3 {m}
+  -0.212132034, 0.212132034, 0;!- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo ombreira esquerda,!- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  0, 0, 0,                    !- X,Y,Z Vertex 1 {m}
+  -0.212132034, 0.212132034, 0,!- X,Y,Z Vertex 2 {m}
+  -0.212132034, 0.212132034, 1,!- X,Y,Z Vertex 3 {m}
+  0, 0, 1;                    !- X,Y,Z Vertex 4 {m}
+
+Shading:Zone:Detailed,
+  JANELA Recuo ombreira direita,!- Name
+  PAREDE_FRENTE,              !- Base Surface Name
+  ,                           !- Transmittance Schedule Name
+  4,                          !- Number of Vertices
+  0.707106781, 0.707106781, 0,!- X,Y,Z Vertex 1 {m}
+  0.494974747, 0.919238816, 0,!- X,Y,Z Vertex 2 {m}
+  0.494974747, 0.919238816, 1,!- X,Y,Z Vertex 3 {m}
+  0.707106781, 0.707106781, 1;!- X,Y,Z Vertex 4 {m}
+
+Output:Variable,
+  JANELA,                     !- Key Value
+  Surface Outside Face Sunlit Fraction,!- Variable Name
+  Timestep;                   !- Reporting Frequency

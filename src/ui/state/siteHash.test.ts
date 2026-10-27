@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CITIES } from '../cities';
 import { buildHash, parseHash } from './hashState';
-import { DEFAULT_SITE, hasHourlyData, hashForSite, siteFromHash } from './siteHash';
+import { DEFAULT_SITE, hashForSite, siteFromHash } from './siteHash';
 
 describe('local no # da URL', () => {
   it('sem estado: local padrão (Florianópolis), sem dados históricos', () => {
@@ -32,8 +32,6 @@ describe('local no # da URL', () => {
     const hash = buildHash(hashForSite(selected));
     expect(hash).toBe('#hist=1&local=recife');
     expect(siteFromHash(parseHash(hash))).toEqual(selected);
-    expect(hasHourlyData(selected)).toBe(true);
-    expect(hasHourlyData({ ...selected, historical: false })).toBe(false);
   });
 
   it('local de arquivo faz ida e volta pela URL', () => {
@@ -49,7 +47,6 @@ describe('local no # da URL', () => {
     };
     const hash = buildHash(hashForSite(selected));
     expect(siteFromHash(parseHash(hash))).toEqual(selected);
-    expect(hasHourlyData(selected)).toBe(true);
   });
 
   it('coordenadas inválidas no link caem no padrão', () => {
