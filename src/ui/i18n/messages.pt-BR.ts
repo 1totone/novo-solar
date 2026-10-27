@@ -43,8 +43,8 @@ export const ptBR = {
   'facade.heading': 'Fachada',
   'facade.orientation': 'Orientação da fachada (azimute da normal externa)',
   'facade.orientationHelp':
-    'Graus a partir do Norte, no sentido horário; aceita qualquer valor, inclusive negativo (−30° = 330°).',
-  'facade.orientationInvalid': 'Digite um número em graus.',
+    'Graus a partir do Norte, no sentido horário (Leste = 90°), inclusive negativos (−45° = 315°), ou o rumo para onde a fachada olha: N, NE, L, SE, S, SO, O, NO, por sigla ou por extenso.',
+  'facade.orientationInvalid': 'Digite um número em graus ou um rumo, como NO ou noroeste.',
   'facade.normalized': 'Normal externa: {degrees}° ({compass})',
   'facade.showProtractor': 'Mostrar o transferidor sobre a carta',
   'protection.heading': 'Proteção',
