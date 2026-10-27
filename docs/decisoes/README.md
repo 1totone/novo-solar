@@ -45,6 +45,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0039](0039-carregamento-sob-demanda.md) | Carregamento sob demanda do que não é do caminho básico (passos 6 e 7, vista 3D; na Fase 4, idiomas, ajuda, modo didático, catálogo e projeções) e orçamento do JavaScript inicial no CI | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
 | [0040](0040-atalho-entre-passos.md) | Atalho entre passos: barra com os números dos passos, só com um passo avançado aberto; no alto da coluna no computador e no pé da tela no celular | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
 | [0041](0041-integracao-das-fases-por-merge-commit.md) | Integração das Fases 3 e 4 na `main` por merge commit (exceção ao squash só para os dois PRs de integração de fase) | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
+| [0042](0042-teste-do-f2.9-sem-moderador.md) | Teste do F2.9 sem moderador: página `teste/` com a ferramenta num iframe, conferência pelo endereço, SEQ e SUS; não substitui o F4.9 | 2026-10-27 | proposta |
 | [0043](0043-exportacao-para-o-energyplus.md) | Exportação para o EnergyPlus e para o CAD (F5.2): objetos por projeção para brise e par de aletas encostados, placas detalhadas para o resto, infinito com 20 · y_máx, modelo para conferir e DXF R12; teste de ida e volta no EnergyPlus 26.2 | 2026-10-27 | proposta (Fase 5, só na prévia) |
 
 ## Modelo
