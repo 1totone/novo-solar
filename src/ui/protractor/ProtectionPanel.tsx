@@ -6,8 +6,6 @@ import type { HashState } from '../state/hashState';
 import { DrawingControls } from '../mask/DrawingControls';
 import type { Drawing } from '../mask/DrawingLayer';
 import { onRovingKeyDown } from '../a11y/roving';
-import { NextStep, Step } from '../layout/Step';
-import { protectionSummary } from './summary';
 
 interface Row {
   label: MessageKey;
@@ -78,21 +76,14 @@ export function ProtectionPanel({
   onChange,
   drawing,
   onDrawingChange,
-  open,
-  onOpenChange,
-  onNext,
 }: {
   state: ProtractorState;
   hash: HashState;
   onChange: (patch: Record<string, string>) => void;
   drawing: Drawing | null;
   onDrawingChange: (next: Drawing | null) => void;
-  /** Passo aberto no acordeão (decisão 0044). */
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onNext: () => void;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t } = useI18n();
   // Abre "Mais opções" se o link já traz algum campo avançado ou desenho; depois, quem decide é
   // o usuário (apagar um campo não fecha o painel).
   const [moreOpen, setMoreOpen] = useState(
@@ -160,18 +151,7 @@ export function ProtectionPanel({
   const partialSet = t('protection.setPartial');
 
   return (
-    <Step
-      n={3}
-      heading={t('protection.heading')}
-      summary={protectionSummary(hash, state, t, (v) =>
-        formatNumber(v, Number.isInteger(v) ? 0 : 1),
-      )}
-      summaryTestId="protection-summary"
-      open={open}
-      onOpenChange={onOpenChange}
-      testId="protection-panel"
-      dataStep="3"
-    >
+    <>
       <div className="field">
         <span className="field-label">{t('protection.reference')}</span>
         <div
@@ -238,7 +218,6 @@ export function ProtectionPanel({
           onChange={onChange}
         />
       </details>
-      <NextStep n={4} heading={t('data.heading')} onClick={onNext} />
-    </Step>
+    </>
   );
 }

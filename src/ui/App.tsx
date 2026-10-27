@@ -15,15 +15,12 @@ import { answerRegion, exerciseFromHash, EXERCISES } from './didactic/exercises'
 import { TUTORIAL_STEPS, tutorialStepFromHash } from './didactic/tutorial';
 import { overlayCsv, windCsv } from './export/dataCsv';
 import { downloadBlob, fileSlug, standaloneSvg, svgToPng } from './export/image';
-import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
 import { LanguageSelect } from './i18n/LanguageSelect';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
-import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
-import { ProjectSection } from './project/ProjectSection';
 import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
 import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
@@ -31,8 +28,9 @@ import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext'
 import { StepNav } from './layout/StepNav';
 import { initialStep, revealStep, type StepId } from './layout/steps';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
-import { FacadePanel } from './protractor/FacadePanel';
-import { ProtectionPanel } from './protractor/ProtectionPanel';
+import { protectionSummary } from './protractor/summary';
+import { dataSummary, facadeSummary, outputsSummary } from './layout/stepSummaries';
+import { NextStep, Step } from './layout/Step';
 import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
@@ -53,6 +51,24 @@ const EffectPanel = lazy(() =>
 );
 // A aba da rosa dos ventos, só quando escolhida (decisão 0044: espaço no orçamento para o
 // redesenho depois do piloto do F2.9).
+// Conteúdo dos passos 2 a 5, fora do bloco inicial (decisões 0039 e 0044): o cabeçalho e o resumo
+// de cada passo ficam nele; o conteúdo chega no tempo ocioso depois da carta, para quem abre o passo
+// não esperar.
+const loadFacade = () => import('./protractor/FacadePanel');
+const loadProtection = () => import('./protractor/ProtectionPanel');
+const loadData = () => import('./overlay/DataPanel');
+const loadOutputs = () => import('./export/OutputsPanel');
+const loadProject = () => import('./project/ProjectSection');
+const FacadePanel = lazy(() => loadFacade().then((m) => ({ default: m.FacadePanel })));
+const ProtectionPanel = lazy(() => loadProtection().then((m) => ({ default: m.ProtectionPanel })));
+const DataPanel = lazy(() => loadData().then((m) => ({ default: m.DataPanel })));
+const OutputsPanel = lazy(() => loadOutputs().then((m) => ({ default: m.OutputsPanel })));
+const ProjectSection = lazy(() => loadProject().then((m) => ({ default: m.ProjectSection })));
+function preloadBasicSteps() {
+  for (const load of [loadFacade, loadProtection, loadData, loadOutputs, loadProject]) {
+    load().catch(() => {});
+  }
+}
 const WindPanel = lazy(() => import('./wind/WindPanel').then((m) => ({ default: m.WindPanel })));
 const View3DPanel = lazy(() =>
   import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
@@ -100,7 +116,7 @@ function PrintRuler({ label }: { label: string }) {
 }
 
 export function App() {
-  const { t, formatNumber, formatDate } = useI18n();
+  const { t, locale, formatNumber, formatDate } = useI18n();
   const [hashState, setHashState] = useHashState();
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
   const [drawing, setDrawing] = useState<Drawing | null>(null);
@@ -160,6 +176,13 @@ export function App() {
     pendingReveal.current = { id, focus: true };
     setOpenStep(id);
   };
+  const stepLoading = <p className="note">{t('advanced.loading')}</p>;
+  useEffect(() => {
+    // Navegador sem requestIdleCallback (o Safari, até a versão 18): um pouco depois da carta.
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(preloadBasicSteps, { timeout: 3000 });
+    } else setTimeout(preloadBasicSteps, 1500);
+  }, []);
   const geometryOpen = openStep === '6';
   const effectOpen = openStep === '7';
   // O tutorial (F4.5) abre o passo que ele realça; um desenho começado (exercício) abre o passo 3.
@@ -630,55 +653,101 @@ export function App() {
                 {...stepProps('1')}
                 onNext={() => goToStep('2')}
               />
-              <FacadePanel
-                state={protractor}
-                rawOrientation={hashState.o ?? ''}
-                onChange={setHashState}
+              <Step
+                n={2}
+                heading={t('facade.heading')}
+                summary={facadeSummary(protractor, t, formatNumber)}
+                summaryTestId="facade-summary"
+                testId="facade-panel"
+                dataStep="2"
                 {...stepProps('2')}
-                onNext={() => goToStep('3')}
-              />
-              <ProtectionPanel
-                state={protractor}
-                hash={hashState}
-                onChange={setHashState}
-                drawing={drawing}
-                onDrawingChange={setDrawing}
-                {...stepProps('3')}
-                onNext={() => goToStep('4')}
-              />
-              <DataPanel
-                overlay={ov.overlay}
-                hasData={epw !== null}
-                sourceUrl={sourceUrl}
-                limits={ov.quantityLimits}
-                timeZone={site.timeZone}
-                onChange={setHashState}
-                {...stepProps('4')}
-                onNext={() => goToStep('5')}
-              />
-              <OutputsPanel
-                {...stepProps('5')}
-                print={print}
-                onPrintChange={setPrint}
-                onPrint={() => window.print()}
-                onExport={onExport}
-                csvAvailable={csvAvailable}
-                comparing={hashA !== null}
-                onCompare={onCompare}
-                geometryAvailable={geometry.window !== null}
               >
-                <ProjectSection
-                  onSave={project.save}
-                  onOpen={project.open}
-                  onCopyLink={project.copyLink}
-                  fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
-                  fileSizeMb={
-                    projectFiles.length > 0
-                      ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
-                      : null
-                  }
-                />
-              </OutputsPanel>
+                <Suspense fallback={stepLoading}>
+                  <FacadePanel
+                    state={protractor}
+                    rawOrientation={hashState.o ?? ''}
+                    onChange={setHashState}
+                  />
+                </Suspense>
+                <NextStep n={3} heading={t('protection.heading')} onClick={() => goToStep('3')} />
+              </Step>
+              <Step
+                n={3}
+                heading={t('protection.heading')}
+                summary={protectionSummary(hashState, protractor, t, (v) =>
+                  formatNumber(v, Number.isInteger(v) ? 0 : 1),
+                )}
+                summaryTestId="protection-summary"
+                testId="protection-panel"
+                dataStep="3"
+                {...stepProps('3')}
+              >
+                <Suspense fallback={stepLoading}>
+                  <ProtectionPanel
+                    state={protractor}
+                    hash={hashState}
+                    onChange={setHashState}
+                    drawing={drawing}
+                    onDrawingChange={setDrawing}
+                  />
+                </Suspense>
+                <NextStep n={4} heading={t('data.heading')} onClick={() => goToStep('4')} />
+              </Step>
+              <Step
+                n={4}
+                heading={t('data.heading')}
+                summary={dataSummary(ov.overlay, epw !== null, t, formatNumber)}
+                summaryTestId="data-summary"
+                testId="data-panel"
+                dataStep="4"
+                {...stepProps('4')}
+              >
+                <Suspense fallback={stepLoading}>
+                  <DataPanel
+                    overlay={ov.overlay}
+                    hasData={epw !== null}
+                    sourceUrl={sourceUrl}
+                    limits={ov.quantityLimits}
+                    timeZone={site.timeZone}
+                    onChange={setHashState}
+                  />
+                </Suspense>
+                <NextStep n={5} heading={t('outputs.heading')} onClick={() => goToStep('5')} />
+              </Step>
+              <Step
+                n={5}
+                heading={t('outputs.heading')}
+                summary={outputsSummary(print, hashA !== null, t, formatNumber, locale)}
+                summaryTestId="outputs-summary"
+                testId="outputs-panel"
+                dataStep="5"
+                {...stepProps('5')}
+              >
+                <Suspense fallback={stepLoading}>
+                  <OutputsPanel
+                    print={print}
+                    onPrintChange={setPrint}
+                    onPrint={() => window.print()}
+                    onExport={onExport}
+                    csvAvailable={csvAvailable}
+                    comparing={hashA !== null}
+                    onCompare={onCompare}
+                    geometryAvailable={geometry.window !== null}
+                  >
+                    <ProjectSection
+                      onSave={project.save}
+                      onOpen={project.open}
+                      onCopyLink={project.copyLink}
+                      fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
+                      fileSizeMb={
+                        projectFiles.length > 0
+                          ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
+                          : null
+                      }
+                    />
+                  </OutputsPanel>
+                </Suspense>
+              </Step>
               <p className="steps-group">{t('advanced.group')}</p>
               <ChartOptionsPanel
                 hash={hashState}

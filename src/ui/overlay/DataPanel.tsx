@@ -10,7 +10,6 @@ import {
   type OverlayState,
 } from '../state/overlayHash';
 import { onRovingKeyDown } from '../a11y/roving';
-import { NextStep, Step } from '../layout/Step';
 
 const LABEL: Record<DataKey, MessageKey> = {
   tbs: 'data.tbs',
@@ -89,9 +88,6 @@ export function DataPanel({
   limits,
   timeZone,
   onChange,
-  open,
-  onOpenChange,
-  onNext,
 }: {
   overlay: OverlayState;
   /** Há um EPW carregado para o local escolhido. */
@@ -102,10 +98,6 @@ export function DataPanel({
   limits: readonly number[] | null;
   timeZone: number;
   onChange: (patch: Record<string, string>) => void;
-  /** Passo aberto no acordeão (decisão 0044). */
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onNext: () => void;
 }) {
   const { t, formatNumber } = useI18n();
   const id = useId();
@@ -114,35 +106,8 @@ export function DataPanel({
   const [moreOpen, setMoreOpen] = useState(overlay.mode === 'frequency');
   const tz = `${timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(timeZone), Number.isInteger(timeZone) ? 0 : 1)}`;
 
-  const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
-  const summary = !hasData
-    ? t('steps.data.needData')
-    : !key || !info
-      ? t('steps.data.none')
-      : [
-          t(`data.short.${key}`),
-          t(overlay.semester === 1 ? 'data.semester1' : 'data.semester2'),
-          ...(overlay.mode === 'frequency'
-            ? [
-                t('steps.data.frequency', {
-                  threshold: formatLimit(overlay.threshold),
-                  unit: info.unit,
-                }),
-              ]
-            : []),
-        ].join(' · ');
-
   return (
-    <Step
-      n={4}
-      heading={t('data.heading')}
-      summary={summary}
-      summaryTestId="data-summary"
-      open={open}
-      onOpenChange={onOpenChange}
-      testId="data-panel"
-      dataStep="4"
-    >
+    <>
       {!hasData ? (
         <p className="note" data-testid="data-need-file">
           {t('data.needFile')} {sourceUrl && <a href={sourceUrl}>{t('data.sourceLink')}</a>}
@@ -282,7 +247,6 @@ export function DataPanel({
           )}
         </>
       )}
-      <NextStep n={5} heading={t('outputs.heading')} onClick={onNext} />
-    </Step>
+    </>
   );
 }
