@@ -50,7 +50,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     id: 'dados',
-    target: '4',
+    // Os dados e o que pintar ficam no passo 1 (decisão 0047).
+    target: '1',
     done: (s) => s.hist === '1' && s.dado === 'tbs',
     patch: { hist: '1', dado: 'tbs' },
   },

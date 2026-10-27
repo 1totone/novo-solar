@@ -255,9 +255,6 @@ export const en: Catalog = {
   'site.heading': 'Location',
   'site.cityLabel': 'City',
   'site.fileOption': 'File: {name}',
-  'site.cityData': 'Weather data for the city',
-  'site.openHistorical': 'Open historical data (SOL-AR 6.2)',
-  'site.closeHistorical': 'Close historical data',
   'site.recentLink': 'Download recent data (TMYx 2011 to 2025, Climate.OneBuilding.org)',
   'site.recentHelp': 'Unzip the downloaded file and load the .epw below.',
   'site.loadingHistorical': 'Opening the historical data…',
@@ -1039,4 +1036,21 @@ export const en: Catalog = {
   'angles.internal': 'internal',
   'angles.external': 'external',
   'angles.choose': 'Drawing of the angle',
+  // Data sources in step 1 (decision 0047).
+  'sources.label': 'Hourly data',
+  'sources.none': 'Chart only, no hourly data',
+  'sources.historical': 'SOL-AR 6.2 data (reference year from {start} to {end})',
+  'sources.historicalIwec': 'SOL-AR 6.2 data (IWEC file)',
+  'sources.file': 'File {file}',
+  'sources.fileRecord': 'File {file} (data from {start} to {end})',
+  'sources.otherFiles': 'Loaded files',
+  'sources.paint': 'Paint on the chart',
+  'sources.paintMore': 'Semester, bands and hours above a threshold are in step 4.',
+  'sources.paintMoreLink': 'Open step 4',
+  'sources.compare': 'Compare with other data',
+  'sources.compareHelp':
+    'Keeps the current data as A; choose the data for B above and see the difference B − A on the chart.',
+  'sources.comparing':
+    'A: {source} Choose the data for B above; the difference B − A appears on the chart.',
+  'sources.noData': 'No hourly data.',
 };

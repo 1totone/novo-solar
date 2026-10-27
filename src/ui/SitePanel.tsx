@@ -11,6 +11,7 @@ import {
 } from './catalog/catalog';
 import { useCatalog } from './catalog/useCatalog';
 import { CITIES, type City } from './cities';
+import { cityOfFile, fileMatches, sameFile, type Place } from './data/sources';
 import { fileSite, readClimateFile, type LoadedFile } from './data/climateFile';
 import type { HistoricalState } from './data/historical';
 import { LocationForm } from './data/LocationForm';
@@ -21,6 +22,7 @@ import { RestoreStepFocus } from './layout/AdvancedStepStub';
 import { rememberFocus } from './layout/focusAfterLoad';
 import { NextStep, Step } from './layout/Step';
 import { fileRadiationLag } from './overlay/radiationLag';
+import { DATA_KEYS } from './state/overlayHash';
 import type { SelectedSite } from './state/siteHash';
 
 // Catálogo nacional (F4.1): o código da busca e do mapa só chega com o catálogo aberto (decisão 0039).
@@ -33,6 +35,18 @@ export type { LoadedFile } from './data/climateFile';
 interface Props {
   selected: SelectedSite;
   loadedFile: LoadedFile | null;
+  /** Arquivos carregados nesta sessão (decisão 0047): continuam à escolha ao trocar de cidade. */
+  files: readonly LoadedFile[];
+  /** Variável pintada na carta (`dado` no link) e a escolha dela aqui mesmo (item e da 0044). */
+  paintKey: string | undefined;
+  onPaint: (key: string) => void;
+  /** Leva ao passo 4 (semestre, faixas, frequência). */
+  onMoreData: () => void;
+  /** Comparação com outros dados (item h da 0044): A guarda os dados de agora. */
+  comparing: boolean;
+  /** De onde vêm os dados da A, na frase da impressão. */
+  compareSource: string;
+  onCompare: (start: boolean) => void;
   historical: HistoricalState;
   onSelect: (selected: SelectedSite, file: LoadedFile | null) => void;
   /** Local da obra do catálogo (F4.1), `perto` no link. */
@@ -63,6 +77,13 @@ const placeOf = (city: City): Solar62Location => ({
 export function SitePanel({
   selected,
   loadedFile,
+  files,
+  paintKey,
+  onPaint,
+  onMoreData,
+  comparing,
+  compareSource,
+  onCompare,
   historical,
   onSelect,
   projectPoint,
@@ -107,12 +128,68 @@ export function SitePanel({
   };
 
   const onCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const index = /^arquivo:(\d+)$/.exec(e.target.value);
+    const file = index ? files[Number(index[1])] : undefined;
     const next = CITIES.find((s) => s.id === e.target.value);
-    if (!next) return;
+    if (!file && !next) return;
     setError(null);
     setPending(null);
-    onSelect({ kind: 'city', site: next, historical: false }, null);
+    if (file) onSelect(fileSite(file), file);
+    else onSelect({ kind: 'city', site: next!, historical: false }, null);
   };
+
+  // Fontes de dados do lugar (decisão 0047): um arquivo de uma cidade da lista aparece com ela, ao
+  // lado dos dados históricos; os de outros lugares entram na lista de cidades.
+  const fileCity = selected.kind === 'file' && loadedFile ? cityOfFile(loadedFile) : null;
+  const placeCity = city ?? fileCity;
+  const fileIndex = loadedFile ? files.findIndex((f) => sameFile(f, loadedFile)) : -1;
+  const place: Place | null = placeCity
+    ? placeCity
+    : selected.kind === 'station'
+      ? { wmo: selected.id, ...selected.site }
+      : selected.kind === 'file' && loadedFile
+        ? loadedFile.data.location
+        : null;
+  const otherFiles = files.map((f, i) => ({ f, i })).filter(({ f }) => cityOfFile(f) === null);
+  const sourceOptions: { key: string; label: string; checked: boolean; choose: () => void }[] = [];
+  if (placeCity || selected.kind === 'station') {
+    sourceOptions.push({
+      key: 'none',
+      label: t('sources.none'),
+      checked: (selected.kind === 'city' && !selected.historical) || selected.kind === 'station',
+      choose: () => {
+        if (placeCity) onSelect({ kind: 'city', site: placeCity, historical: false }, null);
+      },
+    });
+  }
+  const placeHistorical = placeCity?.historical;
+  if (placeCity && placeHistorical) {
+    sourceOptions.push({
+      key: 'hist',
+      label: placeHistorical.period
+        ? t('sources.historical', {
+            start: placeHistorical.period[0],
+            end: placeHistorical.period[1],
+          })
+        : t('sources.historicalIwec'),
+      checked: selected.kind === 'city' && selected.historical,
+      choose: () => onSelect({ kind: 'city', site: placeCity, historical: true }, null),
+    });
+  }
+  if (place) {
+    files.forEach((f, i) => {
+      if (!fileMatches(f, place)) return;
+      const record = f.format === 'epw' ? epwPeriodOfRecord(f.comments) : null;
+      sourceOptions.push({
+        key: `file:${i}`,
+        label: record
+          ? t('sources.fileRecord', { file: f.fileName, start: record[0], end: record[1] })
+          : t('sources.file', { file: f.fileName }),
+        checked: selected.kind === 'file' && i === fileIndex,
+        choose: () => onSelect(fileSite(f), f),
+      });
+    });
+  }
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -333,10 +410,18 @@ export function SitePanel({
         <label htmlFor={selectId}>{t('site.cityLabel')}</label>
         <select
           id={selectId}
-          value={city ? city.id : selected.kind === 'station' ? 'estacao' : 'arquivo'}
+          value={
+            placeCity
+              ? placeCity.id
+              : selected.kind === 'station'
+                ? 'estacao'
+                : fileIndex >= 0
+                  ? `arquivo:${fileIndex}`
+                  : 'arquivo'
+          }
           onChange={onCityChange}
         >
-          {selected.kind === 'file' && (
+          {selected.kind === 'file' && !placeCity && fileIndex < 0 && (
             <option value="arquivo">{t('site.fileOption', { name: selected.site.name })}</option>
           )}
           {selected.kind === 'station' && (
@@ -347,6 +432,15 @@ export function SitePanel({
               {s.name}
             </option>
           ))}
+          {otherFiles.length > 0 && (
+            <optgroup label={t('sources.otherFiles')}>
+              {otherFiles.map(({ f, i }) => (
+                <option key={i} value={`arquivo:${i}`}>
+                  {t('site.fileOption', { name: fileSite(f).site.name || f.fileName })}
+                </option>
+              ))}
+            </optgroup>
+          )}
         </select>
       </div>
       {catalogOpen ? (
@@ -385,50 +479,44 @@ export function SitePanel({
       ) : (
         catalogStub
       )}
-      {city && (
-        <div className="field" data-testid="city-data">
-          <span className="field-label">{t('site.cityData')}</span>
-          {city.historical && (
-            <button
-              type="button"
-              className="btn"
-              aria-pressed={selected.kind === 'city' && selected.historical}
-              onClick={() =>
-                onSelect(
-                  {
-                    kind: 'city',
-                    site: city,
-                    historical: !(selected.kind === 'city' && selected.historical),
-                  },
-                  null,
-                )
-              }
-            >
-              {selected.kind === 'city' && selected.historical
-                ? t('site.closeHistorical')
-                : t('site.openHistorical')}
-            </button>
-          )}
-          {historical.status === 'loading' && (
-            <p className="note" role="status">
-              {t('site.loadingHistorical')}
-            </p>
-          )}
-          {historical.status === 'error' && (
-            <p className="error" role="alert">
-              {t('site.historicalError')}
-            </p>
-          )}
-          <p className="note">
-            <a href={city.sourceUrl}>{t('site.recentLink')}</a>. {t('site.recentHelp')}
+      <fieldset className="field plain sources" data-testid="data-sources">
+        <legend className="field-label">{t('sources.label')}</legend>
+        {sourceOptions.map((o) => (
+          <label className="check" key={o.key}>
+            <input
+              type="radio"
+              name={`${fileId}-src`}
+              checked={o.checked}
+              onChange={() => {
+                setError(null);
+                setPending(null);
+                o.choose();
+              }}
+            />
+            {o.label}
+          </label>
+        ))}
+        {historical.status === 'loading' && (
+          <p className="note" role="status">
+            {t('site.loadingHistorical')}
           </p>
+        )}
+        {historical.status === 'error' && (
+          <p className="error" role="alert">
+            {t('site.historicalError')}
+          </p>
+        )}
+        {placeCity && (
+          <p className="note">
+            <a href={placeCity.sourceUrl}>{t('site.recentLink')}</a>. {t('site.recentHelp')}
+          </p>
+        )}
+        <div className="field">
+          <label htmlFor={fileId}>{t('site.fileLabel')}</label>
+          <input id={fileId} type="file" accept=".epw,.csv" onChange={onFileChange} />
+          <p className="note">{t('site.fileHelp')}</p>
         </div>
-      )}
-      <div className="field">
-        <label htmlFor={fileId}>{t('site.fileLabel')}</label>
-        <input id={fileId} type="file" accept=".epw,.csv" onChange={onFileChange} />
-        <p className="note">{t('site.fileHelp')}</p>
-      </div>
+      </fieldset>
       {pending && (
         <LocationForm
           key={pending.fileName}
@@ -450,6 +538,47 @@ export function SitePanel({
         <p className="error" role="alert">
           {error}
         </p>
+      )}
+      {data && (
+        <div className="field" data-testid="paint">
+          <label htmlFor={`${fileId}-paint`}>{t('sources.paint')}</label>
+          <select
+            id={`${fileId}-paint`}
+            value={paintKey ?? ''}
+            onChange={(e) => onPaint(e.target.value)}
+          >
+            <option value="">{t('data.none')}</option>
+            {DATA_KEYS.map((k) => (
+              <option key={k} value={k}>
+                {t(`data.${k}`)}
+              </option>
+            ))}
+          </select>
+          <p className="note">
+            {t('sources.paintMore')}{' '}
+            <button type="button" className="btn small" onClick={onMoreData}>
+              {t('sources.paintMoreLink')}
+            </button>
+          </p>
+        </div>
+      )}
+      {(data || comparing) && (
+        <div className="field">
+          <button
+            type="button"
+            className="btn"
+            aria-pressed={comparing}
+            data-testid="compare-data"
+            onClick={() => onCompare(!comparing)}
+          >
+            {comparing ? t('outputs.compareStop') : t('sources.compare')}
+          </button>
+          <p className="note" data-testid="compare-data-note">
+            {comparing
+              ? t('sources.comparing', { source: compareSource || t('sources.noData') })
+              : t('sources.compareHelp')}
+          </p>
+        </div>
       )}
       <dl className="site-info" data-testid="site-info">
         <dt>{t('site.latitude')}</dt>

@@ -35,7 +35,7 @@ export const helpPtBR: HelpContent = {
       },
       {
         title: 'Dados sobre a carta',
-        text: 'No passo 1, abra os dados históricos; no passo 4, escolha a temperatura. As células vermelhas são as horas mais quentes; as que ficam sob a hachura vermelha da máscara estão protegidas.',
+        text: 'No passo 1, em "Dados horários", escolha os dados do SOL-AR 6.2 e, logo abaixo, em "Pintar na carta", a temperatura. As células vermelhas são as horas mais quentes; as que ficam sob a hachura vermelha da máscara estão protegidas.',
       },
       {
         title: 'Imprimir e continuar',
@@ -82,7 +82,7 @@ export const helpPtBR: HelpContent = {
     steps: [
       {
         title: '1. Local',
-        text: 'Escolha a cidade. Para colorir a carta com dados horários, abra os dados históricos (os do SOL-AR 6.2) ou carregue um arquivo climático EPW; o link de cada cidade baixa o arquivo recente (TMYx). O arquivo é lido só no seu navegador.',
+        text: 'Escolha a cidade e, em "Dados horários", os dados do SOL-AR 6.2 ou um arquivo climático EPW carregado (o link de cada cidade baixa o arquivo recente, TMYx); em "Pintar na carta", o que colorir. Cada arquivo carregado continua na lista ao trocar de cidade, e "Comparar com outros dados" mostra a diferença entre dois deles. O arquivo é lido só no seu navegador.',
       },
       {
         title: '2. Fachada',

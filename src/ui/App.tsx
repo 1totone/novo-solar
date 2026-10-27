@@ -10,6 +10,7 @@ import type { City } from './cities';
 import { projectPointFromHash } from './catalog/catalog';
 import { describeConfig } from './compare/describe';
 import { useHistorical } from './data/historical';
+import { withFile } from './data/sources';
 import { exampleFromHash, helpSectionFromHash } from './help/content';
 import { answerRegion, exerciseFromHash, EXERCISES } from './didactic/exercises';
 import { TUTORIAL_STEPS, tutorialStepFromHash } from './didactic/tutorial';
@@ -119,6 +120,8 @@ export function App() {
   const { t, locale, formatNumber, formatDate } = useI18n();
   const [hashState, setHashState] = useHashState();
   const [loadedFile, setLoadedFile] = useState<LoadedFile | null>(null);
+  // Arquivos carregados nesta sessão (decisão 0047): continuam à escolha no passo 1.
+  const [files, setFiles] = useState<LoadedFile[]>([]);
   const [drawing, setDrawing] = useState<Drawing | null>(null);
   const [print, setPrint] = useState<PrintOptions>(DEFAULT_PRINT);
   // Arquivo carregado da configuração A da comparação (só quando a A usa um arquivo).
@@ -262,6 +265,12 @@ export function App() {
     onOpened: (opened) => {
       setLoadedFile(opened.liveFile);
       setCompareFile(opened.compareFile);
+      setFiles((list) =>
+        [opened.liveFile, opened.compareFile].reduce<LoadedFile[]>(
+          (acc, f) => (f ? withFile(acc, f) : acc),
+          list,
+        ),
+      );
       setPrint(opened.print);
       setDrawing(null);
     },
@@ -464,12 +473,14 @@ export function App() {
     }
   };
 
-  const onCompare = (start: boolean) => {
+  // `difference`: a comparação começada no passo 1 (decisão 0047) já mostra a diferença B − A.
+  const onCompare = (start: boolean, difference = false) => {
     if (start) {
       const current = { ...hashState };
       delete current.cmp;
+      delete current.dif;
       setCompareFile(liveFile);
-      setHashState({ cmp: buildHash(current).replace(/^#/, '') });
+      setHashState({ cmp: buildHash(current).replace(/^#/, ''), dif: difference ? '1' : '' });
     } else {
       setCompareFile(null);
       setHashState({ cmp: '', dif: '' });
@@ -644,7 +655,22 @@ export function App() {
                 selected={selected}
                 loadedFile={selected.kind === 'file' ? loadedFile : null}
                 historical={historical}
+                files={files}
+                paintKey={ov.overlay.key}
+                onPaint={(key) =>
+                  setHashState({
+                    dado: key,
+                    faixas: '',
+                    limiar: '',
+                    modo: ov.overlay.mode === 'frequency' ? 'freq' : '',
+                  })
+                }
+                onMoreData={() => goToStep('4')}
+                comparing={hashA !== null}
+                compareSource={sourceA}
+                onCompare={(start) => onCompare(start, true)}
                 onSelect={(next, file) => {
+                  if (file) setFiles((list) => withFile(list, file));
                   setLoadedFile(file);
                   setHashState(hashForSite(next));
                 }}

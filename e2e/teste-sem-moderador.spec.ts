@@ -112,9 +112,8 @@ test.describe('teste sem moderador (F2.9)', () => {
     // 5. Dados históricos e temperatura.
     card = await startTask(page, '5');
     await openStep(app, '1');
-    await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
-    await openStep(app, '4');
-    await app.getByTestId('data-panel').getByLabel('Variável').selectOption('tbs');
+    await app.getByRole('radio', { name: /Dados do SOL-AR 6\.2/ }).check();
+    await app.getByLabel('Pintar na carta').selectOption('tbs');
     await card.getByLabel('Período dos dados').fill('entre 1951 e 1970');
     await card.getByLabel('Horas com mais de 25 °C e sol na janela').fill('à tarde');
     await finishTask(page, '5', 5, 'terminei');
@@ -137,7 +136,7 @@ test.describe('teste sem moderador (F2.9)', () => {
     card = await startTask(page, '7');
     await openStep(app, '1');
     await app.getByLabel('Cidade').selectOption('recife');
-    await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
+    await app.getByRole('radio', { name: /Dados do SOL-AR 6\.2/ }).check();
     await app.getByRole('tab', { name: 'Rosa dos ventos' }).click();
     await app.getByRole('radio', { name: 'Verão' }).click();
     await card.getByLabel('Direção').fill('leste');

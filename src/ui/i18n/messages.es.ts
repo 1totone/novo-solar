@@ -255,9 +255,6 @@ export const es: Catalog = {
   'site.heading': 'Ubicación',
   'site.cityLabel': 'Ciudad',
   'site.fileOption': 'Archivo: {name}',
-  'site.cityData': 'Datos climáticos de la ciudad',
-  'site.openHistorical': 'Abrir datos históricos (SOL-AR 6.2)',
-  'site.closeHistorical': 'Cerrar datos históricos',
   'site.recentLink': 'Descargar datos recientes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
   'site.recentHelp': 'Descomprima el archivo descargado y cargue el .epw abajo.',
   'site.loadingHistorical': 'Abriendo los datos históricos…',
@@ -1051,4 +1048,21 @@ export const es: Catalog = {
   'angles.internal': 'interna',
   'angles.external': 'externa',
   'angles.choose': 'Dibujo del ángulo',
+  // Fuentes de datos en el paso 1 (decisión 0047).
+  'sources.label': 'Datos horarios',
+  'sources.none': 'Solo la carta, sin datos horarios',
+  'sources.historical': 'Datos de SOL-AR 6.2 (año de referencia de {start} a {end})',
+  'sources.historicalIwec': 'Datos de SOL-AR 6.2 (archivo IWEC)',
+  'sources.file': 'Archivo {file}',
+  'sources.fileRecord': 'Archivo {file} (datos de {start} a {end})',
+  'sources.otherFiles': 'Archivos cargados',
+  'sources.paint': 'Pintar en la carta',
+  'sources.paintMore': 'Semestre, rangos y horas por encima de un umbral están en el paso 4.',
+  'sources.paintMoreLink': 'Abrir el paso 4',
+  'sources.compare': 'Comparar con otros datos',
+  'sources.compareHelp':
+    'Guarda los datos actuales como A; elija arriba los datos de B y vea la diferencia B − A en la carta.',
+  'sources.comparing':
+    'A: {source} Elija arriba los datos de B; la diferencia B − A aparece en la carta.',
+  'sources.noData': 'Sin datos horarios.',
 };

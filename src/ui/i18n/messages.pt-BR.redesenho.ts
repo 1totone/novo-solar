@@ -70,4 +70,21 @@ export const redesenhoPtBR = {
   'angles.internal': 'interna',
   'angles.external': 'externa',
   'angles.choose': 'Desenho do ângulo',
+  // Fontes de dados no passo 1 (decisão 0047, itens e, f e h da 0044).
+  'sources.label': 'Dados horários',
+  'sources.none': 'Só a carta, sem dados horários',
+  'sources.historical': 'Dados do SOL-AR 6.2 (ano de referência de {start} a {end})',
+  'sources.historicalIwec': 'Dados do SOL-AR 6.2 (arquivo IWEC)',
+  'sources.file': 'Arquivo {file}',
+  'sources.fileRecord': 'Arquivo {file} (dados de {start} a {end})',
+  'sources.otherFiles': 'Arquivos carregados',
+  'sources.paint': 'Pintar na carta',
+  'sources.paintMore': 'Semestre, faixas e horas acima de um limiar ficam no passo 4.',
+  'sources.paintMoreLink': 'Abrir o passo 4',
+  'sources.compare': 'Comparar com outros dados',
+  'sources.compareHelp':
+    'Guarda os dados de agora como A; escolha acima os dados de B e veja a diferença B − A na carta.',
+  'sources.comparing':
+    'A: {source} Escolha acima os dados de B; a diferença B − A aparece na carta.',
+  'sources.noData': 'Sem dados horários.',
 } as const;

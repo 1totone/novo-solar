@@ -35,7 +35,7 @@ export const helpEn: HelpContent = {
       },
       {
         title: 'Data on the chart',
-        text: 'In step 1, open the historical data; in step 4, choose the temperature. The red cells are the hottest hours; those under the red hatching of the mask are protected.',
+        text: 'In step 1, under "Hourly data", choose the SOL-AR 6.2 data and, just below, under "Paint on the chart", the temperature. The red cells are the hottest hours; those under the red hatching of the mask are protected.',
       },
       {
         title: 'Print and continue',
@@ -82,7 +82,7 @@ export const helpEn: HelpContent = {
     steps: [
       {
         title: '1. Location',
-        text: 'Choose the city. To colour the chart with hourly data, open the historical data (those of SOL-AR 6.2) or load an EPW weather file; the link of each city downloads the recent file (TMYx). The file is read only in your browser.',
+        text: 'Choose the city and, under "Hourly data", the SOL-AR 6.2 data or a loaded EPW weather file (the link of each city downloads the recent file, TMYx); under "Paint on the chart", what to colour. Each loaded file stays in the list when you change city, and "Compare with other data" shows the difference between two of them. The file is read only in your browser.',
       },
       {
         title: '2. Facade',
