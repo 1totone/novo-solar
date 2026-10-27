@@ -50,6 +50,6 @@ export interface ClimateFile {
 export async function loadClimateFile(page: Root, file: ClimateFile) {
   await openStep(page, '1');
   await page
-    .getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)')
+    .getByLabel('Ou carregue um arquivo climático (EPW, .zip do TMYx ou CSV do SOL-AR)')
     .setInputFiles(file);
 }

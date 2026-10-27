@@ -256,11 +256,11 @@ export const ptBR = {
   'site.cityLabel': 'Cidade',
   'site.fileOption': 'Arquivo: {name}',
   'site.recentLink': 'Baixar dados recentes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Descompacte o arquivo baixado e carregue o .epw abaixo.',
+  'site.recentHelp': 'Carregue abaixo o .zip baixado, sem descompactar.',
   'site.loadingHistorical': 'Abrindo os dados históricos…',
   'site.historicalError':
     'Não foi possível abrir os dados históricos. Confira a conexão e tente de novo.',
-  'site.fileLabel': 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)',
+  'site.fileLabel': 'Ou carregue um arquivo climático (EPW, .zip do TMYx ou CSV do SOL-AR)',
   'site.fileHelp': 'O arquivo é lido só no seu navegador; nada é enviado pela internet.',
   'site.unknownFormat':
     'Formato não reconhecido: carregue um arquivo EPW ou um CSV do SOL-AR (extensão .csv).',

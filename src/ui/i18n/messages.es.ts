@@ -256,11 +256,11 @@ export const es: Catalog = {
   'site.cityLabel': 'Ciudad',
   'site.fileOption': 'Archivo: {name}',
   'site.recentLink': 'Descargar datos recientes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Descomprima el archivo descargado y cargue el .epw abajo.',
+  'site.recentHelp': 'Cargue abajo el .zip descargado, sin descomprimir.',
   'site.loadingHistorical': 'Abriendo los datos históricos…',
   'site.historicalError':
     'No fue posible abrir los datos históricos. Revise la conexión e intente de nuevo.',
-  'site.fileLabel': 'O cargue un archivo climático (EPW o CSV de SOL-AR)',
+  'site.fileLabel': 'O cargue un archivo climático (EPW, .zip del TMYx o CSV de SOL-AR)',
   'site.fileHelp': 'El archivo se lee solo en su navegador; nada se envía por internet.',
   'site.unknownFormat':
     'Formato no reconocido: cargue un archivo EPW o un CSV de SOL-AR (extensión .csv).',
@@ -922,8 +922,7 @@ export const es: Catalog = {
   'station.sourceEra5':
     'Punto {name} ({uf}), archivo TMYx 2011 a 2025 de Climate.OneBuilding.org hecho solo con el reanálisis ERA5; ningún dato horario abierto.',
   'station.download': 'Descargar el archivo de esta estación (Climate.OneBuilding.org)',
-  'station.downloadHelp':
-    'Descomprima el archivo descargado y cargue el .epw en el campo de arriba.',
+  'station.downloadHelp': 'Cargue el .zip descargado en el campo de arriba, sin descomprimir.',
   'station.period': '{start} a {end} ({years} años de datos)',
   'station.quality': 'Calidad del archivo',
   'station.q.missing': 'valores ausentes: {count}',
@@ -1065,4 +1064,9 @@ export const es: Catalog = {
   'sources.comparing':
     'A: {source} Elija arriba los datos de B; la diferencia B − A aparece en la carta.',
   'sources.noData': 'Sin datos horarios.',
+  // .zip directo (decisión 0048).
+  'site.zip.noEpw': 'El .zip no tiene ningún archivo .epw.',
+  'site.zip.manyEpw': 'El .zip tiene más de un archivo .epw: descomprímalo y cargue el que quiera.',
+  'site.zip.corrupt':
+    'No se pudo abrir el .zip: el archivo parece incompleto o dañado. Descárguelo de nuevo.',
 };

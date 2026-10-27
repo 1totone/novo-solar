@@ -87,4 +87,9 @@ export const redesenhoPtBR = {
   'sources.comparing':
     'A: {source} Escolha acima os dados de B; a diferença B − A aparece na carta.',
   'sources.noData': 'Sem dados horários.',
+  // .zip direto (decisão 0048, item g da 0044).
+  'site.zip.noEpw': 'O .zip não tem nenhum arquivo .epw.',
+  'site.zip.manyEpw': 'O .zip tem mais de um arquivo .epw: descompacte e carregue o que quiser.',
+  'site.zip.corrupt':
+    'Não foi possível abrir o .zip: o arquivo parece incompleto ou corrompido. Baixe de novo.',
 } as const;

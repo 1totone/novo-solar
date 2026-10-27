@@ -228,7 +228,7 @@ export const fase4PtBR = {
   'station.sourceEra5':
     'Ponto {name} ({uf}), arquivo TMYx 2011 a 2025 do Climate.OneBuilding.org feito só com a reanálise ERA5; nenhum dado horário aberto.',
   'station.download': 'Baixar o arquivo desta estação (Climate.OneBuilding.org)',
-  'station.downloadHelp': 'Descompacte o arquivo baixado e carregue o .epw no campo acima.',
+  'station.downloadHelp': 'Carregue o .zip baixado no campo acima, sem descompactar.',
   'station.period': '{start} a {end} ({years} anos de dados)',
   'station.quality': 'Qualidade do arquivo',
   'station.q.missing': 'valores ausentes: {count}',
