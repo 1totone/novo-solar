@@ -123,11 +123,12 @@ export function FacadePanel({
           />
           {state.orientationValid && (
             <output id={`${id}-n`} className="orientation-name" data-testid="normal-azimuth">
-              {t(exact ? 'facade.normalizedExact' : 'facade.normalizedNear', {
-                degrees,
-                name: names[nearest]!,
-                compass,
-              })}
+              <span className="orientation-name-main" data-testid="orientation-name">
+                {exact ? names[nearest] : `≈ ${names[nearest]}`}
+              </span>
+              <span className="orientation-name-detail">
+                {t('facade.normalized', { degrees, compass })}
+              </span>
             </output>
           )}
         </div>
@@ -177,8 +178,8 @@ export function FacadePanel({
               <FacadePlan orientation={o} />
             </div>
           </div>
+          <p className="note">{t('facade.orientationHelp')}</p>
         </div>
-        <p className="note">{t('facade.orientationHelp')}</p>
       </div>
       <label className="check">
         <input

@@ -14,9 +14,8 @@ test('botão "NO": 315° no link, o rumo por extenso e a máscara do lado noroes
   await openStep(page, '2');
   await page.getByRole('radio', { name: 'noroeste (315°)' }).click();
   await expect(page).toHaveURL(/o=315/);
-  await expect(page.getByTestId('normal-azimuth')).toHaveText(
-    'Normal externa: 315° = noroeste (NO)',
-  );
+  await expect(page.getByTestId('orientation-name')).toHaveText('noroeste');
+  await expect(page.getByTestId('normal-azimuth')).toContainText('Normal externa: 315° (NO)');
   await expect(page.getByRole('radio', { name: 'noroeste (315°)' })).toHaveAttribute(
     'aria-checked',
     'true',
@@ -31,7 +30,9 @@ test('botão "NO": 315° no link, o rumo por extenso e a máscara do lado noroes
       { altitude: 60, azimuth: 135 },
     ]),
   ).toEqual(['total', 'none']);
-  await expect(page.getByTestId('facade-summary')).toHaveText('Fachada 315° (NO)');
+  await expect(page.getByTestId('facade-summary')).toHaveText(
+    'Fachada 315° (NO) · sem transferidor',
+  );
 });
 
 test('o campo aceita "NO" e "noroeste"; 45° mostra "nordeste" bem visível', async ({ page }) => {
@@ -42,32 +43,29 @@ test('o campo aceita "NO" e "noroeste"; 45° mostra "nordeste" bem visível', as
   await expect(page).toHaveURL(/o=315/);
   // O campo continua com o que foi digitado; o link guarda o número.
   await expect(field).toHaveValue('NO');
-  await expect(page.getByTestId('normal-azimuth')).toHaveText(
-    'Normal externa: 315° = noroeste (NO)',
-  );
+  await expect(page.getByTestId('orientation-name')).toHaveText('noroeste');
   await field.fill('nordeste');
   await expect(page).toHaveURL(/o=45/);
   await field.fill('45');
-  await expect(page.getByTestId('normal-azimuth')).toHaveText(
-    'Normal externa: 45° = nordeste (NE)',
-  );
+  await expect(page.getByTestId('orientation-name')).toHaveText('nordeste');
+  await expect(page.getByTestId('normal-azimuth')).toContainText('Normal externa: 45° (NE)');
   await expect(page.getByRole('radio', { name: 'nordeste (45°)' })).toHaveAttribute(
     'aria-checked',
     'true',
   );
   // O nome por extenso fica ao lado do número, em destaque (não abaixo, em letra pequena).
   const fieldBox = (await field.boundingBox())!;
-  const nameBox = (await page.getByTestId('normal-azimuth').boundingBox())!;
+  const nameBox = (await page.getByTestId('orientation-name').boundingBox())!;
+  expect(nameBox.x).toBeGreaterThan(fieldBox.x + fieldBox.width);
   expect(nameBox.y).toBeLessThan(fieldBox.y + fieldBox.height);
   const size = await page
-    .getByTestId('normal-azimuth')
+    .getByTestId('orientation-name')
     .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-  expect(size).toBeGreaterThanOrEqual(16);
+  expect(size).toBeGreaterThanOrEqual(18);
   // Fora da rosa: aproximação ao rumo mais próximo.
   await field.fill('300');
-  await expect(page.getByTestId('normal-azimuth')).toHaveText(
-    'Normal externa: 300° ≈ oés-noroeste (ONO)',
-  );
+  await expect(page.getByTestId('orientation-name')).toHaveText('≈ oés-noroeste');
+  await expect(page.getByTestId('normal-azimuth')).toContainText('Normal externa: 300° (ONO)');
   await field.fill('noroest');
   await expect(page.getByRole('alert')).toContainText('ou um rumo, como NO ou noroeste');
 });

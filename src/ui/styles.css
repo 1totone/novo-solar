@@ -2036,19 +2036,46 @@ a.btn {
 }
 
 .orientation-row input {
-  width: 6.5rem;
+  width: 5.5rem;
 }
 
 .orientation-name {
-  font-size: 1.05rem;
-  font-weight: 600;
+  display: flex;
+  flex: 1 1 8rem;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.orientation-name-main {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
   color: var(--color-accent);
+}
+
+.orientation-name-detail {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.facade-rose {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.facade-rose .note {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.85rem;
 }
 
 .facade-rose-buttons {
   display: grid;
-  grid-template-columns: repeat(3, 3rem);
-  grid-template-rows: repeat(3, 2.75rem);
+  flex: none;
+  grid-template-columns: repeat(3, 2.75rem);
+  grid-template-rows: repeat(3, 2.6rem);
   gap: 0.25rem;
 }
 

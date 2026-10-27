@@ -39,8 +39,6 @@ export const redesenhoPtBR = {
   // Fachada por rumos (decisão 0044, item c).
   'compass.names':
     'norte,nor-nordeste,nordeste,lés-nordeste,leste,lés-sudeste,sudeste,su-sudeste,sul,su-sudoeste,sudoeste,oés-sudoeste,oeste,oés-noroeste,noroeste,nor-noroeste',
-  'facade.normalizedExact': 'Normal externa: {degrees}° = {name} ({compass})',
-  'facade.normalizedNear': 'Normal externa: {degrees}° ≈ {name} ({compass})',
   'facade.compass': 'Ou escolha o rumo da fachada',
   'facade.compassButton': '{name} ({degrees}°)',
 } as const;
