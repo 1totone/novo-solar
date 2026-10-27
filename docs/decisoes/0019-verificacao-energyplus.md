@@ -1,7 +1,7 @@
 # 0019. Critérios da verificação contra o EnergyPlus (F3.8)
 
 - Data: 2026-10-24
-- Status: proposta (arranjo do F3.8 adiantado antes do portão 2; a confirmar com o Anthony na integração da Fase 3)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 2 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
@@ -12,7 +12,7 @@ O ROADMAP propõe, para o F3.8, comparar a fração ensolarada hora a hora com a
 
 O limite de 0,02 com o sol de cada programa mede, portanto, a diferença entre os modelos de sol, e não o cálculo da sombra, que é o objeto do F3.8.
 
-## Decisão (proposta)
+## Decisão
 
 O F3.8 passa a ter dois critérios, um para cada fonte de diferença (tabela na spec 07, seção 7.10):
 
@@ -20,6 +20,10 @@ O F3.8 passa a ter dois critérios, um para cada fonte de diferença (tabela na 
 2. **Ponta a ponta, cada programa com o seu sol.** Sobre as horas com sol na janela em pelo menos um dos dois cálculos: RMSE ≤ 0,03, viés ≤ 0,002 em módulo e RMSE explicado pela posição do sol (a mesma geometria com os dois sóis dá o mesmo RMSE, com diferença ≤ 0,002).
 
 A aplicação continua com o SPA (spec 02), conferido contra o pvlib e contra as datas do U.S. Naval Observatory. O sol do EnergyPlus não é adotado.
+
+## Conferência do sol do EnergyPlus na pré-revisão (27/10/2026)
+
+Na pré-revisão, o sol do EnergyPlus foi reproduzido de novo, sem o script do F3.8, direto do código-fonte atual do repositório do NREL (`SUN3` e `SUN4`, `SolarShading.cc`; não necessariamente idêntico ao da versão 26.2.0 usada no F3.8), e comparado com o SPA do pvlib 0.16.1 no fim de cada passo de 10 min de 2026, em Florianópolis, Brasília, Porto Alegre e Manaus. Diferença na direção do sol: média de 0,32° a 0,33° e máxima de 0,56° a 0,58°, conforme o local. É a mesma ordem de grandeza do contexto acima (média de 0,32° a 0,34° e máxima de 0,59°, nos 5 locais do F3.8), o que sustenta a separação entre geometria, com o mesmo sol, e ponta a ponta, cada programa com o seu. Essa conferência está registrada só no comentário da pré-revisão; a evidência versionada continua sendo o teste do F3.8, que reproduz o sol do EnergyPlus e o confere contra os cossenos de saída (10⁻¹²).
 
 ## Alternativas consideradas
 

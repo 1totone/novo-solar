@@ -1,13 +1,13 @@
 # 0039. Carregamento sob demanda e orçamento do JavaScript inicial
 
 - Data: 2026-10-26
-- Status: proposta (na integração da Fase 3, para os passos 6 e 7 e a vista 3D, e na da Fase 4, para o resto; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 23 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3, para os passos 6 e 7 e a vista 3D, e na da Fase 4, para o resto.
 
 ## Contexto
 
 Na revisão do F2.9 (24/10/2026), o JavaScript da aplicação tinha 330 kB (104 kB com gzip) e a primeira abertura num celular emulado (Pixel 7, CPU 4 vezes mais lenta, Slow 4G) levava 3,5 s até a carta. A inspeção da prévia da Fase 4 mediu 739 kB (231 kB com gzip) no bloco inicial: tudo o que as Fases 3 e 4 acrescentaram vinha junto, mesmo o que o caminho básico (local, carta, transferidor, máscara) nunca usa. Os maiores itens eram os textos em espanhol e inglês (114 kB), a ajuda nos três idiomas (86 kB) e os passos 6 e 7 (cerca de 50 kB).
 
-## Decisão (proposta)
+## Decisão
 
 1. **Fica no bloco inicial só o caminho básico** (passos 1 a 5, carta, transferidor, máscara, dados na carta, rosa dos ventos) e o que a carta desenha a partir do link.
 2. **Carregados sob demanda** (`import()`), cada um no seu bloco:

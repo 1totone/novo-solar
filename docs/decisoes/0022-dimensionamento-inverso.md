@@ -1,13 +1,13 @@
 # 0022. Dimensionamento inverso (F3.6)
 
 - Data: 2026-10-25
-- Status: proposta (núcleo do F3.6 adiantado antes do portão 2, na branch da Fase 3; a confirmar com o Anthony na integração da Fase 3)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 5 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O F3.6 vai do período a sombrear para os ângulos (na referência escolhida) e as dimensões da proteção, com a subdivisão em lâminas mantendo os ângulos, e deve reproduzir o exemplo de Brasília do tutorial do SOL-AR da UFU. O Anthony pediu testes de ida e volta com o núcleo do F3.2 (o dispositivo dimensionado sombreia 100% das amostras do período), de minimalidade (reduzir qualquer dimensão deixa sol entrar) e a documentação da interpretação das datas do tutorial, que não estão no texto. Modelo na spec 10.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Critério: sombra de 100% da janela** em todas as amostras do período (a sombra total da seção 1.6 da spec 01), com as menores dimensões. Dimensionar para uma sombra parcial (ex.: 50% ou um percentual da radiação) fica para depois.
 2. **Período** em dias do ano de referência (todos os dias, inclusive, podendo passar pelo fim do ano) e horas em **hora solar verdadeira** (padrão, a das linhas da carta e do ensino) ou legal; amostras a cada 5 min, com as pontas.

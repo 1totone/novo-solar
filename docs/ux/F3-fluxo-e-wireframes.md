@@ -1,7 +1,7 @@
 # F3: fluxo e wireframes da Fase 3
 
 - Data: 2026-10-25
-- Status: **proposta**, aceita provisoriamente para seguir com a interface na branch de integração da Fase 3 (decisão 0023). O Anthony revisa antes de a Fase 3 entrar na `main`.
+- Status: aceita com a decisão 0023: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente.
 - Página navegável: `public/wireframes/fase-3.html`, publicada em `.../wireframes/fase-3.html` (na prévia da branch de integração).
 
 ## Princípio que manda

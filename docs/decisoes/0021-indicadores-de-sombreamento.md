@@ -1,13 +1,13 @@
 # 0021. Indicadores de sombreamento (F3.5)
 
 - Data: 2026-10-25
-- Status: proposta (núcleo do F3.5 adiantado antes do portão 2, na branch da Fase 3; a confirmar com o Anthony na integração da Fase 3)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 4 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O F3.5 quantifica o efeito da proteção: percentual da radiação direta incidente na janela (DNI · cos θ, com cos θ ≥ 0) bloqueada nas horas quentes e admitida nas horas frias, e comparação entre alternativas. O Anthony pediu que a fração ensolarada fosse ponderada por cos θ nas amostras de dentro da hora, supondo a DNI constante na hora, com memória de cálculo à mão e, se viável, conferência contra o EnergyPlus explicando as diferenças de interpolação dos dados climáticos e de posição do sol. Modelo na spec 09.
 
-## Decisão (proposta)
+## Decisão
 
 1. **DNI constante na hora**, como pedido: E₀ = DNI · média de cos θ e E = DNI · média de cos θ · f_e nas 6 amostras da hora (C e C_e da spec 07, seção 7.6). A alternativa, **DNI constante enquanto o sol está acima do horizonte** (que conserva a energia da hora no nascer e no pôr do sol), fica como opção do núcleo. Efeito medido: nenhum nos EPWs TMYx de Florianópolis e Manaus, que têm DNI zero em todas as horas com o sol acima do horizonte só em parte da hora; em Porto Alegre, +2,4% na radiação anual de uma fachada Sudeste e +1,2 ponto percentual no admitido nas horas frias.
 2. **Dois percentuais**, bloqueado nas horas quentes e admitido nas horas frias, com as somas em kWh/m² por classe; indefinido (e não 0% ou 100%) quando a classe não recebe radiação direta. Horas neutras e sem classe só nas somas.

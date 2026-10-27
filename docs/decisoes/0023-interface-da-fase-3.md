@@ -1,13 +1,13 @@
 # 0023. Interface da Fase 3 (fluxo e wireframes)
 
 - Data: 2026-10-25
-- Status: proposta (aceita provisoriamente para construir a interface na branch de integração da Fase 3; a confirmar com o Anthony antes de integrar na `main`)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 6 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). O teste do F2.9 pode reabrir a posição dos passos.
 
 ## Contexto
 
 A Fase 3 acrescenta a proteção descrita pelas dimensões (F3.1), as curvas de percentual sombreado e a máscara de um ponto (F3.2), a fração ensolarada hora a hora e o mapa mês × hora (F3.3), a classificação das horas (F3.4), os indicadores e a comparação de alternativas (F3.5), o dimensionamento pelo período (F3.6) e a vista 3D (F3.7). O núcleo de cálculo já existe (decisões 0018 a 0022). O Anthony pediu, como no F2.1, uma proposta de fluxo e wireframes antes da interface, com a regra "simples primeiro": o fluxo básico atual não muda, e o que é da Fase 3 fica recolhido ou num passo próprio. A `main` está congelada no caminho das 9 tarefas do teste com usuários (F2.9), e a interface da Fase 3 é feita numa branch de integração até o portão 2.
 
-## Decisão (proposta)
+## Decisão
 
 Detalhes e wireframes em `docs/ux/F3-fluxo-e-wireframes.md` e `public/wireframes/fase-3.html`.
 

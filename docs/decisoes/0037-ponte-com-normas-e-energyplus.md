@@ -1,7 +1,7 @@
 # 0037. Ponte com NBR 15220-3, INI-C e EnergyPlus: o que entra na v1.0 e o que fica na v2.0
 
 - Data: 2026-10-26
-- Status: proposta (corrige a decisão 0006 no ponto do escopo da v1.0; a decidir pelo Anthony, item 21 da issue "Revisão pendente")
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 21 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Corrige a decisão 0006 no ponto do escopo da v1.0; a pergunta ao Prof. Lamberts sobre a exportação para o EnergyPlus (abaixo) fica para o portão 2.
 
 ## Contexto
 
@@ -15,11 +15,18 @@ O que a v1.0 (integração das Fases 3 e 4) já tem de relação com essas refer
 
 Nenhuma delas é uma saída que o EnergyPlus, o INI-C ou a NBR 15220-3 leiam diretamente. O uso do CSV hora a hora como entrada de um modelo do EnergyPlus não foi verificado.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Corrigir a decisão 0006 para o que o roteiro diz:** na v1.0, a ponte com o EnergyPlus é a **conferência** (F3.8, F3.5, F4.4) e os **dados exportáveis**; as **saídas para EnergyPlus, INI-C e NBR 15220-3** (F5.2, F5.3, F5.6) ficam na v2.0, como no ROADMAP.
 2. A seção 3 do ROADMAP passa a dizer "conferência com o EnergyPlus e dados exportáveis (v1.0); saídas para NBR 15220-3, INI-C e EnergyPlus (v2.0)". A decisão 0006 ganha a nota "escopo da ponte corrigido pela 0037".
 3. Nada muda no código.
+
+## Pergunta ao Prof. Lamberts no portão 2
+
+A pré-revisão de 27/10/2026 aceita manter as saídas para EnergyPlus, INI-C e NBR 15220-3 na v2.0, mas recomenda perguntar ao Prof. Lamberts, no portão 2, se a **exportação para o EnergyPlus (F5.2)** deve vir para a v1.0. Das três peças, ela é a de menor custo: o arranjo do F3.8 (`docs/validacao/scripts/energyplus_fracao_ensolarada.py`, na branch da Fase 3) já escreve, em Python, modelos do EnergyPlus com a zona, a janela e as placas da proteção (`Shading:Building:Detailed`) a partir das cenas no formato da spec 07, seção 7.1, e os roda no EnergyPlus 26.2. A exportação pela aplicação ainda exigiria escrever o IDF em TypeScript, escolher os objetos de saída (as placas detalhadas ou `Shading:Overhang:Projection` e `Shading:Fin:Projection`, como no F5.2) e o teste de ida e volta; esse teste reaproveita a referência do F3.8.
+
+- Se o Prof. Lamberts quiser a exportação na v1.0: vale a alternativa 1 só para o F5.2 (um passo F4.11, com teste de referência antes da implementação) e a v1.0 atrasa o tempo desse passo; o F5.3 e o F5.6 continuam na v2.0.
+- Se não: esta decisão fica como está.
 
 ## Alternativas consideradas
 

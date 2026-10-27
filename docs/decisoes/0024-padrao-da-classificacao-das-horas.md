@@ -1,7 +1,7 @@
 # 0024. Padrão da classificação das horas para o sombreamento: limiar de 20 °C
 
 - Data: 2026-10-25
-- Status: aceita provisoriamente em 26/10/2026 (aplicada na integração da Fase 3; substitui o item 2 da decisão 0020; a confirmar no portão 3)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 7 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Aplicada na integração da Fase 3; substitui o item 2 da decisão 0020.
 
 ## Contexto
 
@@ -9,7 +9,7 @@ A decisão 0020 adotou como padrão a faixa adaptativa da ASHRAE 55 comparada co
 
 Há uma fonte brasileira citável, do próprio LabEEE, para a necessidade de sombra pela temperatura externa: Lamberts, Dutra e Pereira (2014), "Eficiência energética na arquitetura": "esta estratégia [o sombreamento] deve ser utilizada sempre que a temperatura do ar for superior a 20 °C, mesmo quando a carta bioclimática indicar conforto térmico" (p. 91); na p. 135, o critério é o do Analysis-BIO para um ambiente sem carga térmica interna, com o limite abaixo de 20 °C quando há carga interna (Tabela 4-4), e o livro manda levar essas horas para a carta do Analysis SOL-AR e bloquear com α, β e γ a área correspondente.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Método padrão:** limiar único de **20 °C** sobre a temperatura da hora (T_fria = T_quente = 20 °C): acima, a sombra é desejada; abaixo, o sol é desejado; empate neutro. Na tela, com a fonte: "critério de sombreamento de Lamberts, Dutra e Pereira (2014) para ambiente sem carga térmica interna; com carga interna, use um limite menor".
 2. **Faixa adaptativa da ASHRAE 55** continua como alternativa, com o acréscimo por ganhos ΔT (padrão 0) e o aviso de que, com ΔT = 0, compara a faixa interna com o ar externo.

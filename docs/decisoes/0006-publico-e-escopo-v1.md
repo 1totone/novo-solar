@@ -1,7 +1,7 @@
 # 0006. Público e escopo da v1.0
 
 - Data: 2026-10-23
-- Status: aceita
+- Status: aceita; escopo da ponte com NBR 15220-3, INI-C e EnergyPlus corrigido pela decisão 0037 (27/10/2026)
 
 ## Contexto
 
@@ -10,8 +10,8 @@ O SOL-AR 6.2 é usado sobretudo no ensino de conforto ambiental e no projeto de 
 ## Decisão
 
 - **Público:** estudantes e professores de arquitetura e engenharia (ensino) e projetistas e consultores (projeto); pesquisadores como público secundário.
-- **Dentro do escopo:** carta solar e transferidor; máscaras por ângulos e calculadas pela geometria; sobreposição de dados climáticos; quantificação do efeito do sombreamento; rosa dos ventos; catálogo de arquivos climáticos; ponte com NBR 15220-3, INI-C e EnergyPlus; modo didático.
-- **Fora do escopo:** simulação energética (exportamos para o EnergyPlus); iluminação natural; simulação de ventilação ou CFD; painel climático genérico; contas de usuário e servidor.
+- **Dentro do escopo:** carta solar e transferidor; máscaras por ângulos e calculadas pela geometria; sobreposição de dados climáticos; quantificação do efeito do sombreamento; rosa dos ventos; catálogo de arquivos climáticos; ponte com NBR 15220-3, INI-C e EnergyPlus (corrigido pela decisão 0037: na v1.0, a conferência contra o EnergyPlus e os dados exportáveis; as saídas para NBR 15220-3, INI-C e EnergyPlus ficam na v2.0, como no roteiro do ROADMAP); modo didático.
+- **Fora do escopo:** simulação energética (o EnergyPlus faz isso; a exportação para ele fica na v2.0, decisão 0037); iluminação natural; simulação de ventilação ou CFD; painel climático genérico; contas de usuário e servidor.
 
 ## Alternativas consideradas
 
