@@ -120,6 +120,9 @@ test('a coluna fica curta no computador: os cinco cabeçalhos e o passo aberto e
 test('no celular, o cabeçalho tocado fica à vista abaixo da carta fixa', async ({ page }, info) => {
   test.skip(info.project.name !== 'celular', 'leiaute de uma coluna');
   await page.goto(`./${STATE}`);
+  // Com os dados, a carta fixa ganha a legenda (cerca de 90 px a mais): espera por ela, para medir
+  // a área fixa já com a altura final.
+  await expect(page.getByTestId('overlay-legend')).toBeVisible();
   // O passo 1 aberto é longo: o 4 fica abaixo dele; ao tocar, o 1 fecha e o 4 sobe.
   await stepHeader(page, '4').scrollIntoViewIfNeeded();
   await stepHeader(page, '4').click();
