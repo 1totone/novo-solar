@@ -38,11 +38,11 @@ test('passos 2 a 5: fora do bloco inicial, chegam depois da carta; o foco fica n
   });
   await page.goto('./#local=florianopolis&o=30&a1=55');
   await expect(page.getByTestId('sun-chart')).toBeVisible();
-  const preloaded = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"]')].map((l) => l.href),
-  );
   const steps = /(FacadePanel|ProtectionPanel|DataPanel|OutputsPanel|ProjectSection)-/;
-  expect(preloaded.filter((h) => steps.test(h))).toEqual([]);
+  // Fora do bloco inicial: a página não os pede (os do bloco estão no HTML como modulepreload;
+  // o orçamento confere também as importações estáticas).
+  const html = await (await page.request.get('./')).text();
+  expect(html).not.toMatch(steps);
   await expect.poll(() => scripts.filter((s) => steps.test(s)).length, { timeout: 10_000 }).toBe(5);
 
   // Os resumos estão lá desde o início; o conteúdo aparece ao abrir, com o foco no resumo.
