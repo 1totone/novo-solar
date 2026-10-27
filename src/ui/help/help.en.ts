@@ -78,7 +78,7 @@ export const helpEn: HelpContent = {
   },
   guide: {
     intro:
-      'SOL-AR draws the sun-path diagram of a place and, over it, the shading protractor and the shading mask of a device. The basic path has five steps; the advanced ones are folded below them. Everything you choose is kept in the page address: copy the link to save or share it.',
+      'SOL-AR draws the sun-path diagram of a place and, over it, the shading protractor and the shading mask of a device. The basic path has five steps, one open at a time: click or tap the title of a step to open it; when closed, it shows on one line what has been chosen. The advanced ones are folded below them. Everything you choose is kept in the page address: copy the link to save or share it.',
     steps: [
       {
         title: '1. Location',

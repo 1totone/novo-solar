@@ -78,7 +78,7 @@ export const helpPtBR: HelpContent = {
   },
   guide: {
     intro:
-      'O SOL-AR desenha a carta solar de um lugar e, sobre ela, o transferidor de ângulos e a máscara de sombra de uma proteção. O caminho básico tem cinco passos; os avançados ficam recolhidos abaixo deles. Tudo o que você escolhe fica no endereço da página: copie o link para guardar ou compartilhar.',
+      'O SOL-AR desenha a carta solar de um lugar e, sobre ela, o transferidor de ângulos e a máscara de sombra de uma proteção. O caminho básico tem cinco passos, um aberto por vez: clique ou toque no título de um passo para abri-lo; fechado, ele mostra numa linha o que já foi escolhido. Os avançados ficam recolhidos abaixo deles. Tudo o que você escolhe fica no endereço da página: copie o link para guardar ou compartilhar.',
     steps: [
       {
         title: '1. Local',

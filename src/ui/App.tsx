@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { onRovingKeyDown } from './a11y/roving';
 import type { EpwData } from '../core/epw/hourly';
 import { cellDifference, DIFFERENCE_BANDS, sameLocation } from '../core/overlay/difference';
@@ -29,6 +29,7 @@ import { timeZoneOffset } from './timeZoneOffset';
 import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
 import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
 import { StepNav } from './layout/StepNav';
+import { initialStep, revealStep, type StepId } from './layout/steps';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
@@ -113,6 +114,7 @@ export function App() {
   const tutorialTarget = tutorialStep ? TUTORIAL_STEPS[tutorialStep - 1]!.target : null;
   const exercise = exerciseFromHash(hashState);
   const exerciseChecked = exercise !== null && hashState.conferir === '1';
+  const geometry = geometryFromHash(hashState);
   const selected = siteFromHash(hashState);
   const site = selected.site;
   const city: City | null = selected.kind === 'city' ? selected.site : null;
@@ -125,19 +127,51 @@ export function App() {
         ? historical.data
         : null;
   const ov = useOverlay(epw, hashState);
-  const geometry = geometryFromHash(hashState);
-  // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
-  const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
-  // Passo 7 aberto: o link traz uma escolha da classificação das horas.
-  const [effectOpen, setEffectOpen] = useState(() =>
-    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct', 'alter1'].some(
-      (k) => hashState[k],
-    ),
+  // Passos como acordeão (decisão 0044): um aberto por vez; fechados, cada um mostra o resumo.
+  const [openStep, setOpenStep] = useState<StepId | null>(() =>
+    initialStep(hashState, geometry.defined, tutorialTarget),
   );
-  // Opções da carta (F4.3) abertas: o link traz uma projeção ou um tipo de linha horária.
-  const [chartOptionsOpen, setChartOptionsOpen] = useState(() =>
-    Boolean(hashState.proj || hashState.hl),
-  );
+  // Passo aberto pelo usuário: depois de desenhar, o cabeçalho dele vai para a vista (e, com
+  // `focus`, recebe o foco: botões "Próximo" e atalho entre passos).
+  const pendingReveal = useRef<{ id: StepId; focus: boolean } | null>(null);
+  useEffect(() => {
+    const r = pendingReveal.current;
+    if (!r) return;
+    pendingReveal.current = null;
+    revealStep(r.id, r.focus);
+  });
+  const stepProps = (id: StepId) => ({
+    open: openStep === id,
+    // Os passos avançados avisam também o "toggle" do details já aberto ao montar: só uma mudança
+    // de verdade abre o passo e o traz para a vista.
+    onOpenChange: (open: boolean) => {
+      if (open === (openStep === id)) return;
+      setOpenStep((current) => (open ? id : current === id ? null : current));
+      if (open) pendingReveal.current = { id, focus: false };
+    },
+  });
+  const goToStep = (id: StepId) => {
+    if (openStep === id) {
+      revealStep(id, true);
+      return;
+    }
+    pendingReveal.current = { id, focus: true };
+    setOpenStep(id);
+  };
+  const geometryOpen = openStep === '6';
+  const effectOpen = openStep === '7';
+  // O tutorial (F4.5) abre o passo que ele realça; um desenho começado (exercício) abre o passo 3.
+  const [seenTutorial, setSeenTutorial] = useState(tutorialStep);
+  if (seenTutorial !== tutorialStep) {
+    setSeenTutorial(tutorialStep);
+    if (tutorialTarget && tutorialTarget !== 'carta') setOpenStep(tutorialTarget);
+  }
+  const drawingActive = drawing !== null;
+  const [seenDrawing, setSeenDrawing] = useState(drawingActive);
+  if (seenDrawing !== drawingActive) {
+    setSeenDrawing(drawingActive);
+    if (drawingActive) setOpenStep('3');
+  }
   useEffect(() => {
     const root = document.documentElement;
     if (!tutorialTarget) {
@@ -426,9 +460,8 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
-    (geometryOpen || effectOpen || chartOptionsOpen) && wind.tab === 'chart' && !hashA
-      ? 'follow'
-      : '',
+    // No computador, a carta fica sempre à vista ao lado dos passos (decisão 0044).
+    'follow',
   ]
     .filter(Boolean)
     .join(' ');
@@ -470,8 +503,7 @@ export function App() {
       }
       testId="geometry-panel"
       summaryTestId="geometry-summary"
-      open={geometryOpen}
-      onOpenChange={setGeometryOpen}
+      {...stepProps('6')}
     />
   );
   const effectStub = (
@@ -480,8 +512,7 @@ export function App() {
       heading={t('effect.heading')}
       summary={t('effect.summary')}
       testId="effect-panel"
-      open={effectOpen}
-      onOpenChange={setEffectOpen}
+      {...stepProps('7')}
     />
   );
 
@@ -553,7 +584,7 @@ export function App() {
           <div className="workspace">
             <div className="steps">
               {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
-              {(geometryOpen || effectOpen) && <StepNav />}
+              {(geometryOpen || effectOpen) && <StepNav current={openStep} onGo={goToStep} />}
               {tutorialStep && (
                 <Suspense fallback={null}>
                   <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
@@ -591,11 +622,15 @@ export function App() {
                 }}
                 projectPoint={projectPointFromHash(hashState.perto)}
                 onProjectPointChange={(value) => setHashState({ perto: value })}
+                {...stepProps('1')}
+                onNext={() => goToStep('2')}
               />
               <FacadePanel
                 state={protractor}
                 rawOrientation={hashState.o ?? ''}
                 onChange={setHashState}
+                {...stepProps('2')}
+                onNext={() => goToStep('3')}
               />
               <ProtectionPanel
                 state={protractor}
@@ -603,6 +638,8 @@ export function App() {
                 onChange={setHashState}
                 drawing={drawing}
                 onDrawingChange={setDrawing}
+                {...stepProps('3')}
+                onNext={() => goToStep('4')}
               />
               <DataPanel
                 overlay={ov.overlay}
@@ -611,8 +648,11 @@ export function App() {
                 limits={ov.quantityLimits}
                 timeZone={site.timeZone}
                 onChange={setHashState}
+                {...stepProps('4')}
+                onNext={() => goToStep('5')}
               />
               <OutputsPanel
+                {...stepProps('5')}
                 print={print}
                 onPrintChange={setPrint}
                 onPrint={() => window.print()}
@@ -640,8 +680,7 @@ export function App() {
                 site={site}
                 placeName={site.name}
                 onChange={setHashState}
-                open={chartOptionsOpen}
-                onOpenChange={setChartOptionsOpen}
+                {...stepProps('opcoes')}
               />
               {geometryOpen ? (
                 <Suspense fallback={geometryStub}>
@@ -652,8 +691,7 @@ export function App() {
                     site={site}
                     orientation={protractor.orientation}
                     onChange={setHashState}
-                    open={geometryOpen}
-                    onOpenChange={setGeometryOpen}
+                    {...stepProps('6')}
                   />
                   <RestoreStepFocus testId="geometry-panel" />
                 </Suspense>
@@ -668,8 +706,7 @@ export function App() {
                     geometry={geometry}
                     orientation={protractor.orientation}
                     onChange={setHashState}
-                    open={effectOpen}
-                    onOpenChange={setEffectOpen}
+                    {...stepProps('7')}
                   />
                   <RestoreStepFocus testId="effect-panel" />
                 </Suspense>

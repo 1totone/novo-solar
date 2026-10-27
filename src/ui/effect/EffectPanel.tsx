@@ -166,6 +166,7 @@ export function EffectPanel({
             <span className="step-n">7</span>
             {t('effect.heading')}
             <span className="step-badge">{t('advanced.badge')}</span>
+            <span className="step-toggle" aria-hidden="true" />
           </h2>
           <span className="step-summary">{t('effect.summary')}</span>
         </summary>

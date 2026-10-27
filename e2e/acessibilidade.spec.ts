@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { openStep } from './fixtures/steps';
 
 // F4.6: teclado nas abas e nos grupos de botões (achado 15 da revisão do F2.9), nomes acessíveis
 // dos campos de ângulo (achado 16) e contraste da grade da carta (achado 17).
@@ -41,6 +42,7 @@ test.describe('acessibilidade (F4.6)', () => {
     page,
   }) => {
     await page.goto('./#local=florianopolis&o=0&a1=40');
+    await openStep(page, '3');
     const internal = page.getByRole('radio', { name: 'Interna' });
     await expect(internal).toHaveAttribute('tabindex', '0');
     await expect(page.getByRole('radio', { name: 'Externa' })).toHaveAttribute('tabindex', '-1');
@@ -66,6 +68,7 @@ test.describe('acessibilidade (F4.6)', () => {
     page,
   }) => {
     await page.goto('./#local=florianopolis&o=0');
+    await openStep(page, '3');
     for (const name of [
       'α (brise horizontal), sombra total',
       'β (brises verticais), sombra total, esquerda',
@@ -109,6 +112,7 @@ test.describe('acessibilidade (F4.6)', () => {
         return (hi! + 0.05) / (lo! + 0.05);
       });
     expect(ratio).toBeGreaterThanOrEqual(3);
+    await openStep(page, '3');
     await page.getByText('Mais opções').first().click();
     const result = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])

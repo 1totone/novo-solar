@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile } from './fixtures/steps';
 
 const SOLAR62 = new URL('../docs/validacao/casos/solar-6.2/', import.meta.url);
-const FILE_LABEL = 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)';
 
 // As 15 cidades do SOL-AR 6.2: período dos registros das TRY (Goulart, Lamberts e Firmino, 1998).
 const CITIES_62: [string, string][] = [
@@ -24,9 +24,9 @@ const CITIES_62: [string, string][] = [
   ['vitoria', 'entre 1961 e 1970'],
 ];
 
-/** O passo 4 tem dados: a variável pode ser escolhida. */
+/** O passo 4 tem dados: o resumo dele não pede mais os dados (decisão 0044). */
 async function expectData(page: Page) {
-  await expect(page.getByTestId('data-panel').getByLabel('Variável')).toBeVisible();
+  await expect(page.getByTestId('data-summary')).toHaveText('Nenhum dado na carta');
 }
 
 test.describe('dados climáticos (F2.7)', () => {
@@ -87,7 +87,7 @@ test.describe('dados climáticos (F2.7)', () => {
       'utf-8',
     );
     // O arquivo original do LabEEE é Latin-1 ("Localização", "Elevação").
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'CHL_Concepcion_NormaIWEC_SOlAr.csv',
       mimeType: 'text/csv',
       buffer: Buffer.from(text, 'latin1'),
@@ -105,7 +105,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
   test('CSV sem cabeçalho pede o local, sem presumir o fuso', async ({ page }) => {
     await page.goto('./#local=recife');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'recife.csv',
       mimeType: 'text/csv',
       buffer: readFileSync(new URL('recife.csv', SOLAR62)),
@@ -130,7 +130,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
     // O atalho preenche com o local da cidade escolhida, só quando pedido.
     await page.getByLabel('Cidade', { exact: true }).selectOption('recife');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'recife.csv',
       mimeType: 'text/csv',
       buffer: readFileSync(new URL('recife.csv', SOLAR62)),
@@ -141,7 +141,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
   test('EPW: período de registro do comentário do TMYx', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'tmyx.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(

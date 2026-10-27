@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { maskTints } from './fixtures/pixels';
+import { openStep } from './fixtures/steps';
 
 // Caso do tutorial do SOL-AR (UFU): Brasília, fachada nordeste (30°), referência interna. Nos
 // testes de cor, o transferidor fica oculto (tr=0) e os pontos ficam longe das linhas da grade.
@@ -35,6 +36,7 @@ test.describe('máscara pelos ângulos', () => {
 
   test('sombra parcial em "Mais opções" e índice 2 do brise afastado', async ({ page }) => {
     await page.goto(`./${TUTORIAL}`);
+    await openStep(page, '3');
     await page.getByText('Mais opções').click();
     // Do centro da janela, a ponta do brise é vista mais perto do horizonte: α interno 60°
     // (externo 30°, contra 35° da total).
@@ -43,6 +45,7 @@ test.describe('máscara pelos ângulos', () => {
     await expect(page.getByTestId('mask-partial')).toHaveCount(1);
     await expect(page).toHaveURL(/pa1=60/);
     // Perfil 32,4°: fora da total, dentro da parcial; perfil 55,4°: total.
+    await openStep(page, '2');
     await page.getByLabel('Mostrar o transferidor sobre a carta').uncheck();
     expect(
       await maskTints(page, [
@@ -51,7 +54,9 @@ test.describe('máscara pelos ângulos', () => {
       ]),
     ).toEqual(['partial', 'total']);
 
-    // Brise afastado: α2 = 20° (externo 70°) abre a fresta junto à fachada.
+    // Brise afastado: α2 = 20° (externo 70°) abre a fresta junto à fachada. O passo 3 reabre com
+    // "Mais opções" aberto, porque o link já tem campos dele.
+    await openStep(page, '3');
     // O conjunto parcial não tem índice 2, então a fresta fica com sombra parcial.
     await page.getByTestId('angle-a2').fill('20');
     await expect(page).toHaveURL(/a2=20/);
@@ -65,6 +70,7 @@ test.describe('máscara pelos ângulos', () => {
 
   test('desenho à mão: marca vértices, conclui e guarda no link', async ({ page }) => {
     await page.goto('./#local=brasilia&o=0&tr=0');
+    await openStep(page, '3');
     await page.getByText('Mais opções').click();
     await page.getByRole('button', { name: 'Começar a desenhar' }).click();
     const chart = page.getByTestId('sun-chart');

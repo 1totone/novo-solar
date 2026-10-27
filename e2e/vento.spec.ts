@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
 import { svgColors } from './fixtures/pixels';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 // F4.4: rosa dos ventos filtrada pela condição térmica (classificação do passo 7) e com a
 // velocidade corrigida para a altura e o terreno (spec 06, seções 6.3, 6.7 e 6.8; decisão 0027).
@@ -26,7 +27,7 @@ const CLASS_1 = [57, 135, 229];
 
 async function openRose(page: Page, hash = '') {
   await page.goto(`./${hash}`);
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name: 'vento.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(EPW),
@@ -126,6 +127,7 @@ test.describe('vento avançado (F4.4)', () => {
     );
     await expect(row(page, /^N /)).toHaveText(['100,0', '0,0', '0,0', '0,0', '100,0', '0,9']);
     // O CSV do passo 5 é a mesma rosa, com o filtro e a correção no cabeçalho.
+    await openStep(page, '5');
     const [csv] = await Promise.all([
       page.waitForEvent('download'),
       page

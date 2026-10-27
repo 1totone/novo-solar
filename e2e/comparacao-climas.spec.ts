@@ -2,13 +2,13 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
-const FILE_LABEL = 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)';
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
 const RECIFE = 'LOCATION,Recife-Teste,PE,BRA,SRC-Teste,828990,-8.12600,-34.92300,-3.0,10.0';
 
 async function load(page: Page, name: string, text: string) {
-  await page.getByLabel(FILE_LABEL).setInputFiles({
+  await loadClimateFile(page, {
     name,
     mimeType: 'text/plain',
     buffer: Buffer.from(text),
@@ -30,6 +30,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
       'a.epw',
       syntheticEpw(FLORIPA, () => 20),
     );
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await load(
       page,
@@ -63,6 +64,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
       'B − A: +3,0 °C (média de A: 20,0; de B: 23,0).',
     );
 
+    await openStep(page, '5');
     const [csv] = await Promise.all([
       page.waitForEvent('download'),
       page
@@ -80,6 +82,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
     // O link reabre a diferença; fechar a comparação a desliga.
     await page.reload();
     await expect(page.getByTestId('difference-toggle')).toHaveAttribute('aria-pressed', 'true');
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await expect(page).not.toHaveURL(/dif=1/);
     await expect(page.getByTestId('difference-toggle')).toHaveCount(0);
@@ -94,6 +97,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
       'a.epw',
       syntheticEpw(FLORIPA, () => 20, 'A', daytime(400)),
     );
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await load(
       page,
@@ -135,6 +139,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
       'a.epw',
       syntheticEpw(FLORIPA, () => 20),
     );
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await page.getByTestId('difference-toggle').click();
     await expect(page.getByTestId('difference-blocked')).toContainText(
@@ -142,6 +147,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
     );
     await expect(page.getByTestId('compare-view')).toBeVisible();
 
+    await openStep(page, '4');
     await page.getByTestId('data-panel').getByLabel('Variável').selectOption('tbs');
     await load(
       page,
@@ -158,6 +164,7 @@ test.describe('comparação de climas: diferença B − A na mesma carta (F4.2)'
   test('TRY histórico contra um arquivo recente do mesmo lugar', async ({ page }) => {
     await page.goto('./#local=florianopolis&hist=1&dado=tbs');
     await expect(page.getByTestId('overlay-legend')).toBeVisible();
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await load(
       page,

@@ -19,6 +19,7 @@ import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import { RestoreStepFocus } from './layout/AdvancedStepStub';
 import { rememberFocus } from './layout/focusAfterLoad';
+import { NextStep, Step } from './layout/Step';
 import { fileRadiationLag } from './overlay/radiationLag';
 import type { SelectedSite } from './state/siteHash';
 
@@ -37,6 +38,10 @@ interface Props {
   /** Local da obra do catálogo (F4.1), `perto` no link. */
   projectPoint: ProjectPoint | null;
   onProjectPointChange: (value: string) => void;
+  /** Passo aberto no acordeão (decisão 0044). */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onNext: () => void;
 }
 
 /** Arquivos futuros do LabEEE e do INPE (BrazFuture), no Zenodo (decisão 0034). */
@@ -62,6 +67,9 @@ export function SitePanel({
   onSelect,
   projectPoint,
   onProjectPointChange,
+  open,
+  onOpenChange,
+  onNext,
 }: Props) {
   const { t, formatNumber } = useI18n();
   const [catalogOpen, setCatalogOpen] = useState(
@@ -269,6 +277,26 @@ export function SitePanel({
     if (missing.length > 0) notices.push(t('site.noticeMissing', { fields: missing.join('; ') }));
   }
 
+  // Resumo do passo fechado (decisão 0044): o local e de onde vêm os dados horários.
+  let dataSummary: string;
+  if (selected.kind === 'city') {
+    const h = selected.historical ? city?.historical : undefined;
+    if (!h) dataSummary = t('steps.site.chartOnly');
+    else if (historical.status === 'loading') dataSummary = t('steps.site.loading');
+    else if (historical.status === 'error') dataSummary = t('steps.site.error');
+    else if (h.period) {
+      dataSummary = t('steps.site.historical', { start: h.period[0], end: h.period[1] });
+    } else dataSummary = t('steps.site.historicalIwec');
+  } else if (selected.kind === 'file') {
+    const record =
+      loadedFile && loadedFile.format === 'epw' ? epwPeriodOfRecord(loadedFile.comments) : null;
+    dataSummary = !loadedFile
+      ? t('steps.site.fileMissing')
+      : record
+        ? t('steps.site.fileRecord', { start: record[0], end: record[1] })
+        : t('steps.site.file', { file: loadedFile.fileName });
+  } else dataSummary = t('steps.site.station');
+
   // Catálogo recolhido: só o resumo, sem baixar o código dele (decisão 0039).
   const catalogStub = (
     <details
@@ -291,11 +319,16 @@ export function SitePanel({
   );
 
   return (
-    <section className="site-panel step-panel" aria-labelledby="site-heading" data-step="1">
-      <h2 id="site-heading">
-        <span className="step-n">1</span>
-        {t('site.heading')}
-      </h2>
+    <Step
+      n={1}
+      heading={t('site.heading')}
+      summary={`${site.name} · ${dataSummary}`}
+      summaryTestId="site-summary"
+      open={open}
+      onOpenChange={onOpenChange}
+      testId="site-panel"
+      dataStep="1"
+    >
       <div className="field">
         <label htmlFor={selectId}>{t('site.cityLabel')}</label>
         <select
@@ -506,6 +539,7 @@ export function SitePanel({
           </>
         )}
       </dl>
-    </section>
+      <NextStep n={2} heading={t('facade.heading')} onClick={onNext} />
+    </Step>
   );
 }

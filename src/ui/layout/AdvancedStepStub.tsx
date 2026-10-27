@@ -43,6 +43,7 @@ export function AdvancedStepStub({
             {n !== null && <span className="step-n">{n}</span>}
             {heading}
             <span className="step-badge">{t('advanced.badge')}</span>
+            <span className="step-toggle" aria-hidden="true" />
           </h2>
           <span className="step-summary" data-testid={summaryTestId}>
             {summary}

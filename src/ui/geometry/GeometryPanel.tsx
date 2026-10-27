@@ -143,6 +143,7 @@ export function GeometryPanel({
             <span className="step-n">6</span>
             {t('geometry.heading')}
             <span className="step-badge">{t('advanced.badge')}</span>
+            <span className="step-toggle" aria-hidden="true" />
           </h2>
           <span className="step-summary" data-testid="geometry-summary">
             {summary}

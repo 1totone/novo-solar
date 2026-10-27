@@ -2,6 +2,7 @@
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
 import { fase3PtBR } from './messages.pt-BR.fase3';
 import { fase4PtBR } from './messages.pt-BR.fase4';
+import { redesenhoPtBR } from './messages.pt-BR.redesenho';
 
 export const ptBR = {
   'app.name': 'SOL-AR',
@@ -345,4 +346,5 @@ export const ptBR = {
   'epw.field.totalSkyCover': 'cobertura do céu',
   ...fase3PtBR,
   ...fase4PtBR,
+  ...redesenhoPtBR,
 } as const;
