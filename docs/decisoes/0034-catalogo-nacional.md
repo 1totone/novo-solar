@@ -1,7 +1,7 @@
 # 0034. Catálogo nacional: metadados, qualidade e link oficial; mapa do Natural Earth embutido (F4.1)
 
 - Data: 2026-10-26
-- Status: proposta (F4.1 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4). Revê a decisão 0010 no ponto que ela deixou para o F4.1.
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 17 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Revê a decisão 0010 no ponto que ela deixou para o F4.1.
 
 ## Contexto
 
@@ -9,7 +9,7 @@ O ROADMAP pede, no F4.1, os arquivos TMYx e INMET com mapa e busca, o aviso de d
 
 A pesquisa dos termos (`docs/dados/termos-de-redistribuicao.md`) achou: TMYx do Climate.OneBuilding.org sem licença ("All Rights Reserved"), com base ISD que a NOAA diz não poder ser redistribuída fora dos EUA e com dados da ASHRAE embutidos; EPW do INMET (LabEEE) sem termos e marcados pelo próprio LabEEE como "not recommended"; BrazFuture em CC BY 4.0 (a versão a conferir); Natural Earth em domínio público. Os servidores do OneBuilding não têm CORS: o navegador não pode baixar o arquivo para dentro da aplicação.
 
-## Decisão (proposta)
+## Decisão
 
 1. **TMYx 2011-2025 das 579 estações do Brasil, sem redistribuir os arquivos.** O catálogo traz metadados (estação, UF, coordenadas, altitude e fuso do cabeçalho do EPW, período e anos de dados, fonte), os indicadores de qualidade calculados por nós e o link para o zip oficial. O usuário baixa e carrega no passo 1, como já fazia com as 15 cidades. Pedido de permissão e de CORS ao OneBuilding por e-mail (`docs/dados/rascunhos-de-email.md`); com permissão, os arquivos podem vir com a aplicação, numa revisão desta decisão.
 2. **INMET fora** até a resposta do Prof. Lamberts (pendência da decisão 0010), também porque o LabEEE não os recomenda.

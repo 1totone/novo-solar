@@ -1,13 +1,13 @@
 # 0033. Modo didático: tutorial guiado e exercício de máscara com métrica em ângulo sólido (F4.5)
 
 - Data: 2026-10-26
-- Status: proposta (F4.5 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 16 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.5, um tutorial guiado, um modo exercício ("o aluno desenha a máscara e a ferramenta compara com a calculada") e textos curtos de apoio em cada tela. A instrução da sessão pede a métrica do exercício documentada. A comparação entre a máscara desenhada e a calculada não tem métrica padrão na literatura de ensino de cartas solares; o SOL-AR 6.2 não tinha exercício.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Tutorial guiado** em 8 etapas pelo caminho básico, com o caso de Brasília do tutorial da UFU, para continuar nos exemplos resolvidos da ajuda (decisão 0032). Cartão no alto dos passos (`tutorial=<etapa>`), aberto pela ajuda numa nova aba; cada etapa realça o painel em que o aluno vai mexer, diz quando a ação foi feita e oferece "Fazer por mim". Os textos de cada etapa são os **textos curtos de apoio** do caminho básico; os passos avançados já têm a sua introdução na tela.
 2. **Exercícios de máscara**: 4 casos (brise infinito, brise com γ, aletas, grelha) dados pelos ângulos; o link do exercício traz o local e a fachada, sem os ângulos, e a carta mostra o transferidor sem a resposta. O aluno desenha com o desenho à mão que já existia (passo 3); "Conferir" compara e desenha a resposta hachurada sobre o desenho.

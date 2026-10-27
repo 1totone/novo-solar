@@ -3,7 +3,7 @@
 Para quem vai manter o programa no LabEEE/UFSC sem ter acompanhado o desenvolvimento. Diz onde está cada coisa, como rodar, testar e publicar, como atualizar dados e traduções, como refazer as validações e o que nunca pode ser quebrado.
 
 - Escrito em 26/10/2026, na branch de integração da Fase 4 (contém as Fases 0 a 4).
-- Estado do projeto naquela data: a `main` está na Fase 2 (passo F2.9, teste com usuários); as Fases 3 e 4 estão em branches de integração, à espera dos portões 2, 3 e 4. Várias decisões citadas aqui estão como "proposta" em `docs/decisoes/README.md`. O estado corrente fica sempre no "Você está aqui" de `docs/ROADMAP.md`, que prevalece sobre este guia.
+- Estado do projeto naquela data: a `main` está na Fase 2 (passo F2.9, teste com usuários); as Fases 3 e 4 estão em branches de integração, à espera dos portões 2, 3 e 4. As decisões 0018 a 0041 citadas aqui estão aceitas por delegação (pré-revisão do Claude, 27/10/2026), com validação por colegas pendente (`docs/decisoes/README.md`). O estado corrente fica sempre no "Você está aqui" de `docs/ROADMAP.md`, que prevalece sobre este guia.
 - Onde este guia disser "depende do Anthony ou do LabEEE", a informação não existe no repositório: não suponha, pergunte.
 
 ## 1. O que é o programa e onde está
@@ -152,7 +152,7 @@ O projeto foi conduzido assim (CLAUDE.md e ROADMAP, seção 4), e o fluxo contin
 
 1. Uma mudança por branch e por PR; nunca direto na `main`.
 2. Se a mudança toca física: primeiro o teste contra referência independente, depois o código (seção 9).
-3. CI verde e prévia conferida antes do merge (squash). Nunca integrar com o CI vermelho nem fazer force-push na `main`. Exceção (decisão 0041, proposta): os PRs de integração de fase e os que atualizam uma branch de integração com outra entram por merge commit, para não perder a ancestralidade entre as branches.
+3. CI verde e prévia conferida antes do merge (squash). Nunca integrar com o CI vermelho nem fazer force-push na `main`. Exceção (decisão 0041): os PRs de integração de fase e os que atualizam uma branch de integração com outra entram por merge commit, para não perder a ancestralidade entre as branches.
 4. No mesmo PR: `CHANGELOG.md` ("Não lançado"), spec ou ajuda, ROADMAP e, se houver decisão nova, uma nota em `docs/decisoes/`.
 
 ## 4. Atualizar o catálogo nacional (TMYx do Climate.OneBuilding.org)
@@ -358,7 +358,7 @@ Os scripts que leem EPW esperam os arquivos em `.cache/epw/` (rode `baixar_epw.p
    O script regrava os modelos e a referência e imprime o resumo. `energyplus_indicadores.py` e `energyplus_vento.py` usam a mesma variável `ENERGYPLUS_DIR`.
 4. `npm test` e comparar o resumo impresso com o relatório. O teste reproduz o sol do EnergyPlus 26.2.0 (`SUN3` e `SUN4`) e confere essa reprodução contra 24 passos de cossenos de saída gravados na referência; numa versão nova do EnergyPlus, refaça também essa conferência.
 
-**Critérios da decisão 0019 (proposta)**, na spec 07, seção 7.10. A diferença entre os programas tem duas fontes, e cada uma tem o seu critério:
+**Critérios da decisão 0019**, na spec 07, seção 7.10. A diferença entre os programas tem duas fontes, e cada uma tem o seu critério:
 
 1. **Geometria, com o mesmo sol** (o sol do EnergyPlus reproduzido no teste, conferido contra os cossenos de saída a 10⁻¹²): por passo, com cos θ ≥ 10⁻³, diferença ≤ 5 × 10⁻⁴ e percentil 99 ≤ 5 × 10⁻⁵; com cos θ < 10⁻³, diferença × cos θ ≤ 5 × 10⁻⁴; hora a hora no ano, ≤ 10⁻⁴ fora das horas com passo rasante, que não podem passar de 1% das horas; nenhum passo com fração positiva no EnergyPlus e sol fora da janela aqui.
 2. **Ponta a ponta, cada programa com o seu sol** (SPA na aplicação, `SUN3`/`SUN4` no EnergyPlus): sobre as horas com sol na janela, RMSE ≤ 0,03, viés ≤ 0,002 em módulo, e a mesma geometria com os dois sóis dá o mesmo RMSE (diferença ≤ 0,002).

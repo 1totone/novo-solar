@@ -1,13 +1,13 @@
 # 0028. Arquivo de projeto e link (F4.7)
 
 - Data: 2026-10-26
-- Status: proposta (F4.7 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 11 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.7, salvar e abrir um arquivo de projeto e um link que reabra o mesmo estado; a instrução da sessão pede JSON com versão de esquema, compatível com os links atuais. O estado da análise já vive no `#` da URL (decisão 0004), mas o link não leva o arquivo climático carregado pelo usuário (só fica na memória do navegador) nem as opções de impressão; e, com a aplicação instalada (F4.6), não há barra de endereço para copiar o link.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Projeto em JSON com esquema versionado** (`format: "sol-ar-project"`, `schema: 1`), com o estado do link (`state`, as mesmas chaves e os mesmos textos do `#`), as opções de impressão e o texto dos arquivos climáticos carregados que o estado usa (o da configuração atual e o da A da comparação, sem repetir quando é o mesmo). Spec 11.
 2. **O link continua sendo o estado da análise**; o projeto é o link mais o que não cabe nele (arquivos climáticos e opções de impressão). Abrir um projeto troca o `#` inteiro pelo do projeto.

@@ -1,13 +1,13 @@
 # 0031. Instalável e funcionando sem internet (F4.6)
 
 - Data: 2026-10-26
-- Status: proposta (F4.6 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 14 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.6, a aplicação instalável e funcionando sem internet; a instrução da sessão acrescenta "sem requisições externas, build portátil". A aplicação já é estática e não faz requisições externas (os arquivos climáticos recentes são links para o usuário baixar). Faltava guardar a aplicação no navegador, com o build relativo (`base: './'`) servido em qualquer pasta, inclusive nas prévias dos PRs (`pr/<número>/`).
 
-## Decisão (proposta)
+## Decisão
 
 1. **Manifesto** (`public/manifest.webmanifest`) com `start_url` e `scope` relativos (`./`), exibição `standalone`, cor do tema e ícones de 192 e 512 px, um mascarável e o SVG; ícones gerados do `favicon.svg` por `scripts/pwa/icones.mjs`.
 2. **Service worker gerado no build** (`scripts/pwa/plugin.ts` sobre `scripts/pwa/sw-template.js`), sem dependência nova: a lista dos arquivos do build e a versão (do `package.json` e do commit) entram no `sw.js`.

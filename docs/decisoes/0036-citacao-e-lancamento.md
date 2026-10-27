@@ -1,13 +1,13 @@
 # 0036. Citação, DOI e canal de retorno; sem contagem de uso na v1.0 (preparação do F4.10)
 
 - Data: 2026-10-26
-- Status: proposta (preparação do F4.10 na integração da Fase 4; endereço, DOI, página no LabEEE e canal de retorno dependem do Anthony e do LabEEE)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 19 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Endereço, DOI, página no LabEEE e canal de retorno dependem do Anthony e do LabEEE.
 
 ## Contexto
 
 O F4.10 pede o endereço definitivo, a página no LabEEE, um canal de retorno dos usuários, o DOI pelo Zenodo para citação acadêmica e a decisão sobre a contagem anônima de uso. A instrução da sessão: só preparar (CITATION.cff e metadados do Zenodo), porque o DOI e o endereço dependem do Anthony e do LabEEE. O roteiro completo está em `docs/lancamento/roteiro-f4.10.md`.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Citação:** `CITATION.cff` (formato 1.2.0) na raiz, com o autor da nova versão, a licença MIT, o endereço do repositório e, nas referências, o Analysis SOL-AR 6.2 com Roberto Lamberts, Alexandra Albuquerque Maciel e Edson T. Ono (LabEEE/UFSC). A versão acompanha a do `package.json` a cada release (teste em `tests/metadados.test.ts`).
 2. **DOI:** pela integração do Zenodo com o GitHub, a partir das releases que o workflow `release.yml` já cria (decisão 0012); metadados em `.zenodo.json`, com os créditos da versão original na descrição, os três autores originais como colaboradores ("RelatedPerson") e a relação "nova versão de" com a página do SOL-AR 6.2. Para citar o programa, o DOI do conceito (todas as versões).

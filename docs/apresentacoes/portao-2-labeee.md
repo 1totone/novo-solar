@@ -114,6 +114,7 @@ O build já é portátil (caminhos relativos, estado no `#` do endereço): funci
 4. **Endereço:** o subdomínio da seção 8 (pedido à TI da UFSC).
 5. **Manutenção:** se e quando o repositório passa para uma organização do LabEEE no GitHub (o projeto foi montado para isso).
 6. **Arquivos climáticos futuros** (LabEEE e INPE), para a comparação de climas da Fase 4.
+7. **Exportação para o EnergyPlus na v1.0?** A proposta é deixar as saídas para EnergyPlus, INI-C e NBR 15220-3 na v2.0 (decisão 0037). A exportação para o EnergyPlus (F5.2) é a de menor custo, porque o arranjo da verificação contra o EnergyPlus (F3.8) já gera e roda os modelos; trazê-la para a v1.0 atrasa o lançamento o tempo desse passo.
 
 ## 10. Roteiro sugerido para a demonstração (15 a 20 min)
 

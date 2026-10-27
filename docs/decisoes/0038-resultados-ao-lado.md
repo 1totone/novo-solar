@@ -1,13 +1,13 @@
 # 0038. Resultados ao lado da carta no computador
 
 - Data: 2026-10-26
-- Status: proposta (na integração da Fase 3; a confirmar com o Anthony no portão 3, com a decisão 0023)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 22 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3.
 
 ## Contexto
 
 Na inspeção visual da prévia da Fase 4 (computador de 1366 × 900), o conteúdo pesado dos passos avançados ficava espremido na coluna dos passos, de cerca de 290 px: o mapa mês × hora do passo 6, a classificação das horas, os indicadores e a tabela das alternativas do passo 7 (e, na Fase 4, o mapa do catálogo, com 579 estações). Enquanto isso, o painel da direita, com cerca de 650 px, mostrava só a carta, com uma área em branco abaixo dela. A decisão 0023 pedia os passos 1 a 5 sem mudança.
 
-## Decisão (proposta)
+## Decisão
 
 1. **No computador** (página em duas colunas, a partir de 52rem de largura) e **com a aba "Carta solar"**, os resultados pesados de um passo avançado aberto vão para o painel da direita, **abaixo da carta**, na ordem dos passos, cada um com o cabeçalho "Do passo N, nome do passo":
    - passo 6: "Sombra ao longo do ano" (mapa mês × hora, legenda, hipóteses, tabela e exportações);
