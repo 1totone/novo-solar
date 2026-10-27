@@ -16,6 +16,7 @@ import { fileSite, readClimateFile, type LoadedFile } from './data/climateFile';
 import type { HistoricalState } from './data/historical';
 import { LocationForm } from './data/LocationForm';
 import { decodeText } from './data/readText';
+import { epwFromZip, looksLikeZip, ZipFileError } from './data/zipFile';
 import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import { RestoreStepFocus } from './layout/AdvancedStepStub';
@@ -198,27 +199,39 @@ export function SitePanel({
     setPending(null);
     let format: 'epw' | 'csv' = 'epw';
     try {
-      const text = decodeText(await file.arrayBuffer());
-      if (/^\uFEFF?\s*LOCATION/i.test(text) || /\.epw$/i.test(file.name)) {
-        openFile(file.name, 'epw', text);
+      let bytes: Uint8Array = new Uint8Array(await file.arrayBuffer());
+      let fileName = file.name;
+      // .zip do TMYx direto, sem descompactar (decisão 0048): vale o .epw de dentro.
+      if (looksLikeZip(bytes)) {
+        const inner = await epwFromZip(bytes);
+        bytes = inner.content;
+        fileName = inner.fileName;
+      }
+      const text = decodeText(bytes);
+      if (/^\uFEFF?\s*LOCATION/i.test(text) || /\.epw$/i.test(fileName)) {
+        openFile(fileName, 'epw', text);
         return;
       }
-      if (!/\.csv$/i.test(file.name)) {
+      if (!/\.csv$/i.test(fileName)) {
         setError(t('site.unknownFormat'));
         return;
       }
       format = 'csv';
       if (solar62Header(text)) {
-        openFile(file.name, 'csv', text);
+        openFile(fileName, 'csv', text);
         return;
       }
       // Sem cabeçalho: confere os dados antes de pedir o local (qualquer local válido serve).
       parseSolar62(text, { name: '', latitude: 0, longitude: 0, timeZone: 0, elevation: 0 });
       setError(null);
-      setPending({ fileName: file.name, text });
+      setPending({ fileName, text });
     } catch (err) {
       setError(
-        err instanceof EpwParseError ? epwErrorMessage(err, t, format) : t('site.readError'),
+        err instanceof ZipFileError
+          ? t(`site.zip.${err.problem}`)
+          : err instanceof EpwParseError
+            ? epwErrorMessage(err, t, format)
+            : t('site.readError'),
       );
     }
   };
@@ -513,7 +526,7 @@ export function SitePanel({
         )}
         <div className="field">
           <label htmlFor={fileId}>{t('site.fileLabel')}</label>
-          <input id={fileId} type="file" accept=".epw,.csv" onChange={onFileChange} />
+          <input id={fileId} type="file" accept=".epw,.zip,.csv" onChange={onFileChange} />
           <p className="note">{t('site.fileHelp')}</p>
         </div>
       </fieldset>

@@ -256,11 +256,11 @@ export const en: Catalog = {
   'site.cityLabel': 'City',
   'site.fileOption': 'File: {name}',
   'site.recentLink': 'Download recent data (TMYx 2011 to 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Unzip the downloaded file and load the .epw below.',
+  'site.recentHelp': 'Load the downloaded .zip below, without unzipping it.',
   'site.loadingHistorical': 'Opening the historical data…',
   'site.historicalError':
     'The historical data could not be opened. Check the connection and try again.',
-  'site.fileLabel': 'Or load a weather file (EPW or SOL-AR CSV)',
+  'site.fileLabel': 'Or load a weather file (EPW, TMYx .zip or SOL-AR CSV)',
   'site.fileHelp': 'The file is read only in your browser; nothing is sent over the internet.',
   'site.unknownFormat': 'Format not recognised: load an EPW file or a SOL-AR CSV (.csv extension).',
   'site.latitude': 'Latitude',
@@ -912,7 +912,7 @@ export const en: Catalog = {
   'station.sourceEra5':
     'Point {name} ({uf}), TMYx 2011 to 2025 file from Climate.OneBuilding.org built only from the ERA5 reanalysis; no hourly data open.',
   'station.download': 'Download the file of this station (Climate.OneBuilding.org)',
-  'station.downloadHelp': 'Unzip the downloaded file and load the .epw in the field above.',
+  'station.downloadHelp': 'Load the downloaded .zip in the field above, without unzipping it.',
   'station.period': '{start} to {end} ({years} years of data)',
   'station.quality': 'File quality',
   'station.q.missing': 'missing values: {count}',
@@ -1053,4 +1053,9 @@ export const en: Catalog = {
   'sources.comparing':
     'A: {source} Choose the data for B above; the difference B − A appears on the chart.',
   'sources.noData': 'No hourly data.',
+  // .zip directly (decision 0048).
+  'site.zip.noEpw': 'The .zip has no .epw file.',
+  'site.zip.manyEpw': 'The .zip has more than one .epw file: unzip it and load the one you want.',
+  'site.zip.corrupt':
+    'Could not open the .zip: the file seems incomplete or damaged. Download it again.',
 };
