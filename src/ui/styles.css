@@ -916,7 +916,666 @@ fieldset.plain .check {
   .print-protractor-only .sun-chart .sun-paths,
   .print-protractor-only .sun-chart .overlay,
   .print-protractor-only .sun-chart .mask,
+  .print-protractor-only .sun-chart .shading,
   .print-protractor-only .legend {
     display: none !important;
+  }
+}
+
+/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores provisórias até a
+   paleta da Fase 4, decisão 0023). Curva de 0% tracejada e de 100% grossa: o nível não depende só
+   da cor. */
+.sun-chart .contour {
+  fill: none;
+  stroke: #005f73;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .contour.level-0 {
+  stroke-dasharray: 6 3;
+}
+
+.sun-chart .contour.level-100 {
+  stroke-width: 2.5;
+}
+
+.sun-chart .contour-label {
+  font-size: 0.045px;
+  font-weight: 600;
+  fill: #005f73;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.sun-chart .full-shade {
+  fill: rgb(0 95 115 / 18%);
+}
+
+.sun-chart .hatch-full-shade {
+  fill: #005f73;
+}
+
+.sun-chart .hatch-point {
+  fill: #6f42c1;
+}
+
+/* Curvas da geometria anterior enquanto o worker calcula as novas. */
+.sun-chart .shading .stale {
+  opacity: 0.35;
+}
+
+.swatch.contour-line {
+  background: linear-gradient(#005f73, #005f73) center / 100% 2px no-repeat;
+}
+
+.swatch.full-shade {
+  background: rgb(0 95 115 / 18%);
+}
+
+.legend.hatched .swatch.full-shade {
+  background: repeating-linear-gradient(0deg, #005f73 0 2px, transparent 2px 6px);
+}
+
+.swatch.point-mask {
+  background: repeating-linear-gradient(90deg, #6f42c1 0 2px, transparent 2px 6px);
+}
+
+/* Curvas em cálculo no worker: aviso sobre o canto da carta, sem empurrar o que vem abaixo. */
+.chart-view {
+  position: relative;
+}
+
+.shading-pending {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  margin: 0;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  color: #3d444d;
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+@media print {
+  .shading-pending {
+    display: none;
+  }
+}
+
+/* F3.3: mapa mês × hora da sombra (1 unidade do SVG = 1 px). */
+.annual-map {
+  position: relative;
+  min-height: 2rem;
+  margin: 0.5rem 0;
+}
+
+.month-hour-map {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.month-hour-map.stale {
+  opacity: 0.35;
+}
+
+.annual-legend {
+  justify-content: flex-start;
+  margin: 0.25rem 0;
+}
+
+.swatch.no-sun {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+.annual-table .data-table td.no-sun {
+  background: repeating-linear-gradient(45deg, #d0d7de 0 1px, #fff 1px 4px);
+}
+
+.export-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+/* F3.4: hipóteses e partes das classes de hora (passo 7). */
+.hypotheses {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.hypotheses li + li {
+  margin-top: 0.3rem;
+}
+
+.class-results .field-label {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.class-bar {
+  display: block;
+  width: 100%;
+  height: 1.4rem;
+}
+
+.class-legend {
+  justify-content: flex-start;
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.85rem;
+}
+
+.swatch.class-cold {
+  background: #3872bc;
+}
+
+.swatch.class-neutral {
+  background: #e5e4e2;
+}
+
+.swatch.class-hot {
+  background: #b94643;
+}
+
+.swatch.class-none {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+/* F3.5: indicadores e alternativas (passo 7). */
+.indicator-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.indicator-tile {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.indicator-tile p {
+  margin: 0;
+}
+
+.tile-label,
+.tile-note {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.tile-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.btn.small {
+  min-height: 32px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.note.block {
+  display: block;
+  font-weight: 400;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.indicators .data-table th,
+.indicators .data-table td {
+  padding: 0.25rem 0.35rem;
+  font-size: 0.85rem;
+}
+
+.alternatives-table tr.current th {
+  text-decoration: underline;
+}
+
+.alternatives-plot {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU). */
+.sun-chart .period-area {
+  fill: rgb(45 164 78 / 22%);
+  stroke: #1a7f37;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-mark circle {
+  fill: #1b1f24;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-label {
+  font-size: 0.045px;
+  font-weight: 700;
+  fill: #1b1f24;
+  text-anchor: start;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.swatch.period-area {
+  background: rgb(45 164 78 / 22%);
+  border-color: #1a7f37;
+}
+
+.swatch.period-mark {
+  border-radius: 50%;
+  background: #1b1f24;
+}
+
+.sizing-fins {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+/* F3.7: vista 3D. */
+.view3d-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: flex-end;
+}
+
+.view3d-controls .field {
+  margin-bottom: 0.25rem;
+}
+
+.view3d-canvas {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.view3d-canvas canvas {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  touch-action: none;
+}
+
+.view3d-status {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Células da sobreposição em cálculo no web worker (achado 9). */
+.overlay-pending {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+/* Fase 3: passos avançados recolhidos (decisão 0023). */
+.steps-group {
+  margin: 0.25rem 0 -0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.advanced-step > details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.advanced-step > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-step > details > summary:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.advanced-step > details > summary h2 {
+  margin: 0;
+}
+
+.advanced-step > details > summary h2::after {
+  content: '▸';
+  margin-left: auto;
+  color: var(--color-accent);
+}
+
+.advanced-step > details[open] > summary h2::after {
+  content: '▾';
+}
+
+.advanced-step > details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+.step-badge {
+  padding: 0 0.45rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.step-summary {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+fieldset.piece {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+fieldset.piece legend {
+  padding: 0 0.25rem;
+  font-weight: 600;
+}
+
+.piece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: 0 0.6rem;
+}
+
+.piece-grid .field {
+  display: flex;
+  flex-direction: column;
+  /* Rótulos de uma e de duas linhas na mesma fileira: os campos ficam alinhados embaixo. */
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.piece-grid label {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.add-piece {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.add-piece select {
+  min-height: 44px;
+  font: inherit;
+}
+
+.geometry-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.geometry-drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.geometry-drawing path {
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-wall {
+  fill: #eaeef2;
+  stroke: #8c959f;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-glass {
+  fill: #ddf4ff;
+  stroke: #0969da;
+  stroke-width: 1.5;
+}
+
+.geometry-drawing .gd-glass.gd-edge {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.geometry-drawing .gd-piece {
+  fill: #1b1f24;
+  fill-opacity: 0.85;
+  stroke: #1b1f24;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-piece.gd-edge {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: square;
+}
+
+.geometry-drawing .gd-beyond {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1.25;
+  stroke-dasharray: 4 3;
+}
+
+.geometry-drawing .gd-angle path {
+  fill: none;
+  stroke: #6639ba;
+  stroke-width: 1.25;
+  stroke-dasharray: 6 4;
+}
+
+.geometry-drawing .gd-angle text {
+  fill: #6639ba;
+  font-weight: 600;
+}
+
+.geometry-drawing .gd-dim path {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1;
+}
+
+.geometry-drawing text {
+  fill: var(--color-text);
+  font-family: inherit;
+}
+
+.geometry-drawing .gd-title {
+  font-weight: 600;
+}
+
+/* Ponto da máscara de um ponto (F3.2), na cor da hachura do ponto na carta. */
+.geometry-drawing .gd-point circle,
+.geometry-drawing .gd-point path {
+  fill: none;
+  stroke: #6f42c1;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-pick {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.export-only,
+.print-geometry {
+  display: none;
+}
+
+/* Com um passo avançado aberto, a carta acompanha a rolagem no computador (decisão 0023). */
+@media (min-width: 52rem) {
+  .chart-section.follow {
+    position: sticky;
+    top: 0.5rem;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+}
+
+@media print {
+  .print-geometry {
+    display: block;
+    break-before: page;
+  }
+
+  .print-geometry .geometry-drawing {
+    border: 0;
+  }
+}
+
+/* Resultados ao lado (decisão 0038): no computador, os resultados pesados dos passos 6 e 7
+   ficam no painel da direita, abaixo da carta; no passo, uma linha leva até eles. */
+.side-results > div:not(:empty) {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.side-result-heading {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.side-result-heading:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.side-pointer {
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+@media print {
+  .side-results {
+    display: none;
+  }
+}
+
+/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. No computador, fixo no
+   alto da coluna dos passos; no celular, no pé da tela. */
+.step-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+.step-nav-title {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.step-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-nav-n {
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.step-nav-n[aria-current='step'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.step-nav-n:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 51.99rem) {
+  .step-nav {
+    order: 99;
+    top: auto;
+    bottom: 0;
+    justify-content: center;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .step-nav-title {
+    display: none;
+  }
+
+  .step-nav ol {
+    flex-wrap: nowrap;
+  }
+
+  .step-nav-n {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+}
+
+@media print {
+  .step-nav {
+    display: none;
+  }
+}
+
+/* Com a barra no pé da tela do celular, o que for rolado para a vista para acima dela. */
+@media (max-width: 51.99rem) {
+  html:has(.step-nav) {
+    scroll-padding-bottom: 3.5rem;
   }
 }

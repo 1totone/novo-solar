@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { EpwData } from '../../core/epw/parseEpw';
 import { maskRegions } from '../../core/mask/mask';
+import { buildScene } from '../../core/shading/geometry';
+import { pointMask } from '../../core/shading/pointMask';
 import { useI18n } from '../i18n/useI18n';
 import { DrawingLayer, type Drawing } from '../mask/DrawingLayer';
 import { MaskLayer } from '../mask/MaskLayer';
@@ -9,6 +11,13 @@ import { OverlayLayer, type CellView } from '../overlay/OverlayLayer';
 import { CellTable } from '../overlay/CellTable';
 import { DIGITS, useOverlay } from '../overlay/useOverlay';
 import { ProtractorOverlay } from '../protractor/ProtractorOverlay';
+import { ShadingLayer } from '../shading/ShadingLayer';
+import { PeriodArea, PeriodMarks } from '../sizing/PeriodLayer';
+import { useSizing } from '../sizing/sizingClient';
+import { sizingInput } from '../sizing/sizingInput';
+import { sizingFromHash } from '../state/sizingHash';
+import { useShadingChart } from '../shading/useShadingChart';
+import { geometryFromHash } from '../state/geometryHash';
 import type { HashState } from '../state/hashState';
 import { protractorFromHash } from '../state/protractorHash';
 import { siteFromHash } from '../state/siteHash';
@@ -45,6 +54,31 @@ export function ChartView({
   const formatLimit = (v: number) => formatNumber(v, Number.isInteger(v) ? 0 : 1);
   const hasNoData = showOverlay && ov.cells!.some((c) => !ov.stats!.has(`${c.period}-${c.hour}`));
 
+  // Proteção pelas dimensões (passo 6, F3.2): curvas no worker, máscara de um ponto aqui (é leve).
+  const geometry = geometryFromHash(hash);
+  const win = geometry.window;
+  const hasPlates = win !== null && (geometry.devices.length > 0 || (win.setback ?? 0) > 0);
+  const shading = useShadingChart(
+    hasPlates && geometry.contours ? { window: win, devices: geometry.devices, orientation } : null,
+  );
+  const point = hasPlates ? (geometry.point?.value ?? null) : null;
+  const pointKey = point ? JSON.stringify([win, geometry.devices, point, orientation]) : null;
+  const pointRegion = useMemo(
+    () => (point && win ? pointMask(buildScene(win, geometry.devices), point, orientation) : null),
+    // A chave representa a janela, as peças, o ponto e a orientação.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pointKey],
+  );
+  // Dimensionamento pelo período (F3.6): a área do período e o sol que determina cada ângulo.
+  const sizing = sizingFromHash(hash);
+  const sized = useSizing(
+    hash.dvc !== '0' ? sizingInput(site, orientation, geometry, sizing) : null,
+  ).result;
+  const shown = shading.chart ?? shading.stale;
+  const hasContours = Boolean(shown && shown.contours.length > 0);
+  const hasFull = Boolean(shown && shown.fullShade.length > 0);
+  const hasPoint = pointRegion !== null && pointRegion.kind !== 'empty';
+
   return (
     <div className="chart-view">
       <SunChart
@@ -71,6 +105,15 @@ export function ChartView({
         overlay={
           <>
             <MaskLayer regions={regions} hatched={showOverlay} />
+            {(shown || hasPoint) && (
+              <ShadingLayer
+                chart={shown}
+                stale={shading.pending}
+                point={hasPoint ? pointRegion : null}
+                hatched={showOverlay}
+              />
+            )}
+            {sized && sized.sunny > 0 && <PeriodArea outline={sized.outline} />}
             {protractor.show && (
               <ProtractorOverlay
                 orientation={orientation}
@@ -83,9 +126,12 @@ export function ChartView({
           </>
         }
         top={
-          drawing && onDrawingAdd ? (
-            <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />
-          ) : undefined
+          <>
+            {sized && sized.sunny > 0 && (
+              <PeriodMarks angles={sized.angles} showAlphaMax={sizing.gap > 0} />
+            )}
+            {drawing && onDrawingAdd && <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />}
+          </>
         }
       />
       {showOverlay && (
@@ -132,6 +178,68 @@ export function ChartView({
               {t('mask.partial')}
             </span>
           )}
+        </p>
+      )}
+      {(hasContours || hasPoint) && (
+        <p
+          className={`legend shading-legend${showOverlay ? ' hatched' : ''}`}
+          role="group"
+          aria-label={t('shading.legend')}
+          data-testid="shading-legend"
+        >
+          {hasContours && (
+            <span className="legend-item">
+              <span className="swatch contour-line" aria-hidden="true" />
+              {t('shading.legendContours')}
+            </span>
+          )}
+          {hasFull && (
+            <span className="legend-item">
+              <span className="swatch full-shade" aria-hidden="true" />
+              {t('shading.legendFull')}
+            </span>
+          )}
+          {hasPoint && point && (
+            <span className="legend-item">
+              <span className="swatch point-mask" aria-hidden="true" />
+              {t('shading.legendPoint', {
+                x: formatNumber(point.x, 2),
+                z: formatNumber(point.z, 2),
+              })}
+            </span>
+          )}
+        </p>
+      )}
+      {sized && sized.sunny > 0 && (
+        <p
+          className="legend period-legend"
+          role="group"
+          aria-label={t('sizing.heading')}
+          data-testid="period-legend"
+        >
+          <span className="legend-item">
+            <span className="swatch period-area" aria-hidden="true" />
+            {t('sizing.legend')}
+          </span>
+          <span className="legend-item">
+            <span className="swatch period-mark" aria-hidden="true" />
+            {t('sizing.legendPoints')}
+          </span>
+        </p>
+      )}
+      {shading.pending && (
+        <p className="shading-pending" role="status" data-testid="shading-pending">
+          {t('shading.pending')}
+        </p>
+      )}
+      {shading.failed && (
+        <p className="error" role="alert" data-testid="shading-failed">
+          {t('shading.failed')}
+        </p>
+      )}
+      {ov.pending && ov.quantity && (
+        <p className="overlay-pending" role="status" data-testid="overlay-pending">
+          {t('chart.overlayPending')}
         </p>
       )}
       {showOverlay && (

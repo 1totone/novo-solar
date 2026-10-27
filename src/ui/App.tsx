@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useMemo, useState, type CSSProperties } from 'react';
 import type { EpwData } from '../core/epw/parseEpw';
 import { OVERLAY_QUANTITIES } from '../core/overlay/overlay';
 import { windRose } from '../core/wind/windRose';
@@ -12,18 +12,36 @@ import { OutputsPanel } from './export/OutputsPanel';
 import { DEFAULT_PRINT, type PrintOptions } from './export/printOptions';
 import { useI18n } from './i18n/useI18n';
 import type { Drawing } from './mask/DrawingLayer';
+import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
+import { StepNav } from './layout/StepNav';
 import { DataPanel } from './overlay/DataPanel';
 import { useOverlay } from './overlay/useOverlay';
 import { SitePanel, type LoadedFile } from './SitePanel';
 import { timeZoneOffset } from './timeZoneOffset';
+import { GeometryDrawing } from './geometry/GeometryDrawing';
+import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
+import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { FacadePanel } from './protractor/FacadePanel';
 import { ProtectionPanel } from './protractor/ProtectionPanel';
+import { geometryFromHash } from './state/geometryHash';
 import { buildHash, parseHash, type HashState } from './state/hashState';
 import { protractorFromHash } from './state/protractorHash';
 import { hasHourlyData, hashForSite, siteFromHash } from './state/siteHash';
 import { useHashState } from './state/useHashState';
 import { windFromHash } from './state/windHash';
 import { WindPanel } from './wind/WindPanel';
+
+// Fora do caminho básico, carregados sob demanda (decisão 0039): os passos 6 e 7, só quando
+// abertos, e a aba da vista 3D, só quando escolhida.
+const GeometryPanel = lazy(() =>
+  import('./geometry/GeometryPanel').then((m) => ({ default: m.GeometryPanel })),
+);
+const EffectPanel = lazy(() =>
+  import('./effect/EffectPanel').then((m) => ({ default: m.EffectPanel })),
+);
+const View3DPanel = lazy(() =>
+  import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
+);
 
 const OLD_VERSION_URL = 'https://labeee.ufsc.br/downloads/softwares/analysis-sol-ar';
 const ROADMAP_URL = 'https://github.com/1totone/novo-solar/blob/main/docs/ROADMAP.md';
@@ -73,7 +91,30 @@ export function App() {
         ? historical.data
         : null;
   const ov = useOverlay(epw, hashState);
+  const geometry = geometryFromHash(hashState);
+  // Passo 6 aberto: no computador, a carta acompanha a rolagem (as curvas da Fase 3 ficam à vista).
+  const [geometryOpen, setGeometryOpen] = useState(() => geometry.defined);
+  // Passo 7 aberto: o link traz uma escolha da classificação das horas.
+  const [effectOpen, setEffectOpen] = useState(() =>
+    ['cm', 'ca', 'cr', 'cal', 'cn', 'cg', 'tf', 'tq', 'te', 'ct', 'alter1'].some(
+      (k) => hashState[k],
+    ),
+  );
+  const geometryScale = scaleFromHash(hashState.esc);
+  const geometryPrint = geometry.window
+    ? paperDrawing(geometry.window, geometry.devices, geometryScale)
+    : null;
   const wind = windFromHash(hashState);
+  // Resultados ao lado (decisão 0038): no computador, com a aba da carta, os resultados pesados
+  // dos passos 6 e 7 vão para o painel da direita, abaixo da carta.
+  const wide = useWideLayout();
+  const sideOn = wide && wind.tab === 'chart';
+  const [annualSlot, setAnnualSlot] = useState<HTMLElement | null>(null);
+  const [effectSlot, setEffectSlot] = useState<HTMLElement | null>(null);
+  const sideSlots = useMemo(
+    () => (sideOn ? { annual: annualSlot, effect: effectSlot } : {}),
+    [sideOn, annualSlot, effectSlot],
+  );
   const sourceUrl = city?.sourceUrl;
   const rose = useMemo(
     () =>
@@ -225,6 +266,7 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
+    (geometryOpen || effectOpen) && wind.tab === 'chart' && !hashA ? 'follow' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -238,10 +280,51 @@ export function App() {
     source = t('print.sourceCity', { station: city.station });
   } else source = '';
 
+  // Passos 6 e 7 recolhidos: só o cabeçalho, sem carregar o código do passo (decisão 0039).
+  const piecesText =
+    geometry.devices.length > 0
+      ? t('geometry.piecesCount', { count: geometry.devices.length })
+      : t('geometry.noPieces');
+  const geometryStub = (
+    <AdvancedStepStub
+      n={6}
+      heading={t('geometry.heading')}
+      summary={
+        geometry.window
+          ? t('geometry.summaryDefined', {
+              width: formatNumber(geometry.window.width, 2),
+              height: formatNumber(geometry.window.height, 2),
+              pieces: piecesText,
+            })
+          : t('geometry.summary')
+      }
+      testId="geometry-panel"
+      summaryTestId="geometry-summary"
+      open={geometryOpen}
+      onOpenChange={setGeometryOpen}
+    />
+  );
+  const effectStub = (
+    <AdvancedStepStub
+      n={7}
+      heading={t('effect.heading')}
+      summary={t('effect.summary')}
+      testId="effect-panel"
+      open={effectOpen}
+      onOpenChange={setEffectOpen}
+    />
+  );
+
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
         <WindPanel epw={epw} wind={wind} sourceUrl={sourceUrl} onChange={setHashState} />
+      </div>
+    ) : wind.tab === '3d' ? (
+      <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
+        <Suspense fallback={<p className="note">{t('view3d.loading')}</p>}>
+          <View3DPanel hash={hashState} onChange={setHashState} />
+        </Suspense>
       </div>
     ) : (
       <div role="tabpanel" id="panel-chart" aria-labelledby="tab-chart">
@@ -266,103 +349,174 @@ export function App() {
       </header>
 
       <main>
-        <div className="workspace">
-          <div className="steps">
-            <SitePanel
-              selected={selected}
-              loadedFile={selected.kind === 'file' ? loadedFile : null}
-              historical={historical}
-              onSelect={(next, file) => {
-                setLoadedFile(file);
-                setHashState(hashForSite(next));
-              }}
-            />
-            <FacadePanel
-              state={protractor}
-              rawOrientation={hashState.o ?? ''}
-              onChange={setHashState}
-            />
-            <ProtectionPanel
-              state={protractor}
-              hash={hashState}
-              onChange={setHashState}
-              drawing={drawing}
-              onDrawingChange={setDrawing}
-            />
-            <DataPanel
-              overlay={ov.overlay}
-              hasData={epw !== null}
-              sourceUrl={sourceUrl}
-              limits={ov.quantityLimits}
-              timeZone={site.timeZone}
-              onChange={setHashState}
-            />
-            <OutputsPanel
-              print={print}
-              onPrintChange={setPrint}
-              onPrint={() => window.print()}
-              onExport={onExport}
-              csvAvailable={csvAvailable}
-              comparing={hashA !== null}
-              onCompare={onCompare}
-            />
-          </div>
-          <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
-            <h2 id="chart-heading" className="visually-hidden">
-              {t('tabs.label')}
-            </h2>
-            <div className="print-header">
-              <p className="print-title">{t('print.title', { place: site.name })}</p>
-              <p className="print-details">
-                {t('print.details', {
-                  latitude: formatNumber(site.latitude, 3),
-                  longitude: formatNumber(site.longitude, 3),
-                  timeZone: timeZoneOffset(site.timeZone, formatNumber),
-                  source,
-                  date: new Date().toLocaleDateString('pt-BR'),
-                  radius: fmt(print.radiusCm),
-                })}
-              </p>
+        <SideResultsProvider value={sideSlots}>
+          <div className="workspace">
+            <div className="steps">
+              {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
+              {(geometryOpen || effectOpen) && <StepNav />}
+              <SitePanel
+                selected={selected}
+                loadedFile={selected.kind === 'file' ? loadedFile : null}
+                historical={historical}
+                onSelect={(next, file) => {
+                  setLoadedFile(file);
+                  setHashState(hashForSite(next));
+                }}
+              />
+              <FacadePanel
+                state={protractor}
+                rawOrientation={hashState.o ?? ''}
+                onChange={setHashState}
+              />
+              <ProtectionPanel
+                state={protractor}
+                hash={hashState}
+                onChange={setHashState}
+                drawing={drawing}
+                onDrawingChange={setDrawing}
+              />
+              <DataPanel
+                overlay={ov.overlay}
+                hasData={epw !== null}
+                sourceUrl={sourceUrl}
+                limits={ov.quantityLimits}
+                timeZone={site.timeZone}
+                onChange={setHashState}
+              />
+              <OutputsPanel
+                print={print}
+                onPrintChange={setPrint}
+                onPrint={() => window.print()}
+                onExport={onExport}
+                csvAvailable={csvAvailable}
+                comparing={hashA !== null}
+                onCompare={onCompare}
+                geometryAvailable={geometry.window !== null}
+              />
+              <p className="steps-group">{t('advanced.group')}</p>
+              {geometryOpen ? (
+                <Suspense fallback={geometryStub}>
+                  <GeometryPanel
+                    geometry={geometry}
+                    hash={hashState}
+                    scale={geometryScale}
+                    site={site}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={geometryOpen}
+                    onOpenChange={setGeometryOpen}
+                  />
+                  <RestoreStepFocus testId="geometry-panel" />
+                </Suspense>
+              ) : (
+                geometryStub
+              )}
+              {effectOpen ? (
+                <Suspense fallback={effectStub}>
+                  <EffectPanel
+                    epw={epw}
+                    hash={hashState}
+                    geometry={geometry}
+                    orientation={protractor.orientation}
+                    onChange={setHashState}
+                    open={effectOpen}
+                    onOpenChange={setEffectOpen}
+                  />
+                  <RestoreStepFocus testId="effect-panel" />
+                </Suspense>
+              ) : (
+                effectStub
+              )}
             </div>
-            <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
-              {(['chart', 'rose'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  role="tab"
-                  id={`tab-${tab}`}
-                  aria-selected={wind.tab === tab}
-                  aria-controls={`panel-${tab}`}
-                  onClick={() => setHashState({ aba: tab === 'rose' ? 'rosa' : '' })}
-                >
-                  {t(tab === 'chart' ? 'tabs.chart' : 'tabs.rose')}
-                </button>
-              ))}
-            </div>
-            {hashA ? (
-              <div className="compare" data-testid="compare-view">
-                <div className="compare-col" data-testid="compare-a">
-                  <h3 className="compare-label">
-                    {t('compare.a')}: {describeConfig(hashA, fmt, words)}
-                  </h3>
-                  {wind.tab === 'rose' ? (
-                    <WindPanel epw={epwA} wind={windFromHash(hashA)} onChange={() => {}} readOnly />
-                  ) : (
-                    <ChartView hash={hashA} epw={epwA} />
-                  )}
-                </div>
-                <div className="compare-col" data-testid="compare-b">
-                  <h3 className="compare-label">
-                    {t('compare.b')}: {describeConfig(hashState, fmt, words)}
-                  </h3>
-                  {live}
-                </div>
+            <section className={sectionClass} style={printStyle} aria-labelledby="chart-heading">
+              <h2 id="chart-heading" className="visually-hidden">
+                {t('tabs.label')}
+              </h2>
+              <div className="print-header">
+                <p className="print-title">{t('print.title', { place: site.name })}</p>
+                <p className="print-details">
+                  {t('print.details', {
+                    latitude: formatNumber(site.latitude, 3),
+                    longitude: formatNumber(site.longitude, 3),
+                    timeZone: timeZoneOffset(site.timeZone, formatNumber),
+                    source,
+                    date: new Date().toLocaleDateString('pt-BR'),
+                    radius: fmt(print.radiusCm),
+                  })}
+                </p>
               </div>
-            ) : (
-              live
-            )}
-          </section>
-        </div>
+              <div className="tabs" role="tablist" aria-label={t('tabs.label')}>
+                {(['chart', '3d', 'rose'] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    role="tab"
+                    id={`tab-${tab}`}
+                    aria-selected={wind.tab === tab}
+                    aria-controls={`panel-${tab}`}
+                    onClick={() =>
+                      setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
+                    }
+                  >
+                    {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
+                  </button>
+                ))}
+              </div>
+              {hashA ? (
+                <div className="compare" data-testid="compare-view">
+                  <div className="compare-col" data-testid="compare-a">
+                    <h3 className="compare-label">
+                      {t('compare.a')}: {describeConfig(hashA, fmt, words)}
+                    </h3>
+                    {wind.tab === 'rose' ? (
+                      <WindPanel
+                        epw={epwA}
+                        wind={windFromHash(hashA)}
+                        onChange={() => {}}
+                        readOnly
+                      />
+                    ) : (
+                      <ChartView hash={hashA} epw={epwA} />
+                    )}
+                  </div>
+                  <div className="compare-col" data-testid="compare-b">
+                    <h3 className="compare-label">
+                      {t('compare.b')}: {describeConfig(hashState, fmt, words)}
+                    </h3>
+                    {live}
+                  </div>
+                </div>
+              ) : (
+                live
+              )}
+              {sideOn && (
+                <div className="side-results" data-testid="side-results">
+                  <div ref={setAnnualSlot} />
+                  <div ref={setEffectSlot} />
+                </div>
+              )}
+              {geometry.window && geometryPrint && print.geometry && (
+                <div className="print-geometry" data-testid="print-geometry">
+                  <p className="print-title">
+                    {t('geometry.printTitle', { scale: geometryScale })}
+                  </p>
+                  <GeometryDrawing
+                    window={geometry.window}
+                    devices={geometry.devices}
+                    title={t('geometry.printTitle', { scale: geometryScale })}
+                    font={geometryPrint.font}
+                    size={{
+                      width: `${geometryPrint.width.toFixed(2)}cm`,
+                      height: `${geometryPrint.height.toFixed(2)}cm`,
+                    }}
+                    testId="print-geometry-drawing"
+                    point={geometry.point?.value ?? null}
+                  />
+                </div>
+              )}
+            </section>
+          </div>
+        </SideResultsProvider>
 
         <section className="status" aria-labelledby="status-title">
           <h2 id="status-title">{t('status.title')}</h2>
@@ -376,6 +530,9 @@ export function App() {
             </li>
             <li>
               <a href="./wireframes/">{t('status.wireframesLink')}</a>
+            </li>
+            <li>
+              <a href="./wireframes/fase-3.html">{t('status.wireframes3Link')}</a>
             </li>
           </ul>
         </section>

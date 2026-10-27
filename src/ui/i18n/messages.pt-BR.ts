@@ -1,5 +1,7 @@
 // Textos da interface em português do Brasil (idioma de referência).
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
+import { fase3PtBR } from './messages.pt-BR.fase3';
+
 export const ptBR = {
   'app.name': 'SOL-AR',
   'app.tagline':
@@ -10,6 +12,7 @@ export const ptBR = {
   'status.oldVersionLink': 'SOL-AR 6.2 no site do LabEEE',
   'status.roadmapLink': 'Acompanhe o desenvolvimento',
   'status.wireframesLink': 'Esboço das próximas telas (wireframes da Fase 2)',
+  'status.wireframes3Link': 'Proposta das telas da Fase 3 (wireframes da Fase 3)',
   'about.toggleOpen': 'Sobre',
   'about.toggleClose': 'Fechar "Sobre"',
   'about.title': 'Sobre',
@@ -23,6 +26,7 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'chart.overlayPending': 'Calculando as células da carta…',
   'chart.north': 'N',
   'chart.east': 'L',
   'chart.south': 'S',
@@ -332,4 +336,5 @@ export const ptBR = {
   'epw.field.windDirection': 'direção do vento',
   'epw.field.windSpeed': 'velocidade do vento',
   'epw.field.totalSkyCover': 'cobertura do céu',
+  ...fase3PtBR,
 } as const;

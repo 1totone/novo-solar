@@ -80,4 +80,19 @@ test.describe('página inicial', () => {
     await expect(page.getByRole('heading', { name: '0. Fluxo básico' })).toBeHidden();
     expect(errors).toEqual([]);
   });
+
+  test('wireframes da Fase 3 abrem a partir da página e navegam entre telas', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('./');
+    await page.getByRole('link', { name: /wireframes da Fase 3/ }).click();
+    await expect(page).toHaveTitle(/wireframes da Fase 3/);
+    await expect(page.getByRole('heading', { name: /0\. Fluxo/ })).toBeVisible();
+    await page.getByRole('link', { name: '4. Sombra ao longo do ano' }).click();
+    await expect(page.getByRole('heading', { name: /mapa mês × hora/ })).toBeVisible();
+    // O mapa traz as 12 × 24 células do exemplo calculado pelo núcleo.
+    await expect(page.locator('.heat span[title]')).toHaveCount(12 * 24);
+    await expect(page.getByRole('heading', { name: /0\. Fluxo/ })).toBeHidden();
+    expect(errors).toEqual([]);
+  });
 });

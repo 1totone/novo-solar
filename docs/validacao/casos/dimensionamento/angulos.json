@@ -1,0 +1,417 @@
+{
+ "gerado_por": "docs/validacao/scripts/dimensionamento_inverso.py",
+ "casos": [
+  {
+   "id": "tutorial-ufu-ano-todo",
+   "local": {
+    "latitude": -15.863,
+    "longitude": -47.913,
+    "elevation": 1060.4,
+    "timeZone": -3.0
+   },
+   "orientacao": 30.0,
+   "periodo": {
+    "start": [
+     1,
+     1
+    ],
+    "end": [
+     12,
+     31
+    ],
+    "startHour": 9,
+    "endHour": 15,
+    "timeBase": "solar"
+   },
+   "passo_min": 5,
+   "angulos": {
+    "amostras": 26645,
+    "com_sol_na_janela": 19713,
+    "alfa_min": {
+     "externo": 32.48493622306119,
+     "mes": 6,
+     "dia": 21,
+     "hora": 9.0
+    },
+    "alfa_max": {
+     "externo": 89.99907045223301,
+     "mes": 9,
+     "dia": 10,
+     "hora": 14.166666666666668
+    },
+    "gama_direita_min": {
+     "externo": 47.79600732812845,
+     "mes": 12,
+     "dia": 21,
+     "hora": 9.0
+    },
+    "gama_esquerda_min": {
+     "externo": 31.472689603408345,
+     "mes": 6,
+     "dia": 21,
+     "hora": 15.0
+    },
+    "beta_direita_min": {
+     "externo": 0.005050604097903033,
+     "mes": 5,
+     "dia": 26,
+     "hora": 10.583333333333334
+    },
+    "beta_esquerda_min": {
+     "externo": 5.821295036412266e-05,
+     "mes": 3,
+     "dia": 19,
+     "hora": 11.416666666666666
+    },
+    "gama_aleta_direita_max": {
+     "externo": 89.99536920950966,
+     "mes": 5,
+     "dia": 26,
+     "hora": 10.583333333333334
+    },
+    "gama_aleta_esquerda_max": {
+     "externo": 89.99998140514704,
+     "mes": 3,
+     "dia": 19,
+     "hora": 11.416666666666666
+    }
+   },
+   "dif_contra_1_min": {
+    "alfa_min": 0.0,
+    "alfa_max": 0.0001,
+    "gama_direita_min": 0.0,
+    "gama_esquerda_min": 0.0,
+    "beta_direita_min": 0.0,
+    "beta_esquerda_min": 0.0,
+    "gama_aleta_direita_max": 0.0,
+    "gama_aleta_esquerda_max": 0.0
+   }
+  },
+  {
+   "id": "tutorial-ufu-inverno",
+   "local": {
+    "latitude": -15.863,
+    "longitude": -47.913,
+    "elevation": 1060.4,
+    "timeZone": -3.0
+   },
+   "orientacao": 30.0,
+   "periodo": {
+    "start": [
+     5,
+     21
+    ],
+    "end": [
+     7,
+     21
+    ],
+    "startHour": 9,
+    "endHour": 15,
+    "timeBase": "solar"
+   },
+   "passo_min": 5,
+   "angulos": {
+    "amostras": 4526,
+    "com_sol_na_janela": 4526,
+    "alfa_min": {
+     "externo": 32.48493622306119,
+     "mes": 6,
+     "dia": 21,
+     "hora": 9.0
+    },
+    "alfa_max": {
+     "externo": 78.10815978288113,
+     "mes": 5,
+     "dia": 21,
+     "hora": 15.0
+    },
+    "gama_direita_min": {
+     "externo": 59.71306415801708,
+     "mes": 5,
+     "dia": 21,
+     "hora": 9.0
+    },
+    "gama_esquerda_min": {
+     "externo": 31.472689603408345,
+     "mes": 6,
+     "dia": 21,
+     "hora": 15.0
+    },
+    "beta_direita_min": {
+     "externo": 0.005050604097903033,
+     "mes": 5,
+     "dia": 26,
+     "hora": 10.583333333333334
+    },
+    "beta_esquerda_min": {
+     "externo": 0.0056038075805417975,
+     "mes": 6,
+     "dia": 11,
+     "hora": 10.5
+    },
+    "gama_aleta_direita_max": {
+     "externo": 89.99536920950966,
+     "mes": 5,
+     "dia": 26,
+     "hora": 10.583333333333334
+    },
+    "gama_aleta_esquerda_max": {
+     "externo": 89.9944432476942,
+     "mes": 6,
+     "dia": 11,
+     "hora": 10.5
+    }
+   },
+   "dif_contra_1_min": {
+    "alfa_min": 0.0,
+    "alfa_max": 0.0,
+    "gama_direita_min": 0.0,
+    "gama_esquerda_min": 0.0,
+    "beta_direita_min": 0.0,
+    "beta_esquerda_min": 0.0048,
+    "gama_aleta_direita_max": 0.0,
+    "gama_aleta_esquerda_max": 0.0048
+   }
+  },
+  {
+   "id": "florianopolis-norte-verao",
+   "local": {
+    "latitude": -27.67,
+    "longitude": -48.547,
+    "elevation": 6.1,
+    "timeZone": -3.0
+   },
+   "orientacao": 0.0,
+   "periodo": {
+    "start": [
+     10,
+     21
+    ],
+    "end": [
+     2,
+     21
+    ],
+    "startHour": 9,
+    "endHour": 15,
+    "timeBase": "solar"
+   },
+   "passo_min": 5,
+   "angulos": {
+    "amostras": 9052,
+    "com_sol_na_janela": 8363,
+    "alfa_min": {
+     "externo": 72.72970750581165,
+     "mes": 2,
+     "dia": 21,
+     "hora": 12.0
+    },
+    "alfa_max": {
+     "externo": 89.99491043969171,
+     "mes": 12,
+     "dia": 1,
+     "hora": 14.666666666666668
+    },
+    "gama_direita_min": {
+     "externo": 45.18909212844864,
+     "mes": 2,
+     "dia": 21,
+     "hora": 9.0
+    },
+    "gama_esquerda_min": {
+     "externo": 45.160051327106615,
+     "mes": 2,
+     "dia": 21,
+     "hora": 15.0
+    },
+    "beta_direita_min": {
+     "externo": 0.002790509904400551,
+     "mes": 2,
+     "dia": 21,
+     "hora": 12.0
+    },
+    "beta_esquerda_min": {
+     "externo": 4.132389641520831,
+     "mes": 2,
+     "dia": 21,
+     "hora": 12.083333333333334
+    },
+    "gama_aleta_direita_max": {
+     "externo": 89.99922709917765,
+     "mes": 12,
+     "dia": 22,
+     "hora": 12.0
+    },
+    "gama_aleta_esquerda_max": {
+     "externo": 88.85073862799896,
+     "mes": 12,
+     "dia": 21,
+     "hora": 12.083333333333334
+    }
+   },
+   "dif_contra_1_min": {
+    "alfa_min": 0.0002,
+    "alfa_max": 0.0043,
+    "gama_direita_min": 0.0,
+    "gama_esquerda_min": 0.0,
+    "beta_direita_min": 0.0,
+    "beta_esquerda_min": 3.3069,
+    "gama_aleta_direita_max": 0.0,
+    "gama_aleta_esquerda_max": 0.92
+   }
+  },
+  {
+   "id": "florianopolis-sul-manhas-de-verao",
+   "local": {
+    "latitude": -27.67,
+    "longitude": -48.547,
+    "elevation": 6.1,
+    "timeZone": -3.0
+   },
+   "orientacao": 180.0,
+   "periodo": {
+    "start": [
+     11,
+     21
+    ],
+    "end": [
+     1,
+     21
+    ],
+    "startHour": 6.5,
+    "endHour": 9,
+    "timeBase": "solar"
+   },
+   "passo_min": 5,
+   "angulos": {
+    "amostras": 1922,
+    "com_sol_na_janela": 1916,
+    "alfa_min": {
+     "externo": 44.421017327575406,
+     "mes": 12,
+     "dia": 21,
+     "hora": 6.5
+    },
+    "alfa_max": {
+     "externo": 89.94414912150559,
+     "mes": 11,
+     "dia": 21,
+     "hora": 8.916666666666666
+    },
+    "gama_direita_min": null,
+    "gama_esquerda_min": {
+     "externo": 15.943070148719645,
+     "mes": 1,
+     "dia": 21,
+     "hora": 6.5
+    },
+    "beta_direita_min": null,
+    "beta_esquerda_min": {
+     "externo": 71.93864407487251,
+     "mes": 12,
+     "dia": 21,
+     "hora": 6.5
+    },
+    "gama_aleta_direita_max": null,
+    "gama_aleta_esquerda_max": {
+     "externo": 49.48515622603738,
+     "mes": 12,
+     "dia": 21,
+     "hora": 9.0
+    }
+   },
+   "dif_contra_1_min": {
+    "alfa_min": 0.0,
+    "alfa_max": 0.0465,
+    "gama_esquerda_min": 0.0,
+    "beta_esquerda_min": 0.0,
+    "gama_aleta_esquerda_max": 0.0
+   }
+  },
+  {
+   "id": "manaus-oeste-tardes-legal",
+   "local": {
+    "latitude": -3.039,
+    "longitude": -60.05,
+    "elevation": 80.5,
+    "timeZone": -4.0
+   },
+   "orientacao": 270.0,
+   "periodo": {
+    "start": [
+     1,
+     1
+    ],
+    "end": [
+     12,
+     31
+    ],
+    "startHour": 14,
+    "endHour": 16,
+    "timeBase": "legal"
+   },
+   "passo_min": 5,
+   "angulos": {
+    "amostras": 9125,
+    "com_sol_na_janela": 9125,
+    "alfa_min": {
+     "externo": 26.599117725704225,
+     "mes": 10,
+     "dia": 29,
+     "hora": 16.0
+    },
+    "alfa_max": {
+     "externo": 63.90333783027496,
+     "mes": 2,
+     "dia": 8,
+     "hora": 14.0
+    },
+    "gama_direita_min": {
+     "externo": 46.33864353796748,
+     "mes": 6,
+     "dia": 16,
+     "hora": 16.0
+    },
+    "gama_esquerda_min": {
+     "externo": 51.22336555670801,
+     "mes": 12,
+     "dia": 11,
+     "hora": 16.0
+    },
+    "beta_direita_min": {
+     "externo": 0.002271532499605655,
+     "mes": 9,
+     "dia": 28,
+     "hora": 14.666666666666666
+    },
+    "beta_esquerda_min": {
+     "externo": 0.006925625590895379,
+     "mes": 3,
+     "dia": 15,
+     "hora": 15.583333333333334
+    },
+    "gama_aleta_direita_max": {
+     "externo": 89.99793500057575,
+     "mes": 9,
+     "dia": 28,
+     "hora": 14.666666666666666
+    },
+    "gama_aleta_esquerda_max": {
+     "externo": 89.99130397178442,
+     "mes": 3,
+     "dia": 15,
+     "hora": 15.583333333333334
+    }
+   },
+   "dif_contra_1_min": {
+    "alfa_min": 0.0,
+    "alfa_max": 0.0,
+    "gama_direita_min": 0.0,
+    "gama_esquerda_min": 0.0,
+    "beta_direita_min": 0.0016,
+    "beta_esquerda_min": 0.0,
+    "gama_aleta_direita_max": 0.0015,
+    "gama_aleta_esquerda_max": 0.0
+   }
+  }
+ ]
+}

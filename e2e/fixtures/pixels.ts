@@ -12,6 +12,11 @@ interface Image {
   data: Uint8Array;
 }
 
+/** PNG de uma captura de tela decodificado (largura, altura, canais e bytes). */
+export function decodeScreenshot(png: Buffer): Image {
+  return decodePng(png);
+}
+
 function decodePng(png: Buffer): Image {
   let pos = 8;
   let width = 0;
@@ -121,11 +126,12 @@ export async function maskTints(
 /**
  * Cor mediana (RGB) de um bloco de 7 × 7 px (CSS) em pontos de um SVG qualquer, dados em
  * coordenadas do próprio SVG (as do viewBox). Serve para conferir que um desenho aparece de fato,
- * e não só que o elemento existe.
+ * e não só que o elemento existe. `halfPx` muda o tamanho do bloco (1 dá 3 × 3 px, para linhas).
  */
 export async function svgColors(
   svg: Locator,
   points: { x: number; y: number }[],
+  halfPx = 3.5,
 ): Promise<[number, number, number][]> {
   await svg.scrollIntoViewIfNeeded();
   const box = await svg.boundingBox();
@@ -139,7 +145,7 @@ export async function svgColors(
   }, points);
   const img = decodePng(await svg.screenshot());
   const scale = img.width / box.width;
-  const half = Math.round(3.5 * scale);
+  const half = Math.round(halfPx * scale);
   return screen.map((p) => {
     const cx = Math.round((p.x - box.x) * scale);
     const cy = Math.round((p.y - box.y) * scale);
