@@ -90,9 +90,12 @@ test('toque: a leitura fica no ponto tocado; fora do céu, some', async ({ page 
   // A caixa fica acima do dedo.
   const b = (await page.getByTestId('chart-readout').boundingBox())!;
   expect(b.y + b.height).toBeLessThan(p.y);
-  // Tocar fora do horizonte tira a leitura.
-  const chart = (await page.getByTestId('sun-chart').boundingBox())!;
-  await page.touchscreen.tap(chart.x + 4, chart.y + 4);
+  // Tocar na carta fora do horizonte (canto de baixo, à esquerda) tira a leitura.
+  const corner = await page.getByTestId('sun-chart').evaluate((svg) => {
+    const q = new DOMPoint(-1.25, 1.25).matrixTransform((svg as SVGSVGElement).getScreenCTM()!);
+    return { x: q.x, y: q.y };
+  });
+  await page.touchscreen.tap(corner.x, corner.y);
   await expect(page.getByTestId('chart-readout')).toHaveCount(0);
 });
 

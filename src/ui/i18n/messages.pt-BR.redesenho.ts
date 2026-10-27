@@ -44,8 +44,7 @@ export const redesenhoPtBR = {
   // Leitura de um ponto da carta (decisão 0045).
   'readout.position': 'Altura {altitude}° · azimute {azimuth}° ({compass})',
   'readout.sun': 'O sol passa aqui às {time} (hora solar) em {dates}.',
-  'readout.sunEdge':
-    'Além da trajetória do solstício: a borda do sol passa aqui às {time} (hora solar) em {date}.',
+  'readout.sunEdge': 'No solstício, a borda do sol passa aqui às {time} (hora solar), em {date}.',
   'readout.never': 'O sol nunca passa por aqui.',
   'readout.legal': 'Hora legal: {times}.',
   'readout.legalAt': '{time} em {date}',

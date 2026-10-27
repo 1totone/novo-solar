@@ -1026,7 +1026,7 @@ export const es: Catalog = {
   'readout.position': 'Altura {altitude}° · azimut {azimuth}° ({compass})',
   'readout.sun': 'El sol pasa por aquí a las {time} (hora solar) el {dates}.',
   'readout.sunEdge':
-    'Más allá de la trayectoria del solsticio: el borde del sol pasa por aquí a las {time} (hora solar) el {date}.',
+    'En el solsticio, el borde del sol pasa por aquí a las {time} (hora solar), el {date}.',
   'readout.never': 'El sol nunca pasa por aquí.',
   'readout.legal': 'Hora oficial: {times}.',
   'readout.legalAt': '{time} el {date}',

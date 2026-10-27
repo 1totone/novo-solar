@@ -1014,7 +1014,7 @@ export const en: Catalog = {
   'readout.position': 'Altitude {altitude}° · azimuth {azimuth}° ({compass})',
   'readout.sun': 'The sun is here at {time} (solar time) on {dates}.',
   'readout.sunEdge':
-    'Beyond the solstice path: the edge of the sun is here at {time} (solar time) on {date}.',
+    'At the solstice, the edge of the sun is here at {time} (solar time), on {date}.',
   'readout.never': 'The sun is never here.',
   'readout.legal': 'Clock time: {times}.',
   'readout.legalAt': '{time} on {date}',

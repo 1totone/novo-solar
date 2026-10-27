@@ -157,7 +157,7 @@ export function readDirection(
   for (let day = 0; day < 365; day++) {
     const f0 = f[day]!;
     const f1 = f[day + 1]!;
-    if (f0 === 0 || (f0 < 0) !== (f1 < 0)) {
+    if (f0 === 0 || f0 < 0 !== f1 < 0) {
       if (f0 !== 0 && f1 === 0) continue; // a raiz cai no dia seguinte
       const nearest = Math.abs(f0) <= Math.abs(f1) ? day : day + 1;
       passages.push(passage(instants[nearest]!, site.timeZone));
