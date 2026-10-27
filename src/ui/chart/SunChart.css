@@ -109,3 +109,46 @@
   fill: none;
   vector-effect: non-scaling-stroke;
 }
+
+/* Leitura de um ponto (decisão 0045): a marca do ponto e a caixa ao lado dele, só na tela. */
+.chart-frame {
+  position: relative;
+}
+
+.sun-chart .readout-marker circle,
+.sun-chart .readout-marker line {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-readout {
+  position: absolute;
+  z-index: 1;
+  max-width: min(17rem, 70%);
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--color-text);
+  background: rgb(255 255 255 / 94%);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 12%);
+  pointer-events: none;
+}
+
+.chart-readout p {
+  margin: 0;
+}
+
+.chart-readout p:first-child {
+  font-weight: 600;
+}
+
+@media print {
+  .chart-readout,
+  .sun-chart .readout-marker {
+    display: none;
+  }
+}

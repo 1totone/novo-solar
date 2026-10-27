@@ -43,6 +43,8 @@ export function standaloneSvg(
     // O style original vem por último e prevalece (cores das máscaras, das células etc.).
     target[i]!.setAttribute('style', `${computed};${el.getAttribute('style') ?? ''}`);
   });
+  // O que só serve na tela (a marca da leitura de um ponto, decisão 0045) fica de fora.
+  for (const el of Array.from(clone.querySelectorAll('[data-export="no"]'))) el.remove();
   clone.setAttribute('xmlns', SVG_NS);
   if (size) {
     clone.setAttribute('width', typeof size === 'string' ? size : size.width);

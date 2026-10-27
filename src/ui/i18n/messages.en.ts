@@ -1010,4 +1010,14 @@ export const en: Catalog = {
     'north,north-northeast,northeast,east-northeast,east,east-southeast,southeast,south-southeast,south,south-southwest,southwest,west-southwest,west,west-northwest,northwest,north-northwest',
   'facade.compass': 'Or choose where the facade faces',
   'facade.compassButton': '{name} ({degrees}°)',
+  // Reading a point of the chart (decision 0045).
+  'readout.position': 'Altitude {altitude}° · azimuth {azimuth}° ({compass})',
+  'readout.sun': 'The sun is here at {time} (solar time) on {dates}.',
+  'readout.sunEdge':
+    'At the solstice, the edge of the sun is here at {time} (solar time), on {date}.',
+  'readout.never': 'The sun is never here.',
+  'readout.legal': 'Clock time: {times}.',
+  'readout.legalAt': '{time} on {date}',
+  'readout.hint':
+    'Move the mouse over the chart, or tap it, to read the altitude, the azimuth and when the sun passes through the point.',
 };

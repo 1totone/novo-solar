@@ -28,6 +28,7 @@ import { protractorFromHash } from '../state/protractorHash';
 import { siteFromHash } from '../state/siteHash';
 import { chartOptionsFromHash } from '../state/chartOptionsHash';
 import { SunChart } from './SunChart';
+import { useChartReadout } from './ChartReadout';
 import { timeZoneOffset } from '../timeZoneOffset';
 
 const RADIATION: ReadonlySet<OverlayQuantity> = new Set([
@@ -142,67 +143,73 @@ export function ChartView({
   const hasContours = Boolean(shown && shown.contours.length > 0);
   const hasFull = Boolean(shown && shown.fullShade.length > 0);
   const hasPoint = pointRegion !== null && pointRegion.kind !== 'empty';
+  // Leitura de um ponto da carta (decisão 0045): mouse ou toque.
+  const readout = useChartReadout(site, projection, options.hourLines);
 
   return (
     <div className="chart-view">
-      <SunChart
-        site={site}
-        projection={projection}
-        hourLines={options.hourLines}
-        title={t('chart.title', {
-          place: site.name,
-          latitude: formatNumber(site.latitude, 2),
-          longitude: formatNumber(site.longitude, 2),
-          // Hífen no fuso negativo, como antes (o título vai no SVG exportado).
-          timeZone: timeZoneOffset(site.timeZone, formatNumber, '-'),
-        })}
-        underlay={
-          showOverlay ? (
-            <OverlayLayer
-              cells={ov.cells!}
-              stats={stats!}
-              limits={limits!}
-              colors={colors}
-              mode={isDifference ? 'mean' : ov.overlay.mode}
-              onHover={setHovered}
-            />
-          ) : undefined
-        }
-        overlay={
-          <>
-            <MaskLayer regions={regions} hatched={showOverlay} />
-            {answer && (
-              <MaskLayer regions={{ total: answer, partial: EMPTY, partialSet: EMPTY }} answer />
-            )}
-            {(shown || hasPoint) && (
-              <ShadingLayer
-                chart={shown}
-                stale={shading.pending}
-                point={hasPoint ? pointRegion : null}
-                hatched={showOverlay}
+      <div className="chart-frame" {...readout.handlers}>
+        <SunChart
+          site={site}
+          projection={projection}
+          hourLines={options.hourLines}
+          title={t('chart.title', {
+            place: site.name,
+            latitude: formatNumber(site.latitude, 2),
+            longitude: formatNumber(site.longitude, 2),
+            // Hífen no fuso negativo, como antes (o título vai no SVG exportado).
+            timeZone: timeZoneOffset(site.timeZone, formatNumber, '-'),
+          })}
+          underlay={
+            showOverlay ? (
+              <OverlayLayer
+                cells={ov.cells!}
+                stats={stats!}
+                limits={limits!}
+                colors={colors}
+                mode={isDifference ? 'mean' : ov.overlay.mode}
+                onHover={setHovered}
               />
-            )}
-            {sized && sized.sunny > 0 && <PeriodArea outline={sized.outline} />}
-            {protractor.show && (
-              <ProtractorOverlay
-                orientation={orientation}
-                reference={reference}
-                angles={angles}
-                partial={partial}
-                sideLabels={{ right: 'd', left: 'e' }}
-              />
-            )}
-          </>
-        }
-        top={
-          <>
-            {sized && sized.sunny > 0 && (
-              <PeriodMarks angles={sized.angles} showAlphaMax={sizing.gap > 0} />
-            )}
-            {drawing && onDrawingAdd && <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />}
-          </>
-        }
-      />
+            ) : undefined
+          }
+          overlay={
+            <>
+              <MaskLayer regions={regions} hatched={showOverlay} />
+              {answer && (
+                <MaskLayer regions={{ total: answer, partial: EMPTY, partialSet: EMPTY }} answer />
+              )}
+              {(shown || hasPoint) && (
+                <ShadingLayer
+                  chart={shown}
+                  stale={shading.pending}
+                  point={hasPoint ? pointRegion : null}
+                  hatched={showOverlay}
+                />
+              )}
+              {sized && sized.sunny > 0 && <PeriodArea outline={sized.outline} />}
+              {protractor.show && (
+                <ProtractorOverlay
+                  orientation={orientation}
+                  reference={reference}
+                  angles={angles}
+                  partial={partial}
+                  sideLabels={{ right: 'd', left: 'e' }}
+                />
+              )}
+            </>
+          }
+          top={
+            <>
+              {sized && sized.sunny > 0 && (
+                <PeriodMarks angles={sized.angles} showAlphaMax={sizing.gap > 0} />
+              )}
+              {drawing && onDrawingAdd && <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />}
+              {readout.marker}
+            </>
+          }
+        />
+        {readout.box}
+      </div>
       {showOverlay && (
         <>
           <OverlayLegend
