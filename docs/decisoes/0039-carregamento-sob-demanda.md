@@ -1,7 +1,7 @@
 # 0039. Carregamento sob demanda e orçamento do JavaScript inicial
 
 - Data: 2026-10-26
-- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 23 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3, para os passos 6 e 7 e a vista 3D, e na da Fase 4, para o resto.
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 23 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3, para os passos 6 e 7 e a vista 3D, e na da Fase 4, para o resto. Item 1 alterado pela 0044 (acordeão): a aba da rosa dos ventos e o conteúdo dos passos 2 a 5 saem do bloco inicial; o conteúdo dos passos chega no tempo ocioso depois da carta.
 
 ## Contexto
 

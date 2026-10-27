@@ -1,7 +1,6 @@
 import { useId, useState, type ReactNode } from 'react';
 import { useI18n } from '../i18n/useI18n';
 import type { PrintOptions } from './printOptions';
-import { Step } from '../layout/Step';
 
 /** Passo 5: imprimir em escala, exportar e comparar (F2.6). */
 export function OutputsPanel({
@@ -14,8 +13,6 @@ export function OutputsPanel({
   onCompare,
   geometryAvailable = false,
   children,
-  open,
-  onOpenChange,
 }: {
   print: PrintOptions;
   onPrintChange: (next: PrintOptions) => void;
@@ -28,11 +25,8 @@ export function OutputsPanel({
   geometryAvailable?: boolean;
   /** Seção "Projeto" (F4.7), no fim do passo. */
   children?: ReactNode;
-  /** Passo aberto no acordeão (decisão 0044). */
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
 }) {
-  const { t, locale, formatNumber } = useI18n();
+  const { t } = useI18n();
   const id = useId();
   const [radiusText, setRadiusText] = useState(String(print.radiusCm).replace('.', ','));
   // O raio pode mudar por fora (projeto aberto, F4.7): o campo acompanha.
@@ -58,38 +52,9 @@ export function OutputsPanel({
     </label>
   );
   const run = async (kind: 'svg' | 'png' | 'csv' | 'copy') => setStatus(await onExport(kind));
-  // Resumo do passo fechado (decisão 0044): o raio e o que fica fora da folha.
-  const left = [
-    ...(print.protractor ? [] : [t('steps.outputs.protractor')]),
-    ...(print.mask ? [] : [t('steps.outputs.mask')]),
-    ...(print.data ? [] : [t('steps.outputs.data')]),
-    ...(print.legend ? [] : [t('steps.outputs.legend')]),
-  ];
-  const summary = [
-    t('steps.outputs.radius', {
-      radius: formatNumber(print.radiusCm, Number.isInteger(print.radiusCm) ? 0 : 1),
-    }),
-    print.protractorOnly
-      ? t('steps.outputs.protractorOnly')
-      : left.length === 0
-        ? t('steps.outputs.all')
-        : t('steps.outputs.without', {
-            items: new Intl.ListFormat(locale, { type: 'conjunction' }).format(left),
-          }),
-    ...(comparing ? [t('steps.outputs.comparing')] : []),
-  ].join(' · ');
 
   return (
-    <Step
-      n={5}
-      heading={t('outputs.heading')}
-      summary={summary}
-      summaryTestId="outputs-summary"
-      open={open}
-      onOpenChange={onOpenChange}
-      testId="outputs-panel"
-      dataStep="5"
-    >
+    <>
       <div className="field">
         <label htmlFor={`${id}-r`}>{t('outputs.radius')}</label>
         <input
@@ -168,6 +133,6 @@ export function OutputsPanel({
       </button>
       <p className="note">{t('outputs.compareHelp')}</p>
       {children}
-    </Step>
+    </>
   );
 }

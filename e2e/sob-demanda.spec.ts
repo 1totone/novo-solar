@@ -27,6 +27,35 @@ test('o caminho básico não baixa os passos avançados; abrir o passo 6 baixa s
   expect(scripts.some((s) => s.startsWith('EffectPanel-'))).toBe(false);
 });
 
+// Com o acordeão (decisão 0044), o conteúdo dos passos 2 a 5 sai do bloco inicial e chega no tempo
+// ocioso depois da carta: abrir o passo não espera.
+test('passos 2 a 5: fora do bloco inicial, chegam depois da carta; o foco fica no passo aberto', async ({
+  page,
+}) => {
+  const scripts: string[] = [];
+  page.on('request', (r) => {
+    if (r.resourceType() === 'script') scripts.push(new URL(r.url()).pathname.split('/').pop()!);
+  });
+  await page.goto('./#local=florianopolis&o=30&a1=55');
+  await expect(page.getByTestId('sun-chart')).toBeVisible();
+  const preloaded = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"]')].map((l) => l.href),
+  );
+  const steps = /(FacadePanel|ProtectionPanel|DataPanel|OutputsPanel|ProjectSection)-/;
+  expect(preloaded.filter((h) => steps.test(h))).toEqual([]);
+  await expect.poll(() => scripts.filter((s) => steps.test(s)).length, { timeout: 10_000 }).toBe(5);
+
+  // Os resumos estão lá desde o início; o conteúdo aparece ao abrir, com o foco no resumo.
+  await expect(page.getByTestId('facade-summary')).toHaveText('Fachada 30° (NNE)');
+  await expect(page.getByTestId('protection-summary')).toHaveText('Brise α 55°');
+  await page.getByTestId('facade-panel').locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('radio', { name: 'norte (0°)' })).toBeVisible();
+  await expect(page.getByTestId('facade-panel').locator('summary')).toBeFocused();
+  await page.getByTestId('next-step-3').click();
+  await expect(page.getByTestId('angle-a1')).toHaveValue('55');
+});
+
 test('um link com a janela abre o passo 6 já carregado, com o resumo da geometria', async ({
   page,
 }) => {

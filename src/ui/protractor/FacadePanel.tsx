@@ -1,7 +1,6 @@
 import { useId, useState } from 'react';
 import { onRovingKeyDown, rovingTabIndex } from '../a11y/roving';
 import { useI18n } from '../i18n/useI18n';
-import { NextStep, Step } from '../layout/Step';
 import { compassAzimuth } from '../state/orientation';
 import type { ProtractorState } from '../state/protractorHash';
 
@@ -51,17 +50,10 @@ export function FacadePanel({
   state,
   rawOrientation,
   onChange,
-  open,
-  onOpenChange,
-  onNext,
 }: {
   state: ProtractorState;
   rawOrientation: string;
   onChange: (patch: Record<string, string>) => void;
-  /** Passo aberto no acordeão (decisão 0044). */
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onNext: () => void;
 }) {
   const { t, formatNumber } = useI18n();
   const id = useId();
@@ -90,24 +82,9 @@ export function FacadePanel({
     setOrientation(rumo === null ? value : String(rumo));
   };
   const anyChecked = state.orientationValid && ROSE.some((r) => r.index * 22.5 === o);
-  const summary = state.orientationValid
-    ? [
-        t('steps.facade', { degrees, compass }),
-        ...(state.show ? [] : [t('steps.facade.noProtractor')]),
-      ].join(' · ')
-    : t('steps.facade.invalid');
 
   return (
-    <Step
-      n={2}
-      heading={t('facade.heading')}
-      summary={summary}
-      summaryTestId="facade-summary"
-      open={open}
-      onOpenChange={onOpenChange}
-      testId="facade-panel"
-      dataStep="2"
-    >
+    <>
       <div className="field">
         <label htmlFor={`${id}-o`}>{t('facade.orientation')}</label>
         <div className="orientation-row">
@@ -189,7 +166,6 @@ export function FacadePanel({
         />
         {t('facade.showProtractor')}
       </label>
-      <NextStep n={3} heading={t('protection.heading')} onClick={onNext} />
-    </Step>
+    </>
   );
 }
