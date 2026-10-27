@@ -1003,4 +1003,5 @@ export const en: Catalog = {
   'steps.outputs.legend': 'legend',
   'steps.outputs.protractorOnly': 'protractor only',
   'steps.outputs.comparing': 'comparison open',
+  'wind.loading': 'Opening the wind rose…',
 };

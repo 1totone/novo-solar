@@ -49,3 +49,4 @@ O teste com participantes ainda não foi aplicado, e a `main` está congelada at
 - Decisão 0042: o teste mede a ferramenta da integração da Fase 4, já redesenhada (item 2). Os resultados dos participantes respondem se o redesenho resolveu os problemas do piloto.
 - Testes de ponta a ponta: os que mexem nos passos 1 a 5 abrem o passo antes (`e2e/fixtures/steps.ts`); novos testes do acordeão (`e2e/acordeao.spec.ts`).
 - Os PRs dos itens b a j registram as próprias propostas em decisões seguintes, quando houver escolha sem base clara.
+- Orçamento do JavaScript inicial (decisão 0039): o redesenho acrescenta código ao caminho básico. Para continuar abaixo de 480 kB, a aba da rosa dos ventos passa a ser carregada só quando escolhida, como a da vista 3D (de 477,7 para 468,6 kB).

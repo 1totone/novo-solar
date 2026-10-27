@@ -15,7 +15,7 @@ test('o caminho básico não baixa os passos avançados; abrir o passo 6 baixa s
     'Janela, brise, aletas e lâminas em metros; corte, vista e sombra na carta.',
   );
   await page.waitForLoadState('networkidle');
-  const lazy = /^(GeometryPanel|EffectPanel|View3DPanel|scene3d)-/;
+  const lazy = /^(GeometryPanel|EffectPanel|View3DPanel|scene3d|WindPanel)-/;
   expect(scripts.filter((s) => lazy.test(s))).toEqual([]);
 
   // Abrir pelo teclado: o foco continua no resumo do passo depois de o código chegar.
@@ -113,4 +113,19 @@ test('o catálogo chega ao abrir, com o mapa ao lado da carta no computador', as
   } else {
     await expect(catalog.getByTestId('catalog-map')).toBeVisible();
   }
+});
+
+// A aba da rosa dos ventos também chega só quando escolhida (decisão 0044, espaço no orçamento).
+test('a rosa dos ventos é baixada só quando a aba abre', async ({ page }) => {
+  const scripts: string[] = [];
+  page.on('request', (r) => {
+    if (r.resourceType() === 'script') scripts.push(new URL(r.url()).pathname.split('/').pop()!);
+  });
+  await page.goto('./#local=florianopolis&hist=1');
+  await expect(page.getByTestId('sun-chart')).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  expect(scripts.some((s) => s.startsWith('WindPanel-'))).toBe(false);
+  await page.getByRole('tab', { name: 'Rosa dos ventos' }).click();
+  await expect(page.getByTestId('wind-rose')).toBeVisible();
+  expect(scripts.some((s) => s.startsWith('WindPanel-'))).toBe(true);
 });

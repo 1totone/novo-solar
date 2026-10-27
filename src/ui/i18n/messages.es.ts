@@ -1016,4 +1016,5 @@ export const es: Catalog = {
   'steps.outputs.legend': 'leyenda',
   'steps.outputs.protractorOnly': 'solo el transportador',
   'steps.outputs.comparing': 'comparación abierta',
+  'wind.loading': 'Abriendo la rosa de los vientos…',
 };

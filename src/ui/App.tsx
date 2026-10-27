@@ -42,7 +42,6 @@ import { classificationFromHash } from './state/classificationHash';
 import { windFromHash } from './state/windHash';
 import { chartOptionsFromHash } from './state/chartOptionsHash';
 import { useMethodSentence, useWindRose } from './wind/useWindRose';
-import { WindPanel } from './wind/WindPanel';
 
 // Fora do caminho básico, carregados sob demanda (decisão 0039): os passos 6 e 7, só quando
 // abertos, e a aba da vista 3D, só quando escolhida.
@@ -52,6 +51,9 @@ const GeometryPanel = lazy(() =>
 const EffectPanel = lazy(() =>
   import('./effect/EffectPanel').then((m) => ({ default: m.EffectPanel })),
 );
+// A aba da rosa dos ventos, só quando escolhida (decisão 0044: espaço no orçamento para o
+// redesenho depois do piloto do F2.9).
+const WindPanel = lazy(() => import('./wind/WindPanel').then((m) => ({ default: m.WindPanel })));
 const View3DPanel = lazy(() =>
   import('./view3d/View3DPanel').then((m) => ({ default: m.View3DPanel })),
 );
@@ -519,13 +521,15 @@ export function App() {
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
-        <WindPanel
-          epw={epw}
-          wind={wind}
-          classification={classification}
-          sourceUrl={sourceUrl}
-          onChange={setHashState}
-        />
+        <Suspense fallback={<p className="note">{t('wind.loading')}</p>}>
+          <WindPanel
+            epw={epw}
+            wind={wind}
+            classification={classification}
+            sourceUrl={sourceUrl}
+            onChange={setHashState}
+          />
+        </Suspense>
       </div>
     ) : wind.tab === '3d' ? (
       <div role="tabpanel" id="panel-3d" aria-labelledby="tab-3d">
@@ -809,13 +813,15 @@ export function App() {
                       {t('compare.a')}: {describeConfig(hashA, fmt, words)}
                     </h3>
                     {wind.tab === 'rose' ? (
-                      <WindPanel
-                        epw={epwA}
-                        wind={windFromHash(hashA)}
-                        classification={classificationFromHash(hashA)}
-                        onChange={() => {}}
-                        readOnly
-                      />
+                      <Suspense fallback={<p className="note">{t('wind.loading')}</p>}>
+                        <WindPanel
+                          epw={epwA}
+                          wind={windFromHash(hashA)}
+                          classification={classificationFromHash(hashA)}
+                          onChange={() => {}}
+                          readOnly
+                        />
+                      </Suspense>
                     ) : (
                       <ChartView hash={hashA} epw={epwA} />
                     )}
