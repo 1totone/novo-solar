@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="description" content="Teste com usuários do novo SOL-AR, sem moderador (F2.9)." />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <title>Teste do SOL-AR</title>
+  </head>
+  <body>
+    <div class="teste">
+      <aside class="roteiro" aria-label="Roteiro do teste">
+        <div class="roteiro-topo">
+          <strong>Teste do SOL-AR</strong>
+          <span id="progresso" class="progresso"></span>
+          <button id="recolher" type="button" class="btn pequeno" aria-expanded="true">
+            Esconder roteiro
+          </button>
+        </div>
+        <div id="tela" class="tela" aria-live="polite"></div>
+      </aside>
+      <main class="ferramenta">
+        <div class="endereco">
+          <label for="endereco">Endereço</label>
+          <input id="endereco" type="text" readonly />
+          <button id="copiar-endereco" type="button" class="btn pequeno">Copiar</button>
+        </div>
+        <div class="aviso-fora" role="alert">
+          A ferramenta saiu da página.
+          <button id="voltar-ferramenta" type="button" class="btn pequeno">
+            Voltar para a ferramenta
+          </button>
+        </div>
+        <div class="moldura">
+          <iframe id="app" title="SOL-AR"></iframe>
+          <div id="cobertura" class="cobertura"></div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../src/teste/main.ts"></script>
+  </body>
+</html>
