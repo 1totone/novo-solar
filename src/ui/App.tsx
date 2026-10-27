@@ -557,6 +557,7 @@ export function App() {
             }),
             t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
             t(`chart.noteHours.${chartOptions.hourLines}`),
+            t('readout.hint'),
           ].join(' ')}
         </p>
       </div>

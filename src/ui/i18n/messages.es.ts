@@ -1022,4 +1022,14 @@ export const es: Catalog = {
     'norte,nor-noreste,noreste,este-noreste,este,este-sureste,sureste,sur-sureste,sur,sur-suroeste,suroeste,oeste-suroeste,oeste,oeste-noroeste,noroeste,nor-noroeste',
   'facade.compass': 'O elija el rumbo de la fachada',
   'facade.compassButton': '{name} ({degrees}°)',
+  // Lectura de un punto de la carta (decisión 0045).
+  'readout.position': 'Altura {altitude}° · azimut {azimuth}° ({compass})',
+  'readout.sun': 'El sol pasa por aquí a las {time} (hora solar) el {dates}.',
+  'readout.sunEdge':
+    'Más allá de la trayectoria del solsticio: el borde del sol pasa por aquí a las {time} (hora solar) el {date}.',
+  'readout.never': 'El sol nunca pasa por aquí.',
+  'readout.legal': 'Hora oficial: {times}.',
+  'readout.legalAt': '{time} el {date}',
+  'readout.hint':
+    'Pase el ratón sobre la carta, o tóquela, para leer la altura, el azimut y cuándo el sol pasa por el punto.',
 };

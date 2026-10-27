@@ -101,8 +101,34 @@ Proposta da decisão 0025. As três projeções mostram o mesmo céu e as mesmas
 | Regiões da máscara fora da estereográfica | a região exata da spec 01 (seção 1.6) em direções sorteadas | nenhuma direção a mais de 0,5° da borda classificada errada |
 | Ida e volta (projeção e inversa) | direções sorteadas | 10⁻⁹ grau |
 
+## 3.6 Leitura de um ponto (decisão 0045)
+
+Passar o mouse sobre a carta, ou tocar nela, mostra a leitura do ponto: altura, azimute e quando o sol passa por ali. Núcleo em `src/core/chart/readout.ts`; interface em `src/ui/chart/ChartReadout.tsx`.
+
+1. **Direção:** inversa da projeção ativa (seção 3.5.3). Fora do céu desenhado (fora do horizonte nas azimutais; fora da faixa de 0° a 90° ou da largura na cilíndrica), não há leitura. Altura e azimute arredondados a 1°, com o rumo de 16 pontos.
+2. **Declinação e ângulo horário** que levam o sol à direção (triângulo de posição, com φ a latitude, z o ângulo zenital e A o azimute a partir do Norte, sentido horário):
+
+   sen δ = cos z · sen φ + sen z · cos A · cos φ
+   H = atan2(−sen z · sen A, cos z · cos φ − sen z · cos A · sen φ), positivo à tarde
+
+   A hora solar verdadeira do ponto é 12 + H/15. A conta é geocêntrica: a paralaxe do sol (até 0,0024°) fica de fora; as trajetórias da carta são topocêntricas (spec 02), e a diferença é menor que um centésimo de pixel numa carta de 600 px.
+3. **Datas:** a declinação do sol vem do SPA (spec 02) a cada 0 h UT do ano de referência, com a equação do tempo, e é interpolada pela parábola dos três dias mais próximos. Para cada dia, no instante da hora solar do ponto, compara-se a declinação do sol com a do ponto. Onde a diferença muda de sinal entre dois dias, o ponto fica entre as trajetórias desses dias; a passagem é dada no dia mais próximo (a declinação muda até 0,41° por dia; a meio caminho, 0,2°, menos que o raio do disco solar, 0,267°). Entre os solstícios, a declinação passa por cada valor duas vezes: duas datas, simétricas em relação ao solstício.
+4. **Além da trajetória do solstício:** sem cruzamento, o ponto fica do lado de fora da trajetória de 21/06 (ou de 21/12). Se a distância a ela for menor que o raio do disco solar (959,63″ a 1 UA, raio nominal da IAU 2015), o disco ainda cobre o ponto: uma data, a do dia em que a trajetória passa mais perto, com o aviso "a borda do sol". Mais longe, o sol nunca passa por ali.
+5. **Hora legal:** com os analemas na carta (seção 3.5 e spec 02, seção 2.5.1), a leitura dá também a hora legal (fuso do arquivo) de cada passagem; a hora solar é a mesma nas duas datas, a legal não (equação do tempo).
+6. **Perto dos solstícios, a data é mal condicionada:** a declinação quase não muda de um dia para outro (δ ≈ δₘₐₓ − 0,0036° · d², com d em dias a partir do solstício). Um ponto 0,2° para dentro da trajetória de 21/06 dá datas cerca de 7 dias antes e depois dela. É o que o céu faz, e a leitura diz: o sol passa ali nas duas datas.
+
+### 3.6.1 Validação
+
+| Grandeza | Referência | Tolerância |
+|---|---|---|
+| Hora solar do ponto | posições do sol pelo pvlib nas linhas horárias de 6 locais, dia 21 de cada mês de 2026 (`docs/validacao/casos/carta/linhas-horarias.csv`, 852 pontos) | 1 min |
+| Instante da passagem, fora dos solstícios | os mesmos pontos (exceto 21/06 e 21/12) | 30 min (paralaxe: até 17 min a 31 dias do solstício) |
+| Passagem nos solstícios | os mesmos pontos de 21/06 e 21/12 | declinação do sol na passagem a menos de 0,003° da do ponto do pvlib, até 2 dias dele |
+| Ida e volta | direções de 5° a 85° de ângulo zenital, a cada 15° de azimute, em Recife, Florianópolis e Helsinque | o disco do sol (SPA) cobre o ponto em cada passagem devolvida |
+
 ## Referências
 
 - Snyder, J. P. *Map Projections: A Working Manual*. USGS Professional Paper 1395, 1987 (projeção estereográfica, preservação de circunferências).
 - Bittencourt, L. *Uso das cartas solares*, capítulos sobre a carta estereográfica e o transferidor.
 - Mazria, E. *The Passive Solar Energy Book*. Emmaus: Rodale Press, 1979 (cartas cilíndricas do sol e máscaras de sombra nessa projeção).
+- Prša, A. et al. Nominal values for selected solar and planetary quantities: IAU 2015 Resolution B3. *The Astronomical Journal*, v. 152, n. 2, 41, 2016 (raio nominal do Sol).

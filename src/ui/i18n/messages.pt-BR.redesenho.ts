@@ -41,4 +41,14 @@ export const redesenhoPtBR = {
     'norte,nor-nordeste,nordeste,lés-nordeste,leste,lés-sudeste,sudeste,su-sudeste,sul,su-sudoeste,sudoeste,oés-sudoeste,oeste,oés-noroeste,noroeste,nor-noroeste',
   'facade.compass': 'Ou escolha o rumo da fachada',
   'facade.compassButton': '{name} ({degrees}°)',
+  // Leitura de um ponto da carta (decisão 0045).
+  'readout.position': 'Altura {altitude}° · azimute {azimuth}° ({compass})',
+  'readout.sun': 'O sol passa aqui às {time} (hora solar) em {dates}.',
+  'readout.sunEdge':
+    'Além da trajetória do solstício: a borda do sol passa aqui às {time} (hora solar) em {date}.',
+  'readout.never': 'O sol nunca passa por aqui.',
+  'readout.legal': 'Hora legal: {times}.',
+  'readout.legalAt': '{time} em {date}',
+  'readout.hint':
+    'Passe o mouse sobre a carta, ou toque nela, para ler a altura, o azimute e quando o sol passa pelo ponto.',
 } as const;
