@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
 import { svgColors } from './fixtures/pixels';
+import { loadClimateFile } from './fixtures/steps';
 
 // F3.4: classificação das horas no passo 7, com as hipóteses na tela. EPWs sintéticos num local
 // como Florianópolis, com radiação direta normal de 600 Wh/m² das 6 às 18 h (linhas 7 a 18).
@@ -13,7 +14,7 @@ async function loadEpw(
   name: string,
   dryBulb: (m: number, d: number, h: number) => number,
 ) {
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name,
     mimeType: 'text/plain',
     buffer: Buffer.from(syntheticEpw(FLORIPA, dryBulb, 'Teste do passo 7', dni)),

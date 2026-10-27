@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 // F4.7: arquivo de projeto e link (spec 11, decisão 0028).
 
@@ -15,7 +16,7 @@ const EPW = syntheticEpw(
 );
 
 async function loadEpw(page: Page) {
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name: 'projeto.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(EPW),
@@ -24,6 +25,7 @@ async function loadEpw(page: Page) {
 
 /** Salva o projeto e devolve o texto do arquivo baixado e o nome dele. */
 async function saveProject(page: Page) {
+  await openStep(page, '5');
   const [download] = await Promise.all([
     page.waitForEvent('download'),
     page.getByTestId('project-save').click(),
@@ -35,6 +37,7 @@ async function saveProject(page: Page) {
 }
 
 async function openProject(page: Page, name: string, text: string) {
+  await openStep(page, '5');
   await page.getByTestId('project-input').setInputFiles({
     name,
     mimeType: 'application/json',
@@ -54,6 +57,7 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
   test('salvar e abrir: o mesmo link e as opções de impressão', async ({ page }) => {
     const hash = '#a1=55&hl=a&local=florianopolis&o=30&proj=eq&tr=0';
     await page.goto(`./${hash}`);
+    await openStep(page, '5');
     await page.getByTestId('print-radius').fill('8');
     const saved = await saveProject(page);
     expect(saved.name).toBe('solar-florianopolis-sc-projeto.json');
@@ -72,6 +76,7 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
 
     // Outra página, outro estado: abrir o projeto troca o link inteiro e o raio da impressão.
     await freshPage(page, '#local=recife&o=200&aba=rosa');
+    await openStep(page, '5');
     await expect(page.getByTestId('print-radius')).toHaveValue('6');
     await openProject(page, saved.name, saved.text);
     await expect(page.getByTestId('project-status')).toContainText(
@@ -91,6 +96,7 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
     await page.getByRole('tab', { name: 'Rosa dos ventos' }).click();
     await page.getByTestId('wind-more').locator('summary').click();
     await page.getByRole('radio', { name: 'Quentes' }).click();
+    await openStep(page, '5');
     await expect(page.getByTestId('project-section')).toContainText(
       'Com projeto.epw, o projeto terá cerca de',
     );
@@ -111,6 +117,7 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
       'com o arquivo climático projeto.epw',
     );
     await expect.poll(() => hashOf(page.url())).toBe(before);
+    await openStep(page, '1');
     await expect(page.getByTestId('site-info')).toContainText('projeto.epw');
     await expect(page.getByTestId('wind-rose')).toHaveAccessibleName(/; horas quentes$/);
     await expect(page.getByTestId('wind-info')).toContainText('2.555 horas válidas');
@@ -121,9 +128,11 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
   }) => {
     await page.goto('./#aba=rosa');
     await loadEpw(page);
+    await openStep(page, '5');
     await page.getByTestId('compare').click();
     await expect(page).toHaveURL(/cmp=/);
     // A configuração atual (B) volta para uma cidade sem dados: só a A usa o arquivo.
+    await openStep(page, '1');
     await page.getByLabel('Cidade').selectOption('recife');
     const compare = page.getByTestId('compare-view');
     await expect(compare.getByTestId('compare-a').getByTestId('wind-rose')).toBeVisible();
@@ -180,6 +189,7 @@ test.describe('arquivo de projeto e link (F4.7)', () => {
   test('copiar o link; seção acessível pelo teclado; axe', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('./#local=florianopolis&o=30&a1=55');
+    await openStep(page, '5');
     const copy = page.getByTestId('copy-link');
     await copy.focus();
     await page.keyboard.press('Enter');

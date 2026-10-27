@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { maskTints } from './fixtures/pixels';
+import { openStep } from './fixtures/steps';
 
 // F4.3: projeções equidistante e cilíndrica, cada uma com o seu transferidor, e linhas horárias em
 // hora legal (analemas). Spec 03, seção 3.5; spec 02, seção 2.5.1; decisão 0025.
@@ -160,6 +161,7 @@ test.describe('projeções e analemas (F4.3)', () => {
     await page.emulateMedia({ media: 'screen' });
 
     await page.goto('./#local=florianopolis&o=0&proj=cil');
+    await openStep(page, '5');
     await page.getByTestId('print-radius').fill('5');
     await page.emulateMedia({ media: 'print' });
     // Da linha do horizonte (y = 0) à borda do zênite (y = −1 no SVG): R na escala de impressão.
@@ -173,6 +175,7 @@ test.describe('projeções e analemas (F4.3)', () => {
 
   test('desenho à mão na equidistante: o vértice vem da inversa da projeção', async ({ page }) => {
     await page.goto('./#local=brasilia&o=0&tr=0&proj=eq');
+    await openStep(page, '3');
     await page.getByText('Mais opções').click();
     await page.getByRole('button', { name: 'Começar a desenhar' }).click();
     const chart = page.getByTestId('sun-chart');

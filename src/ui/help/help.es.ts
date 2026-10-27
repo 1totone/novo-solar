@@ -78,7 +78,7 @@ export const helpEs: HelpContent = {
   },
   guide: {
     intro:
-      'SOL-AR dibuja la carta solar de un lugar y, sobre ella, el transportador de ángulos y la máscara de sombra de una protección. El camino básico tiene cinco pasos; los avanzados quedan plegados debajo de ellos. Todo lo que usted elige queda en la dirección de la página: copie el enlace para guardar o compartir.',
+      'SOL-AR dibuja la carta solar de un lugar y, sobre ella, el transportador de ángulos y la máscara de sombra de una protección. El camino básico tiene cinco pasos, uno abierto a la vez: haga clic o toque en el título de un paso para abrirlo; cerrado, muestra en una línea lo que ya se eligió. Los avanzados quedan plegados debajo de ellos. Todo lo que usted elige queda en la dirección de la página: copie el enlace para guardar o compartir.',
     steps: [
       {
         title: '1. Ubicación',

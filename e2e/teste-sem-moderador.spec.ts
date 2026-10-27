@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 // Página do teste do F2.9 sem moderador (decisão 0042): o roteiro inteiro, feito como um
 // participante faria, e o arquivo de resultados nas colunas de docs/ux/F2.9-registro.csv.
@@ -91,11 +92,13 @@ test.describe('teste sem moderador (F2.9)', () => {
 
     // 2. Fachada noroeste (o transferidor já aparece).
     await startTask(page, '2');
+    await openStep(app, '2');
     await app.getByLabel('Orientação da fachada (azimute da normal externa)').fill('315');
     await finishTask(page, '2', 5, 'terminei');
 
     // 3. α = 50°.
     card = await startTask(page, '3');
+    await openStep(app, '3');
     await app.getByTestId('angle-a1').fill('50');
     await card.getByRole('radio', { name: 'sim' }).check();
     await finishTask(page, '3', 4, 'terminei');
@@ -108,7 +111,9 @@ test.describe('teste sem moderador (F2.9)', () => {
 
     // 5. Dados históricos e temperatura.
     card = await startTask(page, '5');
+    await openStep(app, '1');
     await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
+    await openStep(app, '4');
     await app.getByTestId('data-panel').getByLabel('Variável').selectOption('tbs');
     await card.getByLabel('Período dos dados').fill('entre 1951 e 1970');
     await card.getByLabel('Horas com mais de 25 °C e sol na janela').fill('à tarde');
@@ -119,7 +124,7 @@ test.describe('teste sem moderador (F2.9)', () => {
       page.getByRole('link', { name: /Baixar o arquivo recente de Recife/ }),
     ).toHaveAttribute('href', /Recife.*TMYx\.2011-2025\.zip$/);
     card = await startTask(page, '6');
-    await app.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(app, {
       name: 'recife.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(RECIFE)),
@@ -130,6 +135,7 @@ test.describe('teste sem moderador (F2.9)', () => {
 
     // 7. Rosa dos ventos do verão, com os dados antigos de novo.
     card = await startTask(page, '7');
+    await openStep(app, '1');
     await app.getByLabel('Cidade').selectOption('recife');
     await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
     await app.getByRole('tab', { name: 'Rosa dos ventos' }).click();
@@ -140,6 +146,7 @@ test.describe('teste sem moderador (F2.9)', () => {
     // 8. Impressão em escala, só com o transferidor.
     await startTask(page, '8');
     await app.getByRole('tab', { name: 'Carta solar' }).click();
+    await openStep(app, '5');
     await app.getByLabel('Máscara', { exact: true }).uncheck();
     await app.getByLabel('Dados', { exact: true }).uncheck();
     await app.getByRole('button', { name: 'Imprimir ou salvar em PDF' }).click();

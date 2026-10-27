@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 // Leiaute do celular em pé (decisão 0013): a carta fica fixa no topo e os passos rolam por baixo,
 // mas a área fixa não pode tomar a tela. Revisão antes do teste com usuários (F2.9).
@@ -7,11 +8,12 @@ const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,
 
 async function chartWithData(page: Page) {
   await page.goto('./#a1=50&o=315');
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name: 'floripa.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(syntheticEpw(FLORIPA, (_m, _d, h) => h)),
   });
+  await openStep(page, '4');
   await page.getByTestId('data-panel').getByLabel('Variável').selectOption('tbs');
   await expect(page.getByTestId('overlay-legend')).toBeVisible();
 }

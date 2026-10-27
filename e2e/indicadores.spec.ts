@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
 import { svgColors } from './fixtures/pixels';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 // F3.5: radiação direta bloqueada e admitida e comparação de alternativas, no passo 7. EPW sintético
 // num local como Florianópolis: 15 °C até a linha 12 do dia e 25 °C da 13 em diante (manhãs frias,
@@ -12,7 +13,7 @@ const BASE = '#local=florianopolis&o=0&jl=1%2C5&ja=1%2C2&cm=l&tf=20&tq=20';
 
 async function load(page: Page, hash: string) {
   await page.goto(`./${hash}`);
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name: 'manha-fria.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(
@@ -93,9 +94,12 @@ test.describe('passo 7: indicadores e alternativas (F3.5)', () => {
     // Aleta à esquerda de quem está dentro olhando para o Norte: a oeste. De manhã (horas frias,
     // antes do meio-dia solar, 12h14 em hora legal) o sol vem do leste, e a sombra dela cai fora
     // da janela.
+    // As peças ficam no passo 6 (um passo aberto por vez, decisão 0044); depois, de volta ao 7.
+    await openStep(page, '6');
     await page.getByTestId('piece-add-type').selectOption('ae');
     await page.getByTestId('piece-add').click();
     await expect(page).toHaveURL(/pc2=ae_/);
+    await openStep(page, '7');
     await expect(page.getByTestId('alternative-status-alter1')).toHaveText(
       'superada por Atual (não guardada)',
       { timeout: 20000 },

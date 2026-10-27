@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { useI18n } from '../i18n/useI18n';
+import { NextStep, Step } from '../layout/Step';
 import type { ProtractorState } from '../state/protractorHash';
 
 function normalize(deg: number): number {
@@ -11,23 +12,42 @@ export function FacadePanel({
   state,
   rawOrientation,
   onChange,
+  open,
+  onOpenChange,
+  onNext,
 }: {
   state: ProtractorState;
   rawOrientation: string;
   onChange: (patch: Record<string, string>) => void;
+  /** Passo aberto no acordeão (decisão 0044). */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onNext: () => void;
 }) {
   const { t, formatNumber } = useI18n();
   const id = useId();
   const points = t('compass.points').split(',');
   const o = normalize(state.orientation);
   const compass = points[Math.round(o / 22.5) % 16]!;
+  const degrees = formatNumber(o, Number.isInteger(o) ? 0 : 1);
+  const summary = state.orientationValid
+    ? [
+        t('steps.facade', { degrees, compass }),
+        ...(state.show ? [] : [t('steps.facade.noProtractor')]),
+      ].join(' · ')
+    : t('steps.facade.invalid');
 
   return (
-    <section className="step-panel" aria-labelledby={`${id}-h`} data-step="2">
-      <h2 id={`${id}-h`}>
-        <span className="step-n">2</span>
-        {t('facade.heading')}
-      </h2>
+    <Step
+      n={2}
+      heading={t('facade.heading')}
+      summary={summary}
+      summaryTestId="facade-summary"
+      open={open}
+      onOpenChange={onOpenChange}
+      testId="facade-panel"
+      dataStep="2"
+    >
       <div className="field">
         <label htmlFor={`${id}-o`}>{t('facade.orientation')}</label>
         <input
@@ -41,10 +61,7 @@ export function FacadePanel({
         />
         {state.orientationValid ? (
           <p className="note" data-testid="normal-azimuth">
-            {t('facade.normalized', {
-              degrees: formatNumber(o, Number.isInteger(o) ? 0 : 1),
-              compass,
-            })}
+            {t('facade.normalized', { degrees, compass })}
           </p>
         ) : (
           <p className="error" role="alert">
@@ -61,6 +78,7 @@ export function FacadePanel({
         />
         {t('facade.showProtractor')}
       </label>
-    </section>
+      <NextStep n={3} heading={t('protection.heading')} onClick={onNext} />
+    </Step>
   );
 }

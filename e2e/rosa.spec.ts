@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
 import { svgColors } from './fixtures/pixels';
+import { loadClimateFile } from './fixtures/steps';
 
 // No EPW sintético, todas as horas têm vento de 180° (Sul) a 2,0 m/s.
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
@@ -25,7 +26,7 @@ test.describe('rosa dos ventos', () => {
     page,
   }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(page, {
       name: 'floripa.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(FLORIPA)),

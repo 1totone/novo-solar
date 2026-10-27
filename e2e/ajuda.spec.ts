@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { openStep } from './fixtures/steps';
 
 // F4.8: ajuda (decisão 0032). Diálogo com seis partes (a dos exercícios entrou no F4.5), aberto pelo cabeçalho ou pelo link
 // (ajuda=<parte>); exemplos resolvidos que abrem numa nova aba com o cartão do passo a passo.
@@ -89,11 +90,16 @@ test.describe('ajuda (F4.8)', () => {
     const card = tab.getByTestId('example-card');
     await expect(card).toContainText('Exemplo resolvido 1 de 3');
     await expect(card).toContainText('57,5°');
-    await expect(tab.getByLabel('α (brise horizontal), sombra total')).toHaveValue('55');
-    await expect(tab.getByTestId('sizing-angles')).toContainText('57,5° (32,5°)');
+    // O link do exemplo traz a janela: abre no passo 6, com o período; o α lido fica no passo 3.
+    // O período é calculado num web worker: com a máquina ocupada, pode passar de 5 s.
+    await expect(tab.getByTestId('sizing-angles')).toContainText('57,5° (32,5°)', {
+      timeout: 20000,
+    });
     await expect(tab.getByTestId('sizing-angles')).toContainText('42,2°');
     await expect(tab.getByTestId('sizing-angles')).toContainText('58,5°');
     await expect(tab.getByTestId('sizing-overhang')).toContainText('1,42 m');
+    await openStep(tab, '3');
+    await expect(tab.getByLabel('α (brise horizontal), sombra total')).toHaveValue('55');
     // "Ver o exemplo na ajuda" abre a ajuda neste exemplo; "Fechar o exemplo" tira o cartão.
     await card.getByRole('button', { name: 'Ver o exemplo na ajuda' }).click();
     const dialog = tab.getByRole('dialog', { name: 'Ajuda' });
@@ -125,10 +131,11 @@ test.describe('ajuda (F4.8)', () => {
     await page.bringToFront();
     const afastado = await openExample(page, /Brise afastado da parede/);
     await expect(afastado.getByTestId('example-card')).toContainText('Exemplo resolvido 3 de 3');
+    await expect(afastado.getByLabel('Afastamento da fachada (m)')).toHaveValue('0,28');
+    await openStep(afastado, '3');
     await expect(afastado.getByLabel('α (brise horizontal), sombra total')).toHaveValue('55');
     await afastado.getByText('Mais opções').first().click();
     await expect(afastado.getByLabel('α2 (brise horizontal), sombra total')).toHaveValue('20');
-    await expect(afastado.getByLabel('Afastamento da fachada (m)')).toHaveValue('0,28');
   });
 
   test.describe('em espanhol e em inglês', () => {

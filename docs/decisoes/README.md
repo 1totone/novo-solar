@@ -47,6 +47,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0041](0041-integracao-das-fases-por-merge-commit.md) | Integração das Fases 3 e 4 na `main` por merge commit (exceção ao squash só para os dois PRs de integração de fase) | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
 | [0042](0042-teste-do-f2.9-sem-moderador.md) | Teste do F2.9 sem moderador: página `teste/` com a ferramenta num iframe, conferência pelo endereço, SEQ e SUS; não substitui o F4.9 | 2026-10-27 | proposta |
 | 0043 | Exportação para o EnergyPlus e para o CAD (F5.2), na branch da Fase 5 (PR #84, só para a prévia); entra aqui quando a Fase 5 for integrada | 2026-10-27 | proposta |
+| [0044](0044-redesenho-depois-do-piloto.md) | Redesenho depois do piloto do F2.9 (P0), sobre a integração da Fase 4: passos em acordeão, leitura da carta, fachada por rumos, desenho dos ângulos, fontes de dados, .zip direto, comparação onde os dados aparecem, "Compartilhar" e página do teste; o teste com participantes passa à prévia `/pr/51/teste/` | 2026-10-27 | aceita (decisão do Anthony); detalhes marcados como proposta |
 
 ## Modelo
 

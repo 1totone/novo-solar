@@ -86,6 +86,7 @@ export function ChartOptionsPanel({
           <h2 id={`${id}-h`}>
             {t('chartOptions.heading')}
             <span className="step-badge">{t('advanced.badge')}</span>
+            <span className="step-toggle" aria-hidden="true" />
           </h2>
           <span className="step-summary">
             {changed

@@ -1,14 +1,17 @@
 import { expect, test } from '@playwright/test';
+import { openStep } from './fixtures/steps';
 
 test.describe('transferidor', () => {
   test('orientação e ângulos desenham as curvas sobre a carta e ficam no link', async ({
     page,
   }) => {
     await page.goto('./');
+    await openStep(page, '2');
     await page.getByLabel('Orientação da fachada (azimute da normal externa)').fill('-30');
     await expect(page.getByTestId('normal-azimuth')).toContainText('330°');
     await expect(page.getByTestId('normal-azimuth')).toContainText('NNO');
 
+    await openStep(page, '3');
     await page.getByTestId('angle-a1').fill('45');
     await page.getByTestId('angle-bd1').fill('30');
     await page.getByTestId('angle-ge1').fill('20');
@@ -34,6 +37,7 @@ test.describe('transferidor', () => {
     await expect(page).toHaveURL(/ref=e/);
 
     await page.reload();
+    await openStep(page, '3');
     await expect(page.getByRole('radio', { name: 'Externa' })).toHaveAttribute(
       'aria-checked',
       'true',
@@ -43,6 +47,7 @@ test.describe('transferidor', () => {
 
   test('valor fora de 0° a 90° é sinalizado e não desenha curva', async ({ page }) => {
     await page.goto('./#a1=120');
+    await openStep(page, '3');
     await expect(page.getByRole('alert')).toContainText('de 0° a 90°');
     await expect(page.getByTestId('angle-a1')).toHaveAttribute('aria-invalid', 'true');
     await expect(page.getByTestId('curve-alpha--1')).toHaveCount(0);
@@ -52,6 +57,7 @@ test.describe('transferidor', () => {
     page,
   }) => {
     await page.goto('./#a1=40');
+    await openStep(page, '3');
     await expect(page.getByTestId('angle-a2')).toBeHidden();
     await page.getByText('Mais opções').click();
     await expect(page.getByText('Índices 2 (brise afastado da parede)')).toBeVisible();
@@ -65,6 +71,7 @@ test.describe('transferidor', () => {
   test('ocultar o transferidor', async ({ page }) => {
     await page.goto('./');
     await expect(page.getByTestId('protractor')).toHaveCount(1);
+    await openStep(page, '2');
     await page.getByLabel('Mostrar o transferidor sobre a carta').uncheck();
     await expect(page.getByTestId('protractor')).toHaveCount(0);
     await expect(page).toHaveURL(/tr=0/);

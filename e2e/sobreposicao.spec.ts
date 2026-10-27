@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile, openStep } from './fixtures/steps';
 
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
 
 /** Carrega um EPW sintético em que a temperatura de cada hora do arquivo é o número da hora. */
 async function loadHourlyEpw(page: Page) {
-  await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+  await loadClimateFile(page, {
     name: 'floripa.epw',
     mimeType: 'text/plain',
     buffer: Buffer.from(syntheticEpw(FLORIPA, (_m, _d, h) => h)),
@@ -18,6 +19,7 @@ test.describe('dados sobre a carta', () => {
     page,
   }) => {
     await page.goto('./#local=manaus');
+    await openStep(page, '4');
     const need = page.getByTestId('data-need-file');
     await expect(need).toContainText('abra no passo 1 os dados da cidade');
     await expect(need.getByRole('link')).toHaveAttribute('href', /Manaus.*TMYx/);
@@ -27,6 +29,7 @@ test.describe('dados sobre a carta', () => {
   test('temperatura por célula, com faixas padrão, digitadas e legenda', async ({ page }) => {
     await page.goto('./');
     await loadHourlyEpw(page);
+    await openStep(page, '4');
     const panel = page.getByTestId('data-panel');
     await panel.getByLabel('Variável').selectOption('tbs');
     await expect(page).toHaveURL(/dado=tbs/);
@@ -58,6 +61,7 @@ test.describe('dados sobre a carta', () => {
   test('segundo semestre e frequência de horas acima do limiar', async ({ page }) => {
     await page.goto('./');
     await loadHourlyEpw(page);
+    await openStep(page, '4');
     const panel = page.getByTestId('data-panel');
     await panel.getByLabel('Variável').selectOption('tbs');
     await panel.getByRole('radio', { name: '22/jun a 21/dez' }).click();
