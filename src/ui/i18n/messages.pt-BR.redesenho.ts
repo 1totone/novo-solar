@@ -35,4 +35,5 @@ export const redesenhoPtBR = {
   'steps.outputs.legend': 'legenda',
   'steps.outputs.protractorOnly': 'só o transferidor',
   'steps.outputs.comparing': 'comparação aberta',
+  'wind.loading': 'Abrindo a rosa dos ventos…',
 } as const;
