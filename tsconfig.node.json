@@ -20,6 +20,7 @@
   },
   "include": [
     "vite.config.ts",
+    "vite.teste.config.ts",
     "playwright.config.ts",
     "eslint.config.js",
     "e2e",
