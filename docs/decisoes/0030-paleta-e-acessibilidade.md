@@ -1,7 +1,7 @@
 # 0030. Paleta segura para daltonismo, teclado e contraste (F4.6)
 
 - Data: 2026-10-26
-- Status: proposta (F4.6 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 13 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
@@ -15,7 +15,7 @@ As decisões 0013, 0015 e 0023 deixaram cores provisórias "até a paleta da Fas
 - **Grade da carta (#d0d7de):** 1,45:1 sobre o branco (achado 17).
 - **Sem problema:** as rampas sequenciais (um matiz, luminosidade monótona, passos de pelo menos 0,06), os dois braços da temperatura (ΔE 18,1 e 18,8 com daltonismo), as classes frias e quentes (18,8), o preenchimento da máscara total e parcial (9,6 na deuteranopia, a pior) e as cores da rosa dos ventos.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Cores da carta em variáveis de CSS** (`:root` de `src/ui/styles.css`), conferidas por `tests/acessibilidade/paleta.test.ts`:
 

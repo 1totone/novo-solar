@@ -1,13 +1,13 @@
 # 0025. Outras projeções e linhas horárias em hora legal (F4.3)
 
 - Data: 2026-10-26
-- Status: proposta (F4.3 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 8 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.3, as projeções equidistante e cilíndrica, cada uma com seu transferidor, e linhas horárias em hora legal (analemas) com o fuso do arquivo, para ensinar a diferença entre hora solar e hora legal. A spec v0 (seção 3.5) só dava as fórmulas básicas. Faltava decidir como a carta cilíndrica se orienta, como as camadas exatas da estereográfica (círculos e retas) passam para as outras projeções, como o desenho à mão se comporta e onde ficam as opções, sem complicar o fluxo básico.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Equidistante polar**, r = R · z / 90°, com a orientação da estereográfica (Norte para cima, vista de cima). O horizonte tem o mesmo raio R.
 2. **Cilíndrica centrada na normal da fachada**: x = R · ψ / 180°, y = R · h / 90° (carta de 2 × 1, escala vertical por grau o dobro da horizontal), com o azimute verdadeiro nos rótulos e a direção oposta à normal nas duas bordas.

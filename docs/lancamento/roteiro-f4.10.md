@@ -1,6 +1,6 @@
 # F4.10: roteiro do lançamento
 
-Preparação feita na integração da Fase 4 (decisão 0036, proposta). O que depende do Anthony e do LabEEE está marcado; o Claude faz o resto num PR quando cada resposta chegar.
+Preparação feita na integração da Fase 4 (decisão 0036, aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente). O que depende do Anthony e do LabEEE está marcado; o Claude faz o resto num PR quando cada resposta chegar.
 
 ## 1. O que já está pronto
 

@@ -1,13 +1,13 @@
 # 0027. Vento avançado: filtro pela condição térmica e correção para a altura e o terreno (F4.4)
 
 - Data: 2026-10-26
-- Status: proposta (F4.4 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 10 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.4, filtros da rosa dos ventos pela condição térmica, a correção da velocidade para a altura e a rugosidade do terreno como no EnergyPlus e o aviso de que o vento é da estação, e não do terreno. Faltava decidir de onde vem a condição térmica de cada hora, como o vento do instante h se junta à temperatura da hora, que perfil e que terrenos usar, em que faixa de altura, e onde ficam as opções sem complicar a rosa básica.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Condição térmica pela classificação do passo 7** (spec 08), com o mesmo método, os mesmos valores e a mesma temperatura da hora: filtros "quentes", "frias" e "neutras", além de "todas as horas" (padrão). Cada linha do arquivo usa a própria classe; as horas sem classe ficam fora dos três filtros. O método se escolhe só no passo 7; a aba da rosa mostra qual é, em uma frase.
 2. **Vento do instante h com a classe da hora (h − 1, h]**: com a temperatura da hora padrão (média do início e do fim), a temperatura representa o instante h − 0,5; com "fim da hora" (opção do passo 7), os dois são do instante h. As horas de cada classe ficam as mesmas no passo 7 e na rosa.

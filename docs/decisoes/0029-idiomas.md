@@ -1,13 +1,13 @@
 # 0029. Idiomas: português, espanhol e inglês (F4.6)
 
 - Data: 2026-10-26
-- Status: proposta (F4.6 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4; as traduções precisam de revisão por falantes nativos da área)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 12 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). As traduções precisam de revisão por falantes nativos da área.
 
 ## Contexto
 
 A decisão 0005 previu a estrutura de tradução desde o início; o ROADMAP pede PT, ES e EN no F4.6, e a instrução da sessão pede o glossário técnico antes das traduções. Faltava decidir como o idioma é escolhido, se ele vai para o link, como ficam os números, as horas e as datas, e o que não se traduz.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Três catálogos com as mesmas chaves** (`src/ui/i18n/messages.pt-BR*.ts`, `messages.es.ts`, `messages.en.ts`); o português é a referência. Um teste confere chaves, marcadores `{nome}`, listas (meses, rosa dos ventos), ausência de travessão e de frases longas sem tradução.
 2. **Glossário técnico primeiro** (`docs/i18n/glossario-tecnico.md`): α, β e γ continuam com as letras gregas e as definições do SOL-AR 6.2 nas três línguas, com a equivalência da literatura em inglês onde ajuda (α externo = *vertical shadow angle*; β externo = *horizontal shadow angle*); referência interna e externa traduzidas ao pé da letra; termos do EnergyPlus e da ASHRAE com os nomes dessas fontes.

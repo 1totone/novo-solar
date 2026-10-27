@@ -1,13 +1,13 @@
 # 0032. Ajuda dentro da aplicação, com exemplos resolvidos do tutorial da UFU (F4.8)
 
 - Data: 2026-10-26
-- Status: proposta (F4.8 na branch de integração da Fase 4; a confirmar com o Anthony no portão 4)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 15 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)).
 
 ## Contexto
 
 O ROADMAP pede, no F4.8, guia rápido, glossário, perguntas frequentes e 3 exemplos resolvidos, porque o SOL-AR 6.2 não tinha manual nem suporte. A instrução da sessão acrescenta que os exemplos incluam os pontos do tutorial do SOL-AR da UFU (Bortoli e Saramago) já levantados nos relatórios do F2.3 e do F3.6: o α2 medido da verga e não do peitoril, os 55° lidos contra os 57,5° exigidos pelo período e a curva de 0% com o vidro recuado; e que a ajuda traga as hipóteses dos indicadores. A aplicação é estática, funciona sem internet e tem três idiomas.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Ajuda dentro da aplicação**, num diálogo modal aberto pelo botão "Ajuda" do cabeçalho, com cinco partes em abas: guia rápido, exemplos resolvidos, glossário, perguntas frequentes e hipóteses e limites. A parte aberta fica no link (`ajuda=guia`, `exemplos`, `glossario`, `perguntas`, `hipoteses`), para que um professor ou a página do LabEEE possa apontar direto para uma delas. Fecha com Esc, com o botão ou com um clique fora; o foco volta ao botão.
 2. **Texto como dados tipados por idioma** (`src/ui/help/help.pt-BR.ts`, `help.es.ts`, `help.en.ts`), com a mesma estrutura nos três (conferida em teste), fora dos catálogos de frases curtas da interface. Termos do glossário técnico (`docs/i18n/glossario-tecnico.md`); espanhol e inglês a revisar por falantes nativos, como o resto da interface.
