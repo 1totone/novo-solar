@@ -68,6 +68,7 @@ test('no celular, a barra fica no pé da tela', async ({ page }, info) => {
   await page.goto(`./${ADVANCED}&hist=1`);
   await page.getByTestId('step-nav-7').click();
   await expect(stepDetails(page, '7')).toHaveAttribute('open', '');
+  await expect(page.getByTestId('classes-results')).toBeVisible({ timeout: 20000 });
   const box = (await page.getByTestId('step-nav').boundingBox())!;
   const height = page.viewportSize()!.height;
   expect(Math.abs(box.y + box.height - height)).toBeLessThan(2);
