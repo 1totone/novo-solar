@@ -27,6 +27,7 @@ Todas as mudanças relevantes do projeto. Formato baseado no [Keep a Changelog](
 
 ### Alterado
 
+- Decisões 0018 a 0041 (itens 1 a 25 da issue #65) aceitas por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. A decisão 0037 corrige o escopo da 0006: na v1.0, a conferência contra o EnergyPlus e os dados exportáveis; as saídas para NBR 15220-3, INI-C e EnergyPlus ficam na v2.0, com a pergunta ao Prof. Lamberts sobre trazer a exportação para o EnergyPlus para a v1.0 no material do portão 2.
 - As 6 cidades de teste dão lugar ao catálogo de cidades; os links antigos continuam abrindo o mesmo local.
 - As mensagens de erro do cabeçalho de arquivos climáticos indicam a linha.
 - O estado no `#` da URL passa a ser atualizado sem criar uma entrada no histórico a cada mudança.
