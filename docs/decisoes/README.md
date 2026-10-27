@@ -25,6 +25,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0026](0026-criterio-sus-do-portao-4.md) | Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
 | [0037](0037-ponte-com-normas-e-energyplus.md) | Ponte com NBR 15220-3, INI-C e EnergyPlus: na v1.0, conferência contra o EnergyPlus e dados exportáveis; saídas para normas e EnergyPlus na v2.0 (corrige o escopo da 0006 para o que o ROADMAP diz) | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
 | [0041](0041-integracao-das-fases-por-merge-commit.md) | Integração das Fases 3 e 4 na `main` por merge commit (exceção ao squash só para os dois PRs de integração de fase) | 2026-10-26 | aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente |
+| [0042](0042-teste-do-f2.9-sem-moderador.md) | Teste do F2.9 sem moderador: página `teste/` com a ferramenta num iframe, conferência pelo endereço, SEQ e SUS; não substitui o F4.9 | 2026-10-27 | proposta |
 
 ## Modelo
 
