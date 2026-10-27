@@ -161,9 +161,17 @@ fieldset {
   background: var(--color-bg);
 }
 
+/* Título dentro da caixa: uma legenda de duas linhas sobre a borda fazia a borda começar no meio dela. */
 legend {
+  float: left;
+  width: 100%;
+  margin: 0 0 0.5rem;
+  padding: 0;
   font-weight: 600;
-  padding: 0 0.25rem;
+}
+
+legend + * {
+  clear: left;
 }
 
 .escala {
