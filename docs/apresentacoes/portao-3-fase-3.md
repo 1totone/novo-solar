@@ -2,7 +2,7 @@
 
 - Preparado em 26/10/2026, para o portão 3 do roteiro (`docs/ROADMAP.md`): "máscaras validadas; indicadores revisados".
 - Prévia da Fase 3 (branch de integração `claude/fase-3-autonomous-work-xwt1mh`, PR #35, em rascunho): https://1totone.github.io/novo-solar/pr/35/
-- Situação: a Fase 3 está inteira na branch de integração e só entra na `main` depois dos portões 2 e 3. Nada da Fase 3 está marcado como feito no ROADMAP. As decisões 0018 a 0024 estão aceitas provisoriamente; este documento pede a confirmação de cada uma (seção 6).
+- Situação: a Fase 3 está inteira na branch de integração e só entra na `main` depois dos portões 2 e 3. Nada da Fase 3 está marcado como feito no ROADMAP. As decisões 0018 a 0024 estão aceitas por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Este documento as leva ao portão (seção 6), que pode reabrir qualquer uma.
 - Quem confere: o Anthony (física, normas e didática). O retorno do Prof. Lamberts e do LabEEE fica para o portão 4, mas a seção 9 sugere o que mostrar a eles, se houver ocasião.
 
 ## 1. Em poucas palavras
@@ -134,7 +134,7 @@ Os testes discriminam: mutações plantadas no núcleo (14 no F3.2 e no F3.3, 5 
 
 ## 6. Decisões a aprovar
 
-Todas estão aceitas provisoriamente e aplicadas na integração. Para cada uma: o que diz, a recomendação e o que muda se o Anthony discordar.
+Todas estão aceitas por delegação (pré-revisão do Claude, 27/10/2026), com validação por colegas pendente, e aplicadas na integração. Para cada uma: o que diz, a recomendação e o que muda se o Anthony discordar.
 
 | Decisão | O que diz | Recomendação | Se discordar |
 |---|---|---|---|

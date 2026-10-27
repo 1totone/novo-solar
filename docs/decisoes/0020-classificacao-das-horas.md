@@ -1,13 +1,13 @@
 # 0020. Classificação das horas pela temperatura externa (F3.4)
 
 - Data: 2026-10-25
-- Status: proposta (núcleo do F3.4 adiantado antes do portão 2, na branch da Fase 3; a confirmar com o Anthony na integração da Fase 3); item 2 (faixa adaptativa como padrão) substituído pela decisão 0024, aceita provisoriamente em 26/10/2026
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 3 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Item 2 (faixa adaptativa como padrão) substituído pela decisão 0024.
 
 ## Contexto
 
 O F3.4 classifica as horas do arquivo climático em quentes (sombra desejada), frias (sol desejado) e neutras, para os indicadores do F3.5. O ROADMAP pede limiares editáveis, a faixa adaptativa da ASHRAE 55 como referência, a temperatura de equilíbrio por tipologia e o aviso de que a temperatura externa é um indicador aproximado. O Anthony pediu ainda: conferir a edição vigente da ASHRAE 55; calcular a temperatura média predominante do próprio EPW e conferi-la contra uma implementação aberta só nos scripts de validação; só usar temperatura de equilíbrio por tipologia com fonte citável; deixar explícito que a faixa adaptativa vale para a temperatura operativa interna; não usar a NBR 15575 para a temperatura externa; e decidir qual temperatura representa o intervalo (h − 1, h] da fração ensolarada. Modelo e algoritmos na spec 08.
 
-## Decisão (proposta)
+## Decisão
 
 1. **Temperatura da hora:** T_h = (T(h − 1) + T(h)) / 2, o valor em h − 0,5 e a média da interpolação linear no intervalo, coerente com a radiação e com as amostras do sol simétricas em torno de h − 0,5 (spec 07, seção 7.6). A temperatura do fim da hora fica como opção. Nos 6 EPWs de teste, de 151 a 612 horas por ano (1,7% a 7%) mudam de classe entre as duas; com a média, as horas quentes diminuem de 0% (Concepción) a 8,5% (Belém), porque a média de dois valores consecutivos atenua o pico da tarde; as horas frias mudam nos dois sentidos (de −16% em Manaus, 108 contra 129, a +0,6% em Florianópolis).
 2. **Faixa adaptativa da ASHRAE 55-2023 como método padrão:** T_conf = 0,31 · t_pma + 17,8 °C, ±3,5 °C (80%, padrão) ou ±2,5 °C (90%), comparada com T_h. Fora de 10 °C ≤ t_pma ≤ 33,5 °C, a hora fica sem classe (Concepción: 50 dias por ano; Porto Alegre, com α = 0,6 e 7 dias: 2 dias). Sem o acréscimo por velocidade do ar.
