@@ -52,7 +52,7 @@ export const ptBR = {
   'protection.internal': 'Interna',
   'protection.external': 'Externa',
   'protection.referenceHelpInternal':
-    'Interna: α e β medidos a partir do plano da fachada, γ a partir da vertical (α = AVS e β = AHS da INI-C).',
+    'Interna: α e β medidos a partir do plano da fachada, γ a partir da vertical.',
   'protection.referenceHelpExternal':
     'Externa: α medido a partir da horizontal, β a partir da normal, γ a partir da horizontal (externo = 90° − interno).',
   'protection.left': 'Esquerda',
@@ -62,8 +62,7 @@ export const ptBR = {
   'protection.beta': 'β (brises verticais)',
   'protection.gamma': 'γ (limites laterais)',
   'protection.totalSet': 'Sombra total (100%)',
-  'protection.totalHelp':
-    'α medido da base da janela, β da aresta oposta à aleta, γ do canto inferior do mesmo lado. Na região vermelha, a janela inteira fica à sombra.',
+  'protection.totalHelp': 'Na região vermelha da carta, a janela inteira fica à sombra.',
   'protection.more': 'Mais opções',
   'protection.index2': 'Índices 2 (brise afastado da parede)',
   'protection.index2Help':

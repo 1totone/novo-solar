@@ -225,6 +225,16 @@ export const helpEn: HelpContent = {
             'The two ways SOL-AR measures the angles; external = 90° − internal. The internal one is the default and matches the AVS and AHS of the INI-C.',
         },
         {
+          term: 'AVS (vertical shading angle)',
+          definition:
+            'The Brazilian INI-C (Inmetro, 2020) name for the angle of the overhang: between the vertical plane at the base of the glass and the plane through the farthest edge of the device. It is α in the internal reference, the default in the program.',
+        },
+        {
+          term: 'AHS (horizontal shading angle)',
+          definition:
+            'The INI-C name for the angle of the fins: between the facade plane and the plane through the farthest edge of the fin and the opposite edge of the window. It is β in the internal reference.',
+        },
+        {
           term: 'Indices 1 and 2',
           definition:
             'For a device set away from the wall: index 1 goes to the outer edge; index 2, to the inner edge, with α2 measured from the lintel. Full shade lies between the two curves, because the gap lets the sun through.',

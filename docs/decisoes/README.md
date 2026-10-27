@@ -49,6 +49,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | 0043 | Exportação para o EnergyPlus e para o CAD (F5.2), na branch da Fase 5 (PR #84, só para a prévia); entra aqui quando a Fase 5 for integrada | 2026-10-27 | proposta |
 | [0044](0044-redesenho-depois-do-piloto.md) | Redesenho depois do piloto do F2.9 (P0), sobre a integração da Fase 4: passos em acordeão, leitura da carta, fachada por rumos, desenho dos ângulos, fontes de dados, .zip direto, comparação onde os dados aparecem, "Compartilhar" e página do teste; o teste com participantes passa à prévia `/pr/51/teste/` | 2026-10-27 | aceita (decisão do Anthony); detalhes marcados como proposta |
 | [0045](0045-leitura-da-carta.md) | Leitura de um ponto da carta: altura, azimute, hora solar e as duas datas em que o sol passa, a borda do disco além do solstício e a hora legal com os analemas (item b da 0044) | 2026-10-27 | proposta |
+| [0046](0046-desenho-dos-angulos.md) | Desenho de onde se mede cada ângulo no passo 3: α no corte, β na planta e γ na vista, um por vez, seguindo o campo em foco, com o valor digitado nas duas referências; AVS e AHS só na ajuda e no glossário (item d da 0044) | 2026-10-27 | proposta |
 
 ## Modelo
 

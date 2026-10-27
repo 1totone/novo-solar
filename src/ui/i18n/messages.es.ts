@@ -51,7 +51,7 @@ export const es: Catalog = {
   'protection.internal': 'Interna',
   'protection.external': 'Externa',
   'protection.referenceHelpInternal':
-    'Interna: α y β medidos desde el plano de la fachada, γ desde la vertical (α = AVS y β = AHS de la norma brasileña INI-C).',
+    'Interna: α y β medidos desde el plano de la fachada, γ desde la vertical.',
   'protection.referenceHelpExternal':
     'Externa: α medido desde la horizontal (ángulo de sombra vertical), β desde la normal (ángulo de sombra horizontal), γ desde la horizontal (externo = 90° − interno).',
   'protection.left': 'Izquierda',
@@ -61,8 +61,7 @@ export const es: Catalog = {
   'protection.beta': 'β (aletas verticales)',
   'protection.gamma': 'γ (límites laterales)',
   'protection.totalSet': 'Sombra total (100%)',
-  'protection.totalHelp':
-    'α medido desde la base de la ventana, β desde la arista opuesta a la aleta, γ desde la esquina inferior del mismo lado. En la región roja, toda la ventana queda a la sombra.',
+  'protection.totalHelp': 'En la región roja de la carta, toda la ventana queda a la sombra.',
   'protection.more': 'Más opciones',
   'protection.index2': 'Índices 2 (protección separada de la pared)',
   'protection.index2Help':
@@ -1032,4 +1031,24 @@ export const es: Catalog = {
   'readout.legalAt': '{time} el {date}',
   'readout.hint':
     'Pase el ratón sobre la carta, o tóquela, para leer la altura, el azimut y cuándo el sol pasa por el punto.',
+  // Dibujo de los ángulos (decisión 0046, ítem d de la 0044).
+  'angles.heading': 'Dónde se mide cada ángulo (referencia {reference})',
+  'angles.section': 'α en corte',
+  'angles.plan': 'β en planta',
+  'angles.view': 'γ en vista',
+  'angles.inside': 'interior',
+  'angles.outside': 'exterior',
+  'angles.alphaDesc':
+    'Corte de la ventana: {angle}, del alféizar al borde exterior de la protección, medido {from}.',
+  'angles.betaDesc':
+    'Planta de la ventana: β de cada aleta, del borde opuesto de la ventana a la punta de la aleta, medido {from}.',
+  'angles.gammaDesc':
+    'Vista desde adentro hacia afuera: γ de cada lado de la protección, de la esquina inferior del mismo lado a la punta de la protección, medido {from}.',
+  'angles.fromFacade': 'desde el plano de la fachada',
+  'angles.fromHorizontal': 'desde la horizontal',
+  'angles.fromNormal': 'desde la normal de la fachada',
+  'angles.fromVertical': 'desde la vertical',
+  'angles.internal': 'interna',
+  'angles.external': 'externa',
+  'angles.choose': 'Dibujo del ángulo',
 };
