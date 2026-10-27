@@ -873,6 +873,15 @@ fieldset.plain .check {
   min-height: 36px;
 }
 
+/* Fontes de dados do passo 1 (decisão 0047): o fieldset não alarga a coluna. */
+fieldset.sources {
+  min-width: 0;
+}
+
+fieldset.sources .check {
+  padding: 0.2rem 0;
+}
+
 .print-header,
 .print-ruler {
   display: none;

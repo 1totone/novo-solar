@@ -38,7 +38,7 @@ test.describe('dados climáticos (F2.7)', () => {
       await page.goto(`./#local=${id}`);
       const source = page.getByTestId('site-source');
       await expect(source, id).toContainText('nenhum dado horário aberto');
-      await page.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
+      await page.getByRole('radio', { name: /^Dados do SOL-AR 6\.2/ }).check();
       await expect(source, id).toContainText('dados históricos');
       await expect(source, id).toContainText('SOL-AR 6.2');
       await expect(page.getByTestId('site-period'), id).toContainText(period);
@@ -73,7 +73,7 @@ test.describe('dados climáticos (F2.7)', () => {
     await page.goto('./#dado=tbs&hist=1&local=natal');
     await expect(page.getByTestId('site-period')).toContainText('entre 1951 e 1970');
     await expect(page.getByTestId('overlay')).toHaveCount(1);
-    await page.getByRole('button', { name: 'Fechar dados históricos' }).click();
+    await page.getByRole('radio', { name: 'Só a carta, sem dados horários' }).check();
     await expect(page.getByTestId('overlay')).toHaveCount(0);
     expect(page.url()).not.toContain('hist=1');
   });
