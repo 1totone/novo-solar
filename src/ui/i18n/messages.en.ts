@@ -42,8 +42,9 @@ export const en: Catalog = {
   'facade.heading': 'Facade',
   'facade.orientation': 'Facade orientation (azimuth of the outward normal)',
   'facade.orientationHelp':
-    'Degrees from North, clockwise; any value is accepted, including negative ones (−30° = 330°).',
-  'facade.orientationInvalid': 'Type a number in degrees.',
+    'Degrees from North, clockwise (East = 90°; −45° = 315°), or where the facade faces, abbreviated (NW) or in full (northwest).',
+  'facade.orientationInvalid':
+    'Type a number in degrees or a compass point, such as NW or northwest.',
   'facade.normalized': 'Outward normal: {degrees}° ({compass})',
   'facade.showProtractor': 'Show the protractor on the chart',
   'protection.heading': 'Shading',
@@ -1004,4 +1005,9 @@ export const en: Catalog = {
   'steps.outputs.protractorOnly': 'protractor only',
   'steps.outputs.comparing': 'comparison open',
   'wind.loading': 'Opening the wind rose…',
+  // Facade by compass point (decision 0044, item c).
+  'compass.names':
+    'north,north-northeast,northeast,east-northeast,east,east-southeast,southeast,south-southeast,south,south-southwest,southwest,west-southwest,west,west-northwest,northwest,north-northwest',
+  'facade.compass': 'Or choose where the facade faces',
+  'facade.compassButton': '{name} ({degrees}°)',
 };

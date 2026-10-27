@@ -29,9 +29,20 @@ describe('fachada e ângulos no # da URL', () => {
   });
 
   it('orientação inválida cai em 0° e é sinalizada', () => {
-    const p = protractorFromHash({ o: 'norte' });
+    const p = protractorFromHash({ o: 'nortee' });
     expect(p.orientation).toBe(0);
     expect(p.orientationValid).toBe(false);
+  });
+
+  it('rumo no lugar dos graus (decisão 0044, item c)', () => {
+    expect(protractorFromHash({ o: 'NO' })).toMatchObject({
+      orientation: 315,
+      orientationValid: true,
+    });
+    expect(protractorFromHash({ o: 'norte' })).toMatchObject({
+      orientation: 0,
+      orientationValid: true,
+    });
   });
 
   it('sombra parcial com prefixo p e γ das aletas', () => {

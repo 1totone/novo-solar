@@ -36,4 +36,9 @@ export const redesenhoPtBR = {
   'steps.outputs.protractorOnly': 'só o transferidor',
   'steps.outputs.comparing': 'comparação aberta',
   'wind.loading': 'Abrindo a rosa dos ventos…',
+  // Fachada por rumos (decisão 0044, item c).
+  'compass.names':
+    'norte,nor-nordeste,nordeste,lés-nordeste,leste,lés-sudeste,sudeste,su-sudeste,sul,su-sudoeste,sudoeste,oés-sudoeste,oeste,oés-noroeste,noroeste,nor-noroeste',
+  'facade.compass': 'Ou escolha o rumo da fachada',
+  'facade.compassButton': '{name} ({degrees}°)',
 } as const;

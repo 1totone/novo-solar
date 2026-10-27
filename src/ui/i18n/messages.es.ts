@@ -42,8 +42,8 @@ export const es: Catalog = {
   'facade.heading': 'Fachada',
   'facade.orientation': 'Orientación de la fachada (acimut de la normal exterior)',
   'facade.orientationHelp':
-    'Grados desde el Norte, en sentido horario; acepta cualquier valor, incluso negativo (−30° = 330°).',
-  'facade.orientationInvalid': 'Escriba un número en grados.',
+    'Grados desde el Norte, en sentido horario (Este = 90°; −45° = 315°), o el rumbo hacia donde mira la fachada, por sigla (NO) o por extenso (noroeste).',
+  'facade.orientationInvalid': 'Escriba un número en grados o un rumbo, como NO o noroeste.',
   'facade.normalized': 'Normal exterior: {degrees}° ({compass})',
   'facade.showProtractor': 'Mostrar el transportador sobre la carta',
   'protection.heading': 'Protección',
@@ -1017,4 +1017,9 @@ export const es: Catalog = {
   'steps.outputs.protractorOnly': 'solo el transportador',
   'steps.outputs.comparing': 'comparación abierta',
   'wind.loading': 'Abriendo la rosa de los vientos…',
+  // Fachada por rumbos (decisión 0044, ítem c).
+  'compass.names':
+    'norte,nor-noreste,noreste,este-noreste,este,este-sureste,sureste,sur-sureste,sur,sur-suroeste,suroeste,oeste-suroeste,oeste,oeste-noroeste,noroeste,nor-noroeste',
+  'facade.compass': 'O elija el rumbo de la fachada',
+  'facade.compassButton': '{name} ({degrees}°)',
 };

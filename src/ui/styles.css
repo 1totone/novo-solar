@@ -2025,3 +2025,105 @@ a.btn {
   border-top: 0;
   border-bottom: 1px solid var(--color-border);
 }
+
+/* Fachada por rumos (decisão 0044, item c): o número e o rumo por extenso lado a lado, e a rosa de
+   botões com a planta da fachada no centro. */
+.orientation-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  align-items: center;
+}
+
+.orientation-row input {
+  width: 5.5rem;
+}
+
+.orientation-name {
+  display: flex;
+  flex: 1 1 8rem;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.orientation-name-main {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+
+.orientation-name-detail {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.facade-rose {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.facade-rose .note {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.facade-rose-buttons {
+  display: grid;
+  flex: none;
+  grid-template-columns: repeat(3, 2.75rem);
+  grid-template-rows: repeat(3, 2.6rem);
+  gap: 0.25rem;
+}
+
+.facade-rose-buttons button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.facade-rose-buttons button[aria-checked='true'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.facade-rose-buttons button:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.facade-rose-center {
+  display: grid;
+  place-items: center;
+}
+
+.facade-plan {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.facade-plan-ring {
+  fill: none;
+  stroke: var(--color-border);
+}
+
+.facade-plan-wall {
+  stroke: var(--color-text);
+  stroke-width: 3;
+}
+
+.facade-plan-normal {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.facade-plan-arrow {
+  fill: var(--color-accent);
+}

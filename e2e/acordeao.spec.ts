@@ -99,17 +99,18 @@ test('sem rolar: o campo do α e a máscara na carta na mesma tela', async ({ pa
   await expect(field).toBeInViewport();
 });
 
-test('a coluna fica curta no computador: os cinco cabeçalhos e o passo aberto cabem na tela', async ({
+test('a coluna fica curta no computador: os cinco cabeçalhos e o passo aberto em cerca de uma tela', async ({
   page,
 }, info) => {
   test.skip(info.project.name !== 'computador', 'leiaute de duas colunas');
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto(`./${STATE}`);
   await openStep(page, '2');
-  // Passo 2 aberto: do cabeçalho do 1 ao do 5, tudo dentro de uma tela.
+  // Passo 2 aberto (o mais alto do caminho básico depois do 1, com a rosa de rumos): do cabeçalho
+  // do 1 ao do 5, pouco mais de uma tela (eram cerca de 4.500 px, quase seis telas, no piloto).
   const first = (await stepHeader(page, '1').boundingBox())!;
   const fifth = (await stepHeader(page, '5').boundingBox())!;
-  expect(fifth.y + fifth.height - first.y).toBeLessThan(768);
+  expect(fifth.y + fifth.height - first.y).toBeLessThan(1.1 * 768);
   // A carta fica fixa ao lado ao rolar até o fim da coluna.
   await openStep(page, '5');
   await page.getByTestId('compare').scrollIntoViewIfNeeded();
