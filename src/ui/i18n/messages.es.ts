@@ -982,4 +982,46 @@ export const es: Catalog = {
   'cell.difference': 'B − A: {diff} {unit} (media de A: {a}; de B: {b}).',
   'cells.captionDifference':
     'Media de las horas de B menos la de A en cada celda ({unit}); filas: quincenas; columnas: horas del archivo.',
+  // F5.2: exportación a EnergyPlus y CAD (spec 13, decisión 0043).
+  'energyplus.heading': 'EnergyPlus y CAD',
+  'energyplus.intro':
+    'La ventana y las piezas para EnergyPlus 26.2, y el corte y la vista para CAD. El alero y el par de aletas adosados a la fachada salen como objetos por proyección; el resto, como placas: adosadas (Shading:Zone:Detailed) o separadas de la fachada (Shading:Building:Detailed).',
+  'energyplus.windowName': 'Nombre de la ventana en su modelo',
+  'energyplus.wallName': 'Nombre del muro (superficie base)',
+  'energyplus.nameInvalid': 'Use nombres sin coma, punto y coma ni "!", de hasta 90 caracteres.',
+  'energyplus.paste': 'Opcional: pegue el objeto FenestrationSurface:Detailed de su ventana',
+  'energyplus.pasteHelp':
+    'Con la ventana pegada, los nombres vienen de ella y las placas salen en su posición en su modelo. Sin ella, la ventana queda con la esquina inferior izquierda (vista desde dentro) en el origen y la fachada del paso 2.',
+  'energyplus.order': 'Orden de los vértices en su modelo (GlobalGeometryRules)',
+  'energyplus.order.ccw': 'Antihorario (predeterminado)',
+  'energyplus.order.cw': 'Horario',
+  'energyplus.pasteOk':
+    'Ventana {name}, en el muro {wall}: {width} × {height} m, normal exterior a {azimuth}°.',
+  'energyplus.pasteError.notFenestration':
+    'No se encontró un objeto FenestrationSurface:Detailed en el texto pegado.',
+  'energyplus.pasteError.fieldCount':
+    'El objeto pegado tiene menos campos que un FenestrationSurface:Detailed.',
+  'energyplus.pasteError.notFourVertices': 'La ventana debe tener 4 vértices.',
+  'energyplus.pasteError.badNumber': 'Una de las coordenadas de los vértices no es un número.',
+  'energyplus.pasteError.notPlanar': 'Los vértices no están en un plano (más de 1 mm fuera).',
+  'energyplus.pasteError.notVertical':
+    'La ventana no es vertical; la exportación vale para ventanas en muros verticales.',
+  'energyplus.pasteError.notRectangle': 'La ventana pegada no es un rectángulo.',
+  'energyplus.warnSize':
+    'La ventana pegada mide {width} × {height} m; la del paso 6, {width6} × {height6} m. Las piezas salen con las medidas del paso 6.',
+  'energyplus.warnAzimuth':
+    'La normal de la ventana pegada está a {azimuth}°, y la fachada del paso 2, a {orientation}°. Si su modelo tiene Building North Axis distinto de 0, es lo esperado.',
+  'energyplus.plan': 'En qué se convierte cada pieza',
+  'energyplus.planReveal': 'Retranqueo del vidrio: {types}',
+  'energyplus.planPiece': 'Pieza {n}: {types}',
+  'energyplus.capped':
+    'Pieza {n}: prolongación infinita exportada con {length} m; la sombra en la ventana es la misma mientras el sol esté a más de 2,9° del plano de la fachada.',
+  'energyplus.objects': 'Objetos para su modelo (.idf)',
+  'energyplus.model': 'Modelo para verificar (.idf)',
+  'energyplus.dxf': 'Corte y vista (.dxf)',
+  'energyplus.objectsHelp':
+    'Objetos: para pegar en su IDF. Izquierda y derecha de los objetos por proyección se ven desde fuera, como en EnergyPlus.',
+  'energyplus.modelHelp':
+    'Modelo para verificar: una zona mínima que corre sola con el EPW del lugar y da la fracción soleada de la ventana en cada paso de tiempo (la misma del mapa del año, con el sol de EnergyPlus).',
+  'energyplus.dxfHelp': 'Corte y vista: DXF R12 en metros, lado a lado, con capas separadas.',
 };

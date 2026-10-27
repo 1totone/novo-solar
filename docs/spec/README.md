@@ -16,6 +16,7 @@
 10. [Dimensionamento inverso](10-dimensionamento-inverso.md) (proposta): do período a sombrear para os ângulos α, β e γ e as dimensões de brise e aletas; subdivisão em lâminas.
 11. [Arquivo de projeto e link](11-arquivo-de-projeto.md) (proposta, decisão 0028): o que o link e o projeto guardam, formato JSON com versão de esquema, abrir, salvar e compatibilidade com os links.
 12. [Modo didático](12-modo-didatico.md) (proposta, decisão 0033): tutorial guiado, exercícios de máscara e a métrica da comparação (índice de Jaccard em ângulo sólido e nas horas de sol).
+13. [Exportação para o EnergyPlus e para o CAD](13-exportacao-energyplus.md) (proposta, decisão 0043, Fase 5): cada peça como Shading:Overhang:Projection, Shading:Fin:Projection, Shading:Zone:Detailed ou Shading:Building:Detailed; janela colada do modelo do usuário; modelo para conferir; corte e vista em DXF R12; teste de ida e volta no EnergyPlus 26.2.
 
 ## Resumo do que está fixado
 

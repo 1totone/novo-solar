@@ -182,7 +182,7 @@ function assertPlanarConvex(vertices: readonly Vec3[]): void {
 }
 
 /** Verga, peitoril e ombreiras de uma janela recuada d atrás do plano da fachada. */
-function reveal(W: number, H: number, d: number): Plate[] {
+export function reveal(W: number, H: number, d: number): Plate[] {
   if (d === 0) return [];
   return [
     [
@@ -213,7 +213,7 @@ function reveal(W: number, H: number, d: number): Plate[] {
 }
 
 /** Placas de um dispositivo; d é o recuo (as proteções são medidas do plano da fachada, y = d). */
-function devicePlates(W: number, H: number, d: number, device: Device): Plate[] {
+export function devicePlates(W: number, H: number, d: number, device: Device): Plate[] {
   switch (device.kind) {
     case 'overhang': {
       const z = H + nonNegative(device.above, 'above');

@@ -10,3 +10,12 @@ Gerado por `docs/validacao/scripts/energyplus_fracao_ensolarada.py` com o Energy
     - `passos`: a mesma fração em cada passo dos dias de `dias_passos` (dias 1, 11 e 21 de cada mês, na ordem dia, hora, passo; 7 casas);
     - `cossenos`: 24 passos com os cossenos de incidência de saída (parede direita, janela e cobertura), que são as componentes do sol do EnergyPlus no referencial da fachada.
   - `resumo` e `sol_spa_x_energyplus`: estatísticas do script, calculadas com o shapely e o pvlib, independentes da aplicação.
+
+## Exportação (F5.2)
+
+Em `exportacao/`, gerado por `docs/validacao/scripts/energyplus_exportacao.py` e por `tests/referencia/energyplusExportacao.test.ts` (spec 13, seção 13.6; relatório `docs/validacao/relatorios/F5.2-exportacao-energyplus.md`):
+
+- `cenas.json`: as 3 cenas novas (as outras 8 são as do F3.8);
+- `<cena>.idf`: o modelo para conferir que a aplicação exporta; `objetos-no-modelo-objetos.idf`: os objetos para o modelo do usuário, gerados a partir da janela colada de `objetos-no-modelo-base.idf` (escrito pelo script);
+- `<cena>.dxf`: corte e vista de três cenas;
+- `resultados.json`: a fração ensolarada horária do EnergyPlus em cada modelo exportado, a contagem dos objetos, a conferência da geometria e a dos DXF.

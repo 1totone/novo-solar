@@ -1,0 +1,37 @@
+{
+  "nota": "Cenas novas do teste de ida e volta do F5.2 (spec 13, seção 13.6), além das 8 do F3.8. Prolongamento infinito = null. Na cena objetos-no-modelo, a janela do modelo base tem o canto (x = 0, z = 0) em 'origem' (coordenadas do mundo).",
+  "cenas": [
+    {
+      "id": "projecao-assimetrica",
+      "local": "florianopolis",
+      "orientacao": 300.0,
+      "janela": { "width": 1.5, "height": 1.2, "setback": 0.0 },
+      "dispositivos": [
+        { "kind": "overhang", "depth": 0.6, "above": 0.1, "gap": 0.0, "extendLeft": 0.1, "extendRight": 0.7 },
+        { "kind": "fin", "side": "right", "depth": 0.3, "offset": 0.05, "gap": 0.0, "extendAbove": 0.1, "extendBelow": 0.4 },
+        { "kind": "fin", "side": "left", "depth": 0.6, "offset": 0.25, "gap": 0.0, "extendAbove": 0.5, "extendBelow": 0.0 }
+      ]
+    },
+    {
+      "id": "aleta-sozinha-infinita",
+      "local": "porto-alegre",
+      "orientacao": 60.0,
+      "janela": { "width": 1.0, "height": 1.4, "setback": 0.0 },
+      "dispositivos": [
+        { "kind": "overhang", "depth": 0.5, "above": 0.2, "gap": 0.0, "extendLeft": null, "extendRight": null },
+        { "kind": "fin", "side": "right", "depth": 0.4, "offset": 0.1, "gap": 0.0, "extendAbove": null, "extendBelow": 0.2 }
+      ]
+    },
+    {
+      "id": "objetos-no-modelo",
+      "local": "manaus",
+      "orientacao": 225.0,
+      "origem": [12.5, -3.25, 4.0],
+      "janela": { "width": 1.2, "height": 1.0, "setback": 0.1 },
+      "dispositivos": [
+        { "kind": "overhang", "depth": 0.5, "above": 0.0, "gap": 0.0, "extendLeft": 0.3, "extendRight": 0.3 },
+        { "kind": "verticalLouvers", "count": 3, "chord": 0.2, "pitch": 0.4, "angle": 15.0, "gap": 0.05, "start": 0.2, "extendAbove": 0.1, "extendBelow": 0.0 }
+      ]
+    }
+  ]
+}

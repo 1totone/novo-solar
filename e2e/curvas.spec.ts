@@ -142,7 +142,7 @@ test.describe('curvas e máscara de um ponto na carta (F3.2)', () => {
     await page.goto(`./${BRISE}`);
     await waitForCurves(page);
     const panel = page.getByTestId('geometry-panel');
-    await expect(panel.locator('details')).toHaveAttribute('open');
+    await expect(panel.locator('details').first()).toHaveAttribute('open');
     await page.getByTestId('shading-contours').uncheck();
     await expect(page).toHaveURL(/cs=0/);
     await expect(page.getByTestId('shading-layer')).toHaveCount(0);

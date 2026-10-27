@@ -29,7 +29,7 @@ async function reveal(svg: Locator) {
 /** Abre o passo 6 se estiver fechado (ele abre sozinho quando o link já traz uma janela). */
 async function openStep6(page: Page) {
   const panel = page.getByTestId('geometry-panel');
-  if ((await panel.locator('details').getAttribute('open')) === null) {
+  if ((await panel.locator('details').first().getAttribute('open')) === null) {
     await panel.locator('summary').click();
   }
   return panel;
@@ -53,7 +53,7 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
       /7\s*Efeito no ano/,
     ]);
     const panel = page.getByTestId('geometry-panel');
-    await expect(panel.locator('details')).not.toHaveAttribute('open');
+    await expect(panel.locator('details').first()).not.toHaveAttribute('open');
     await expect(page.getByTestId('effect-panel').locator('details').first()).not.toHaveAttribute(
       'open',
     );
@@ -154,7 +154,9 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
 
   test('exportação em SVG na escala escolhida e impressão em escala', async ({ page }) => {
     await page.goto(`./${TUTORIAL}`);
-    await expect(page.getByTestId('geometry-panel').locator('details')).toHaveAttribute('open');
+    await expect(page.getByTestId('geometry-panel').locator('details').first()).toHaveAttribute(
+      'open',
+    );
     await page.getByTestId('geometry-scale').selectOption('20');
     await expect(page).toHaveURL(/esc=20/);
     const download = page.waitForEvent('download');

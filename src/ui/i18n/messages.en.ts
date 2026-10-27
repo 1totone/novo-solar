@@ -969,4 +969,46 @@ export const en: Catalog = {
   'cell.difference': 'B − A: {diff} {unit} (mean of A: {a}; of B: {b}).',
   'cells.captionDifference':
     'Mean of the hours of B minus that of A in each cell ({unit}); rows: half-months; columns: file hours.',
+  // F5.2: export to EnergyPlus and CAD (spec 13, decision 0043).
+  'energyplus.heading': 'EnergyPlus and CAD',
+  'energyplus.intro':
+    'The window and the pieces for EnergyPlus 26.2, and the section and view for CAD. The overhang and the pair of fins attached to the facade are exported as projection objects; the rest as plates: attached (Shading:Zone:Detailed) or detached from the facade (Shading:Building:Detailed).',
+  'energyplus.windowName': 'Window name in your model',
+  'energyplus.wallName': 'Wall name (base surface)',
+  'energyplus.nameInvalid': 'Use names without comma, semicolon or "!", up to 90 characters.',
+  'energyplus.paste': 'Optional: paste the FenestrationSurface:Detailed object of your window',
+  'energyplus.pasteHelp':
+    'With the window pasted, the names come from it and the plates are placed at its position in your model. Without it, the window has its lower left corner (seen from inside) at the origin and the facade of step 2.',
+  'energyplus.order': 'Vertex order in your model (GlobalGeometryRules)',
+  'energyplus.order.ccw': 'Counterclockwise (default)',
+  'energyplus.order.cw': 'Clockwise',
+  'energyplus.pasteOk':
+    'Window {name}, on wall {wall}: {width} × {height} m, outward normal at {azimuth}°.',
+  'energyplus.pasteError.notFenestration':
+    'No FenestrationSurface:Detailed object found in the pasted text.',
+  'energyplus.pasteError.fieldCount':
+    'The pasted object has fewer fields than a FenestrationSurface:Detailed.',
+  'energyplus.pasteError.notFourVertices': 'The window must have 4 vertices.',
+  'energyplus.pasteError.badNumber': 'One of the vertex coordinates is not a number.',
+  'energyplus.pasteError.notPlanar': 'The vertices are not on a plane (more than 1 mm off).',
+  'energyplus.pasteError.notVertical':
+    'The window is not vertical; the export works for windows in vertical walls.',
+  'energyplus.pasteError.notRectangle': 'The pasted window is not a rectangle.',
+  'energyplus.warnSize':
+    'The pasted window is {width} × {height} m; the step 6 window is {width6} × {height6} m. The pieces keep the step 6 dimensions.',
+  'energyplus.warnAzimuth':
+    'The outward normal of the pasted window is at {azimuth}°, and the step 2 facade at {orientation}°. If your model has a Building North Axis other than 0, this is expected.',
+  'energyplus.plan': 'What each piece becomes',
+  'energyplus.planReveal': 'Glass setback: {types}',
+  'energyplus.planPiece': 'Piece {n}: {types}',
+  'energyplus.capped':
+    'Piece {n}: infinite extension exported as {length} m; the shadow on the window is the same while the sun is more than 2.9° from the facade plane.',
+  'energyplus.objects': 'Objects for your model (.idf)',
+  'energyplus.model': 'Model to check (.idf)',
+  'energyplus.dxf': 'Section and view (.dxf)',
+  'energyplus.objectsHelp':
+    'Objects: to paste into your IDF. Left and right of the projection objects are seen from outside, as in EnergyPlus.',
+  'energyplus.modelHelp':
+    'Model to check: a minimal zone that runs on its own with the site EPW and gives the window sunlit fraction at each timestep (the same as the annual map, with the EnergyPlus sun).',
+  'energyplus.dxfHelp': 'Section and view: DXF R12 in meters, side by side, on separate layers.',
 };

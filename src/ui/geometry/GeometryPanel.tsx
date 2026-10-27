@@ -17,6 +17,7 @@ import {
   type PieceCode,
   type PieceField,
 } from '../state/geometryHash';
+import { EnergyPlusSection } from './EnergyPlusSection';
 import { GeometryDrawing } from './GeometryDrawing';
 import { paperDrawing, SCALES, screenFont } from './layout';
 
@@ -342,6 +343,12 @@ export function GeometryPanel({
                     })}
                   </p>
                 )}
+                <EnergyPlusSection
+                  window={win}
+                  devices={geometry.devices}
+                  site={site}
+                  orientation={orientation}
+                />
                 <h3 className="sub-heading">{t('shading.heading')}</h3>
                 {!hasPlates && <p className="note">{t('shading.noPlates')}</p>}
                 <label className="check">

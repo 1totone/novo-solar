@@ -34,7 +34,10 @@ test('um link com a janela abre o passo 6 já carregado, com o resumo da geometr
   await expect(page.getByTestId('geometry-summary')).toHaveText(
     'Janela de 1,50 × 1,20 m · 1 peça(s)',
   );
-  await expect(page.getByTestId('geometry-panel').locator('details')).toHaveAttribute('open', '');
+  await expect(page.getByTestId('geometry-panel').locator('details').first()).toHaveAttribute(
+    'open',
+    '',
+  );
 });
 
 // Fase 4 (decisão 0039): espanhol e inglês, ajuda, modo didático e catálogo também sob demanda.

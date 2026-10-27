@@ -8,3 +8,4 @@ shapely==2.2.0
 olefile==0.47
 cabarchive==0.2.5
 pythermalcomfort==4.6.2
+ezdxf==1.4.5
