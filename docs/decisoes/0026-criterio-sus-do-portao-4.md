@@ -1,13 +1,13 @@
 # 0026. Critério da SUS no portão 4: média de pelo menos 70, com o intervalo de confiança
 
 - Data: 2026-10-26
-- Status: proposta (o Anthony confirma antes da coleta do F4.9; protocolo em `docs/ux/F4.9-protocolo-de-usabilidade.md`, seção 9.2)
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 9 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Vale para a coleta do F4.9; protocolo em `docs/ux/F4.9-protocolo-de-usabilidade.md`, seção 9.2.
 
 ## Contexto
 
 O portão 4 do ROADMAP pede "SUS ≥ 70" no teste com 10 a 15 alunos (F4.9), sem dizer se o critério vale para a média observada ou para o intervalo de confiança. Com 12 participantes e o desvio-padrão típico da SUS (17,7 pontos, Sauro e Lewis), o intervalo de confiança de 95% da média vai cerca de 11 pontos para cada lado (protocolo, seção 4.3). A definição precisa ser fixada antes da coleta, para que o resultado não escolha o critério.
 
-## Decisão (proposta)
+## Decisão
 
 O portão 4 é atingido quando a **média** da SUS dos participantes válidos é de pelo menos 70. O relatório sempre informa, junto da média, o n, o desvio-padrão e o intervalo de confiança de 95% pela t de Student; uma média entre 65 e 75 é descrita como compatível com médias verdadeiras acima e abaixo de 70, e não como aprovação ou reprovação firme.
 

@@ -97,7 +97,7 @@ A versão pública completa, para ensino e projeto.
 - **Português, espanhol e inglês**; paleta conferida para daltonismo, uso por teclado; **instalável e funcionando sem internet**; projeto salvo em arquivo e link que reabre o mesmo estado.
 - Citação com DOI pelo Zenodo; canal de retorno pelas issues do GitHub e pelo e-mail do LabEEE.
 - **Validação**: relatório consolidado em `docs/validacao/relatorios/F4.9-validacao-consolidada.md`; usabilidade com alunos pela SUS.
-- O que fica para a v2.0 (decisão 0037, proposta): exportação para o EnergyPlus, INI-C e zona da NBR 15220-3, radiação difusa com máscara, entorno.
+- O que fica para a v2.0 (decisão 0037, aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente): exportação para o EnergyPlus, INI-C e zona da NBR 15220-3, radiação difusa com máscara, entorno.
 
 ## 6. Resultado do ensaio (26/10/2026)
 
