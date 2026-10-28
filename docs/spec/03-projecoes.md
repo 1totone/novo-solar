@@ -126,6 +126,28 @@ Passar o mouse sobre a carta, ou tocar nela, mostra a leitura do ponto: altura, 
 | Passagem nos solstícios | os mesmos pontos de 21/06 e 21/12 | declinação do sol na passagem a menos de 0,003° da do ponto do pvlib, até 2 dias dele |
 | Ida e volta | direções de 5° a 85° de ângulo zenital, a cada 15° de azimute, em Recife, Florianópolis e Helsinque | o disco do sol (SPA) cobre o ponto em cada passagem devolvida |
 
+## 3.7 Pontos marcados (decisão 0051)
+
+Um clique na carta (no toque, o botão "Marcar ponto" da leitura; pelo teclado, a altura e o azimute digitados) marca o ponto. Até 3 pontos, com número fixo de 1 a 3. Núcleo em `src/core/protractor/pointAngles.ts`; interface em `src/ui/chart/PointMarkers.tsx` e `src/ui/chart/PointsPanel.tsx`; estado em `src/ui/state/pointsHash.ts`.
+
+1. **Direção guardada, não a posição na tela:** altura h e azimute A, com uma casa decimal (0,1° é cerca de 0,3 px numa carta de 600 px). O clique passa pela inversa da projeção ativa (seção 3.6, item 1); o marcador, pela projeção direta (seção 3.5). Mudar a projeção, ou a fachada na cilíndrica, move o marcador para a mesma direção do céu.
+2. **Leitura:** a mesma da seção 3.6 (altura e azimute a 1°, hora solar, datas, hora legal com os analemas).
+3. **α e β do ponto**, para a fachada do passo 2 (orientação A_f), na referência do passo 3: os ângulos que a direção faz nos planos do transferidor (spec 01, seção 1.3, "Ângulos do sol nas mesmas grandezas"), com ψ = A − A_f reduzido a (−180°, 180°]:
+
+   tan α_ext = tan h / cos ψ  β_ext = |ψ|, do lado de ψ (direita se ψ > 0)
+
+   Na referência interna, 90° menos o externo. É o α (ou o β) da proteção infinita cuja borda passa pelo ponto: com α_ext da proteção menor que o do ponto (ou α_int maior), o ponto fica na sombra total. **Sem α e β** quando a direção não está diante da fachada (s_y = cos h · cos ψ ≤ 0: atrás dela, no plano dela ou no zênite), como o sol nessa posição (spec 01, seção 1.2). Valores a 1°.
+
+### 3.7.1 Validação
+
+| Grandeza | Referência | Tolerância |
+|---|---|---|
+| α do ponto | curva de α do transferidor (`alphaCircle`, seção 3.3) passa pelo ponto da carta estereográfica; 2.000 direções sorteadas diante de fachadas de −360° a 360° | 10⁻⁹ R |
+| β do ponto | reta de β (`betaRayAzimuth`) no azimute do ponto, nas mesmas direções | 10⁻⁹ grau |
+| Referência | interna = 90° − externa, pela conversão do transferidor (`toExternal`) | 10⁻⁹ grau |
+| Máscara | com meio grau a mais de proteção (α ou β), o ponto fica na sombra total de `mask.ts`; com meio grau a menos, não; nas duas referências, 300 direções | exata |
+| Marcador na tela | centro do marcador na posição das fórmulas da seção 3.5, nas três projeções; a leitura no centro devolve a altura e o azimute do ponto (`e2e/pontos.spec.ts`) | 1,5 px |
+
 ## Referências
 
 - Snyder, J. P. *Map Projections: A Working Manual*. USGS Professional Paper 1395, 1987 (projeção estereográfica, preservação de circunferências).

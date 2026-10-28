@@ -9,7 +9,7 @@ O estado da análise vive no `#` da URL (decisão 0004): o link reabre o mesmo l
 | Parte | Link | Projeto |
 |---|---|---|
 | Local do catálogo, dados históricos, local de um arquivo (nome, latitude, longitude, fuso, altitude) | sim | sim (o mesmo texto do link) |
-| Fachada, proteção, dados sobre a carta, rosa dos ventos, passos 6 e 7, projeção, comparação (configuração A) | sim | sim |
+| Fachada, proteção, dados sobre a carta, rosa dos ventos, passos 6 e 7, projeção, comparação (configuração A), pontos marcados na carta (`pm1` a `pm3`, decisão 0051) | sim | sim |
 | Arquivo climático carregado do computador (EPW ou CSV do SOL-AR) | não: fica só na memória do navegador e nunca sai dele | sim, o texto inteiro, como foi lido |
 | Arquivo climático da configuração A da comparação, quando é outro arquivo carregado | não | sim |
 | Opções de impressão do passo 5 (raio, o que incluir) | não | sim |
