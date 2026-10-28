@@ -19,7 +19,7 @@ const SAVED = '2026-10-26T13:20:00.000Z';
 const KITCHEN_SINK =
   '#a1=55&a2=30&aba=rosa&bd1=30&be1=40&ca=90&cg=2&cm=a&cmp=local%3Drecife%26o%3D30&cn=20&cr=m' +
   '&cs=0&ct=f&dado=tbs&dt=0_45-30_30-330_30&esc=50&estacao=jun-ago&gad=50&hist=1&hl=a&ja=1' +
-  '&jl=1%2C2&local=natal&o=200&pbe1=20&pc1=ad_0%2C4&pc2=lh_x_0%2C2_0%2C3&periodo=tarde&proj=cil' +
+  '&jl=1%2C2&local=natal&o=200&pbe1=20&pc1=ad_0%2C4&pc2=lh_x_0%2C2_0%2C3&periodo=tarde&pm1=35.2_112.5&pm3=60_330&proj=cil' +
   '&rosa=vel&setores=16&tr=0&va=4%2C5&vh=q&vt=s';
 
 const base = (over: Partial<Project> = {}): Project => ({
