@@ -256,11 +256,10 @@ export const es: Catalog = {
   'site.cityLabel': 'Ciudad',
   'site.fileOption': 'Archivo: {name}',
   'site.recentLink': 'Descargar datos recientes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Cargue abajo el .zip descargado, sin descomprimir.',
+  'site.recentHelp': 'Cargue el .zip descargado en "Abrir archivo", sin descomprimir.',
   'site.loadingHistorical': 'Abriendo los datos históricos…',
   'site.historicalError':
     'No fue posible abrir los datos históricos. Revise la conexión e intente de nuevo.',
-  'site.fileLabel': 'O cargue un archivo climático (EPW, .zip del TMYx o CSV de SOL-AR)',
   'site.fileHelp': 'El archivo se lee solo en su navegador; nada se envía por internet.',
   'site.unknownFormat':
     'Formato no reconocido: cargue un archivo EPW o un CSV de SOL-AR (extensión .csv).',
@@ -351,12 +350,6 @@ export const es: Catalog = {
   'stepNav.label': 'Ir a un paso',
   'stepNav.title': 'Pasos',
   'stepNav.go': 'Ir al paso {n}, {name}',
-  'side.pointer': '{title}: al lado, debajo de la carta.',
-  'side.go': 'Ver',
-  'side.heading': 'Del paso {step}, {name}',
-  'side.annual': 'Sombra a lo largo del año',
-  'side.effect': 'Clasificación de las horas e indicadores',
-  'side.catalog': 'Mapa de las estaciones',
   'geometry.heading': 'Protección por las dimensiones',
   'geometry.summary':
     'Ventana, protección horizontal, aletas y lamas en metros; corte, vista y sombra en la carta.',
@@ -890,7 +883,7 @@ export const es: Catalog = {
     'La orientación cambió: la comparación sigue con la fachada a {orientation}°, la del ejercicio.',
   'mask.answer': 'máscara calculada (respuesta del ejercicio)',
   // F4.1: catálogo nacional de estaciones (decisión 0034).
-  'catalog.heading': 'Catálogo nacional: {count} estaciones (TMYx 2011 a 2025)',
+  'catalog.heading': 'Catálogo nacional: {count} estaciones TMYx',
   'catalog.intro':
     'Estaciones de Brasil con archivo TMYx 2011 a 2025 en Climate.OneBuilding.org, con los datos de cada archivo y la calidad verificada por nosotros. El archivo se descarga del sitio oficial y se carga aquí.',
   'catalog.loading': 'Cargando el catálogo…',
@@ -922,7 +915,7 @@ export const es: Catalog = {
   'station.sourceEra5':
     'Punto {name} ({uf}), archivo TMYx 2011 a 2025 de Climate.OneBuilding.org hecho solo con el reanálisis ERA5; ningún dato horario abierto.',
   'station.download': 'Descargar el archivo de esta estación (Climate.OneBuilding.org)',
-  'station.downloadHelp': 'Cargue el .zip descargado en el campo de arriba, sin descomprimir.',
+  'station.downloadHelp': 'Cargue el .zip descargado en "Abrir archivo", sin descomprimir.',
   'station.period': '{start} a {end} ({years} años de datos)',
   'station.quality': 'Calidad del archivo',
   'station.q.missing': 'valores ausentes: {count}',
@@ -1081,4 +1074,24 @@ export const es: Catalog = {
     'El archivo climático cargado no va en el enlace: quien lo abra necesita cargar el mismo archivo (o abrir el proyecto guardado en el paso 5).',
   'share.label': 'Enlace de este análisis',
   'share.close': 'Cerrar',
+  // Leiaute em colunas (decisão 0050).
+  'info.label': 'Explicación: {topic}',
+  'chart.infoLabel': 'Cómo leer la carta',
+  'site.fileButton': 'Abrir archivo',
+  'site.fileButtonDetail': ' climático (EPW, .zip del TMYx o CSV de SOL-AR)',
+  'site.detailsLabel': 'Detalles del lugar:',
+  'site.lineNotice': '1 aviso',
+  'site.lineNotices': '{count} avisos',
+  'site.originTry': 'TRY de SOL-AR 6.2',
+  'site.originIwec': 'IWEC de SOL-AR 6.2',
+  'site.originCity': 'estación {station}',
+  'site.originFile': 'archivo {file}',
+  'site.originStation': 'catálogo TMYx',
+  'site.originLink': 'coordenadas del enlace',
+  'facade.orientationLabel': 'Orientación',
+  'facade.orientationLabelDetail': ' de la fachada (acimut de la normal exterior)',
+  'protection.referenceShort': 'Referencia',
+  'angles.caption': '{view}, referencia {reference}',
+  'sources.compareShort': 'Comparar',
+  'outputs.copyShort': 'Copiar',
 };

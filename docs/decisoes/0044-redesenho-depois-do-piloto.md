@@ -1,7 +1,7 @@
 # 0044. Redesenho depois do piloto do F2.9
 
 - Data: 2026-10-27
-- Status: aceita (decisão do Anthony, 27/10/2026, depois do piloto P0). As escolhas de detalhe marcadas como **proposta** são do Claude, sem base clara, e podem ser revistas no teste com participantes ou no portão 2.
+- Status: aceita (decisão do Anthony, 27/10/2026, depois do piloto P0). As escolhas de detalhe marcadas como **proposta** são do Claude, sem base clara, e podem ser revistas no teste com participantes ou no portão 2. **Corrigida pela 0050 (28/10/2026):** no computador, os passos 1 a 5 ficam sempre abertos, em colunas; o acordeão (item a e detalhes 4 a 7) fica só no celular.
 
 ## Contexto
 

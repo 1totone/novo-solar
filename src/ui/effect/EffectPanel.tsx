@@ -1,7 +1,6 @@
 import { useId } from 'react';
 import { ADAPTIVE, SHADING_THRESHOLD } from '../../core/comfort/classification';
 import type { EpwData } from '../../core/epw/parseEpw';
-import { SideSlot } from '../layout/SideResults';
 import { useI18n } from '../i18n/useI18n';
 import {
   classificationFromHash,
@@ -292,13 +291,7 @@ export function EffectPanel({
                 {t('classes.incomplete')}
               </p>
             )}
-            <SideSlot
-              slot="effect"
-              active={open}
-              step={7}
-              stepName={t('effect.heading')}
-              title={t('side.effect')}
-            >
+            <>
               <h4 className="sub-heading">{t('classes.hypotheses')}</h4>
               <ul className="hypotheses" data-testid="classes-hypotheses">
                 {hypotheses.map((h) => (
@@ -382,7 +375,7 @@ export function EffectPanel({
                   onChange={onChange}
                 />
               )}
-            </SideSlot>
+            </>
           </>
         )}
       </details>

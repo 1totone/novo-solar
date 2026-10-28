@@ -15,6 +15,8 @@ import { ANGLE_VIEWS, type AngleView } from './angleView';
  */
 
 const RAD = Math.PI / 180;
+/** Símbolo de cada desenho, no botão que o escolhe. */
+const SYMBOL: Record<AngleView, string> = { alpha: 'α', beta: 'β', gamma: 'γ' };
 /** Ângulo de exemplo quando o campo está vazio. */
 const EXAMPLE = 45;
 
@@ -151,10 +153,13 @@ export function AngleDiagrams({
             role="radio"
             aria-checked={view === v}
             tabIndex={view === v ? 0 : -1}
+            aria-label={caption[v]}
+            title={caption[v]}
             data-testid={`angle-view-${v}`}
             onClick={() => onViewChange(v)}
           >
-            {caption[v]}
+            {/* Só o símbolo à vista (decisão 0050); o nome inteiro para o leitor de tela. */}
+            {SYMBOL[v]}
           </button>
         ))}
       </div>
@@ -326,6 +331,13 @@ export function AngleDiagrams({
           </svg>
         </figure>
       )}
+      {/* Legenda à vista: o desenho escolhido e a referência (decisão 0050). */}
+      <p className="angle-caption" data-testid="angle-caption">
+        {t('angles.caption', {
+          view: caption[view],
+          reference: t(reference === 'internal' ? 'angles.internal' : 'angles.external'),
+        })}
+      </p>
     </div>
   );
 }

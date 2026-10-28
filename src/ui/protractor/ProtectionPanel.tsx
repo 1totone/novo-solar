@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n/useI18n';
+import { InfoButton, InfoText } from '../layout/InfoTip';
+import { useInfo } from '../layout/useInfo';
 import type { MessageKey } from '../i18n/i18n';
 import { ANGLE_KEYS, type AngleKey, type ProtractorState } from '../state/protractorHash';
 import type { HashState } from '../state/hashState';
@@ -86,6 +88,7 @@ export function ProtectionPanel({
   onDrawingChange: (next: Drawing | null) => void;
 }) {
   const { t } = useI18n();
+  const info = useInfo();
   // Abre "Mais opções" se o link já traz algum campo avançado ou desenho; depois, quem decide é
   // o usuário (apagar um campo não fecha o painel).
   const [moreOpen, setMoreOpen] = useState(
@@ -160,8 +163,10 @@ export function ProtectionPanel({
 
   return (
     <>
-      <div className="field">
-        <span className="field-label">{t('protection.reference')}</span>
+      <div className="field row">
+        <span className="field-label" aria-hidden="true">
+          {t('protection.referenceShort')}
+        </span>
         <div
           className="segmented"
           role="radiogroup"
@@ -181,6 +186,13 @@ export function ProtectionPanel({
             </button>
           ))}
         </div>
+        <InfoButton
+          info={info}
+          label={t('info.label', { topic: t('protection.reference') })}
+          testId="protection-info"
+        />
+      </div>
+      <InfoText info={info} testId="protection-help">
         <p className="note">
           {t(
             state.reference === 'internal'
@@ -188,25 +200,30 @@ export function ProtectionPanel({
               : 'protection.referenceHelpExternal',
           )}
         </p>
-      </div>
+        <p className="note">{t('protection.sidesHelp')}</p>
+        <p className="note">{t('protection.totalHelp')}</p>
+      </InfoText>
+      {/* Os ângulos da sombra total ao lado do desenho de onde se mede cada um (decisão 0050). */}
       <h3 className="set-heading">
         <span className="swatch total" aria-hidden="true" />
         {t('protection.totalSet')}
       </h3>
-      {grid(TOTAL.first, totalSet)}
-      <h3 className="sub-heading">
-        {t('angles.heading', {
-          reference: t(state.reference === 'internal' ? 'angles.internal' : 'angles.external'),
-        })}
-      </h3>
-      <AngleDiagrams
-        reference={state.reference}
-        angles={state.angles}
-        view={view}
-        onViewChange={setView}
-      />
-      <p className="note">{t('protection.sidesHelp')}</p>
-      <p className="note">{t('protection.totalHelp')}</p>
+      <div className="protection-main">
+        <div className="protection-angles">{grid(TOTAL.first, totalSet)}</div>
+        <div className="protection-figure">
+          <h3 className="visually-hidden">
+            {t('angles.heading', {
+              reference: t(state.reference === 'internal' ? 'angles.internal' : 'angles.external'),
+            })}
+          </h3>
+          <AngleDiagrams
+            reference={state.reference}
+            angles={state.angles}
+            view={view}
+            onViewChange={setView}
+          />
+        </div>
+      </div>
       {state.invalid.length > 0 && (
         <p className="error" role="alert">
           {t('protection.invalid')}

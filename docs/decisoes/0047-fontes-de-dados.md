@@ -1,7 +1,7 @@
 # 0047. Fontes de dados no passo 1: o que pintar e a comparação
 
 - Data: 2026-10-27
-- Status: proposta (itens e, f e h da decisão 0044; escolhas do Claude sem base clara, marcadas abaixo).
+- Status: proposta (itens e, f e h da decisão 0044; escolhas do Claude sem base clara, marcadas abaixo). Pela 0050 (28/10/2026), a lista de rádios das fontes vira uma lista de escolha, com "Abrir arquivo" e "Comparar" ao lado; o resto continua.
 
 ## Contexto
 

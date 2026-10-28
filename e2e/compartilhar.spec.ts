@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
-import { loadClimateFile } from './fixtures/steps';
+import { isAccordion, loadClimateFile } from './fixtures/steps';
 
 // "Compartilhar" no cabeçalho (decisão 0049, item i da 0044; problema 10 do piloto do F2.9: a
 // lógica do link não ficou clara). Copia o endereço, diz o que ele reabre e o que não vai nele.
@@ -28,10 +28,22 @@ test('copia o link, diz o que ele reabre, e o link reabre a mesma análise', asy
   // Outra aba com o link copiado: a mesma fachada, o mesmo brise e a mesma referência.
   const other = await context.newPage();
   await other.goto(copied);
-  await expect(other.getByTestId('facade-summary')).toHaveText('Fachada 315° (NO)');
-  await expect(other.getByTestId('protection-summary')).toHaveText(
-    'Brise α 50° · referência externa',
-  );
+  if (isAccordion(other)) {
+    await expect(other.getByTestId('facade-summary')).toHaveText('Fachada 315° (NO)');
+    await expect(other.getByTestId('protection-summary')).toHaveText(
+      'Brise α 50° · referência externa',
+    );
+  } else {
+    // No computador, os passos ficam abertos (decisão 0050): os próprios campos.
+    await expect(other.getByLabel('Orientação da fachada (azimute da normal externa)')).toHaveValue(
+      '315',
+    );
+    await expect(other.getByTestId('angle-a1')).toHaveValue('50');
+    await expect(other.getByRole('radio', { name: 'Externa' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+  }
   await expect(other.getByLabel('Cidade')).toHaveValue('recife');
 });
 

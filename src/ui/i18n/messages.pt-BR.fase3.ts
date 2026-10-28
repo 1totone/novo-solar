@@ -341,9 +341,4 @@ export const fase3PtBR = {
   'stepNav.label': 'Ir a um passo',
   'stepNav.title': 'Passos',
   'stepNav.go': 'Ir ao passo {n}, {name}',
-  'side.pointer': '{title}: ao lado, abaixo da carta.',
-  'side.go': 'Ver',
-  'side.heading': 'Do passo {step}, {name}',
-  'side.annual': 'Sombra ao longo do ano',
-  'side.effect': 'Classificação das horas e indicadores',
 } as const;

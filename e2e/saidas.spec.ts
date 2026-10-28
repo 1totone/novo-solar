@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
-import { loadClimateFile, openStep } from './fixtures/steps';
+import { loadClimateFile, openPrintOptions, openStep } from './fixtures/steps';
 
 const FLORIPA = 'LOCATION,Florianopolis-Teste,SC,BRA,SRC-Teste,838990,-27.67000,-48.54700,-3.0,6.1';
 const CM_PER_PX = 2.54 / 96;
@@ -31,10 +31,11 @@ test.describe('imprimir e exportar', () => {
     await page.emulateMedia({ media: 'print' });
     const ruler = await page.locator('.print-ruler .ruler').boundingBox();
     expect(ruler!.width * CM_PER_PX).toBeCloseTo(5, 2);
-    await expect(page.locator('.steps')).toBeHidden();
+    await expect(page.locator('.steps:visible')).toHaveCount(0);
     await expect(page.locator('.print-header')).toContainText('Florianópolis');
     // Sem o transferidor na impressão.
     await page.emulateMedia({ media: 'screen' });
+    await openPrintOptions(page);
     await page.getByLabel('Transferidor', { exact: true }).uncheck();
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('#panel-chart .protractor')).toBeHidden();

@@ -10,6 +10,8 @@ import {
   type OverlayState,
 } from '../state/overlayHash';
 import { onRovingKeyDown } from '../a11y/roving';
+import { InfoButton, InfoText } from '../layout/InfoTip';
+import { useInfo } from '../layout/useInfo';
 
 const LABEL: Record<DataKey, MessageKey> = {
   tbs: 'data.tbs',
@@ -48,7 +50,7 @@ function BandEditor({
   const [dirty, setDirty] = useState(false);
   const valid = !dirty || parseLimits(text) !== null;
   return (
-    <div className="field">
+    <div className="field row">
       <span className="field-label">{t('data.bands', { unit })}</span>
       <div className="band-inputs">
         {text.map((value, i) => (
@@ -104,6 +106,7 @@ export function DataPanel({
   const key = overlay.key;
   const info = key ? OVERLAY_QUANTITIES[QUANTITY_OF[key]] : undefined;
   const [moreOpen, setMoreOpen] = useState(overlay.mode === 'frequency');
+  const help = useInfo();
   const tz = `${timeZone < 0 ? '−' : '+'}${formatNumber(Math.abs(timeZone), Number.isInteger(timeZone) ? 0 : 1)}`;
 
   return (
@@ -114,7 +117,7 @@ export function DataPanel({
         </p>
       ) : (
         <>
-          <div className="field">
+          <div className="field row">
             <label htmlFor={`${id}-v`}>{t('data.variable')}</label>
             <select
               id={`${id}-v`}
@@ -135,10 +138,17 @@ export function DataPanel({
                 </option>
               ))}
             </select>
+            {key && info && (
+              <InfoButton
+                info={help}
+                label={t('info.label', { topic: t('data.heading') })}
+                testId="data-info"
+              />
+            )}
           </div>
           {key && info && (
             <>
-              <div className="field">
+              <div className="field row">
                 <span className="field-label">{t('data.semester')}</span>
                 <div
                   className="segmented"
@@ -193,24 +203,31 @@ export function DataPanel({
                       {t('data.bandsFile')}
                     </button>
                   </div>
-                  <p className="note">
-                    {overlay.bands.source === 'file'
-                      ? t('data.bandsFileWarning')
-                      : t(FROM_62.includes(key) ? 'data.bandsDefault62' : 'data.bandsDefaultNew')}
-                  </p>
                 </>
               )}
-              <p className="note">
-                {t('data.cellHelp', {
-                  interval: t(
-                    info.timing === 'integrated'
-                      ? 'data.intervalIntegrated'
-                      : 'data.intervalInstant',
-                  ),
-                  tz,
-                  what: t(overlay.mode === 'frequency' ? 'data.colorFrequency' : 'data.colorMean'),
-                })}
-              </p>
+              {overlay.mode === 'mean' && overlay.bands.source === 'file' && (
+                <p className="note">{t('data.bandsFileWarning')}</p>
+              )}
+              <InfoText info={help} testId="data-help">
+                {overlay.mode === 'mean' && overlay.bands.source !== 'file' && (
+                  <p className="note">
+                    {t(FROM_62.includes(key) ? 'data.bandsDefault62' : 'data.bandsDefaultNew')}
+                  </p>
+                )}
+                <p className="note">
+                  {t('data.cellHelp', {
+                    interval: t(
+                      info.timing === 'integrated'
+                        ? 'data.intervalIntegrated'
+                        : 'data.intervalInstant',
+                    ),
+                    tz,
+                    what: t(
+                      overlay.mode === 'frequency' ? 'data.colorFrequency' : 'data.colorMean',
+                    ),
+                  })}
+                </p>
+              </InfoText>
               <details
                 className="more"
                 open={moreOpen}

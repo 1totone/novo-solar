@@ -1,7 +1,7 @@
 import type { TutorialTarget } from '../didactic/tutorial';
 import type { HashState } from '../state/hashState';
 import { rememberFocus } from './focusAfterLoad';
-import { WIDE_QUERY } from './sideResultsContext';
+import { MEDIUM_QUERY } from './useLayout';
 
 /**
  * Passos da coluna como acordeão (decisão 0044): os cinco do caminho básico, o painel das projeções
@@ -40,9 +40,11 @@ const SELECTOR: Record<StepId, string> = {
   '7': '[data-testid="effect-panel"]',
 };
 
-/** Cabeçalho (o `summary`) do passo. */
+/** Cabeçalho do passo: o `summary` do acordeão, ou o título do passo sempre aberto (decisão 0050). */
 export function stepSummary(id: StepId): HTMLElement | null {
-  return document.querySelector<HTMLElement>(`.steps ${SELECTOR[id]} > details > summary`);
+  return document.querySelector<HTMLElement>(
+    `.steps ${SELECTOR[id]} > details > summary, .steps ${SELECTOR[id]} > h2`,
+  );
 }
 
 /**
@@ -50,7 +52,7 @@ export function stepSummary(id: StepId): HTMLElement | null {
  * o atalho entre passos (decisão 0040), quando está à vista.
  */
 export function topCover(): number {
-  const wide = window.matchMedia?.(WIDE_QUERY).matches ?? true;
+  const wide = window.matchMedia?.(MEDIUM_QUERY).matches ?? true;
   const el = document.querySelector<HTMLElement>(wide ? '.step-nav' : '.chart-section');
   if (!el || getComputedStyle(el).position !== 'sticky') return 0;
   // A altura, e não a posição de agora: antes de rolar, a área ainda não grudou no alto.
@@ -59,14 +61,21 @@ export function topCover(): number {
 
 /**
  * Traz o cabeçalho do passo para a vista, abaixo do que é fixo no alto, se ele não estiver à vista
- * (fechar o passo de cima pode tirá-lo do lugar); com `focus`, põe o foco nele.
+ * (fechar o passo de cima pode tirá-lo do lugar); com `focus`, põe o foco nele. No computador, quem
+ * rola é a coluna do passo, não a página (decisão 0050); `alignTop` leva o cabeçalho ao alto dela.
  */
-export function revealStep(id: StepId, focus: boolean) {
+export function revealStep(id: StepId, focus: boolean, alignTop = false) {
   const summary = stepSummary(id);
   if (!summary) return;
   const cover = topCover();
   const box = summary.getBoundingClientRect();
-  if (box.top < cover || box.bottom > window.innerHeight) {
+  const column = summary.closest<HTMLElement>('.steps');
+  if (column && getComputedStyle(column).overflowY === 'auto') {
+    const area = column.getBoundingClientRect();
+    if (alignTop || box.top < area.top + cover || box.bottom > area.bottom) {
+      column.scrollTo({ top: Math.max(0, box.top - area.top + column.scrollTop - cover - 8) });
+    }
+  } else if (box.top < cover || box.bottom > window.innerHeight) {
     window.scrollTo({ top: Math.max(0, box.top + window.scrollY - cover - 8) });
   }
   if (!focus) return;

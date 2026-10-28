@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { svgColors } from './fixtures/pixels';
-import { openStep } from './fixtures/steps';
+import { openPrintOptions } from './fixtures/steps';
 
 // F3.2: curvas de percentual, região de sombra total e máscara de um ponto na carta.
 // Caso analítico (spec 07, seção 7.5): brise infinito rente à fachada, de profundidade D = 0,8 m,
@@ -209,7 +209,7 @@ test.describe('curvas e máscara de um ponto na carta (F3.2)', () => {
     await page.emulateMedia({ media: 'print' });
     await expect(page.getByTestId('shading-layer')).toBeVisible();
     await page.emulateMedia({ media: 'screen' });
-    await openStep(page, '5');
+    await openPrintOptions(page);
     await page.getByRole('checkbox', { name: /Só o transferidor/ }).check();
     await page.emulateMedia({ media: 'print' });
     await expect(page.getByTestId('shading-layer')).toBeHidden();

@@ -2,9 +2,10 @@ import { useId, type ReactNode } from 'react';
 import { useI18n } from '../i18n/useI18n';
 
 /**
- * Um passo da coluna, como acordeão (decisão 0044): o cabeçalho com o número, o título e, fechado,
- * um resumo de uma linha do que já foi escolhido; aberto, o conteúdo. Quem abre e fecha é a
- * aplicação (um passo aberto por vez); o conteúdo só existe com o passo aberto.
+ * Um passo da coluna. No celular, como acordeão (decisão 0044): o cabeçalho com o número, o título e,
+ * fechado, um resumo de uma linha do que já foi escolhido; aberto, o conteúdo. Quem abre e fecha é a
+ * aplicação (um passo aberto por vez); o conteúdo só existe com o passo aberto. No computador
+ * (`fixed`, decisão 0050), sempre aberto: só o cabeçalho e o conteúdo, sem resumo.
  */
 export function Step({
   n = null,
@@ -16,6 +17,7 @@ export function Step({
   summaryTestId,
   dataStep,
   advanced = false,
+  fixed = false,
   children,
 }: {
   /** Número do passo (sem número, um painel do grupo avançado, como o das projeções). */
@@ -29,10 +31,29 @@ export function Step({
   /** Alvo do tutorial (F4.5): `data-step` do painel. */
   dataStep?: string;
   advanced?: boolean;
+  /** Sempre aberto, sem acordeão (computador, decisão 0050). */
+  fixed?: boolean;
   children: ReactNode;
 }) {
   const { t } = useI18n();
   const id = useId();
+  if (fixed) {
+    return (
+      <section
+        className="step-panel fixed"
+        aria-labelledby={`${id}-h`}
+        data-testid={testId}
+        data-step={dataStep}
+      >
+        {/* Alvo do foco do atalho entre passos (decisão 0040), no leiaute de duas colunas. */}
+        <h2 id={`${id}-h`} className="step-heading" tabIndex={-1}>
+          {n !== null && <span className="step-n">{n}</span>}
+          <span className="step-title">{heading}</span>
+        </h2>
+        <div className="step-body">{children}</div>
+      </section>
+    );
+  }
   return (
     <section
       className={`step-panel${advanced ? ' advanced-step' : ''}`}

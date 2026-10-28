@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { svgColors } from './fixtures/pixels';
-import { openStep } from './fixtures/steps';
+import { openPrintOptions, openStep } from './fixtures/steps';
 
 // F3.1: passo 6, proteção pelas dimensões. Caso da Figura 22 do tutorial do SOL-AR da UFU: janela
 // de 2,00 × 1,00 m com o vidro 15 cm atrás da face da parede, brise de 1,28 m na verga,
@@ -41,7 +41,7 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
     page,
   }) => {
     await page.goto('./#local=florianopolis');
-    const headings = page.locator('.steps h2');
+    const headings = page.locator('.steps .step-panel h2');
     await expect(headings).toHaveText([
       /1\s*Local/,
       /2\s*Fachada/,
@@ -182,6 +182,7 @@ test.describe('passo 6: proteção pelas dimensões (F3.1)', () => {
     await page.emulateMedia({ media: 'screen' });
     // Sem a opção no passo 5, o desenho não vai para a impressão.
     await openStep(page, '5');
+    await openPrintOptions(page);
     await page.getByRole('checkbox', { name: /Corte e vista da proteção/ }).uncheck();
     await expect(page.getByTestId('print-geometry')).toHaveCount(0);
   });

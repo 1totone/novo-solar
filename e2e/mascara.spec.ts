@@ -83,7 +83,9 @@ test.describe('máscara pelos ângulos', () => {
     await page.mouse.click(cx - d, cy - d);
     await page.mouse.click(cx + d, cy - d);
     await page.mouse.click(cx, cy + d);
-    await expect(page.getByRole('status')).toContainText('3 até agora');
+    await expect(page.getByRole('status').filter({ hasText: 'até agora' })).toContainText(
+      '3 até agora',
+    );
     await page.getByRole('button', { name: 'Concluir polígono' }).click();
     await expect(page).toHaveURL(/dt=/);
     await expect(page.getByTestId('mask-total')).toHaveCount(1);

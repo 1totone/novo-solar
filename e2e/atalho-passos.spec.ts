@@ -3,7 +3,8 @@ import { stepDetails, stepHeader } from './fixtures/steps';
 
 // Atalho entre passos (decisão 0040): só aparece com um passo avançado aberto; cada número abre o
 // passo (acordeão, decisão 0044), sem ele ficar escondido sob a carta (celular) ou sob a própria
-// barra (computador).
+// barra (computador). Com as três colunas (decisão 0050), todos os passos ficam à vista e a barra
+// não aparece; no computador, o teste usa a largura média (duas colunas, a coluna dos passos rola).
 const ADVANCED = '#local=florianopolis&o=0&jl=1%2C5&ja=1%2C2&pc1=b_0%2C8_0%2C1__i_i';
 
 /** O título do passo está na tela e não fica sob o que é fixo no alto. */
@@ -35,7 +36,9 @@ test('no caminho básico, sem passo avançado aberto, a barra não aparece', asy
   await expect(page.getByTestId('step-nav')).toHaveCount(0);
 });
 
-test('com o passo 6 aberto, a barra abre cada passo e marca o aberto', async ({ page }) => {
+test('com o passo 6 aberto, a barra abre cada passo e marca o aberto', async ({ page }, info) => {
+  const desktop = info.project.name === 'computador';
+  if (desktop) await page.setViewportSize({ width: 1024, height: 768 });
   await page.goto(`./${ADVANCED}`);
   // Espera o mapa do ano, que muda a altura do passo 6 quando chega.
   await expect(page.getByTestId('month-hour-map')).toBeAttached({ timeout: 20000 });
@@ -54,12 +57,29 @@ test('com o passo 6 aberto, a barra abre cada passo e marca o aberto', async ({ 
   await headingUncovered(page, 7);
   await expect(nav).toBeInViewport();
 
-  // Um passo do caminho básico: abre, recebe o foco, e a barra sai (nenhum avançado aberto).
+  // Um passo do caminho básico: abre (no computador, já está aberto, decisão 0050), recebe o foco,
+  // e a barra sai (nenhum avançado aberto).
   await page.getByTestId('step-nav-4').click();
-  await expect(stepDetails(page, '4')).toHaveAttribute('open', '');
-  await expect(stepHeader(page, '4')).toBeFocused();
+  if (desktop) {
+    await expect(page.locator('.steps [data-step="4"] > h2')).toBeFocused();
+  } else {
+    await expect(stepDetails(page, '4')).toHaveAttribute('open', '');
+    await expect(stepHeader(page, '4')).toBeFocused();
+  }
   await headingUncovered(page, 4);
   await expect(nav).toHaveCount(0);
+});
+
+test('com as três colunas, a barra não aparece: todos os passos estão à vista', async ({
+  page,
+}, info) => {
+  test.skip(info.project.name !== 'computador', 'leiaute do computador');
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto(`./${ADVANCED}`);
+  await expect(
+    page.locator('.steps-right [data-testid="geometry-panel"] > details'),
+  ).toHaveAttribute('open', '');
+  await expect(page.getByTestId('step-nav')).toHaveCount(0);
 });
 
 test('no celular, a barra fica no pé da tela', async ({ page }, info) => {

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { isAccordion } from './fixtures/steps';
 
 // Carregamento sob demanda (decisão 0039): o caminho básico não baixa o código dos passos 6 e 7
 // nem o da vista 3D; abrir o passo baixa o dele, e o passo aparece igual.
@@ -45,7 +46,13 @@ test('passos 2 a 5: fora do bloco inicial, chegam depois da carta; o foco fica n
   expect(html).not.toMatch(steps);
   await expect.poll(() => scripts.filter((s) => steps.test(s)).length, { timeout: 10_000 }).toBe(5);
 
-  // Os resumos estão lá desde o início; o conteúdo aparece ao abrir, com o foco no resumo.
+  // No computador, os passos ficam abertos (decisão 0050): o conteúdo chega sozinho.
+  if (!isAccordion(page)) {
+    await expect(page.getByRole('radio', { name: 'norte (0°)' })).toBeVisible();
+    await expect(page.getByTestId('angle-a1')).toHaveValue('55');
+    return;
+  }
+  // No celular, os resumos estão lá desde o início; o conteúdo aparece ao abrir, com o foco no resumo.
   await expect(page.getByTestId('facade-summary')).toHaveText('Fachada 30° (NNE)');
   await expect(page.getByTestId('protection-summary')).toHaveText('Brise α 55°');
   await page.getByTestId('facade-panel').locator('summary').focus();
@@ -119,9 +126,7 @@ test('um navegador em inglês abre direto em inglês, sem passar pelo português
   await context.close();
 });
 
-test('o catálogo chega ao abrir, com o mapa ao lado da carta no computador', async ({
-  page,
-}, info) => {
+test('o catálogo chega ao abrir, com o mapa dentro do passo 1', async ({ page }) => {
   await page.goto('./#local=florianopolis');
   const catalog = page.getByTestId('catalog');
   await expect(catalog.locator('summary')).toContainText('579');
@@ -130,18 +135,8 @@ test('o catálogo chega ao abrir, com o mapa ao lado da carta no computador', as
   const map = page.getByTestId('catalog-map');
   await expect(map).toBeVisible({ timeout: 20000 });
   await expect(catalog.locator('summary')).toBeFocused();
-  if (info.project.name === 'computador') {
-    // Acima da carta, no painel da direita, com a largura dele.
-    await expect(page.getByTestId('side-results-top').getByTestId('catalog-map')).toBeVisible();
-    await expect(catalog.getByTestId('catalog-map')).toHaveCount(0);
-    const mapBox = (await map.boundingBox())!;
-    const stepsBox = (await page.locator('.steps').boundingBox())!;
-    expect(mapBox.width).toBeGreaterThan(1.5 * stepsBox.width);
-    const chartBox = (await page.getByTestId('sun-chart').first().boundingBox())!;
-    expect(mapBox.y).toBeLessThan(chartBox.y);
-  } else {
-    await expect(catalog.getByTestId('catalog-map')).toBeVisible();
-  }
+  // Com as colunas (decisão 0050), o mapa fica no próprio passo 1, que rola na coluna dele.
+  await expect(catalog.getByTestId('catalog-map')).toBeVisible();
 });
 
 // A aba da rosa dos ventos também chega só quando escolhida (decisão 0044, espaço no orçamento).

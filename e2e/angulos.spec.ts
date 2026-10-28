@@ -72,7 +72,11 @@ test('α no corte: o ângulo desenhado é o digitado, nas duas referências; pix
 
   // Externa: o mesmo 50 passa a ser medido da horizontal; o brise fica mais curto.
   await page.getByRole('radio', { name: 'Externa' }).click();
-  await expect(page.getByText('Onde se mede cada ângulo (referência externa)')).toBeVisible();
+  // O título fica para o leitor de tela; à vista, a legenda do desenho (decisão 0050).
+  await expect(
+    page.getByRole('heading', { name: 'Onde se mede cada ângulo (referência externa)' }),
+  ).toBeAttached();
+  await expect(page.getByTestId('angle-caption')).toHaveText('α no corte, referência externa');
   await expect(svg).toHaveAttribute('aria-label', /α 50°.*a partir da horizontal\.$/);
   ray = await line(svg, 'ray');
   const reference = await line(svg, 'reference');
