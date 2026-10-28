@@ -197,7 +197,7 @@ export const fase4PtBR = {
     'A orientação mudou: a comparação continua com a fachada a {orientation}°, a do exercício.',
   'mask.answer': 'máscara calculada (resposta do exercício)',
   // F4.1: catálogo nacional de estações (decisão 0034).
-  'catalog.heading': 'Catálogo nacional: {count} estações TMYx',
+  'catalog.heading': 'Catálogo nacional: {count} estações',
   'catalog.intro':
     'Estações do Brasil com arquivo TMYx 2011 a 2025 no Climate.OneBuilding.org, com os dados de cada arquivo e a qualidade conferida por nós. O arquivo é baixado do site oficial e carregado aqui.',
   'catalog.loading': 'Carregando o catálogo…',

@@ -874,7 +874,7 @@ export const en: Catalog = {
     'The orientation changed: the comparison stays with the facade at {orientation}°, that of the exercise.',
   'mask.answer': 'computed mask (answer of the exercise)',
   // F4.1: national station catalogue (decision 0034).
-  'catalog.heading': 'National catalogue: {count} TMYx stations',
+  'catalog.heading': 'National catalogue: {count} stations',
   'catalog.intro':
     'Brazilian stations with a TMYx 2011 to 2025 file on Climate.OneBuilding.org, with the data of each file and its quality checked by us. The file is downloaded from the official site and loaded here.',
   'catalog.loading': 'Loading the catalogue…',
@@ -1079,6 +1079,8 @@ export const en: Catalog = {
   'site.originLink': 'coordinates from the link',
   'facade.orientationLabel': 'Facade orientation',
   'facade.orientationLabelDetail': ' (azimuth of the outward normal)',
+  'facade.showProtractorShort': 'Show the protractor',
+  'facade.showProtractorDetail': ' on the chart',
   'protection.referenceShort': 'Reference',
   'angles.caption': '{view}, {reference} reference',
   'sources.compareShort': 'Compare',

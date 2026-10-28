@@ -180,7 +180,11 @@ export function FacadePanel({
           checked={state.show}
           onChange={(e) => onChange({ tr: e.target.checked ? '' : '0' })}
         />
-        {t('facade.showProtractor')}
+        {/* Rótulo curto à vista, para caber numa linha; o nome inteiro para o leitor de tela. */}
+        <span>
+          {t('facade.showProtractorShort')}
+          <span className="visually-hidden">{t('facade.showProtractorDetail')}</span>
+        </span>
       </label>
     </div>
   );

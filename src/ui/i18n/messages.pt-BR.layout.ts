@@ -19,6 +19,8 @@ export const layoutPtBR = {
   // Passo 2: o rótulo curto à vista; o resto do nome do campo para o leitor de tela.
   'facade.orientationLabel': 'Orientação',
   'facade.orientationLabelDetail': ' da fachada (azimute da normal externa)',
+  'facade.showProtractorShort': 'Mostrar o transferidor',
+  'facade.showProtractorDetail': ' sobre a carta',
   // Passo 3: o rótulo curto da referência (o grupo tem o nome inteiro).
   'protection.referenceShort': 'Referência',
   'angles.caption': '{view}, referência {reference}',

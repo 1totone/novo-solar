@@ -2316,7 +2316,7 @@ a.btn {
 }
 
 .field.sources .row > select {
-  flex-basis: 10rem;
+  flex-basis: 7rem;
 }
 
 .source-actions {
@@ -2572,74 +2572,50 @@ details.print-include {
     margin-top: 0.75rem;
   }
 
-  /* A carta do maior tamanho que a coluna permite: a moldura preenche a altura que sobra das
-     abas e das legendas, e o SVG se ajusta a ela sem deformar. */
+  /* A carta do maior tamanho que a coluna permite, com a altura limitada pela da janela menos o
+     cabeçalho, as abas e as legendas (12rem): o tamanho depende só da janela, e não muda quando as
+     legendas mudam (cálculo em andamento, valor da célula sob o mouse). O que passar da altura (a
+     tabela das células, a rosa com os filtros, a vista 3D, a comparação) rola na coluna, com o
+     espaço da barra de rolagem sempre reservado, para a carta não mudar de largura. */
   .chart-section {
     position: relative;
-    display: flex;
-    flex-direction: column;
     min-width: 0;
     min-height: 0;
     padding-top: 0.25rem;
-    overflow: hidden;
-  }
-
-  .chart-section > .info-text {
-    flex: none;
-    max-height: 30%;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
 
-  .chart-section:not(.comparing) > #panel-chart {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .chart-section:not(.comparing) > #panel-chart > .chart-view {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .chart-section:not(.comparing) .chart-view > .chart-frame {
-    flex: 1 1 auto;
-    min-height: 12rem;
-  }
-
-  .chart-section:not(.comparing) .chart-frame > .sun-chart {
+  .chart-section .chart-frame > .sun-chart {
     width: 100%;
-    height: 100%;
+    height: auto;
     max-width: none;
+    max-height: calc(100dvh - 12rem);
     margin: 0;
   }
 
   .chart-section .chart-view > .legend,
   .chart-section .chart-view > .note,
   .chart-section .chart-view > .cell-info {
-    flex: none;
     margin: 0.15rem 0;
     font-size: 0.85rem;
   }
 
-  .chart-section .cell-info {
-    min-height: 0;
-  }
-
-  /* A rosa, a vista 3D e a comparação rolam dentro da coluna; a rosa cabe abaixo dos filtros. */
-  .chart-section > #panel-rose,
-  .chart-section > #panel-3d,
-  .chart-section > .compare,
-  .chart-section > .difference {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-  }
-
   .chart-section .wind-rose {
     max-height: calc(100dvh - 22rem);
+  }
+
+  .chart-section .cell-info {
+    margin-bottom: 0;
+  }
+
+  .chart-section .cell-table {
+    margin-top: 0.15rem;
+  }
+
+  .chart-section details.more summary {
+    min-height: 26px;
   }
 
   /* Passos: os sempre abertos (decisão 0050) com o título no lugar do resumo; os avançados

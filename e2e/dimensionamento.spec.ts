@@ -71,7 +71,9 @@ test.describe('passo 6: dimensionamento pelo período (F3.6)', () => {
     // Grade de pontos da carta, separados pelo contorno desenhado (com 0,03 de folga): os de
     // dentro ficam em maioria esverdeados (linhas da carta cobrem uma parte), os de fora, quase
     // nunca.
-    await chart.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+    // Só se a carta não estiver inteira à vista: centrar rolaria a coluna do meio (decisão 0050) e
+    // tiraria de vista a metade de cima, onde fica o sol de 21/6.
+    await chart.evaluate((el) => el.scrollIntoView({ block: 'nearest' }));
     const d = (await page.getByTestId('period-area').getAttribute('d'))!;
     const poly = [...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map((m) => [
       Number(m[1]),
