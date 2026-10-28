@@ -95,7 +95,7 @@ export const redesenhoPtBR = {
   // Compartilhar (decisão 0049, item i da 0044).
   'share.button': 'Compartilhar',
   'share.copied':
-    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos e as opções da carta.',
+    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos, as opções da carta e os pontos marcados.',
   'share.manual':
     'O navegador não deixou copiar: selecione o link abaixo e copie. Ele reabre esta mesma análise.',
   'share.how':

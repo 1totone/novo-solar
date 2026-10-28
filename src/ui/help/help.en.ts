@@ -118,7 +118,7 @@ export const helpEn: HelpContent = {
     tabs: [
       {
         title: 'Sun-path diagram',
-        text: 'The chart with the protractor, the mask, the data and the curves of the device.',
+        text: 'The chart with the protractor, the mask, the data and the curves of the device. Move the mouse over it, or tap it, to read a point; click (on touch, "Mark point") to mark up to 3 points, with the altitude, the azimuth, when the sun passes there and the α and β angles of the protractor in the table below the chart. With the keyboard, the "Type a point" button comes right after the chart.',
       },
       {
         title: '3D view',

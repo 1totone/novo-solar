@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { makeProjection } from '../../core/chart/projection';
+import { lazy, Suspense, useMemo, useState } from 'react';
+import { makeProjection, projectDirection } from '../../core/chart/projection';
 import type { EpwData } from '../../core/epw/parseEpw';
 import { EMPTY, maskRegions, type Region } from '../../core/mask/mask';
 import { cellDifference, DIFFERENCE_BANDS } from '../../core/overlay/difference';
@@ -27,9 +27,21 @@ import type { HashState } from '../state/hashState';
 import { protractorFromHash } from '../state/protractorHash';
 import { siteFromHash } from '../state/siteHash';
 import { chartOptionsFromHash } from '../state/chartOptionsHash';
+import {
+  clearPointsPatch,
+  nextPointNumber,
+  pointPatch,
+  pointsFromHash,
+  type PointNumber,
+} from '../state/pointsHash';
 import { SunChart } from './SunChart';
 import { useChartReadout } from './ChartReadout';
+import { MARKER_SIZE, PointMarkers } from './PointMarkers';
+import type { PointsMessage } from './PointsPanel';
 import { timeZoneOffset } from '../timeZoneOffset';
+
+// A tabela dos pontos (decisão 0051) vem sob demanda: fora do JavaScript inicial (decisão 0039).
+const PointsPanel = lazy(() => import('./PointsPanel').then((m) => ({ default: m.PointsPanel })));
 
 const RADIATION: ReadonlySet<OverlayQuantity> = new Set([
   'globalHorizontal',
@@ -51,6 +63,7 @@ export function ChartView({
   onDrawingAdd,
   answer = null,
   difference = null,
+  onHashChange,
 }: {
   hash: HashState;
   epw: EpwData | null;
@@ -60,6 +73,11 @@ export function ChartView({
   answer?: Region | null;
   /** Dados de A na comparação de climas (F4.2): as células mostram B − A (spec 05, seção 5.5). */
   difference?: EpwData | null;
+  /**
+   * Muda o estado do link: com ele, a carta marca pontos e mostra a tabela deles (decisão 0051);
+   * sem ele (a configuração A da comparação), só os desenha.
+   */
+  onHashChange?: (patch: HashState) => void;
 }) {
   const { t, formatNumber } = useI18n();
   const site = siteFromHash(hash).site;
@@ -143,8 +161,35 @@ export function ChartView({
   const hasContours = Boolean(shown && shown.contours.length > 0);
   const hasFull = Boolean(shown && shown.fullShade.length > 0);
   const hasPoint = pointRegion !== null && pointRegion.kind !== 'empty';
-  // Leitura de um ponto da carta (decisão 0045): mouse ou toque.
-  const readout = useChartReadout(site, projection, options.hourLines);
+  // Pontos marcados (decisão 0051): clique, botão no toque ou digitados; até 3, no link.
+  const points = pointsFromHash(hash);
+  const [pointsMessage, setPointsMessage] = useState<PointsMessage | null>(null);
+  const nextPoint = nextPointNumber(points);
+  const addPoint = (direction: { altitude: number; azimuth: number }) => {
+    if (!onHashChange) return;
+    if (nextPoint === null) {
+      setPointsMessage({ kind: 'full' });
+      return;
+    }
+    onHashChange(pointPatch(nextPoint, direction));
+    setPointsMessage({ kind: 'marked', n: nextPoint });
+  };
+  // Ponto marcado cujo marcador cobre a posição dada do SVG (um clique ali não marca outro).
+  const markedAt = (x: number, y: number): PointNumber | null => {
+    for (const p of points) {
+      const c = projectDirection(projection, 90 - p.altitude, p.azimuth);
+      if (Math.hypot(c.x - x, -c.y - y) <= MARKER_SIZE * 1.25) return p.n;
+    }
+    return null;
+  };
+  // Leitura de um ponto da carta (decisão 0045): mouse ou toque. Com o desenho à mão em andamento,
+  // o clique é dele e não marca pontos.
+  const readout = useChartReadout(
+    site,
+    projection,
+    options.hourLines,
+    onHashChange && !drawing ? { next: nextPoint, markedAt, onMark: addPoint } : undefined,
+  );
 
   return (
     <div className="chart-view">
@@ -203,6 +248,7 @@ export function ChartView({
               {sized && sized.sunny > 0 && (
                 <PeriodMarks angles={sized.angles} showAlphaMax={sizing.gap > 0} />
               )}
+              <PointMarkers points={points} />
               {drawing && onDrawingAdd && <DrawingLayer drawing={drawing} onAdd={onDrawingAdd} />}
               {readout.marker}
             </>
@@ -210,6 +256,27 @@ export function ChartView({
         />
         {readout.box}
       </div>
+      {onHashChange && (
+        <Suspense fallback={null}>
+          <PointsPanel
+            points={points}
+            site={site}
+            orientation={orientation}
+            reference={reference}
+            hourLines={options.hourLines}
+            message={pointsMessage}
+            onAdd={addPoint}
+            onRemove={(n) => {
+              onHashChange(pointPatch(n, null));
+              setPointsMessage({ kind: 'removed', n });
+            }}
+            onClear={() => {
+              onHashChange(clearPointsPatch());
+              setPointsMessage({ kind: 'cleared' });
+            }}
+          />
+        </Suspense>
+      )}
       {showOverlay && (
         <>
           <OverlayLegend

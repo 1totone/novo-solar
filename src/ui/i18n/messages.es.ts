@@ -1065,7 +1065,7 @@ export const es: Catalog = {
   // Compartir (decisión 0049).
   'share.button': 'Compartir',
   'share.copied':
-    'Enlace copiado. Abre este mismo análisis: el lugar, la fachada, los ángulos, los datos elegidos y las opciones de la carta.',
+    'Enlace copiado. Abre este mismo análisis: el lugar, la fachada, los ángulos, los datos elegidos, las opciones de la carta y los puntos marcados.',
   'share.manual':
     'El navegador no permitió copiar: seleccione el enlace de abajo y cópielo. Abre este mismo análisis.',
   'share.how':
@@ -1096,4 +1096,38 @@ export const es: Catalog = {
   'angles.caption': '{view}, referencia {reference}',
   'sources.compareShort': 'Comparar',
   'outputs.copyShort': 'Copiar',
+  // Puntos marcados en la carta (decisión 0051).
+  'points.heading': 'Puntos marcados',
+  'points.hint':
+    'Haga clic en la carta (al tocar, use "Marcar punto") para marcar hasta 3 puntos; la tabla debajo de la carta da los ángulos α y β de cada uno.',
+  'points.typeButton': 'Escribir punto',
+  'points.clear': 'Borrar puntos',
+  'points.altitude': 'Altura',
+  'points.altitudeDetail': ' del punto, de 0° a 90°',
+  'points.azimuth': 'Azimut',
+  'points.azimuthDetail': ' del punto, en grados desde el Norte o un rumbo (SE, sureste)',
+  'points.add': 'Marcar punto',
+  'points.altitudeError': 'La altura va de 0° a 90°.',
+  'points.azimuthError': 'Escriba el azimut en grados (ej.: 135) o un rumbo (ej.: SE).',
+  'points.caption':
+    'α y β en la referencia {reference}, para la fachada de {orientation}° ({compass}).',
+  'points.reference': 'α y β en la referencia {reference}',
+  'points.internal': 'interna',
+  'points.external': 'externa',
+  'points.point': 'Punto',
+  'points.sunColumn': 'El sol pasa por ahí',
+  'points.removeColumn': 'Quitar',
+  'points.name': 'Punto {n}',
+  'points.remove': 'Quitar el punto {n}',
+  'points.behind': 'detrás de la fachada',
+  'points.sun': '{time} (hora solar), el {dates}',
+  'points.sunEdge': 'solo el borde del sol, a las {time} (hora solar), el {date}',
+  'points.never': 'nunca',
+  'points.markButton': 'Marcar punto',
+  'points.clickHint': 'Haga clic para marcar el punto {n}.',
+  'points.here': 'Punto {n} marcado aquí.',
+  'points.full': 'Ya hay 3 puntos marcados: quite uno para marcar otro.',
+  'points.marked': 'Punto {n} marcado.',
+  'points.removed': 'Punto {n} quitado.',
+  'points.cleared': 'Puntos quitados.',
 };
