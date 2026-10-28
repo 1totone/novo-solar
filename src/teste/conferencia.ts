@@ -2,8 +2,8 @@
  * Conferência automática das tarefas do teste do F2.9 sem moderador (decisão 0042).
  *
  * Lê o estado da ferramenta pelo endereço do iframe (o '#' guarda local, fachada, ângulos, dados e
- * aba; `src/ui/state/`) e, na tarefa 8, pelas opções de impressão no documento do iframe, que não
- * vão para o endereço. Funções puras: o roteiro na página só monta o retrato e mostra o resultado
+ * aba; `src/ui/state/`) e, na tarefa 8, pela impressão aberta (com as opções, que não vão para o
+ * endereço) e pelas imagens exportadas no passo 5. Funções puras: o roteiro na página só monta o retrato e mostra o resultado
  * no arquivo de resultados, nunca ao participante.
  */
 
@@ -24,6 +24,8 @@ export interface Snapshot {
   print?: PrintSnapshot | null;
   /** Tarefa 8: a página do teste inteira foi impressa (menu do navegador). */
   printedOuter?: boolean;
+  /** Tarefa 8: exportações pedidas no passo 5 durante a tarefa ("svg", "png", "copy", "csv"). */
+  exports?: string[];
   /** Tarefa 9: endereço completo da ferramenta no iframe e o link colado pelo participante. */
   appUrl?: string;
   pastedLink?: string;
@@ -76,8 +78,6 @@ function result(parts: [string, boolean][]): Check {
   };
 }
 
-const MASK_KEYS = /^p?(a[12]|b[de][12]|g[de][12]|ga[de])$|^d[tp]$/;
-
 export function checkTask(task: string, s: Snapshot): Check {
   const h = s.hash;
   switch (task) {
@@ -103,11 +103,15 @@ export function checkTask(task: string, s: Snapshot): Check {
         ['dados históricos abertos', h.hist === '1'],
         ['temperatura na carta', h.dado === 'tbs'],
       ]);
-    case '6':
-      return result([
+    case '6': {
+      const r = result([
         ['arquivo de Recife carregado', h.local === 'arquivo' && isRecife(h)],
         ['temperatura na carta', h.dado === 'tbs'],
       ]);
+      // Informativo: comparou com os dados antigos (decisão 0047), sem mudar o resultado.
+      const compared = h.cmp ? `sim${h.dif === '1' ? ', com a diferença na carta' : ''}` : 'não';
+      return { ok: r.ok, detail: `${r.detail}; comparou com outros dados ${compared}` };
+    }
     case '7':
       return result([
         ['Recife', h.local === 'recife'],
@@ -116,7 +120,7 @@ export function checkTask(task: string, s: Snapshot): Check {
         ['verão (dez a fev)', h.estacao === 'dez-fev'],
       ]);
     case '8':
-      return checkPrint(s);
+      return checkSaved(s);
     case '9':
       return checkLink(s);
     case 'extra': {
@@ -133,37 +137,36 @@ export function checkTask(task: string, s: Snapshot): Check {
   }
 }
 
-/** Camadas que saem na impressão, do estado do endereço e das opções do passo 5. */
-export function printedLayers(h: HashParams, p: PrintSnapshot) {
-  const hasMask = Object.keys(h).some((k) => MASK_KEYS.test(k) && h[k] !== '');
-  return {
-    chart: !p.protractorOnly,
-    protractor: p.protractor && h.tr !== '0',
-    mask: hasMask && p.mask && !p.protractorOnly,
-    data: h.dado !== undefined && h.dado !== '' && p.data && !p.protractorOnly,
-  };
-}
-
-function checkPrint(s: Snapshot): Check {
+/**
+ * Tarefa 8 (decisão 0044, item j): a carta de Recife salva em PDF (pela impressão da ferramenta,
+ * "Salvar como PDF") ou como imagem (PNG, SVG ou copiada no passo 5).
+ */
+function checkSaved(s: Snapshot): Check {
+  const images = (s.exports ?? []).filter((k) => k === 'png' || k === 'svg' || k === 'copy');
   const p = s.print;
-  if (!p) {
+  const how = [
+    ...(p
+      ? [
+          `impressão aberta, PDF ou papel (raio ${p.radiusCm ?? '?'} cm${p.protractorOnly ? ', só o transferidor' : ''})`,
+        ]
+      : []),
+    ...images.map((k) => (k === 'copy' ? 'imagem copiada' : `imagem ${k.toUpperCase()}`)),
+  ];
+  if (how.length === 0) {
     return {
       ok: false,
       detail: s.printedOuter
         ? 'imprimiu a página do teste inteira, não a ferramenta'
-        : 'a impressão não foi aberta',
+        : 'não salvou: nem a impressão (PDF) nem uma imagem',
     };
   }
-  const layers = printedLayers(s.hash, p);
+  // "Só o transferidor" tira a carta da folha: vale se houve também uma imagem.
+  const chart = images.length > 0 || !p?.protractorOnly;
   const r = result([
     ['Recife', isRecife(s.hash)],
-    ['raio 6 cm', p.radiusCm !== null && Math.abs(p.radiusCm - 6) < 0.05],
-    ['carta', layers.chart],
-    ['transferidor', layers.protractor],
-    ['sem máscara', !layers.mask],
-    ['sem dados', !layers.data],
+    ['com a carta', chart],
   ]);
-  return { ok: r.ok, detail: `impressão aberta; ${r.detail} (raio pedido: ${p.radiusCm ?? '?'})` };
+  return { ok: r.ok, detail: `${how.join('; ')}; ${r.detail}` };
 }
 
 function checkLink(s: Snapshot): Check {

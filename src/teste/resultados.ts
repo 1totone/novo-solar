@@ -46,6 +46,8 @@ export interface TaskRecord {
   print?: PrintSnapshot | null;
   /** Tarefa 8: a página do teste inteira foi impressa durante a tarefa. */
   printedOuter?: boolean;
+  /** Tarefa 8: exportações pedidas no passo 5 durante a tarefa (decisão 0044, item j). */
+  exports?: string[];
   seq?: number;
   confusion: string;
 }
