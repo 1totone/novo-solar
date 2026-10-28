@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkAnswer, checkTask, parseHashParams, printedLayers } from './conferencia';
+import { checkAnswer, checkTask, parseHashParams } from './conferencia';
 
 const snap = (hash: string) => ({ hash: parseHashParams(hash) });
 const PRINT = { radiusCm: 6, protractor: true, mask: true, data: true, protractorOnly: false };
@@ -46,29 +46,40 @@ describe('conferência pelo endereço da ferramenta', () => {
     expect(checkTask('7', snap('#local=recife&hist=1&aba=rosa&estacao=jun-ago')).ok).toBe(false);
   });
 
-  it('tarefa 8: impressão aberta, raio 6 cm, carta só com o transferidor', () => {
+  it('tarefa 6: informa se comparou com outros dados, sem mudar o resultado', () => {
+    const file = '#local=arquivo&lat=-8.126&lon=-34.924&fuso=-3&alt=10&dado=tbs';
+    expect(checkTask('6', snap(file)).detail).toContain('comparou com outros dados não');
+    const compared = checkTask('6', snap(`${file}&cmp=local%3Drecife%26hist%3D1&dif=1`));
+    expect(compared.ok).toBe(true);
+    expect(compared.detail).toContain('comparou com outros dados sim, com a diferença na carta');
+  });
+
+  it('tarefa 8: a carta salva em PDF (impressão) ou como imagem', () => {
     const h = '#local=recife&hist=1&dado=tbs&a1=50';
-    expect(checkTask('8', { ...snap(h), print: null }).detail).toBe('a impressão não foi aberta');
+    expect(checkTask('8', { ...snap(h), print: null }).detail).toBe(
+      'não salvou: nem a impressão (PDF) nem uma imagem',
+    );
     expect(checkTask('8', { ...snap(h), print: null, printedOuter: true }).detail).toContain(
       'página do teste inteira',
     );
-    expect(checkTask('8', { ...snap(h), print: PRINT }).ok).toBe(false);
-    expect(checkTask('8', { ...snap(h), print: { ...PRINT, mask: false, data: false } }).ok).toBe(
-      true,
-    );
-    // Sem máscara nem dados na tela, as opções não importam.
-    expect(checkTask('8', { ...snap('#local=recife'), print: PRINT }).ok).toBe(true);
-    // "Só o transferidor" tira a carta.
+    // Impressão aberta (PDF ou papel), com as opções que vierem.
+    const printed = checkTask('8', { ...snap(h), print: PRINT });
+    expect(printed.ok).toBe(true);
+    expect(printed.detail).toContain('impressão aberta, PDF ou papel (raio 6 cm)');
+    // Imagem exportada ou copiada no passo 5; o CSV não é imagem.
+    expect(checkTask('8', { ...snap(h), exports: ['png'] }).detail).toContain('imagem PNG');
+    expect(checkTask('8', { ...snap(h), exports: ['copy'] }).ok).toBe(true);
+    expect(checkTask('8', { ...snap(h), exports: ['csv'] }).ok).toBe(false);
+    // "Só o transferidor" tira a carta da folha.
     expect(checkTask('8', { ...snap(h), print: { ...PRINT, protractorOnly: true } }).ok).toBe(
       false,
     );
     expect(
-      checkTask('8', {
-        ...snap('#local=recife'),
-        print: { ...PRINT, radiusCm: 5 },
-      }).ok,
-    ).toBe(false);
-    expect(printedLayers(parseHashParams('#tr=0'), PRINT).protractor).toBe(false);
+      checkTask('8', { ...snap(h), print: { ...PRINT, protractorOnly: true }, exports: ['svg'] })
+        .ok,
+    ).toBe(true);
+    // Outra cidade não vale.
+    expect(checkTask('8', { ...snap('#local=natal'), exports: ['png'] }).ok).toBe(false);
   });
 
   it('tarefa 9: o link colado abre o mesmo estado, em qualquer ordem das chaves', () => {

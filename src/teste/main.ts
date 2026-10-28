@@ -436,6 +436,7 @@ function snapshot(task: string, r: TaskRecord): Snapshot {
   if (task === '8') {
     snap.print = r.print ?? null;
     snap.printedOuter = r.printedOuter ?? false;
+    snap.exports = r.exports ?? [];
   }
   if (task === '9') {
     snap.appUrl = href ?? appBase + session.appHash;
@@ -503,6 +504,7 @@ function screenTarefa(s: Extract<Screen, { kind: 'tarefa' }>) {
             r.start = Date.now();
             delete r.print;
             delete r.printedOuter;
+            delete r.exports;
             save();
             render();
           },
@@ -798,6 +800,17 @@ function onPrint() {
   save();
 }
 
+/** Exportação pedida no passo 5 da ferramenta (SVG, PNG, CSV ou copiar a imagem). */
+function onExport(e: Event) {
+  const id = activeTask();
+  const target = e.target as Element | null;
+  const kind = target?.closest?.('[data-testid^="export-"]')?.getAttribute('data-testid');
+  if (!id || !kind) return;
+  const r = record(id);
+  r.exports = [...(r.exports ?? []), kind.slice('export-'.length)];
+  save();
+}
+
 function interceptCtrlP(target: Window) {
   target.addEventListener(
     'keydown',
@@ -817,6 +830,7 @@ frame.addEventListener('load', () => {
     const w = frame.contentWindow;
     if (w && w.location.href.startsWith(appBase)) {
       w.addEventListener('beforeprint', onPrint);
+      w.document.addEventListener('click', onExport, true);
       interceptCtrlP(w);
     }
   } catch {

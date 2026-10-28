@@ -102,16 +102,22 @@ export function OutputsPanel({
       <p className="note">{t('outputs.printHelp')}</p>
       <h3 className="sub-heading">{t('outputs.export')}</h3>
       <div className="button-row">
-        <button type="button" className="btn" onClick={() => run('svg')}>
+        <button type="button" className="btn" data-testid="export-svg" onClick={() => run('svg')}>
           SVG
         </button>
-        <button type="button" className="btn" onClick={() => run('png')}>
+        <button type="button" className="btn" data-testid="export-png" onClick={() => run('png')}>
           PNG
         </button>
-        <button type="button" className="btn" disabled={!csvAvailable} onClick={() => run('csv')}>
+        <button
+          type="button"
+          className="btn"
+          data-testid="export-csv"
+          disabled={!csvAvailable}
+          onClick={() => run('csv')}
+        >
           {t('outputs.csv')}
         </button>
-        <button type="button" className="btn" onClick={() => run('copy')}>
+        <button type="button" className="btn" data-testid="export-copy" onClick={() => run('copy')}>
           {t('outputs.copy')}
         </button>
       </div>
