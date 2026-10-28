@@ -4,6 +4,8 @@ import { readDirection } from '../../core/chart/readout';
 import type { Site } from '../../core/chart/sunChart';
 import { useI18n } from '../i18n/useI18n';
 import type { HourLinesMode } from '../state/chartOptionsHash';
+import type { PointNumber } from '../state/pointsHash';
+import { useReadingText } from './readingText';
 
 /** Ponto lido na carta: posição no SVG, direção do céu e onde fica a caixa da leitura. */
 export interface ReadoutPoint {
@@ -54,20 +56,44 @@ function pointAt(
 }
 
 /**
- * Leitura da carta (decisão 0045): passar o mouse ou tocar mostra a altura, o azimute e quando o sol
- * passa pelo ponto (hora solar e datas; hora legal quando a carta mostra os analemas). Devolve os
- * eventos para a moldura da carta, a marca do ponto (dentro do SVG) e a caixa com a leitura.
+ * Marcação de pontos pela leitura (decisão 0051): o número que o próximo ponto recebe (null com os
+ * três marcados), o ponto marcado sob o cursor, se houver, e o que fazer ao marcar.
  */
-export function useChartReadout(site: Site, projection: Projection, hourLines: HourLinesMode) {
-  const { t, formatNumber, formatClock, formatDayMonth, locale } = useI18n();
+export interface ReadoutMarking {
+  next: PointNumber | null;
+  /** Número do ponto marcado que o marcador cobre na posição dada (SVG), ou null. */
+  markedAt: (svgX: number, svgY: number) => PointNumber | null;
+  onMark: (direction: { altitude: number; azimuth: number }) => void;
+}
+
+/** Deslocamento máximo, em px, entre apertar e soltar o botão para contar como clique. */
+const CLICK_SLOP = 4;
+
+/**
+ * Leitura da carta (decisão 0045): passar o mouse ou tocar mostra a altura, o azimute e quando o sol
+ * passa pelo ponto (hora solar e datas; hora legal quando a carta mostra os analemas). Com
+ * `marking`, um clique marca o ponto, e no toque a caixa ganha o botão "Marcar ponto" (decisão
+ * 0051). Devolve os eventos para a moldura da carta, a marca do ponto (dentro do SVG) e a caixa
+ * com a leitura.
+ */
+export function useChartReadout(
+  site: Site,
+  projection: Projection,
+  hourLines: HourLinesMode,
+  marking?: ReadoutMarking,
+) {
+  const { t } = useI18n();
+  const text = useReadingText(hourLines);
   const [point, setPoint] = useState<ReadoutPoint | null>(null);
   const reading = useMemo(
     () => (point ? readDirection(site, point.zenith, point.azimuth) : null),
     [site, point],
   );
+  const mark = (p: ReadoutPoint) =>
+    marking?.onMark({ altitude: 90 - p.zenith, azimuth: p.azimuth });
 
-  // Toque: o ponto de quem tocou sem arrastar (arrastar rola a página).
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  // Onde o botão (mouse) ou o dedo desceu: clique e toque sem arrastar (arrastar rola a página).
+  const pressStart = useRef<{ x: number; y: number; touch: boolean } | null>(null);
   const handlers = {
     // Mouse e caneta: a leitura acompanha o cursor e some quando ele sai da carta.
     onPointerMove: (e: PointerEvent<HTMLElement>) => {
@@ -79,14 +105,22 @@ export function useChartReadout(site: Site, projection: Projection, hourLines: H
     },
     // Toque: a leitura fica no ponto tocado até o próximo toque (fora do céu, some).
     onPointerDown: (e: PointerEvent<HTMLElement>) => {
-      touchStart.current = e.pointerType === 'touch' ? { x: e.clientX, y: e.clientY } : null;
+      const touch = e.pointerType === 'touch';
+      pressStart.current = touch || e.button === 0 ? { x: e.clientX, y: e.clientY, touch } : null;
     },
     onPointerUp: (e: PointerEvent<HTMLElement>) => {
-      const start = touchStart.current;
-      touchStart.current = null;
-      if (e.pointerType !== 'touch' || !start) return;
-      if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 10) return;
-      setPoint(pointAt(e.currentTarget, projection, e.clientX, e.clientY, true));
+      const start = pressStart.current;
+      pressStart.current = null;
+      if (!start) return;
+      const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
+      if (start.touch) {
+        if (moved <= 10) setPoint(pointAt(e.currentTarget, projection, e.clientX, e.clientY, true));
+        return;
+      }
+      // Mouse e caneta: o clique marca o ponto (decisão 0051), salvo em cima de um marcado.
+      if (!marking || moved > CLICK_SLOP) return;
+      const p = pointAt(e.currentTarget, projection, e.clientX, e.clientY, false);
+      if (p && marking.markedAt(p.svgX, p.svgY) === null) mark(p);
     },
   };
 
@@ -106,32 +140,48 @@ export function useChartReadout(site: Site, projection: Projection, hourLines: H
 
   let box: ReactNode = null;
   if (point && reading) {
-    const points = t('compass.points').split(',');
-    const azimuth = Math.round(point.azimuth) % 360;
-    const altitude = Math.round(90 - point.zenith);
-    const minutes = Math.round(reading.solarHour * 60) % (24 * 60);
-    const clock = (m: number) => formatClock(Math.floor(m / 60), m % 60);
-    const list = (items: string[]) =>
-      new Intl.ListFormat(locale, { type: 'conjunction' }).format(items);
-    const dates = reading.passages.map((p) => formatDayMonth(p.date.day, p.date.month));
-    let sun: string;
-    if (reading.passages.length === 0) sun = t('readout.never');
-    else if (reading.solsticeEdge) {
-      sun = t('readout.sunEdge', { time: clock(minutes), date: dates[0]! });
-    } else sun = t('readout.sun', { time: clock(minutes), dates: list([...new Set(dates)]) });
-    const legal =
-      hourLines !== 'solar' && reading.passages.length > 0
-        ? t('readout.legal', {
-            times: list(
-              reading.passages.map((p, i) =>
-                t('readout.legalAt', {
-                  time: clock(Math.round(p.legalHour * 60) % (24 * 60)),
-                  date: dates[i]!,
-                }),
-              ),
-            ),
-          })
-        : null;
+    const legal = text.legal(reading);
+    // Marcação (decisão 0051): o que um clique faz ali, ou o botão no toque.
+    let action: ReactNode = null;
+    if (marking) {
+      const marked = marking.markedAt(point.svgX, point.svgY);
+      if (marked !== null) {
+        action = (
+          <p className="readout-hint" data-testid="readout-mark-hint">
+            {t('points.here', { n: marked })}
+          </p>
+        );
+      } else if (marking.next === null) {
+        action = (
+          <p className="readout-hint readout-full" data-testid="readout-mark-hint">
+            {t('points.full')}
+          </p>
+        );
+      } else if (point.touch) {
+        action = (
+          <button
+            type="button"
+            className="btn small readout-mark"
+            data-testid="readout-mark"
+            // O toque no botão não move a leitura (os eventos da moldura ficam de fora).
+            onPointerDown={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
+            onClick={() => {
+              mark(point);
+              setPoint(null);
+            }}
+          >
+            {t('points.markButton')}
+          </button>
+        );
+      } else {
+        action = (
+          <p className="readout-hint" data-testid="readout-mark-hint">
+            {t('points.clickHint', { n: marking.next })}
+          </p>
+        );
+      }
+    }
     // A caixa fica ao lado do ponto, do lado com mais espaço, e acima dele no toque (o dedo cobre
     // o que fica embaixo).
     const right = point.boxX < point.frameWidth / 2;
@@ -144,14 +194,11 @@ export function useChartReadout(site: Site, projection: Projection, hourLines: H
     box = (
       <div className="chart-readout" style={style} data-testid="chart-readout" aria-live="off">
         <p data-testid="readout-position">
-          {t('readout.position', {
-            altitude: formatNumber(altitude),
-            azimuth: formatNumber(azimuth),
-            compass: points[Math.round(point.azimuth / 22.5) % 16]!,
-          })}
+          {t('readout.position', text.angles(90 - point.zenith, point.azimuth))}
         </p>
-        <p data-testid="readout-sun">{sun}</p>
+        <p data-testid="readout-sun">{text.sun(reading)}</p>
         {legal && <p data-testid="readout-legal">{legal}</p>}
+        {action}
       </div>
     );
   }

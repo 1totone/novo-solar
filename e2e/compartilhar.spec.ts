@@ -17,7 +17,7 @@ test('copia o link, diz o que ele reabre, e o link reabre a mesma análise', asy
   await page.getByRole('button', { name: 'Compartilhar' }).click();
   const panel = page.getByTestId('share-panel');
   await expect(panel.getByRole('status')).toHaveText(
-    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos e as opções da carta.',
+    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos, as opções da carta e os pontos marcados.',
   );
   await expect(panel).toContainText('Tudo fica no próprio endereço, depois do "#"');
   await expect(panel).not.toContainText('arquivo climático');

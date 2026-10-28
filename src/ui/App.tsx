@@ -577,6 +577,7 @@ export function App() {
     t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
     t(`chart.noteHours.${chartOptions.hourLines}`),
     t('readout.hint'),
+    t('points.hint'),
   ].join(' ');
 
   const live =
@@ -609,6 +610,7 @@ export function App() {
           onDrawingAdd={(v) =>
             drawing && setDrawing({ ...drawing, vertices: [...drawing.vertices, v] })
           }
+          onHashChange={setHashState}
         />
         <PrintRuler label={t('print.ruler')} />
       </div>

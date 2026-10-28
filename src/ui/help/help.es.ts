@@ -118,7 +118,7 @@ export const helpEs: HelpContent = {
     tabs: [
       {
         title: 'Carta solar',
-        text: 'La carta con el transportador, la máscara, los datos y las curvas de la protección.',
+        text: 'La carta con el transportador, la máscara, los datos y las curvas de la protección. Pase el ratón sobre ella, o tóquela, para leer un punto; haga clic (al tocar, "Marcar punto") para marcar hasta 3 puntos, con la altura, el azimut, cuándo pasa el sol por ahí y los ángulos α y β del transportador en la tabla debajo de la carta. Con el teclado, el botón "Escribir punto" viene justo después de la carta.',
       },
       {
         title: 'Vista 3D',

@@ -118,7 +118,7 @@ export const helpPtBR: HelpContent = {
     tabs: [
       {
         title: 'Carta solar',
-        text: 'A carta com o transferidor, a máscara, os dados e as curvas da proteção.',
+        text: 'A carta com o transferidor, a máscara, os dados e as curvas da proteção. Passe o mouse sobre ela, ou toque, para ler um ponto; clique (no toque, "Marcar ponto") para marcar até 3 pontos, com a altura, o azimute, quando o sol passa ali e os ângulos α e β do transferidor na tabela embaixo da carta. Pelo teclado, o botão "Digitar ponto" vem logo depois da carta.',
       },
       {
         title: 'Vista 3D',

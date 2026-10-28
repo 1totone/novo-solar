@@ -54,6 +54,7 @@ Uma nota curta por decisão relevante. Antes de mudar algo decidido aqui, escrev
 | [0048](0048-zip-direto.md) | Abrir o .zip do TMYx direto no navegador, pelo fflate (MIT, cerca de 5 kB, só quando se escolhe um .zip); só o .epw de dentro é lido (item g da 0044) | 2026-10-27 | proposta |
 | [0049](0049-compartilhar.md) | Botão "Compartilhar" no cabeçalho: copia o link e diz o que ele reabre (e que os arquivos carregados não vão nele), com o link à vista para copiar à mão (item i da 0044) | 2026-10-27 | proposta |
 | [0050](0050-leiaute-em-colunas.md) | Leiaute em colunas, na tela inteira, sem rolar a página: três colunas a partir de 1200 px (passos 1 a 3, carta, passos 4 a 7), duas de 832 a 1200 px, celular como estava; passos 1 a 5 sempre abertos em blocos compactos; resultados dos passos 6 e 7 na coluna da direita; roteiro do teste mais estreito durante a tarefa | 2026-10-28 | aceita (pedido do Anthony); detalhes marcados como proposta |
+| [0051](0051-pontos-marcados.md) | Pontos marcados na carta: clique (no toque, "Marcar ponto"; pelo teclado, altura e azimute digitados) marca até 3 pontos, com forma e número fixos; tabela embaixo da carta com a leitura e α e β do transferidor na referência do passo 3, para a fachada do passo 2; no link, no projeto, na impressão e nas imagens, nas três projeções | 2026-10-28 | proposta (pedido do Anthony) |
 
 ## Modelo
 

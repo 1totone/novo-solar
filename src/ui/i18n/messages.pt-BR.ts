@@ -3,6 +3,7 @@
 import { fase3PtBR } from './messages.pt-BR.fase3';
 import { fase4PtBR } from './messages.pt-BR.fase4';
 import { layoutPtBR } from './messages.pt-BR.layout';
+import { pontosPtBR } from './messages.pt-BR.pontos';
 import { redesenhoPtBR } from './messages.pt-BR.redesenho';
 
 export const ptBR = {
@@ -344,4 +345,5 @@ export const ptBR = {
   ...fase4PtBR,
   ...redesenhoPtBR,
   ...layoutPtBR,
+  ...pontosPtBR,
 } as const;

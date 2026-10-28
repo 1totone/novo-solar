@@ -1054,7 +1054,7 @@ export const en: Catalog = {
   // Share (decision 0049).
   'share.button': 'Share',
   'share.copied':
-    'Link copied. It reopens this same analysis: the place, the facade, the angles, the chosen data and the chart options.',
+    'Link copied. It reopens this same analysis: the place, the facade, the angles, the chosen data, the chart options and the marked points.',
   'share.manual':
     'The browser did not allow copying: select the link below and copy it. It reopens this same analysis.',
   'share.how':
@@ -1085,4 +1085,38 @@ export const en: Catalog = {
   'angles.caption': '{view}, {reference} reference',
   'sources.compareShort': 'Compare',
   'outputs.copyShort': 'Copy',
+  // Points marked on the chart (decision 0051).
+  'points.heading': 'Marked points',
+  'points.hint':
+    'Click the chart (on touch, use "Mark point") to mark up to 3 points; the table below the chart gives the α and β angles of each one.',
+  'points.typeButton': 'Type a point',
+  'points.clear': 'Clear points',
+  'points.altitude': 'Altitude',
+  'points.altitudeDetail': ' of the point, from 0° to 90°',
+  'points.azimuth': 'Azimuth',
+  'points.azimuthDetail': ' of the point, in degrees from North or a compass point (SE, southeast)',
+  'points.add': 'Mark point',
+  'points.altitudeError': 'The altitude goes from 0° to 90°.',
+  'points.azimuthError': 'Type the azimuth in degrees (e.g. 135) or a compass point (e.g. SE).',
+  'points.caption':
+    'α and β in the {reference} reference, for the facade at {orientation}° ({compass}).',
+  'points.reference': 'α and β in the {reference} reference',
+  'points.internal': 'internal',
+  'points.external': 'external',
+  'points.point': 'Point',
+  'points.sunColumn': 'The sun passes there',
+  'points.removeColumn': 'Remove',
+  'points.name': 'Point {n}',
+  'points.remove': 'Remove point {n}',
+  'points.behind': 'behind the facade',
+  'points.sun': '{time} (solar time), on {dates}',
+  'points.sunEdge': 'only the edge of the sun, at {time} (solar time), on {date}',
+  'points.never': 'never',
+  'points.markButton': 'Mark point',
+  'points.clickHint': 'Click to mark point {n}.',
+  'points.here': 'Point {n} is marked here.',
+  'points.full': 'There are already 3 marked points: remove one to mark another.',
+  'points.marked': 'Point {n} marked.',
+  'points.removed': 'Point {n} removed.',
+  'points.cleared': 'Points removed.',
 };
