@@ -889,6 +889,9 @@ function render() {
   const free = activeTask() !== null;
   cover.hidden = free;
   frame.inert = !free;
+  // Durante a tarefa, o roteiro estreita para a ferramenta ganhar a largura do leiaute em três
+  // colunas (decisão 0050), quando a tela permite.
+  document.body.classList.toggle('em-tarefa', free);
   cover.textContent =
     s.kind === 'tarefa'
       ? phaseOf(session.tasks[s.task.id]) === 'ler'

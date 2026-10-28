@@ -20,7 +20,8 @@ function apply(el: SVGTextElement, c: Candidate) {
 
 /**
  * Põe cada texto com `data-candidates` da carta na primeira posição candidata que não cobre outro
- * texto (labelLayout.ts). Roda depois de cada desenho, antes da pintura; mede só quando os textos
+ * texto nem uma marca com `data-label-obstacle` (os pontos do sol do período, por exemplo; ver
+ * labelLayout.ts). Roda depois de cada desenho, antes da pintura; mede só quando os textos
  * mudaram.
  */
 export function layoutLabels(svg: SVGSVGElement) {
@@ -41,7 +42,8 @@ export function layoutLabels(svg: SVGSVGElement) {
     movable.forEach((el, i) => apply(el, candidates[i]![cached.choice[i]!]!));
     return;
   }
-  const obstacles = fixed.map(rectOf).filter((b) => b.x1 > b.x0 && b.y1 > b.y0);
+  const marks = [...svg.querySelectorAll('[data-label-obstacle]')];
+  const obstacles = [...fixed, ...marks].map(rectOf).filter((b) => b.x1 > b.x0 && b.y1 > b.y0);
   const choice = movable.map((el, i) => {
     const cands = candidates[i]!;
     const boxes = cands.map((c) => {

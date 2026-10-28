@@ -1,7 +1,7 @@
 # 0040. Atalho entre passos com os passos avançados abertos
 
 - Data: 2026-10-26
-- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 24 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3.
+- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 24 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3. Com as três colunas da 0050 (a partir de 1200 px), a barra não aparece: todos os passos ficam à vista.
 
 ## Contexto
 

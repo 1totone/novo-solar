@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { strToU8, zipSync } from 'fflate';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
-import { loadClimateFile, openStep } from './fixtures/steps';
+import { chooseSource, loadClimateFile, openStep } from './fixtures/steps';
 
 // Página do teste do F2.9 sem moderador (decisão 0042): o roteiro inteiro, feito como um
 // participante faria, e o arquivo de resultados nas colunas de docs/ux/F2.9-registro.csv.
@@ -113,7 +113,7 @@ test.describe('teste sem moderador (F2.9)', () => {
     // 5. Dados históricos e temperatura.
     card = await startTask(page, '5');
     await openStep(app, '1');
-    await app.getByRole('radio', { name: /Dados do SOL-AR 6\.2/ }).check();
+    await chooseSource(app, /Dados do SOL-AR 6\.2/);
     await app.getByLabel('Pintar na carta').selectOption('tbs');
     await card.getByLabel('Período dos dados').fill('entre 1951 e 1970');
     await card.getByLabel('Horas com mais de 25 °C e sol na janela').fill('à tarde');
@@ -150,7 +150,7 @@ test.describe('teste sem moderador (F2.9)', () => {
     await openStep(app, '1');
     await app.getByTestId('compare-data').click();
     await app.getByLabel('Cidade').selectOption('recife');
-    await app.getByRole('radio', { name: /Dados do SOL-AR 6\.2/ }).check();
+    await chooseSource(app, /Dados do SOL-AR 6\.2/);
     await app.getByRole('tab', { name: 'Rosa dos ventos' }).click();
     await app.getByRole('radio', { name: 'Verão' }).click();
     await card.getByLabel('Direção').fill('leste');
@@ -267,4 +267,33 @@ test.describe('teste sem moderador (F2.9)', () => {
     const frame2 = await page.locator('#app').boundingBox();
     expect(frame2!.height).toBeGreaterThan(frame!.height + 100);
   });
+
+  // Decisão 0050: durante a tarefa, o roteiro estreita para a ferramenta ter pelo menos 1200 px e
+  // mostrar as três colunas; fora dela (ferramenta coberta), o roteiro tem os 23rem de sempre.
+  for (const screen of [
+    { width: 1366, height: 768, panel: 166 },
+    { width: 1920, height: 1080, panel: 368 },
+  ]) {
+    test(`${screen.width} × ${screen.height}: a ferramenta em três colunas durante a tarefa`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'computador', 'leiaute do computador');
+      await page.setViewportSize(screen);
+      await begin(page);
+      await expect(page.locator('.roteiro')).toHaveCSS('width', '368px');
+      await startTask(page, '1');
+      const panel = (await page.locator('.roteiro').boundingBox())!;
+      const frame = (await page.locator('#app').boundingBox())!;
+      expect(panel.width).toBeCloseTo(screen.panel, 0);
+      expect(frame.width).toBeGreaterThanOrEqual(1200);
+      const app = page.frameLocator('#app');
+      await expect(app.locator('.steps-left')).toBeVisible();
+      await expect(app.locator('.steps-right')).toBeVisible();
+      // Sem rolar: o γ do passo 3 e o raio do passo 5 à vista dentro da ferramenta.
+      for (const id of ['angle-gd1', 'print-radius']) {
+        await expect(app.getByTestId(id)).toBeInViewport({ ratio: 1 });
+      }
+      await expect(app.locator('.steps-left')).toHaveJSProperty('scrollTop', 0);
+    });
+  }
 });

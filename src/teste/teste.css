@@ -318,6 +318,42 @@ select:focus-visible {
 
 /* Computador: roteiro à esquerda; recolhido, vira uma faixa estreita. */
 @media (min-width: 52rem) {
+  /* Durante a tarefa (decisão 0050), o roteiro deixa à ferramenta pelo menos 75rem, a largura do
+     leiaute em três colunas, sem ficar com menos de 10rem: em 1366 px, 10,3rem; em 1536 px, 21rem;
+     a partir de 1568 px, os 23rem de sempre. Fora da tarefa, a ferramenta fica coberta e o roteiro
+     tem a largura toda. */
+  .em-tarefa .roteiro {
+    width: clamp(10rem, calc(100vw - 75rem), 23rem);
+  }
+
+  .em-tarefa .tela {
+    padding: 0.5rem 0.6rem 1rem;
+    font-size: 0.92rem;
+  }
+
+  .em-tarefa .roteiro-topo {
+    flex-wrap: wrap;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .em-tarefa .cartao {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.98rem;
+  }
+
+  .em-tarefa .acoes {
+    flex-wrap: wrap;
+  }
+
+  /* A barra do endereço mais baixa durante a tarefa: a altura vai para a ferramenta. */
+  .em-tarefa .endereco {
+    padding: 0.2rem 0.6rem;
+  }
+
+  .em-tarefa .endereco .btn.pequeno {
+    padding-block: 0.1rem;
+  }
+
   .recolhido .roteiro-topo {
     flex-direction: column;
     align-items: stretch;

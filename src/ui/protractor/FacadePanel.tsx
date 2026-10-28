@@ -1,6 +1,8 @@
 import { useId, useState } from 'react';
 import { onRovingKeyDown, rovingTabIndex } from '../a11y/roving';
 import { useI18n } from '../i18n/useI18n';
+import { InfoButton, InfoText } from '../layout/InfoTip';
+import { useInfo } from '../layout/useInfo';
 import { compassAzimuth } from '../state/orientation';
 import type { ProtractorState } from '../state/protractorHash';
 
@@ -82,90 +84,108 @@ export function FacadePanel({
     setOrientation(rumo === null ? value : String(rumo));
   };
   const anyChecked = state.orientationValid && ROSE.some((r) => r.index * 22.5 === o);
+  const info = useInfo();
 
+  // A rosa de rumos ao lado do campo da orientação (decisão 0050); a explicação atrás do "i".
   return (
-    <>
-      <div className="field">
-        <label htmlFor={`${id}-o`}>{t('facade.orientation')}</label>
-        <div className="orientation-row">
-          <input
-            id={`${id}-o`}
-            type="text"
-            autoComplete="off"
-            value={text}
-            placeholder="0"
-            aria-invalid={!state.orientationValid}
-            aria-describedby={`${id}-n`}
-            onChange={(e) => onType(e.target.value)}
-          />
-          {state.orientationValid && (
-            <output id={`${id}-n`} className="orientation-name" data-testid="normal-azimuth">
-              <span className="orientation-name-main" data-testid="orientation-name">
-                {exact ? names[nearest] : `≈ ${names[nearest]}`}
-              </span>
-              <span className="orientation-name-detail">
-                {t('facade.normalized', { degrees, compass })}
-              </span>
-            </output>
-          )}
-        </div>
-        {!state.orientationValid && (
-          <p className="error" role="alert" id={`${id}-n`}>
-            {t('facade.orientationInvalid')}
-          </p>
-        )}
-      </div>
-      <div className="field">
-        <span className="field-label" id={`${id}-r`}>
+    <div className="facade">
+      <div className="facade-rose">
+        <span className="visually-hidden" id={`${id}-r`}>
           {t('facade.compass')}
         </span>
-        <div className="facade-rose">
-          <div
-            className="facade-rose-buttons"
-            role="radiogroup"
-            aria-labelledby={`${id}-r`}
-            onKeyDown={(e) => onRovingKeyDown(e, 'radio')}
-          >
-            {ROSE.map(({ index, row, col }, i) => {
-              const azimuth = index * 22.5;
-              const checked = state.orientationValid && o === azimuth;
-              return (
-                <button
-                  key={index}
-                  type="button"
-                  role="radio"
-                  aria-checked={checked}
-                  aria-label={t('facade.compassButton', {
-                    name: names[index]!,
-                    degrees: formatNumber(azimuth),
-                  })}
-                  tabIndex={rovingTabIndex(checked, i, anyChecked)}
-                  style={{ gridRow: row, gridColumn: col }}
-                  data-testid={`compass-${azimuth}`}
-                  onClick={() => {
-                    setText(String(azimuth));
-                    setOrientation(String(azimuth));
-                  }}
-                >
-                  {points[index]}
-                </button>
-              );
-            })}
-            <div className="facade-rose-center" style={{ gridRow: 2, gridColumn: 2 }}>
-              <FacadePlan orientation={o} />
-            </div>
+        <div
+          className="facade-rose-buttons"
+          role="radiogroup"
+          aria-labelledby={`${id}-r`}
+          onKeyDown={(e) => onRovingKeyDown(e, 'radio')}
+        >
+          {ROSE.map(({ index, row, col }, i) => {
+            const azimuth = index * 22.5;
+            const checked = state.orientationValid && o === azimuth;
+            return (
+              <button
+                key={index}
+                type="button"
+                role="radio"
+                aria-checked={checked}
+                aria-label={t('facade.compassButton', {
+                  name: names[index]!,
+                  degrees: formatNumber(azimuth),
+                })}
+                tabIndex={rovingTabIndex(checked, i, anyChecked)}
+                style={{ gridRow: row, gridColumn: col }}
+                data-testid={`compass-${azimuth}`}
+                onClick={() => {
+                  setText(String(azimuth));
+                  setOrientation(String(azimuth));
+                }}
+              >
+                {points[index]}
+              </button>
+            );
+          })}
+          <div className="facade-rose-center" style={{ gridRow: 2, gridColumn: 2 }}>
+            <FacadePlan orientation={o} />
           </div>
-          <p className="note">{t('facade.orientationHelp')}</p>
         </div>
       </div>
-      <label className="check">
+      <div className="facade-fields">
+        <div className="field">
+          <div className="row">
+            <label htmlFor={`${id}-o`}>
+              {t('facade.orientationLabel')}
+              <span className="visually-hidden">{t('facade.orientationLabelDetail')}</span>
+            </label>
+            <InfoButton
+              info={info}
+              label={t('info.label', { topic: t('facade.orientationLabel') })}
+              testId="facade-info"
+            />
+          </div>
+          <div className="orientation-row">
+            <input
+              id={`${id}-o`}
+              type="text"
+              autoComplete="off"
+              value={text}
+              placeholder="0"
+              aria-invalid={!state.orientationValid}
+              aria-describedby={`${id}-n`}
+              onChange={(e) => onType(e.target.value)}
+            />
+            {state.orientationValid && (
+              <output id={`${id}-n`} className="orientation-name" data-testid="normal-azimuth">
+                <span className="orientation-name-main" data-testid="orientation-name">
+                  {exact ? names[nearest] : `≈ ${names[nearest]}`}
+                </span>
+                <span className="orientation-name-detail">
+                  {t('facade.normalized', { degrees, compass })}
+                </span>
+              </output>
+            )}
+          </div>
+          {!state.orientationValid && (
+            <p className="error" role="alert" id={`${id}-n`}>
+              {t('facade.orientationInvalid')}
+            </p>
+          )}
+        </div>
+      </div>
+      <InfoText info={info} testId="facade-help">
+        <p className="note">{t('facade.orientationHelp')}</p>
+      </InfoText>
+      <label className="check facade-show">
         <input
           type="checkbox"
           checked={state.show}
           onChange={(e) => onChange({ tr: e.target.checked ? '' : '0' })}
         />
-        {t('facade.showProtractor')}
+        {/* Rótulo curto à vista, para caber numa linha; o nome inteiro para o leitor de tela. */}
+        <span>
+          {t('facade.showProtractorShort')}
+          <span className="visually-hidden">{t('facade.showProtractorDetail')}</span>
+        </span>
       </label>
-    </>
+    </div>
   );
 }

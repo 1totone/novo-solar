@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { maskTints } from './fixtures/pixels';
-import { openStep } from './fixtures/steps';
+import { isAccordion, openStep } from './fixtures/steps';
 
 // Fachada por rumos (decisão 0044, item c; problema 3 do piloto do F2.9: 45° digitado para
 // "noroeste" sem perceber). Botões de rumo, siglas e nomes aceitos no campo, rumo por extenso ao
@@ -30,9 +30,13 @@ test('botão "NO": 315° no link, o rumo por extenso e a máscara do lado noroes
       { altitude: 60, azimuth: 135 },
     ]),
   ).toEqual(['total', 'none']);
-  await expect(page.getByTestId('facade-summary')).toHaveText(
-    'Fachada 315° (NO) · sem transferidor',
-  );
+  if (isAccordion(page)) {
+    await expect(page.getByTestId('facade-summary')).toHaveText(
+      'Fachada 315° (NO) · sem transferidor',
+    );
+  } else {
+    await expect(page.getByLabel('Mostrar o transferidor sobre a carta')).not.toBeChecked();
+  }
 });
 
 test('o campo aceita "NO" e "noroeste"; 45° mostra "nordeste" bem visível', async ({ page }) => {

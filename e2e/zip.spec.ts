@@ -1,7 +1,7 @@
 import { strToU8, zipSync } from 'fflate';
 import { expect, test } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
-import { loadClimateFile } from './fixtures/steps';
+import { chosenSource, loadClimateFile } from './fixtures/steps';
 
 // .zip do TMYx carregado direto, sem descompactar (decisão 0048, item g da 0044; problema 6 do
 // piloto do F2.9). O .zip do teste tem a estrutura dos do Climate.OneBuilding.org: o .epw e os
@@ -21,7 +21,11 @@ test('o .zip do TMYx abre direto: o .epw de dentro, com a cidade, e pinta a cart
   page,
 }) => {
   await page.goto('./#local=recife&dado=tbs');
-  await expect(page.getByText('Carregue abaixo o .zip baixado, sem descompactar.')).toBeVisible();
+  // O "i" das fontes de dados diz que o .zip vai direto em "Abrir arquivo" (decisão 0050).
+  await page.getByTestId('sources-info').click();
+  await expect(
+    page.getByText('Carregue o .zip baixado em "Abrir arquivo", sem descompactar.'),
+  ).toBeVisible();
   await loadClimateFile(page, {
     name: `${NAME}.zip`,
     mimeType: 'application/zip',
@@ -33,7 +37,7 @@ test('o .zip do TMYx abre direto: o .epw de dentro, com a cidade, e pinta a cart
   });
   await expect(page).toHaveURL(/local=arquivo/);
   await expect(page.getByTestId('site-source')).toContainText(`${NAME}.epw`);
-  await expect(page.getByRole('radio', { name: `Arquivo ${NAME}.epw` })).toBeChecked();
+  expect(await chosenSource(page)).toBe(`Arquivo ${NAME}.epw`);
   await expect(page.getByLabel('Cidade')).toHaveValue('recife');
   // 27 °C o ano todo: todas as células na faixa "acima de 25".
   await expect(page.getByTestId('overlay-legend')).toBeVisible();

@@ -30,6 +30,8 @@ test.describe('catálogo nacional (F4.1)', () => {
     await expect(page.getByTestId('sun-chart').locator('title').first()).toContainText('Joinville');
     await page.reload();
     await expect(page.getByTestId('site-info')).toContainText('Estação Joinville');
+    // Qualidade do arquivo nos detalhes do local, abertos pela linha de resumo (decisão 0050).
+    await page.getByTestId('site-line').click();
     await expect(page.getByTestId('station-quality')).toBeVisible();
     await expect(page.getByRole('combobox', { name: 'Cidade' })).toHaveValue('estacao');
   });

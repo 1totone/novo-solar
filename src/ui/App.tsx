@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { onRovingKeyDown } from './a11y/roving';
 import type { EpwData } from '../core/epw/hourly';
 import { cellDifference, DIFFERENCE_BANDS, sameLocation } from '../core/overlay/difference';
@@ -25,10 +25,12 @@ import { SitePanel, type LoadedFile } from './SitePanel';
 import { useProjectActions } from './project/useProjectActions';
 import { timeZoneOffset } from './timeZoneOffset';
 import { AdvancedStepStub, RestoreStepFocus } from './layout/AdvancedStepStub';
-import { SideResultsProvider, useWideLayout } from './layout/sideResultsContext';
+import { InfoButton, InfoText } from './layout/InfoTip';
+import { useInfo } from './layout/useInfo';
+import { useLayout } from './layout/useLayout';
 import { ShareButton } from './layout/ShareButton';
 import { StepNav } from './layout/StepNav';
-import { initialStep, revealStep, type StepId } from './layout/steps';
+import { initialStep, revealStep, stepSummary, type StepId } from './layout/steps';
 import { paperDrawing, scaleFromHash } from './geometry/layout';
 import { protectionSummary } from './protractor/summary';
 import { dataSummary, facadeSummary, outputsSummary } from './layout/stepSummaries';
@@ -162,6 +164,10 @@ export function App() {
     pendingReveal.current = null;
     revealStep(r.id, r.focus);
   });
+  // Leiaute pela largura da janela (decisão 0050): no computador, os passos 1 a 5 ficam sempre
+  // abertos, sem acordeão; o acordeão continua no celular.
+  const layout = useLayout();
+  const mobile = layout === 'mobile';
   const stepProps = (id: StepId) => ({
     open: openStep === id,
     // Os passos avançados avisam também o "toggle" do details já aberto ao montar: só uma mudança
@@ -172,6 +178,29 @@ export function App() {
       if (open) pendingReveal.current = { id, focus: false };
     },
   });
+  // Com as colunas (decisão 0050), o passo avançado que o link abre vem para a vista na coluna dele,
+  // depois que o conteúdo dos passos de cima chegou (decisão 0039) e o React o mostrou (o React
+  // espera até 300 ms para trocar o "Carregando…" pelo conteúdo). Se a pessoa já rolou a coluna,
+  // fica onde ela deixou.
+  useEffect(() => {
+    const id = openStep;
+    if (layout === 'mobile' || (id !== 'opcoes' && id !== '6' && id !== '7')) return;
+    let alive = true;
+    Promise.all([loadFacade(), loadProtection(), loadData(), loadOutputs(), loadProject()])
+      .then(() => new Promise((done) => setTimeout(done, 400)))
+      .then(() => {
+        const column = stepSummary(id)?.closest('.steps');
+        if (alive && column && column.scrollTop === 0) revealStep(id, false, true);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+    // Só ao chegar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const basicProps = (id: StepId) =>
+    mobile ? stepProps(id) : { open: true, onOpenChange: () => {}, fixed: true };
   const goToStep = (id: StepId) => {
     if (openStep === id) {
       revealStep(id, true);
@@ -220,17 +249,7 @@ export function App() {
     ? paperDrawing(geometry.window, geometry.devices, geometryScale)
     : null;
   const wind = windFromHash(hashState);
-  // Resultados ao lado (decisão 0038): no computador, com a aba da carta, os resultados pesados
-  // dos passos 6 e 7 vão para o painel da direita, abaixo da carta.
-  const wide = useWideLayout();
-  const sideOn = wide && wind.tab === 'chart';
-  const [catalogSlot, setCatalogSlot] = useState<HTMLElement | null>(null);
-  const [annualSlot, setAnnualSlot] = useState<HTMLElement | null>(null);
-  const [effectSlot, setEffectSlot] = useState<HTMLElement | null>(null);
-  const sideSlots = useMemo(
-    () => (sideOn ? { catalog: catalogSlot, annual: annualSlot, effect: effectSlot } : {}),
-    [sideOn, catalogSlot, annualSlot, effectSlot],
-  );
+  const chartInfo = useInfo();
   // Projeção da carta (F4.3): a moldura dá o tamanho impresso em raios (2,64 nas azimutais).
   const chartOptions = chartOptionsFromHash(hashState);
   const frame = chartFrame(chartOptions.projection);
@@ -497,8 +516,6 @@ export function App() {
     print.data ? '' : 'print-no-data',
     print.legend ? '' : 'print-no-legend',
     print.protractorOnly ? 'print-protractor-only' : '',
-    // No computador, a carta fica sempre à vista ao lado dos passos (decisão 0044).
-    'follow',
   ]
     .filter(Boolean)
     .join(' ');
@@ -553,6 +570,15 @@ export function App() {
     />
   );
 
+  const chartNote = [
+    t(`chart.noteProjection.${chartOptions.projection}`, {
+      orientation: fmt(protractor.orientation),
+    }),
+    t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
+    t(`chart.noteHours.${chartOptions.hourLines}`),
+    t('readout.hint'),
+  ].join(' ');
+
   const live =
     wind.tab === 'rose' ? (
       <div role="tabpanel" id="panel-rose" aria-labelledby="tab-rose">
@@ -585,24 +611,428 @@ export function App() {
           }
         />
         <PrintRuler label={t('print.ruler')} />
-        <p className="note" data-testid="chart-note">
-          {[
-            t(`chart.noteProjection.${chartOptions.projection}`, {
-              orientation: fmt(protractor.orientation),
-            }),
-            t(chartOptions.projection === 'cylindrical' ? 'chart.noteDatesTop' : 'chart.noteDates'),
-            t(`chart.noteHours.${chartOptions.hourLines}`),
-            t('readout.hint'),
-          ].join(' ')}
-        </p>
       </div>
     );
 
+  // Passos 1 a 3 (no computador, a coluna da esquerda, decisão 0050).
+  const firstSteps = (
+    <>
+      {tutorialStep && (
+        <Suspense fallback={null}>
+          <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
+        </Suspense>
+      )}
+      {exercise && (
+        <Suspense fallback={null}>
+          <ExerciseCard
+            id={exercise}
+            site={siteFromHash(EXERCISES[exercise].state).site}
+            orientation={protractor.orientation}
+            drawn={protractor.drawn.total}
+            checked={exerciseChecked}
+            onChange={setHashState}
+            onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
+          />
+        </Suspense>
+      )}
+      {example && (
+        <Suspense fallback={null}>
+          <ExampleCard
+            id={example}
+            onClose={() => setHashState({ exemplo: '' })}
+            onMore={() => setHashState({ ajuda: 'exemplos' })}
+          />
+        </Suspense>
+      )}
+      <SitePanel
+        selected={selected}
+        loadedFile={selected.kind === 'file' ? loadedFile : null}
+        historical={historical}
+        files={files}
+        paintKey={ov.overlay.key}
+        onPaint={(key) =>
+          setHashState({
+            dado: key,
+            faixas: '',
+            limiar: '',
+            modo: ov.overlay.mode === 'frequency' ? 'freq' : '',
+          })
+        }
+        onMoreData={mobile ? () => goToStep('4') : undefined}
+        comparing={hashA !== null}
+        compareSource={sourceA}
+        onCompare={(start) => onCompare(start, true)}
+        onSelect={(next, file) => {
+          if (file) setFiles((list) => withFile(list, file));
+          setLoadedFile(file);
+          setHashState(hashForSite(next));
+        }}
+        projectPoint={projectPointFromHash(hashState.perto)}
+        onProjectPointChange={(value) => setHashState({ perto: value })}
+        {...basicProps('1')}
+        onNext={mobile ? () => goToStep('2') : undefined}
+      />
+      <Step
+        n={2}
+        heading={t('facade.heading')}
+        summary={facadeSummary(protractor, t, formatNumber)}
+        summaryTestId="facade-summary"
+        testId="facade-panel"
+        dataStep="2"
+        {...basicProps('2')}
+      >
+        <Suspense fallback={stepLoading}>
+          <FacadePanel
+            state={protractor}
+            rawOrientation={hashState.o ?? ''}
+            onChange={setHashState}
+          />
+        </Suspense>
+        {mobile && (
+          <NextStep n={3} heading={t('protection.heading')} onClick={() => goToStep('3')} />
+        )}
+      </Step>
+      <Step
+        n={3}
+        heading={t('protection.heading')}
+        summary={protectionSummary(hashState, protractor, t, (v) =>
+          formatNumber(v, Number.isInteger(v) ? 0 : 1),
+        )}
+        summaryTestId="protection-summary"
+        testId="protection-panel"
+        dataStep="3"
+        {...basicProps('3')}
+      >
+        <Suspense fallback={stepLoading}>
+          <ProtectionPanel
+            state={protractor}
+            hash={hashState}
+            onChange={setHashState}
+            drawing={drawing}
+            onDrawingChange={setDrawing}
+          />
+        </Suspense>
+        {mobile && <NextStep n={4} heading={t('data.heading')} onClick={() => goToStep('4')} />}
+      </Step>
+    </>
+  );
+
+  // Passos 4 a 7 (no computador, a coluna da direita, decisão 0050).
+  const lastSteps = (
+    <>
+      <Step
+        n={4}
+        heading={t('data.heading')}
+        summary={dataSummary(ov.overlay, epw !== null, t, formatNumber)}
+        summaryTestId="data-summary"
+        testId="data-panel"
+        dataStep="4"
+        {...basicProps('4')}
+      >
+        <Suspense fallback={stepLoading}>
+          <DataPanel
+            overlay={ov.overlay}
+            hasData={epw !== null}
+            sourceUrl={sourceUrl}
+            limits={ov.quantityLimits}
+            timeZone={site.timeZone}
+            onChange={setHashState}
+          />
+        </Suspense>
+        {mobile && <NextStep n={5} heading={t('outputs.heading')} onClick={() => goToStep('5')} />}
+      </Step>
+      <Step
+        n={5}
+        heading={t('outputs.heading')}
+        summary={outputsSummary(print, hashA !== null, t, formatNumber, locale)}
+        summaryTestId="outputs-summary"
+        testId="outputs-panel"
+        dataStep="5"
+        {...basicProps('5')}
+      >
+        <Suspense fallback={stepLoading}>
+          <OutputsPanel
+            print={print}
+            onPrintChange={setPrint}
+            onPrint={() => window.print()}
+            onExport={onExport}
+            csvAvailable={csvAvailable}
+            comparing={hashA !== null}
+            onCompare={onCompare}
+            geometryAvailable={geometry.window !== null}
+          >
+            <ProjectSection
+              onSave={project.save}
+              onOpen={project.open}
+              onCopyLink={project.copyLink}
+              fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
+              fileSizeMb={
+                projectFiles.length > 0
+                  ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
+                  : null
+              }
+            />
+          </OutputsPanel>
+        </Suspense>
+      </Step>
+      <p className="steps-group">{t('advanced.group')}</p>
+      <ChartOptionsPanel
+        hash={hashState}
+        site={site}
+        placeName={site.name}
+        onChange={setHashState}
+        {...stepProps('opcoes')}
+      />
+      {geometryOpen ? (
+        <Suspense fallback={geometryStub}>
+          <GeometryPanel
+            geometry={geometry}
+            hash={hashState}
+            scale={geometryScale}
+            site={site}
+            orientation={protractor.orientation}
+            onChange={setHashState}
+            {...stepProps('6')}
+          />
+          <RestoreStepFocus testId="geometry-panel" />
+        </Suspense>
+      ) : (
+        geometryStub
+      )}
+      {effectOpen ? (
+        <Suspense fallback={effectStub}>
+          <EffectPanel
+            epw={epw}
+            hash={hashState}
+            geometry={geometry}
+            orientation={protractor.orientation}
+            onChange={setHashState}
+            {...stepProps('7')}
+          />
+          <RestoreStepFocus testId="effect-panel" />
+        </Suspense>
+      ) : (
+        effectStub
+      )}
+    </>
+  );
+
+  const chartSection = (
+    <section
+      className={sectionClass}
+      style={printStyle}
+      aria-labelledby="chart-heading"
+      data-step="carta"
+    >
+      <h2 id="chart-heading" className="visually-hidden">
+        {t('tabs.label')}
+      </h2>
+      <div className="print-header">
+        <p className="print-title">{t('print.title', { place: site.name })}</p>
+        <p className="print-details">
+          {t('print.details', {
+            latitude: formatNumber(site.latitude, 3),
+            longitude: formatNumber(site.longitude, 3),
+            timeZone: timeZoneOffset(site.timeZone, formatNumber),
+            source,
+            date: formatDate(new Date()),
+            scale: t(
+              chartOptions.projection === 'cylindrical' ? 'print.scaleHeight' : 'print.scaleRadius',
+              { radius: fmt(print.radiusCm) },
+            ),
+          })}
+        </p>
+      </div>
+      <div className="tabs-row">
+        <div
+          className="tabs"
+          role="tablist"
+          aria-label={t('tabs.label')}
+          onKeyDown={(e) => onRovingKeyDown(e, 'tab')}
+        >
+          {(['chart', '3d', 'rose'] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              role="tab"
+              id={`tab-${tab}`}
+              tabIndex={wind.tab === tab ? 0 : -1}
+              aria-selected={wind.tab === tab}
+              aria-controls={`panel-${tab}`}
+              onClick={() =>
+                setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
+              }
+            >
+              {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
+            </button>
+          ))}
+        </div>
+        {wind.tab === 'chart' && (
+          <InfoButton info={chartInfo} label={t('chart.infoLabel')} testId="chart-info" />
+        )}
+      </div>
+      {wind.tab === 'chart' && (
+        <InfoText info={chartInfo} testId="chart-note">
+          <p className="note">{chartNote}</p>
+        </InfoText>
+      )}
+      {hashA && wind.tab === 'chart' && (
+        <p className="difference-toggle">
+          <button
+            type="button"
+            className="btn"
+            aria-pressed={differenceAsked}
+            data-testid="difference-toggle"
+            onClick={() => setHashState({ dif: differenceAsked ? '' : '1' })}
+          >
+            {t('difference.toggle')}
+          </button>
+        </p>
+      )}
+      {differenceBlocked && (
+        <p className="note difference-blocked" data-testid="difference-blocked">
+          {t(`difference.${differenceBlocked}`)}
+        </p>
+      )}
+      {differenceOn && hashA ? (
+        <div className="difference" data-testid="difference-view">
+          <h3 className="compare-label">{t('difference.title')}</h3>
+          <ul className="difference-sources">
+            <li>
+              {t('compare.a')}: {siteFromHash(hashA).site.name}. {sourceA}
+            </li>
+            <li>
+              {t('compare.b')}: {site.name}. {sourceB}
+            </li>
+          </ul>
+          <p className="note">{t('difference.note')}</p>
+          {live}
+        </div>
+      ) : hashA ? (
+        <div className="compare" data-testid="compare-view">
+          <div className="compare-col" data-testid="compare-a">
+            <h3 className="compare-label">
+              {t('compare.a')}: {describeConfig(hashA, fmt, words)}
+            </h3>
+            {wind.tab === 'rose' ? (
+              <Suspense fallback={<p className="note">{t('wind.loading')}</p>}>
+                <WindPanel
+                  epw={epwA}
+                  wind={windFromHash(hashA)}
+                  classification={classificationFromHash(hashA)}
+                  onChange={() => {}}
+                  readOnly
+                />
+              </Suspense>
+            ) : (
+              <ChartView hash={hashA} epw={epwA} />
+            )}
+          </div>
+          <div className="compare-col" data-testid="compare-b">
+            <h3 className="compare-label">
+              {t('compare.b')}: {describeConfig(hashState, fmt, words)}
+            </h3>
+            {live}
+          </div>
+        </div>
+      ) : (
+        live
+      )}
+      {geometry.window && geometryPrint && print.geometry && (
+        <div className="print-geometry" data-testid="print-geometry">
+          <p className="print-title">{t('geometry.printTitle', { scale: geometryScale })}</p>
+          <Suspense fallback={null}>
+            <GeometryDrawing
+              window={geometry.window}
+              devices={geometry.devices}
+              title={t('geometry.printTitle', { scale: geometryScale })}
+              font={geometryPrint.font}
+              size={{
+                width: `${geometryPrint.width.toFixed(2)}cm`,
+                height: `${geometryPrint.height.toFixed(2)}cm`,
+              }}
+              testId="print-geometry-drawing"
+              point={geometry.point?.value ?? null}
+            />
+          </Suspense>
+        </div>
+      )}
+    </section>
+  );
+
+  // "Em construção", créditos e versão: no computador, no fim da coluna dos passos, para a página
+  // não rolar (decisão 0050); no celular, no fim da página, como antes.
+  const about = (
+    <>
+      <section className="status" aria-labelledby="status-title">
+        <h2 id="status-title">{t('status.title')}</h2>
+        <p>{t('status.body')}</p>
+        <ul className="links">
+          <li>
+            <a href={OLD_VERSION_URL}>{t('status.oldVersionLink')}</a>
+          </li>
+          <li>
+            <a href={ROADMAP_URL}>{t('status.roadmapLink')}</a>
+          </li>
+          <li>
+            <a href="./wireframes/">{t('status.wireframesLink')}</a>
+          </li>
+          <li>
+            <a href="./wireframes/fase-3.html">{t('status.wireframes3Link')}</a>
+          </li>
+        </ul>
+      </section>
+
+      <button
+        type="button"
+        className="about-toggle"
+        aria-expanded={aboutOpen}
+        aria-controls="about"
+        onClick={() => setHashState({ painel: aboutOpen ? '' : 'sobre' })}
+      >
+        {aboutOpen ? t('about.toggleClose') : t('about.toggleOpen')}
+      </button>
+
+      {aboutOpen && (
+        <section id="about" className="about" aria-labelledby="about-title">
+          <h2 id="about-title">{t('about.title')}</h2>
+          <h3>{t('about.originalTitle')}</h3>
+          <ul>
+            <li>{t('about.originalResearch')}</li>
+            <li>{t('about.originalProgramming')}</li>
+          </ul>
+          <h3>{t('about.newTitle')}</h3>
+          <ul>
+            <li>{t('about.newAuthor')}</li>
+            <li>{t('about.newAi')}</li>
+            <li>{t('about.newMaintenance')}</li>
+          </ul>
+          <p>{t('about.license')}</p>
+        </section>
+      )}
+    </>
+  );
+  const footer = (
+    <footer className="footer">
+      {t('footer.build', {
+        version: __APP_VERSION__,
+        label: __BUILD_LABEL__,
+        commit: __BUILD_COMMIT__,
+      })}
+    </footer>
+  );
+  // Atalho entre passos (decisão 0040): só com um passo avançado aberto, e não com as três colunas,
+  // em que todos os passos ficam à vista.
+  const stepNav = (geometryOpen || effectOpen) && layout !== 'wide' && (
+    <StepNav current={openStep} onGo={goToStep} />
+  );
+
   return (
-    <div className="page">
+    <div className={`page layout-${layout}`}>
       <header className="header">
         <div className="header-row">
           <h1>{t('app.name')}</h1>
+          <p className="tagline">{t('app.tagline')}</p>
           <div className="header-tools">
             <ShareButton hasFile={selected.kind === 'file' || selectedA?.kind === 'file'} />
             <button
@@ -617,400 +1047,38 @@ export function App() {
             <LanguageSelect />
           </div>
         </div>
-        <p className="tagline">{t('app.tagline')}</p>
       </header>
 
       <main>
-        <SideResultsProvider value={sideSlots}>
-          <div className="workspace">
-            <div className="steps">
-              {/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. */}
-              {(geometryOpen || effectOpen) && <StepNav current={openStep} onGo={goToStep} />}
-              {tutorialStep && (
-                <Suspense fallback={null}>
-                  <TutorialCard step={tutorialStep} hash={hashState} onChange={setHashState} />
-                </Suspense>
-              )}
-              {exercise && (
-                <Suspense fallback={null}>
-                  <ExerciseCard
-                    id={exercise}
-                    site={siteFromHash(EXERCISES[exercise].state).site}
-                    orientation={protractor.orientation}
-                    drawn={protractor.drawn.total}
-                    checked={exerciseChecked}
-                    onChange={setHashState}
-                    onStartDrawing={() => setDrawing({ kind: 'total', vertices: [] })}
-                  />
-                </Suspense>
-              )}
-              {example && (
-                <Suspense fallback={null}>
-                  <ExampleCard
-                    id={example}
-                    onClose={() => setHashState({ exemplo: '' })}
-                    onMore={() => setHashState({ ajuda: 'exemplos' })}
-                  />
-                </Suspense>
-              )}
-              <SitePanel
-                selected={selected}
-                loadedFile={selected.kind === 'file' ? loadedFile : null}
-                historical={historical}
-                files={files}
-                paintKey={ov.overlay.key}
-                onPaint={(key) =>
-                  setHashState({
-                    dado: key,
-                    faixas: '',
-                    limiar: '',
-                    modo: ov.overlay.mode === 'frequency' ? 'freq' : '',
-                  })
-                }
-                onMoreData={() => goToStep('4')}
-                comparing={hashA !== null}
-                compareSource={sourceA}
-                onCompare={(start) => onCompare(start, true)}
-                onSelect={(next, file) => {
-                  if (file) setFiles((list) => withFile(list, file));
-                  setLoadedFile(file);
-                  setHashState(hashForSite(next));
-                }}
-                projectPoint={projectPointFromHash(hashState.perto)}
-                onProjectPointChange={(value) => setHashState({ perto: value })}
-                {...stepProps('1')}
-                onNext={() => goToStep('2')}
-              />
-              <Step
-                n={2}
-                heading={t('facade.heading')}
-                summary={facadeSummary(protractor, t, formatNumber)}
-                summaryTestId="facade-summary"
-                testId="facade-panel"
-                dataStep="2"
-                {...stepProps('2')}
-              >
-                <Suspense fallback={stepLoading}>
-                  <FacadePanel
-                    state={protractor}
-                    rawOrientation={hashState.o ?? ''}
-                    onChange={setHashState}
-                  />
-                </Suspense>
-                <NextStep n={3} heading={t('protection.heading')} onClick={() => goToStep('3')} />
-              </Step>
-              <Step
-                n={3}
-                heading={t('protection.heading')}
-                summary={protectionSummary(hashState, protractor, t, (v) =>
-                  formatNumber(v, Number.isInteger(v) ? 0 : 1),
+        <div className="workspace">
+          {layout === 'wide' ? (
+            <>
+              <div className="steps steps-left">{firstSteps}</div>
+              {chartSection}
+              <div className="steps steps-right">
+                {lastSteps}
+                {about}
+                {footer}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="steps">
+                {stepNav}
+                {firstSteps}
+                {lastSteps}
+                {layout === 'medium' && (
+                  <>
+                    {about}
+                    {footer}
+                  </>
                 )}
-                summaryTestId="protection-summary"
-                testId="protection-panel"
-                dataStep="3"
-                {...stepProps('3')}
-              >
-                <Suspense fallback={stepLoading}>
-                  <ProtectionPanel
-                    state={protractor}
-                    hash={hashState}
-                    onChange={setHashState}
-                    drawing={drawing}
-                    onDrawingChange={setDrawing}
-                  />
-                </Suspense>
-                <NextStep n={4} heading={t('data.heading')} onClick={() => goToStep('4')} />
-              </Step>
-              <Step
-                n={4}
-                heading={t('data.heading')}
-                summary={dataSummary(ov.overlay, epw !== null, t, formatNumber)}
-                summaryTestId="data-summary"
-                testId="data-panel"
-                dataStep="4"
-                {...stepProps('4')}
-              >
-                <Suspense fallback={stepLoading}>
-                  <DataPanel
-                    overlay={ov.overlay}
-                    hasData={epw !== null}
-                    sourceUrl={sourceUrl}
-                    limits={ov.quantityLimits}
-                    timeZone={site.timeZone}
-                    onChange={setHashState}
-                  />
-                </Suspense>
-                <NextStep n={5} heading={t('outputs.heading')} onClick={() => goToStep('5')} />
-              </Step>
-              <Step
-                n={5}
-                heading={t('outputs.heading')}
-                summary={outputsSummary(print, hashA !== null, t, formatNumber, locale)}
-                summaryTestId="outputs-summary"
-                testId="outputs-panel"
-                dataStep="5"
-                {...stepProps('5')}
-              >
-                <Suspense fallback={stepLoading}>
-                  <OutputsPanel
-                    print={print}
-                    onPrintChange={setPrint}
-                    onPrint={() => window.print()}
-                    onExport={onExport}
-                    csvAvailable={csvAvailable}
-                    comparing={hashA !== null}
-                    onCompare={onCompare}
-                    geometryAvailable={geometry.window !== null}
-                  >
-                    <ProjectSection
-                      onSave={project.save}
-                      onOpen={project.open}
-                      onCopyLink={project.copyLink}
-                      fileName={projectFiles.map((f) => f.fileName).join(', ') || null}
-                      fileSizeMb={
-                        projectFiles.length > 0
-                          ? projectFiles.reduce((a, f) => a + f.text.length, 0) / 1e6
-                          : null
-                      }
-                    />
-                  </OutputsPanel>
-                </Suspense>
-              </Step>
-              <p className="steps-group">{t('advanced.group')}</p>
-              <ChartOptionsPanel
-                hash={hashState}
-                site={site}
-                placeName={site.name}
-                onChange={setHashState}
-                {...stepProps('opcoes')}
-              />
-              {geometryOpen ? (
-                <Suspense fallback={geometryStub}>
-                  <GeometryPanel
-                    geometry={geometry}
-                    hash={hashState}
-                    scale={geometryScale}
-                    site={site}
-                    orientation={protractor.orientation}
-                    onChange={setHashState}
-                    {...stepProps('6')}
-                  />
-                  <RestoreStepFocus testId="geometry-panel" />
-                </Suspense>
-              ) : (
-                geometryStub
-              )}
-              {effectOpen ? (
-                <Suspense fallback={effectStub}>
-                  <EffectPanel
-                    epw={epw}
-                    hash={hashState}
-                    geometry={geometry}
-                    orientation={protractor.orientation}
-                    onChange={setHashState}
-                    {...stepProps('7')}
-                  />
-                  <RestoreStepFocus testId="effect-panel" />
-                </Suspense>
-              ) : (
-                effectStub
-              )}
-            </div>
-            <section
-              className={sectionClass}
-              style={printStyle}
-              aria-labelledby="chart-heading"
-              data-step="carta"
-            >
-              <h2 id="chart-heading" className="visually-hidden">
-                {t('tabs.label')}
-              </h2>
-              <div className="print-header">
-                <p className="print-title">{t('print.title', { place: site.name })}</p>
-                <p className="print-details">
-                  {t('print.details', {
-                    latitude: formatNumber(site.latitude, 3),
-                    longitude: formatNumber(site.longitude, 3),
-                    timeZone: timeZoneOffset(site.timeZone, formatNumber),
-                    source,
-                    date: formatDate(new Date()),
-                    scale: t(
-                      chartOptions.projection === 'cylindrical'
-                        ? 'print.scaleHeight'
-                        : 'print.scaleRadius',
-                      { radius: fmt(print.radiusCm) },
-                    ),
-                  })}
-                </p>
               </div>
-              {/* O mapa do catálogo (passo 1) fica acima da carta, à altura do passo (decisão 0038). */}
-              {sideOn && (
-                <div className="side-results side-results-top" data-testid="side-results-top">
-                  <div ref={setCatalogSlot} />
-                </div>
-              )}
-              <div
-                className="tabs"
-                role="tablist"
-                aria-label={t('tabs.label')}
-                onKeyDown={(e) => onRovingKeyDown(e, 'tab')}
-              >
-                {(['chart', '3d', 'rose'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    type="button"
-                    role="tab"
-                    id={`tab-${tab}`}
-                    tabIndex={wind.tab === tab ? 0 : -1}
-                    aria-selected={wind.tab === tab}
-                    aria-controls={`panel-${tab}`}
-                    onClick={() =>
-                      setHashState({ aba: tab === 'rose' ? 'rosa' : tab === '3d' ? '3d' : '' })
-                    }
-                  >
-                    {t(tab === 'chart' ? 'tabs.chart' : tab === '3d' ? 'tabs.view3d' : 'tabs.rose')}
-                  </button>
-                ))}
-              </div>
-              {hashA && wind.tab === 'chart' && (
-                <p className="difference-toggle">
-                  <button
-                    type="button"
-                    className="btn"
-                    aria-pressed={differenceAsked}
-                    data-testid="difference-toggle"
-                    onClick={() => setHashState({ dif: differenceAsked ? '' : '1' })}
-                  >
-                    {t('difference.toggle')}
-                  </button>
-                </p>
-              )}
-              {differenceBlocked && (
-                <p className="note difference-blocked" data-testid="difference-blocked">
-                  {t(`difference.${differenceBlocked}`)}
-                </p>
-              )}
-              {differenceOn && hashA ? (
-                <div className="difference" data-testid="difference-view">
-                  <h3 className="compare-label">{t('difference.title')}</h3>
-                  <ul className="difference-sources">
-                    <li>
-                      {t('compare.a')}: {siteFromHash(hashA).site.name}. {sourceA}
-                    </li>
-                    <li>
-                      {t('compare.b')}: {site.name}. {sourceB}
-                    </li>
-                  </ul>
-                  <p className="note">{t('difference.note')}</p>
-                  {live}
-                </div>
-              ) : hashA ? (
-                <div className="compare" data-testid="compare-view">
-                  <div className="compare-col" data-testid="compare-a">
-                    <h3 className="compare-label">
-                      {t('compare.a')}: {describeConfig(hashA, fmt, words)}
-                    </h3>
-                    {wind.tab === 'rose' ? (
-                      <Suspense fallback={<p className="note">{t('wind.loading')}</p>}>
-                        <WindPanel
-                          epw={epwA}
-                          wind={windFromHash(hashA)}
-                          classification={classificationFromHash(hashA)}
-                          onChange={() => {}}
-                          readOnly
-                        />
-                      </Suspense>
-                    ) : (
-                      <ChartView hash={hashA} epw={epwA} />
-                    )}
-                  </div>
-                  <div className="compare-col" data-testid="compare-b">
-                    <h3 className="compare-label">
-                      {t('compare.b')}: {describeConfig(hashState, fmt, words)}
-                    </h3>
-                    {live}
-                  </div>
-                </div>
-              ) : (
-                live
-              )}
-              {sideOn && (
-                <div className="side-results" data-testid="side-results">
-                  <div ref={setAnnualSlot} />
-                  <div ref={setEffectSlot} />
-                </div>
-              )}
-              {geometry.window && geometryPrint && print.geometry && (
-                <div className="print-geometry" data-testid="print-geometry">
-                  <p className="print-title">
-                    {t('geometry.printTitle', { scale: geometryScale })}
-                  </p>
-                  <Suspense fallback={null}>
-                    <GeometryDrawing
-                      window={geometry.window}
-                      devices={geometry.devices}
-                      title={t('geometry.printTitle', { scale: geometryScale })}
-                      font={geometryPrint.font}
-                      size={{
-                        width: `${geometryPrint.width.toFixed(2)}cm`,
-                        height: `${geometryPrint.height.toFixed(2)}cm`,
-                      }}
-                      testId="print-geometry-drawing"
-                      point={geometry.point?.value ?? null}
-                    />
-                  </Suspense>
-                </div>
-              )}
-            </section>
-          </div>
-        </SideResultsProvider>
-
-        <section className="status" aria-labelledby="status-title">
-          <h2 id="status-title">{t('status.title')}</h2>
-          <p>{t('status.body')}</p>
-          <ul className="links">
-            <li>
-              <a href={OLD_VERSION_URL}>{t('status.oldVersionLink')}</a>
-            </li>
-            <li>
-              <a href={ROADMAP_URL}>{t('status.roadmapLink')}</a>
-            </li>
-            <li>
-              <a href="./wireframes/">{t('status.wireframesLink')}</a>
-            </li>
-            <li>
-              <a href="./wireframes/fase-3.html">{t('status.wireframes3Link')}</a>
-            </li>
-          </ul>
-        </section>
-
-        <button
-          type="button"
-          className="about-toggle"
-          aria-expanded={aboutOpen}
-          aria-controls="about"
-          onClick={() => setHashState({ painel: aboutOpen ? '' : 'sobre' })}
-        >
-          {aboutOpen ? t('about.toggleClose') : t('about.toggleOpen')}
-        </button>
-
-        {aboutOpen && (
-          <section id="about" className="about" aria-labelledby="about-title">
-            <h2 id="about-title">{t('about.title')}</h2>
-            <h3>{t('about.originalTitle')}</h3>
-            <ul>
-              <li>{t('about.originalResearch')}</li>
-              <li>{t('about.originalProgramming')}</li>
-            </ul>
-            <h3>{t('about.newTitle')}</h3>
-            <ul>
-              <li>{t('about.newAuthor')}</li>
-              <li>{t('about.newAi')}</li>
-              <li>{t('about.newMaintenance')}</li>
-            </ul>
-            <p>{t('about.license')}</p>
-          </section>
-        )}
+              {chartSection}
+            </>
+          )}
+        </div>
+        {mobile && about}
       </main>
 
       {helpSection && (
@@ -1024,13 +1092,7 @@ export function App() {
         </Suspense>
       )}
 
-      <footer className="footer">
-        {t('footer.build', {
-          version: __APP_VERSION__,
-          label: __BUILD_LABEL__,
-          commit: __BUILD_COMMIT__,
-        })}
-      </footer>
+      {mobile && footer}
     </div>
   );
 }

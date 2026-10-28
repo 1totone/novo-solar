@@ -21,6 +21,8 @@ import { epwErrorMessage } from './epwErrorMessage';
 import { useI18n } from './i18n/useI18n';
 import { RestoreStepFocus } from './layout/AdvancedStepStub';
 import { rememberFocus } from './layout/focusAfterLoad';
+import { InfoButton, InfoText } from './layout/InfoTip';
+import { useInfo } from './layout/useInfo';
 import { NextStep, Step } from './layout/Step';
 import { fileRadiationLag } from './overlay/radiationLag';
 import { DATA_KEYS } from './state/overlayHash';
@@ -41,8 +43,8 @@ interface Props {
   /** Variável pintada na carta (`dado` no link) e a escolha dela aqui mesmo (item e da 0044). */
   paintKey: string | undefined;
   onPaint: (key: string) => void;
-  /** Leva ao passo 4 (semestre, faixas, frequência). */
-  onMoreData: () => void;
+  /** Leva ao passo 4 (semestre, faixas, frequência); sem ele, o passo 4 já está à vista. */
+  onMoreData?: () => void;
   /** Comparação com outros dados (item h da 0044): A guarda os dados de agora. */
   comparing: boolean;
   /** De onde vêm os dados da A, na frase da impressão. */
@@ -56,7 +58,10 @@ interface Props {
   /** Passo aberto no acordeão (decisão 0044). */
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onNext: () => void;
+  /** Sempre aberto, sem acordeão (computador, decisão 0050). */
+  fixed?: boolean;
+  /** Botão "Próximo" (só no acordeão). */
+  onNext?: () => void;
 }
 
 /** Arquivos futuros do LabEEE e do INPE (BrazFuture), no Zenodo (decisão 0034). */
@@ -91,9 +96,11 @@ export function SitePanel({
   onProjectPointChange,
   open,
   onOpenChange,
+  fixed = false,
   onNext,
 }: Props) {
   const { t, formatNumber } = useI18n();
+  const sourcesInfo = useInfo();
   const [catalogOpen, setCatalogOpen] = useState(
     () => selected.kind === 'station' || projectPoint !== null,
   );
@@ -287,20 +294,12 @@ export function SitePanel({
         : t('site.periodUnknown');
     }
   } else if (selected.kind === 'station') {
-    source = station ? (
-      <>
-        {t(station.fonte === 'era5' ? 'station.sourceEra5' : 'station.source', {
+    source = station
+      ? t(station.fonte === 'era5' ? 'station.sourceEra5' : 'station.source', {
           name: displayName(station),
           uf: station.uf,
-        })}{' '}
-        <a href={`${catalog!.base}${station.url}`} data-testid="station-download">
-          {t('station.download')}
-        </a>
-        . {t('station.downloadHelp')}
-      </>
-    ) : (
-      t('site.sourceLink')
-    );
+        })
+      : t('site.sourceLink');
     if (station) {
       period = t('station.period', {
         start: station.periodo[0],
@@ -408,6 +407,16 @@ export function SitePanel({
     </details>
   );
 
+  // Origem em poucas palavras, para a linha de resumo do local (decisão 0050).
+  let origin: string;
+  if (city && selected.kind === 'city' && selected.historical && city.historical) {
+    origin = t(city.historical.kind === 'try' ? 'site.originTry' : 'site.originIwec');
+  } else if (city) origin = t('site.originCity', { station: city.station });
+  else if (loadedFile) origin = t('site.originFile', { file: loadedFile.fileName });
+  else if (selected.kind === 'station') origin = t('site.originStation');
+  else origin = t('site.originLink');
+  const checkedSource = sourceOptions.find((o) => o.checked);
+
   return (
     <Step
       n={1}
@@ -416,10 +425,11 @@ export function SitePanel({
       summaryTestId="site-summary"
       open={open}
       onOpenChange={onOpenChange}
+      fixed={fixed}
       testId="site-panel"
       dataStep="1"
     >
-      <div className="field">
+      <div className="field row">
         <label htmlFor={selectId}>{t('site.cityLabel')}</label>
         <select
           id={selectId}
@@ -492,23 +502,39 @@ export function SitePanel({
       ) : (
         catalogStub
       )}
-      <fieldset className="field plain sources" data-testid="data-sources">
-        <legend className="field-label">{t('sources.label')}</legend>
-        {sourceOptions.map((o) => (
-          <label className="check" key={o.key}>
-            <input
-              type="radio"
-              name={`${fileId}-src`}
-              checked={o.checked}
-              onChange={() => {
-                setError(null);
-                setPending(null);
-                o.choose();
-              }}
-            />
-            {o.label}
-          </label>
-        ))}
+      {/* Fontes de dados num controle só (decisão 0050): a lista das fontes do lugar e o botão
+          que abre um arquivo; o resto da explicação fica atrás do "i". */}
+      <div className="field sources" data-testid="data-sources">
+        <div className="row">
+          <label htmlFor={`${fileId}-src`}>{t('sources.label')}</label>
+          <select
+            id={`${fileId}-src`}
+            value={checkedSource?.key ?? ''}
+            disabled={sourceOptions.length === 0}
+            onChange={(e) => {
+              const option = sourceOptions.find((o) => o.key === e.target.value);
+              if (!option) return;
+              setError(null);
+              setPending(null);
+              option.choose();
+            }}
+          >
+            {sourceOptions.length === 0 && <option value="">{t('steps.site.fileMissing')}</option>}
+            {sourceOptions.map((o) => (
+              <option key={o.key} value={o.key}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        {station && catalog && (
+          <p className="note">
+            <a href={`${catalog.base}${station.url}`} data-testid="station-download">
+              {t('station.download')}
+            </a>
+            . {t('station.downloadHelp')}
+          </p>
+        )}
         {historical.status === 'loading' && (
           <p className="note" role="status">
             {t('site.loadingHistorical')}
@@ -519,17 +545,56 @@ export function SitePanel({
             {t('site.historicalError')}
           </p>
         )}
-        {placeCity && (
-          <p className="note">
-            <a href={placeCity.sourceUrl}>{t('site.recentLink')}</a>. {t('site.recentHelp')}
+        {/* Abrir um arquivo e comparar com outros dados: ações das fontes, na mesma linha. */}
+        <div className="button-row source-actions">
+          <label className="btn file-btn">
+            {t('site.fileButton')}
+            <span className="visually-hidden">{t('site.fileButtonDetail')}</span>
+            <input
+              id={fileId}
+              type="file"
+              className="visually-hidden"
+              accept=".epw,.zip,.csv"
+              onChange={onFileChange}
+            />
+          </label>
+          {(data || comparing) && (
+            <button
+              type="button"
+              className="btn"
+              aria-pressed={comparing}
+              aria-label={comparing ? undefined : t('sources.compare')}
+              data-testid="compare-data"
+              onClick={() => onCompare(!comparing)}
+            >
+              {comparing ? t('outputs.compareStop') : t('sources.compareShort')}
+            </button>
+          )}
+          <InfoButton
+            info={sourcesInfo}
+            label={t('info.label', { topic: t('sources.label') })}
+            testId="sources-info"
+          />
+        </div>
+        <InfoText info={sourcesInfo} testId="sources-help">
+          {placeCity && (
+            <p className="note">
+              <a href={placeCity.sourceUrl}>{t('site.recentLink')}</a>. {t('site.recentHelp')}
+            </p>
+          )}
+          <p className="note">{t('site.fileHelp')}</p>
+          {(data || comparing) && !comparing && (
+            <p className="note" data-testid="compare-data-note">
+              {t('sources.compareHelp')}
+            </p>
+          )}
+        </InfoText>
+        {comparing && (
+          <p className="note" data-testid="compare-data-note">
+            {t('sources.comparing', { source: compareSource || t('sources.noData') })}
           </p>
         )}
-        <div className="field">
-          <label htmlFor={fileId}>{t('site.fileLabel')}</label>
-          <input id={fileId} type="file" accept=".epw,.zip,.csv" onChange={onFileChange} />
-          <p className="note">{t('site.fileHelp')}</p>
-        </div>
-      </fieldset>
+      </div>
       {pending && (
         <LocationForm
           key={pending.fileName}
@@ -554,134 +619,146 @@ export function SitePanel({
       )}
       {data && (
         <div className="field" data-testid="paint">
-          <label htmlFor={`${fileId}-paint`}>{t('sources.paint')}</label>
-          <select
-            id={`${fileId}-paint`}
-            value={paintKey ?? ''}
-            onChange={(e) => onPaint(e.target.value)}
-          >
-            <option value="">{t('data.none')}</option>
-            {DATA_KEYS.map((k) => (
-              <option key={k} value={k}>
-                {t(`data.${k}`)}
-              </option>
-            ))}
-          </select>
-          <p className="note">
-            {t('sources.paintMore')}{' '}
-            <button type="button" className="btn small" onClick={onMoreData}>
-              {t('sources.paintMoreLink')}
-            </button>
-          </p>
+          <div className="row">
+            <label htmlFor={`${fileId}-paint`}>{t('sources.paint')}</label>
+            <select
+              id={`${fileId}-paint`}
+              value={paintKey ?? ''}
+              onChange={(e) => onPaint(e.target.value)}
+            >
+              <option value="">{t('data.none')}</option>
+              {DATA_KEYS.map((k) => (
+                <option key={k} value={k}>
+                  {t(`data.${k}`)}
+                </option>
+              ))}
+            </select>
+          </div>
+          {onMoreData && (
+            <p className="note">
+              {t('sources.paintMore')}{' '}
+              <button type="button" className="btn small" onClick={onMoreData}>
+                {t('sources.paintMoreLink')}
+              </button>
+            </p>
+          )}
         </div>
       )}
-      {(data || comparing) && (
-        <div className="field">
-          <button
-            type="button"
-            className="btn"
-            aria-pressed={comparing}
-            data-testid="compare-data"
-            onClick={() => onCompare(!comparing)}
-          >
-            {comparing ? t('outputs.compareStop') : t('sources.compare')}
-          </button>
-          <p className="note" data-testid="compare-data-note">
-            {comparing
-              ? t('sources.comparing', { source: compareSource || t('sources.noData') })
-              : t('sources.compareHelp')}
-          </p>
-        </div>
-      )}
-      <dl className="site-info" data-testid="site-info">
-        <dt>{t('site.latitude')}</dt>
-        <dd>{fmt(site.latitude, 3)}°</dd>
-        <dt>{t('site.longitude')}</dt>
-        <dd>{fmt(site.longitude, 3)}°</dd>
-        <dt>{t('site.timeZone')}</dt>
-        <dd>
-          {formatTimeZone(site.timeZone, (n) => formatNumber(n, Number.isInteger(n) ? 0 : 1))}
-        </dd>
-        <dt>{t('site.elevation')}</dt>
-        <dd>{fmt(site.elevation, 1)} m</dd>
-        <dt className="wide">{t('site.source')}</dt>
-        <dd className="wide" data-testid="site-source">
-          {source}
-        </dd>
-        {period && (
-          <>
-            <dt>{t('site.period')}</dt>
-            <dd data-testid="site-period">{period}</dd>
-          </>
-        )}
-        {notices.length > 0 && (
-          <>
-            <dt className="wide">{t('site.notices')}</dt>
-            <dd className="wide" data-testid="site-notices">
-              <ul className="notices">
-                {notices.map((n) => (
-                  <li key={n}>{n}</li>
-                ))}
-              </ul>
-            </dd>
-          </>
-        )}
-        {catalogStation && (
-          <>
-            <dt className="wide">{t('station.quality')}</dt>
-            <dd className="wide" data-testid="station-quality">
-              <ul className="notices">
-                <li>
-                  {t('station.q.missing', { count: formatNumber(catalogStation.q.ausentes) })}
-                </li>
-                <li>{t('station.q.calm', { pct: formatNumber(catalogStation.q.calmaria, 1) })}</li>
-                <li>{t('station.q.kt', { count: formatNumber(catalogStation.q.kt) })}</li>
-                {catalogStation.q.atraso !== null && (
+      {/* Coordenadas, fuso, elevação e origem numa linha; o resto sob demanda (decisão 0050). */}
+      <details className="site-details" data-testid="site-details">
+        <summary data-testid="site-line">
+          <span className="visually-hidden">{t('site.detailsLabel')} </span>
+          {[
+            `${fmt(site.latitude, 3)}°, ${fmt(site.longitude, 3)}°`,
+            formatTimeZone(site.timeZone, (n) => formatNumber(n, Number.isInteger(n) ? 0 : 1)),
+            `${fmt(site.elevation, 0)} m`,
+            origin,
+          ].join(' · ')}
+          {notices.length > 0 && (
+            <>
+              {' · '}
+              <span className="site-line-notices">
+                {notices.length === 1
+                  ? t('site.lineNotice')
+                  : t('site.lineNotices', { count: notices.length })}
+              </span>
+            </>
+          )}
+        </summary>
+        <dl className="site-info" data-testid="site-info">
+          <dt>{t('site.latitude')}</dt>
+          <dd>{fmt(site.latitude, 3)}°</dd>
+          <dt>{t('site.longitude')}</dt>
+          <dd>{fmt(site.longitude, 3)}°</dd>
+          <dt>{t('site.timeZone')}</dt>
+          <dd>
+            {formatTimeZone(site.timeZone, (n) => formatNumber(n, Number.isInteger(n) ? 0 : 1))}
+          </dd>
+          <dt>{t('site.elevation')}</dt>
+          <dd>{fmt(site.elevation, 1)} m</dd>
+          <dt className="wide">{t('site.source')}</dt>
+          <dd className="wide" data-testid="site-source">
+            {source}
+          </dd>
+          {period && (
+            <>
+              <dt>{t('site.period')}</dt>
+              <dd data-testid="site-period">{period}</dd>
+            </>
+          )}
+          {notices.length > 0 && (
+            <>
+              <dt className="wide">{t('site.notices')}</dt>
+              <dd className="wide" data-testid="site-notices">
+                <ul className="notices">
+                  {notices.map((n) => (
+                    <li key={n}>{n}</li>
+                  ))}
+                </ul>
+              </dd>
+            </>
+          )}
+          {catalogStation && (
+            <>
+              <dt className="wide">{t('station.quality')}</dt>
+              <dd className="wide" data-testid="station-quality">
+                <ul className="notices">
                   <li>
-                    {t('station.q.lag', {
-                      minutes: `${catalogStation.q.atraso > 0 ? '+' : catalogStation.q.atraso < 0 ? '−' : ''}${formatNumber(Math.abs(catalogStation.q.atraso), 0)}`,
+                    {t('station.q.missing', { count: formatNumber(catalogStation.q.ausentes) })}
+                  </li>
+                  <li>
+                    {t('station.q.calm', { pct: formatNumber(catalogStation.q.calmaria, 1) })}
+                  </li>
+                  <li>{t('station.q.kt', { count: formatNumber(catalogStation.q.kt) })}</li>
+                  {catalogStation.q.atraso !== null && (
+                    <li>
+                      {t('station.q.lag', {
+                        minutes: `${catalogStation.q.atraso > 0 ? '+' : catalogStation.q.atraso < 0 ? '−' : ''}${formatNumber(Math.abs(catalogStation.q.atraso), 0)}`,
+                      })}
+                    </li>
+                  )}
+                  {catalogStation.q.fechamento !== null && (
+                    <li>
+                      {t('station.q.closure', {
+                        wh: formatNumber(catalogStation.q.fechamento, 0),
+                      })}
+                    </li>
+                  )}
+                  <li>
+                    {t('station.q.radiation', {
+                      ghi: formatNumber(catalogStation.q.ghi, 0),
+                      dni: formatNumber(catalogStation.q.dni, 0),
+                      dhi: formatNumber(catalogStation.q.dhi, 0),
                     })}
                   </li>
-                )}
-                {catalogStation.q.fechamento !== null && (
                   <li>
-                    {t('station.q.closure', { wh: formatNumber(catalogStation.q.fechamento, 0) })}
+                    {t('station.q.temperature', {
+                      min: formatNumber(catalogStation.q.tbs[0], 1),
+                      mean: formatNumber(catalogStation.q.tbs[1], 1),
+                      max: formatNumber(catalogStation.q.tbs[2], 1),
+                    })}
                   </li>
-                )}
-                <li>
-                  {t('station.q.radiation', {
-                    ghi: formatNumber(catalogStation.q.ghi, 0),
-                    dni: formatNumber(catalogStation.q.dni, 0),
-                    dhi: formatNumber(catalogStation.q.dhi, 0),
-                  })}
-                </li>
-                <li>
-                  {t('station.q.temperature', {
-                    min: formatNumber(catalogStation.q.tbs[0], 1),
-                    mean: formatNumber(catalogStation.q.tbs[1], 1),
-                    max: formatNumber(catalogStation.q.tbs[2], 1),
-                  })}
-                </li>
-              </ul>
-            </dd>
-            {catalogStation.futuro && (
-              <>
-                <dt className="wide">{t('station.futureLabel')}</dt>
-                <dd className="wide">
-                  {t('station.future')} <a href={BRAZFUTURE_URL}>{t('station.futureLink')}</a>
-                </dd>
-              </>
-            )}
-          </>
-        )}
-        {selected.kind === 'file' && loadedFile?.comments[0] && (
-          <>
-            <dt>{t('site.comments')}</dt>
-            <dd className="comment">{loadedFile.comments[0]}</dd>
-          </>
-        )}
-      </dl>
-      <NextStep n={2} heading={t('facade.heading')} onClick={onNext} />
+                </ul>
+              </dd>
+              {catalogStation.futuro && (
+                <>
+                  <dt className="wide">{t('station.futureLabel')}</dt>
+                  <dd className="wide">
+                    {t('station.future')} <a href={BRAZFUTURE_URL}>{t('station.futureLink')}</a>
+                  </dd>
+                </>
+              )}
+            </>
+          )}
+          {selected.kind === 'file' && loadedFile?.comments[0] && (
+            <>
+              <dt>{t('site.comments')}</dt>
+              <dd className="comment">{loadedFile.comments[0]}</dd>
+            </>
+          )}
+        </dl>
+      </details>
+      {onNext && <NextStep n={2} heading={t('facade.heading')} onClick={onNext} />}
     </Step>
   );
 }

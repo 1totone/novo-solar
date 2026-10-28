@@ -3,8 +3,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { maskTints } from './fixtures/pixels';
 import { openStep, stepDetails, stepHeader } from './fixtures/steps';
 
-// Passos em acordeão (decisão 0044, item a): um aberto por vez, os fechados com o resumo, a carta
-// sempre à vista ao lado (computador) ou no topo (celular), sem rolar a página para mexer nos campos.
+// Passos em acordeão (decisão 0044, item a), só no celular desde a decisão 0050: um aberto por vez,
+// os fechados com o resumo, a carta fixa no topo. No computador, os passos ficam sempre abertos, em
+// colunas (e2e/colunas.spec.ts).
 const STATE = '#local=recife&hist=1&dado=tbs&o=315&a1=50&ref=e';
 
 /** Quantos passos da coluna estão abertos. */
@@ -12,7 +13,8 @@ const openCount = (page: Page) => page.locator('.steps .step-panel > details[ope
 
 test('um passo aberto por vez; os fechados mostram o resumo do que foi escolhido', async ({
   page,
-}) => {
+}, info) => {
+  test.skip(info.project.name !== 'celular', 'acordeão só no celular (decisão 0050)');
   await page.goto(`./${STATE}`);
   // Ao chegar, o passo 1 está aberto e os outros mostram o resumo.
   await expect(stepDetails(page, '1')).toHaveAttribute('open', '');
@@ -55,7 +57,10 @@ test('um passo aberto por vez; os fechados mostram o resumo do que foi escolhido
   expect(await openCount(page)).toBe(1);
 });
 
-test('"Próximo" leva ao passo seguinte com o foco no cabeçalho; teclado; axe', async ({ page }) => {
+test('"Próximo" leva ao passo seguinte com o foco no cabeçalho; teclado; axe', async ({
+  page,
+}, info) => {
+  test.skip(info.project.name !== 'celular', 'acordeão só no celular (decisão 0050)');
   await page.goto(`./${STATE}`);
   await page.getByTestId('next-step-2').click();
   await expect(stepDetails(page, '2')).toHaveAttribute('open', '');
@@ -97,24 +102,6 @@ test('sem rolar: o campo do α e a máscara na carta na mesma tela', async ({ pa
     ]),
   ).toEqual(['total', 'none']);
   await expect(field).toBeInViewport();
-});
-
-test('a coluna fica curta no computador: os cinco cabeçalhos e o passo aberto em cerca de uma tela', async ({
-  page,
-}, info) => {
-  test.skip(info.project.name !== 'computador', 'leiaute de duas colunas');
-  await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto(`./${STATE}`);
-  await openStep(page, '2');
-  // Passo 2 aberto (o mais alto do caminho básico depois do 1, com a rosa de rumos): do cabeçalho
-  // do 1 ao do 5, pouco mais de uma tela (eram cerca de 4.500 px, quase seis telas, no piloto).
-  const first = (await stepHeader(page, '1').boundingBox())!;
-  const fifth = (await stepHeader(page, '5').boundingBox())!;
-  expect(fifth.y + fifth.height - first.y).toBeLessThan(1.1 * 768);
-  // A carta fica fixa ao lado ao rolar até o fim da coluna.
-  await openStep(page, '5');
-  await page.getByTestId('compare').scrollIntoViewIfNeeded();
-  await expect(page.getByTestId('sun-chart')).toBeInViewport({ ratio: 0.5 });
 });
 
 test('no celular, o cabeçalho tocado fica à vista abaixo da carta fixa', async ({ page }, info) => {

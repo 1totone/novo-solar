@@ -197,7 +197,7 @@ export const fase4PtBR = {
     'A orientação mudou: a comparação continua com a fachada a {orientation}°, a do exercício.',
   'mask.answer': 'máscara calculada (resposta do exercício)',
   // F4.1: catálogo nacional de estações (decisão 0034).
-  'catalog.heading': 'Catálogo nacional: {count} estações (TMYx 2011 a 2025)',
+  'catalog.heading': 'Catálogo nacional: {count} estações',
   'catalog.intro':
     'Estações do Brasil com arquivo TMYx 2011 a 2025 no Climate.OneBuilding.org, com os dados de cada arquivo e a qualidade conferida por nós. O arquivo é baixado do site oficial e carregado aqui.',
   'catalog.loading': 'Carregando o catálogo…',
@@ -228,7 +228,7 @@ export const fase4PtBR = {
   'station.sourceEra5':
     'Ponto {name} ({uf}), arquivo TMYx 2011 a 2025 do Climate.OneBuilding.org feito só com a reanálise ERA5; nenhum dado horário aberto.',
   'station.download': 'Baixar o arquivo desta estação (Climate.OneBuilding.org)',
-  'station.downloadHelp': 'Carregue o .zip baixado no campo acima, sem descompactar.',
+  'station.downloadHelp': 'Carregue o .zip baixado em "Abrir arquivo", sem descompactar.',
   'station.period': '{start} a {end} ({years} anos de dados)',
   'station.quality': 'Qualidade do arquivo',
   'station.q.missing': 'valores ausentes: {count}',
@@ -282,5 +282,4 @@ export const fase4PtBR = {
   'cell.difference': 'B − A: {diff} {unit} (média de A: {a}; de B: {b}).',
   'cells.captionDifference':
     'Média das horas de B menos a de A em cada célula ({unit}); linhas: quinzenas; colunas: horas do arquivo.',
-  'side.catalog': 'Mapa das estações',
 } as const;

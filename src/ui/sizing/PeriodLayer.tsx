@@ -78,7 +78,8 @@ export function PeriodMarks({
     <g className="period" data-testid="period-marks">
       {[...marks.values()].map((m) => (
         <g key={`${m.x},${m.y}`} className="period-mark" data-testid="period-mark">
-          <circle cx={m.x} cy={m.y} r={0.018} />
+          {/* Obstáculo para os rótulos móveis: nenhum rótulo cobre o ponto do sol. */}
+          <circle cx={m.x} cy={m.y} r={0.018} data-label-obstacle="" />
           <text
             x={m.x + 0.03}
             y={m.y}

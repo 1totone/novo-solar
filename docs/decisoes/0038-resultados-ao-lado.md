@@ -1,7 +1,7 @@
 # 0038. Resultados ao lado da carta no computador
 
 - Data: 2026-10-26
-- Status: aceita por delegação (pré-revisão do Claude, 27/10/2026); validação por colegas pendente. Item 22 da issue #65 ([pré-revisão](https://github.com/1totone/novo-solar/issues/65#issuecomment-6444200303)). Na integração da Fase 3.
+- Status: substituída pela 0050 (28/10/2026): com as colunas, os resultados dos passos 6 e 7 ficam dentro do passo, na coluna da direita. Antes: aceita por delegação (pré-revisão do Claude, 27/10/2026), item 22 da issue #65.
 
 ## Contexto
 

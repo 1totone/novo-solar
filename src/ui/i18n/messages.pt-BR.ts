@@ -2,6 +2,7 @@
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
 import { fase3PtBR } from './messages.pt-BR.fase3';
 import { fase4PtBR } from './messages.pt-BR.fase4';
+import { layoutPtBR } from './messages.pt-BR.layout';
 import { redesenhoPtBR } from './messages.pt-BR.redesenho';
 
 export const ptBR = {
@@ -256,11 +257,10 @@ export const ptBR = {
   'site.cityLabel': 'Cidade',
   'site.fileOption': 'Arquivo: {name}',
   'site.recentLink': 'Baixar dados recentes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Carregue abaixo o .zip baixado, sem descompactar.',
+  'site.recentHelp': 'Carregue o .zip baixado em "Abrir arquivo", sem descompactar.',
   'site.loadingHistorical': 'Abrindo os dados históricos…',
   'site.historicalError':
     'Não foi possível abrir os dados históricos. Confira a conexão e tente de novo.',
-  'site.fileLabel': 'Ou carregue um arquivo climático (EPW, .zip do TMYx ou CSV do SOL-AR)',
   'site.fileHelp': 'O arquivo é lido só no seu navegador; nada é enviado pela internet.',
   'site.unknownFormat':
     'Formato não reconhecido: carregue um arquivo EPW ou um CSV do SOL-AR (extensão .csv).',
@@ -343,4 +343,5 @@ export const ptBR = {
   ...fase3PtBR,
   ...fase4PtBR,
   ...redesenhoPtBR,
+  ...layoutPtBR,
 } as const;
