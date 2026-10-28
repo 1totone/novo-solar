@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { chooseSource, isAccordion, loadClimateFile } from './fixtures/steps';
 
 const SOLAR62 = new URL('../docs/validacao/casos/solar-6.2/', import.meta.url);
-const FILE_LABEL = 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)';
 
 // As 15 cidades do SOL-AR 6.2: período dos registros das TRY (Goulart, Lamberts e Firmino, 1998).
 const CITIES_62: [string, string][] = [
@@ -24,9 +24,17 @@ const CITIES_62: [string, string][] = [
   ['vitoria', 'entre 1961 e 1970'],
 ];
 
-/** O passo 4 tem dados: a variável pode ser escolhida. */
+/**
+ * O passo 4 tem dados: o resumo dele não pede mais os dados (decisão 0044); no computador, o passo
+ * aberto mostra a escolha da variável (decisão 0050).
+ */
 async function expectData(page: Page) {
-  await expect(page.getByTestId('data-panel').getByLabel('Variável')).toBeVisible();
+  if (isAccordion(page)) {
+    await expect(page.getByTestId('data-summary')).toHaveText('Nenhum dado na carta');
+  } else {
+    await expect(page.getByTestId('data-panel').getByLabel('Variável')).toBeVisible();
+    await expect(page.getByTestId('data-need-file')).toHaveCount(0);
+  }
 }
 
 test.describe('dados climáticos (F2.7)', () => {
@@ -38,11 +46,12 @@ test.describe('dados climáticos (F2.7)', () => {
       await page.goto(`./#local=${id}`);
       const source = page.getByTestId('site-source');
       await expect(source, id).toContainText('nenhum dado horário aberto');
-      await page.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
+      await chooseSource(page, /^Dados do SOL-AR 6\.2/);
       await expect(source, id).toContainText('dados históricos');
       await expect(source, id).toContainText('SOL-AR 6.2');
       await expect(page.getByTestId('site-period'), id).toContainText(period);
-      await expect(page.getByRole('link', { name: /Baixar dados recentes/ })).toHaveAttribute(
+      // O link dos dados recentes fica no "i" das fontes de dados (decisão 0050).
+      await expect(page.locator('a', { hasText: /Baixar dados recentes/ })).toHaveAttribute(
         'href',
         /climate\.onebuilding\.org\/.*TMYx\.2011-2025\.zip$/,
       );
@@ -73,7 +82,7 @@ test.describe('dados climáticos (F2.7)', () => {
     await page.goto('./#dado=tbs&hist=1&local=natal');
     await expect(page.getByTestId('site-period')).toContainText('entre 1951 e 1970');
     await expect(page.getByTestId('overlay')).toHaveCount(1);
-    await page.getByRole('button', { name: 'Fechar dados históricos' }).click();
+    await chooseSource(page, 'Só a carta, sem dados horários');
     await expect(page.getByTestId('overlay')).toHaveCount(0);
     expect(page.url()).not.toContain('hist=1');
   });
@@ -87,7 +96,7 @@ test.describe('dados climáticos (F2.7)', () => {
       'utf-8',
     );
     // O arquivo original do LabEEE é Latin-1 ("Localização", "Elevação").
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'CHL_Concepcion_NormaIWEC_SOlAr.csv',
       mimeType: 'text/csv',
       buffer: Buffer.from(text, 'latin1'),
@@ -105,7 +114,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
   test('CSV sem cabeçalho pede o local, sem presumir o fuso', async ({ page }) => {
     await page.goto('./#local=recife');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'recife.csv',
       mimeType: 'text/csv',
       buffer: readFileSync(new URL('recife.csv', SOLAR62)),
@@ -130,7 +139,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
     // O atalho preenche com o local da cidade escolhida, só quando pedido.
     await page.getByLabel('Cidade', { exact: true }).selectOption('recife');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'recife.csv',
       mimeType: 'text/csv',
       buffer: readFileSync(new URL('recife.csv', SOLAR62)),
@@ -141,7 +150,7 @@ test.describe('dados climáticos (F2.7)', () => {
 
   test('EPW: período de registro do comentário do TMYx', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel(FILE_LABEL).setInputFiles({
+    await loadClimateFile(page, {
       name: 'tmyx.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(

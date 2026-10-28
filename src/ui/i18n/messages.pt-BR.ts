@@ -1,5 +1,11 @@
 // Textos da interface em português do Brasil (idioma de referência).
 // Espanhol e inglês entram na Fase 4 com as mesmas chaves (decisão 0005).
+import { fase3PtBR } from './messages.pt-BR.fase3';
+import { fase4PtBR } from './messages.pt-BR.fase4';
+import { layoutPtBR } from './messages.pt-BR.layout';
+import { pontosPtBR } from './messages.pt-BR.pontos';
+import { redesenhoPtBR } from './messages.pt-BR.redesenho';
+
 export const ptBR = {
   'app.name': 'SOL-AR',
   'app.tagline':
@@ -10,6 +16,7 @@ export const ptBR = {
   'status.oldVersionLink': 'SOL-AR 6.2 no site do LabEEE',
   'status.roadmapLink': 'Acompanhe o desenvolvimento',
   'status.wireframesLink': 'Esboço das próximas telas (wireframes da Fase 2)',
+  'status.wireframes3Link': 'Proposta das telas da Fase 3 (wireframes da Fase 3)',
   'about.toggleOpen': 'Sobre',
   'about.toggleClose': 'Fechar "Sobre"',
   'about.title': 'Sobre',
@@ -23,6 +30,7 @@ export const ptBR = {
   'about.newMaintenance': 'Manutenção futura: LabEEE/UFSC',
   'about.license': 'Código aberto sob a licença MIT.',
   'footer.build': 'Versão {version} · {label} · {commit}',
+  'chart.overlayPending': 'Calculando as células da carta…',
   'chart.north': 'N',
   'chart.east': 'L',
   'chart.south': 'S',
@@ -37,8 +45,8 @@ export const ptBR = {
   'facade.heading': 'Fachada',
   'facade.orientation': 'Orientação da fachada (azimute da normal externa)',
   'facade.orientationHelp':
-    'Graus a partir do Norte, no sentido horário; aceita qualquer valor, inclusive negativo (−30° = 330°).',
-  'facade.orientationInvalid': 'Digite um número em graus.',
+    'Graus a partir do Norte, no sentido horário (Leste = 90°; −45° = 315°), ou o rumo para onde a fachada olha, por sigla (NO) ou por extenso (noroeste).',
+  'facade.orientationInvalid': 'Digite um número em graus ou um rumo, como NO ou noroeste.',
   'facade.normalized': 'Normal externa: {degrees}° ({compass})',
   'facade.showProtractor': 'Mostrar o transferidor sobre a carta',
   'protection.heading': 'Proteção',
@@ -46,7 +54,7 @@ export const ptBR = {
   'protection.internal': 'Interna',
   'protection.external': 'Externa',
   'protection.referenceHelpInternal':
-    'Interna: α e β medidos a partir do plano da fachada, γ a partir da vertical (α = AVS e β = AHS da INI-C).',
+    'Interna: α e β medidos a partir do plano da fachada, γ a partir da vertical.',
   'protection.referenceHelpExternal':
     'Externa: α medido a partir da horizontal, β a partir da normal, γ a partir da horizontal (externo = 90° − interno).',
   'protection.left': 'Esquerda',
@@ -56,8 +64,7 @@ export const ptBR = {
   'protection.beta': 'β (brises verticais)',
   'protection.gamma': 'γ (limites laterais)',
   'protection.totalSet': 'Sombra total (100%)',
-  'protection.totalHelp':
-    'α medido da base da janela, β da aresta oposta à aleta, γ do canto inferior do mesmo lado. Na região vermelha, a janela inteira fica à sombra.',
+  'protection.totalHelp': 'Na região vermelha da carta, a janela inteira fica à sombra.',
   'protection.more': 'Mais opções',
   'protection.index2': 'Índices 2 (brise afastado da parede)',
   'protection.index2Help':
@@ -68,11 +75,17 @@ export const ptBR = {
   'protection.combinedHelp':
     'Grelha (brise encostado nas aletas, mesma profundidade, junto à parede): deixe γ e γ das aletas em branco, porque as junções fecham as frestas. Com peças soltas, a região vermelha pode ficar menor que a sombra total real, porque partes diferentes da janela podem ser sombreadas por peças diferentes.',
   'protection.partialSet': 'Sombra parcial (50%)',
-  'protection.partialShort': 'parcial',
   'protection.partialHelp':
     'Os mesmos ângulos medidos do centro da janela (curvas tracejadas). Na região amarela o centro fica à sombra, o que equivale a pelo menos metade da janela em brises e aletas longos e sem fresta; nos outros casos, é uma aproximação.',
   'protection.invalid': 'Use um valor de 0° a 90°.',
-  'protection.fieldLabel': '{angle} {side} {index}',
+  'protection.fieldName': '{symbol} ({description}), {set}',
+  'protection.fieldNameSide': '{symbol} ({description}), {set}, {side}',
+  'protection.desc.alpha': 'brise horizontal',
+  'protection.desc.beta': 'brises verticais',
+  'protection.desc.gamma': 'limites laterais',
+  'protection.desc.finTop': 'topo das aletas',
+  'protection.setTotal': 'sombra total',
+  'protection.setPartial': 'sombra parcial',
   'draw.heading': 'Desenhar à mão',
   'draw.help':
     'Como no SOL-AR 6.2: marque na carta os vértices de uma região de sombra. O desenho se soma à máscara calculada e fica guardado no link.',
@@ -215,7 +228,7 @@ export const ptBR = {
   'outputs.compareStop': 'Fechar a comparação',
   'print.title': 'SOL-AR: {place}',
   'print.details':
-    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. Raio da carta: {radius} cm.',
+    'Latitude {latitude}°, longitude {longitude}°, fuso UTC{timeZone}. {source} Impresso em {date}. {scale}',
   'print.sourceCity':
     'Coordenadas da estação {station} (TMYx 2011 a 2025, Climate.OneBuilding.org).',
   'print.sourceFile': 'Dados do arquivo {file}.',
@@ -244,15 +257,11 @@ export const ptBR = {
   'site.heading': 'Local',
   'site.cityLabel': 'Cidade',
   'site.fileOption': 'Arquivo: {name}',
-  'site.cityData': 'Dados climáticos da cidade',
-  'site.openHistorical': 'Abrir dados históricos (SOL-AR 6.2)',
-  'site.closeHistorical': 'Fechar dados históricos',
   'site.recentLink': 'Baixar dados recentes (TMYx 2011 a 2025, Climate.OneBuilding.org)',
-  'site.recentHelp': 'Descompacte o arquivo baixado e carregue o .epw abaixo.',
+  'site.recentHelp': 'Carregue o .zip baixado em "Abrir arquivo", sem descompactar.',
   'site.loadingHistorical': 'Abrindo os dados históricos…',
   'site.historicalError':
     'Não foi possível abrir os dados históricos. Confira a conexão e tente de novo.',
-  'site.fileLabel': 'Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)',
   'site.fileHelp': 'O arquivo é lido só no seu navegador; nada é enviado pela internet.',
   'site.unknownFormat':
     'Formato não reconhecido: carregue um arquivo EPW ou um CSV do SOL-AR (extensão .csv).',
@@ -332,4 +341,9 @@ export const ptBR = {
   'epw.field.windDirection': 'direção do vento',
   'epw.field.windSpeed': 'velocidade do vento',
   'epw.field.totalSkyCover': 'cobertura do céu',
+  ...fase3PtBR,
+  ...fase4PtBR,
+  ...redesenhoPtBR,
+  ...layoutPtBR,
+  ...pontosPtBR,
 } as const;

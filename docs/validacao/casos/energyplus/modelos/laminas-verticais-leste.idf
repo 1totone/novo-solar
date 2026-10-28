@@ -1,0 +1,83 @@
+Version, 26.2;
+SimulationControl, No, No, No, No, Yes, No, 1;
+Building, Verificacao F3.8 laminas-verticais-leste, 0, Suburbs, 0.04, 0.4, FullExterior, 25, 6;
+ShadowCalculation, PolygonClipping, Timestep, 1, 15000, SutherlandHodgman, 512, SimpleSkyDiffuseModeling, No, No, No;
+Timestep, 6;
+RunPeriod, Ano, 1, 1, 2026, 12, 31, 2026, , No, No, No, No, No, No, Hour24;
+GlobalGeometryRules, UpperLeftCorner, Counterclockwise, World;
+Material:NoMass, PAREDE, MediumRough, 1.0, 0.9, 0.7, 0.7;
+Construction, PAREDE, PAREDE;
+WindowMaterial:SimpleGlazingSystem, VIDRO, 5.8, 0.8, 0.85;
+Construction, VIDRO, VIDRO;
+Zone, SALA;
+Output:Diagnostics, DisplayExtraWarnings;
+BuildingSurface:Detailed, PAREDE_FRENTE, Wall, PAREDE, SALA, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    1.7145055188062944e-16, -2.8, 2.2,
+    1.7145055188062944e-16, -2.8, -1.0,
+    -6.123233995736765e-17, 0.9999999999999999, -1.0,
+    -6.123233995736765e-17, 0.9999999999999999, 2.2;
+BuildingSurface:Detailed, PAREDE_FUNDO, Wall, PAREDE, SALA, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    -4.0, 0.9999999999999997, 2.2,
+    -4.0, 0.9999999999999997, -1.0,
+    -4.0, -2.8000000000000003, -1.0,
+    -4.0, -2.8000000000000003, 2.2;
+BuildingSurface:Detailed, PAREDE_DIREITA, Wall, PAREDE, SALA, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    -4.0, -2.8000000000000003, 2.2,
+    -4.0, -2.8000000000000003, -1.0,
+    1.7145055188062944e-16, -2.8, -1.0,
+    1.7145055188062944e-16, -2.8, 2.2;
+BuildingSurface:Detailed, PAREDE_ESQUERDA, Wall, PAREDE, SALA, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    -6.123233995736766e-17, 1.0, 2.2,
+    -6.123233995736766e-17, 1.0, -1.0,
+    -4.0, 0.9999999999999998, -1.0,
+    -4.0, 0.9999999999999998, 2.2;
+BuildingSurface:Detailed, COBERTURA, Roof, PAREDE, SALA, , Outdoors, , SunExposed, WindExposed, autocalculate, 4,
+    -6.123233995736765e-17, 0.9999999999999999, 2.2,
+    -4.0, 0.9999999999999997, 2.2,
+    -4.0, -2.8000000000000003, 2.2,
+    1.7145055188062944e-16, -2.8, 2.2;
+BuildingSurface:Detailed, PISO, Floor, PAREDE, SALA, , Adiabatic, , NoSun, NoWind, autocalculate, 4,
+    1.7145055188062944e-16, -2.8, -1.0,
+    -4.0, -2.8000000000000003, -1.0,
+    -4.0, 0.9999999999999997, -1.0,
+    -6.123233995736765e-17, 0.9999999999999999, -1.0;
+FenestrationSurface:Detailed, JANELA, Window, VIDRO, PAREDE_FRENTE, , autocalculate, , 1, 4,
+    1.1021821192326179e-16, -1.8, 1.2,
+    1.1021821192326179e-16, -1.8, 0.0,
+    0.0, 0.0, 0.0,
+    0.0, 0.0, 1.2;
+Shading:Building:Detailed, PLACA_1, , 4,
+    0.05, 3.061616997868383e-18, -0.2,
+    0.2665063509461097, -0.12499999999999997, -0.2,
+    0.2665063509461097, -0.12499999999999997, 1.4,
+    0.05, 3.061616997868383e-18, 1.4;
+Shading:Building:Detailed, PLACA_2, , 4,
+    0.050000000000000024, -0.3, -0.2,
+    0.2665063509461097, -0.425, -0.2,
+    0.2665063509461097, -0.425, 1.4,
+    0.050000000000000024, -0.3, 1.4;
+Shading:Building:Detailed, PLACA_3, , 4,
+    0.05000000000000004, -0.6, -0.2,
+    0.26650635094610975, -0.725, -0.2,
+    0.26650635094610975, -0.725, 1.4,
+    0.05000000000000004, -0.6, 1.4;
+Shading:Building:Detailed, PLACA_4, , 4,
+    0.05000000000000006, -0.8999999999999999, -0.2,
+    0.26650635094610975, -1.025, -0.2,
+    0.26650635094610975, -1.025, 1.4,
+    0.05000000000000006, -0.8999999999999999, 1.4;
+Shading:Building:Detailed, PLACA_5, , 4,
+    0.05000000000000008, -1.2, -0.2,
+    0.26650635094610975, -1.325, -0.2,
+    0.26650635094610975, -1.325, 1.4,
+    0.05000000000000008, -1.2, 1.4;
+Shading:Building:Detailed, PLACA_6, , 4,
+    0.05000000000000009, -1.5, -0.2,
+    0.2665063509461098, -1.625, -0.2,
+    0.2665063509461098, -1.625, 1.4,
+    0.05000000000000009, -1.5, 1.4;
+Output:Variable, JANELA, Surface Outside Face Beam Solar Incident Angle Cosine Value, Timestep;
+Output:Variable, COBERTURA, Surface Outside Face Beam Solar Incident Angle Cosine Value, Timestep;
+Output:Variable, PAREDE_DIREITA, Surface Outside Face Beam Solar Incident Angle Cosine Value, Timestep;
+Output:Variable, PAREDE_ESQUERDA, Surface Outside Face Beam Solar Incident Angle Cosine Value, Timestep;
+Output:Variable, JANELA, Surface Outside Face Sunlit Fraction, Timestep;

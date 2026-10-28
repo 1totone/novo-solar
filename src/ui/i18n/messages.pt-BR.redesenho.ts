@@ -1,0 +1,107 @@
+// Textos do redesenho depois do piloto do teste do F2.9 (decisão 0044), em português do Brasil.
+// Separados do catálogo principal só para organização; as chaves fazem parte do mesmo catálogo.
+export const redesenhoPtBR = {
+  // Passos em acordeão: resumo de cada passo fechado e o botão que abre o seguinte.
+  'steps.next': 'Próximo: passo {n}, {name}',
+  'steps.site.historical': 'dados de {start} a {end}',
+  'steps.site.historicalIwec': 'dados IWEC (SOL-AR 6.2)',
+  'steps.site.loading': 'abrindo os dados…',
+  'steps.site.error': 'dados não abertos',
+  'steps.site.chartOnly': 'só a carta, sem dados horários',
+  'steps.site.fileRecord': 'dados de {start} a {end} (arquivo)',
+  'steps.site.file': 'arquivo {file}',
+  'steps.site.fileMissing': 'arquivo não carregado; só a carta',
+  'steps.site.station': 'estação do catálogo; só a carta',
+  'steps.facade': 'Fachada {degrees}° ({compass})',
+  'steps.facade.noProtractor': 'sem transferidor',
+  'steps.facade.invalid': 'Orientação inválida',
+  'steps.protection.none': 'Sem proteção',
+  'steps.protection.alpha': 'brise α {value}',
+  'steps.protection.beta': 'aletas β {left}/{right}',
+  'steps.protection.gamma': 'γ {left}/{right}',
+  'steps.protection.more': 'e mais ângulos',
+  'steps.protection.onlyMore': 'ângulos em "Mais opções"',
+  'steps.protection.invalid': 'ângulo inválido',
+  'steps.protection.external': 'referência externa',
+  'steps.data.needData': 'Sem dados horários abertos no passo 1',
+  'steps.data.none': 'Nenhum dado na carta',
+  'steps.data.frequency': 'horas acima de {threshold} {unit}',
+  'steps.outputs.radius': 'Raio de {radius} cm',
+  'steps.outputs.all': 'carta completa',
+  'steps.outputs.without': 'sem {items}',
+  'steps.outputs.protractor': 'transferidor',
+  'steps.outputs.mask': 'máscara',
+  'steps.outputs.data': 'dados',
+  'steps.outputs.legend': 'legenda',
+  'steps.outputs.protractorOnly': 'só o transferidor',
+  'steps.outputs.comparing': 'comparação aberta',
+  'wind.loading': 'Abrindo a rosa dos ventos…',
+  // Fachada por rumos (decisão 0044, item c).
+  'compass.names':
+    'norte,nor-nordeste,nordeste,lés-nordeste,leste,lés-sudeste,sudeste,su-sudeste,sul,su-sudoeste,sudoeste,oés-sudoeste,oeste,oés-noroeste,noroeste,nor-noroeste',
+  'facade.compass': 'Ou escolha o rumo da fachada',
+  'facade.compassButton': '{name} ({degrees}°)',
+  // Leitura de um ponto da carta (decisão 0045).
+  'readout.position': 'Altura {altitude}° · azimute {azimuth}° ({compass})',
+  'readout.sun': 'O sol passa aqui às {time} (hora solar) em {dates}.',
+  'readout.sunEdge': 'No solstício, a borda do sol passa aqui às {time} (hora solar), em {date}.',
+  'readout.never': 'O sol nunca passa por aqui.',
+  'readout.legal': 'Hora legal: {times}.',
+  'readout.legalAt': '{time} em {date}',
+  'readout.hint':
+    'Passe o mouse sobre a carta, ou toque nela, para ler a altura, o azimute e quando o sol passa pelo ponto.',
+  // Desenho dos ângulos (decisão 0046, item d da 0044).
+  'angles.heading': 'Onde se mede cada ângulo (referência {reference})',
+  'angles.section': 'α no corte',
+  'angles.plan': 'β na planta',
+  'angles.view': 'γ na vista',
+  'angles.inside': 'interior',
+  'angles.outside': 'exterior',
+  'angles.alphaDesc':
+    'Corte da janela: {angle}, do peitoril até a aresta externa do brise, medido {from}.',
+  'angles.betaDesc':
+    'Planta da janela: β de cada aleta, da aresta oposta da janela até a ponta da aleta, medido {from}.',
+  'angles.gammaDesc':
+    'Vista de dentro para fora: γ de cada lado do brise, do canto inferior do mesmo lado até a ponta do brise, medido {from}.',
+  'angles.fromFacade': 'a partir do plano da fachada',
+  'angles.fromHorizontal': 'a partir da horizontal',
+  'angles.fromNormal': 'a partir da normal da fachada',
+  'angles.fromVertical': 'a partir da vertical',
+  'angles.internal': 'interna',
+  'angles.external': 'externa',
+  'angles.choose': 'Desenho do ângulo',
+  // Fontes de dados no passo 1 (decisão 0047, itens e, f e h da 0044).
+  'sources.label': 'Dados horários',
+  'sources.none': 'Só a carta, sem dados horários',
+  'sources.historical': 'Dados do SOL-AR 6.2 (ano de referência de {start} a {end})',
+  'sources.historicalIwec': 'Dados do SOL-AR 6.2 (arquivo IWEC)',
+  'sources.file': 'Arquivo {file}',
+  'sources.fileRecord': 'Arquivo {file} (dados de {start} a {end})',
+  'sources.otherFiles': 'Arquivos carregados',
+  'sources.paint': 'Pintar na carta',
+  'sources.paintMore': 'Semestre, faixas e horas acima de um limiar ficam no passo 4.',
+  'sources.paintMoreLink': 'Abrir o passo 4',
+  'sources.compare': 'Comparar com outros dados',
+  'sources.compareHelp':
+    'Guarda os dados de agora como A; escolha acima os dados de B e veja a diferença B − A na carta.',
+  'sources.comparing':
+    'A: {source} Escolha acima os dados de B; a diferença B − A aparece na carta.',
+  'sources.noData': 'Sem dados horários.',
+  // .zip direto (decisão 0048, item g da 0044).
+  'site.zip.noEpw': 'O .zip não tem nenhum arquivo .epw.',
+  'site.zip.manyEpw': 'O .zip tem mais de um arquivo .epw: descompacte e carregue o que quiser.',
+  'site.zip.corrupt':
+    'Não foi possível abrir o .zip: o arquivo parece incompleto ou corrompido. Baixe de novo.',
+  // Compartilhar (decisão 0049, item i da 0044).
+  'share.button': 'Compartilhar',
+  'share.copied':
+    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos, as opções da carta e os pontos marcados.',
+  'share.manual':
+    'O navegador não deixou copiar: selecione o link abaixo e copie. Ele reabre esta mesma análise.',
+  'share.how':
+    'Tudo fica no próprio endereço, depois do "#": nada é guardado num servidor, e o link muda a cada ajuste.',
+  'share.file':
+    'O arquivo climático carregado não vai no link: quem abrir precisa carregar o mesmo arquivo (ou abrir o projeto salvo no passo 5).',
+  'share.label': 'Link desta análise',
+  'share.close': 'Fechar',
+} as const;

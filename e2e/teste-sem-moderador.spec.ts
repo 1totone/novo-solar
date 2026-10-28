@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
+import { strToU8, zipSync } from 'fflate';
 import { expect, test, type Page } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { chooseSource, loadClimateFile, openStep } from './fixtures/steps';
 
 // Página do teste do F2.9 sem moderador (decisão 0042): o roteiro inteiro, feito como um
 // participante faria, e o arquivo de resultados nas colunas de docs/ux/F2.9-registro.csv.
@@ -91,11 +93,13 @@ test.describe('teste sem moderador (F2.9)', () => {
 
     // 2. Fachada noroeste (o transferidor já aparece).
     await startTask(page, '2');
+    await openStep(app, '2');
     await app.getByLabel('Orientação da fachada (azimute da normal externa)').fill('315');
     await finishTask(page, '2', 5, 'terminei');
 
     // 3. α = 50°.
     card = await startTask(page, '3');
+    await openStep(app, '3');
     await app.getByTestId('angle-a1').fill('50');
     await card.getByRole('radio', { name: 'sim' }).check();
     await finishTask(page, '3', 4, 'terminei');
@@ -108,46 +112,66 @@ test.describe('teste sem moderador (F2.9)', () => {
 
     // 5. Dados históricos e temperatura.
     card = await startTask(page, '5');
-    await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
-    await app.getByTestId('data-panel').getByLabel('Variável').selectOption('tbs');
+    await openStep(app, '1');
+    await chooseSource(app, /Dados do SOL-AR 6\.2/);
+    await app.getByLabel('Pintar na carta').selectOption('tbs');
     await card.getByLabel('Período dos dados').fill('entre 1951 e 1970');
     await card.getByLabel('Horas com mais de 25 °C e sol na janela').fill('à tarde');
     await finishTask(page, '5', 5, 'terminei');
 
-    // 6. Arquivo recente: a preparação fica antes de "Comecei", com o link do arquivo.
+    // 6. Arquivo recente: a preparação fica antes de "Comecei", com o link do .zip, que a
+    // ferramenta abre sem descompactar; "Comparar com outros dados" mostra a diferença.
     await expect(
       page.getByRole('link', { name: /Baixar o arquivo recente de Recife/ }),
     ).toHaveAttribute('href', /Recife.*TMYx\.2011-2025\.zip$/);
+    await expect(page.getByTestId('tarefa-6')).toContainText('cerca de 380 kB');
+    await expect(page.getByTestId('tarefa-6')).not.toContainText('megabytes');
     card = await startTask(page, '6');
-    await app.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
-      name: 'recife.epw',
-      mimeType: 'text/plain',
-      buffer: Buffer.from(syntheticEpw(RECIFE)),
+    await openStep(app, '1');
+    await app.getByTestId('compare-data').click();
+    const name = 'BRA_PE_Recife-Guararapes-Freyre.Intl.AP.828990_TMYx.2011-2025';
+    await loadClimateFile(app, {
+      name: `${name}.zip`,
+      mimeType: 'application/zip',
+      buffer: Buffer.from(
+        zipSync({
+          [`${name}.epw`]: strToU8(syntheticEpw(RECIFE)),
+          [`${name}.ddy`]: strToU8('ddy'),
+        }),
+      ),
     });
     await expect(page.locator('#endereco')).toHaveValue(/local=arquivo/);
+    await expect(app.getByTestId('difference-view')).toBeVisible();
     await card.getByLabel('As horas quentes mudaram? Como?').fill('quase iguais');
     await finishTask(page, '6', 2, 'terminei');
 
     // 7. Rosa dos ventos do verão, com os dados antigos de novo.
     card = await startTask(page, '7');
+    await openStep(app, '1');
+    await app.getByTestId('compare-data').click();
     await app.getByLabel('Cidade').selectOption('recife');
-    await app.getByRole('button', { name: 'Abrir dados históricos (SOL-AR 6.2)' }).click();
+    await chooseSource(app, /Dados do SOL-AR 6\.2/);
     await app.getByRole('tab', { name: 'Rosa dos ventos' }).click();
     await app.getByRole('radio', { name: 'Verão' }).click();
     await card.getByLabel('Direção').fill('leste');
     await finishTask(page, '7', 6, 'terminei');
 
-    // 8. Impressão em escala, só com o transferidor.
-    await startTask(page, '8');
+    // 8. A carta em imagem para a aula (PNG exportado no passo 5).
+    card = await startTask(page, '8');
     await app.getByRole('tab', { name: 'Carta solar' }).click();
-    await app.getByLabel('Máscara', { exact: true }).uncheck();
-    await app.getByLabel('Dados', { exact: true }).uncheck();
-    await app.getByRole('button', { name: 'Imprimir ou salvar em PDF' }).click();
+    await openStep(app, '5');
+    const [png] = await Promise.all([
+      page.waitForEvent('download'),
+      app.getByRole('button', { name: 'PNG' }).click(),
+    ]);
+    expect(png.suggestedFilename()).toMatch(/\.png$/);
+    await card.getByLabel('Como você salvou? (PDF, imagem ou outro jeito)').fill('PNG');
     await finishTask(page, '8', 4, 'terminei');
 
-    // 9. Link: o participante copia da barra de endereço.
+    // 9. Link: o participante usa "Compartilhar" no cabeçalho da ferramenta.
     card = await startTask(page, '9');
-    const link = await page.locator('#endereco').inputValue();
+    await app.getByTestId('share').click();
+    const link = await app.getByLabel('Link desta análise').inputValue();
     await card.getByLabel('Cole aqui o link que você mandaria').fill(link);
     await finishTask(page, '9', 7, 'terminei');
 
@@ -201,7 +225,9 @@ test.describe('teste sem moderador (F2.9)', () => {
     expect(byTask['1']![7]).toBe('Direção: nordeste; Altura: 36°');
     for (const id of ['1', '3', '5', '7']) expect(byTask[id]![8], id).toContain('resposta: ok');
     expect(byTask['1']![8]).toContain('SEQ 6');
-    expect(byTask['8']![8]).toContain('raio 6 cm sim; carta sim; transferidor sim');
+    expect(byTask['6']![8]).toContain('comparou com outros dados sim, com a diferença na carta');
+    expect(byTask['8']![8]).toContain('imagem PNG; Recife sim; com a carta sim');
+    expect(byTask['8']![7]).toContain('PNG');
     expect(byTask['9']![8]).toContain('mesmo estado sim');
     expect(byTask['9']![8]).toContain('estado: #');
     expect(byTask.sus![7]).toBe('5,1,4,2,4,1,5,1,4,2');
@@ -241,4 +267,33 @@ test.describe('teste sem moderador (F2.9)', () => {
     const frame2 = await page.locator('#app').boundingBox();
     expect(frame2!.height).toBeGreaterThan(frame!.height + 100);
   });
+
+  // Decisão 0050: durante a tarefa, o roteiro estreita para a ferramenta ter pelo menos 1200 px e
+  // mostrar as três colunas; fora dela (ferramenta coberta), o roteiro tem os 23rem de sempre.
+  for (const screen of [
+    { width: 1366, height: 768, panel: 166 },
+    { width: 1920, height: 1080, panel: 368 },
+  ]) {
+    test(`${screen.width} × ${screen.height}: a ferramenta em três colunas durante a tarefa`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== 'computador', 'leiaute do computador');
+      await page.setViewportSize(screen);
+      await begin(page);
+      await expect(page.locator('.roteiro')).toHaveCSS('width', '368px');
+      await startTask(page, '1');
+      const panel = (await page.locator('.roteiro').boundingBox())!;
+      const frame = (await page.locator('#app').boundingBox())!;
+      expect(panel.width).toBeCloseTo(screen.panel, 0);
+      expect(frame.width).toBeGreaterThanOrEqual(1200);
+      const app = page.frameLocator('#app');
+      await expect(app.locator('.steps-left')).toBeVisible();
+      await expect(app.locator('.steps-right')).toBeVisible();
+      // Sem rolar: o γ do passo 3 e o raio do passo 5 à vista dentro da ferramenta.
+      for (const id of ['angle-gd1', 'print-radius']) {
+        await expect(app.getByTestId(id)).toBeInViewport({ ratio: 1 });
+      }
+      await expect(app.locator('.steps-left')).toHaveJSProperty('scrollTop', 0);
+    });
+  }
 });

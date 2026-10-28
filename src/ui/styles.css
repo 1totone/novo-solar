@@ -8,6 +8,24 @@
   --color-surface: #f6f8fa;
   --color-border: #d0d7de;
   --color-bg: #ffffff;
+  /* Cores da carta (F4.6, decisão 0030), conferidas para daltonismo e contraste em
+     tests/acessibilidade/paleta.test.ts: linhas e textos contra o branco e entre si (simulação de Machado,
+     Oliveira e Fernandes, 2009). A trajetória do sol é --color-sun; as linhas horárias,
+     --color-accent; o desenho à mão, --color-text. */
+  --chart-grid: #8c959f;
+  --chart-protractor: #8250df;
+  --chart-protractor-text: #6639ba;
+  --chart-legal: #a01642;
+  --chart-contour: #4493a1;
+  --chart-contour-text: #2d6e7a;
+  --chart-contour-fill: rgb(68 147 161 / 20%);
+  --chart-period: #1c500e;
+  --chart-period-fill: rgb(45 164 78 / 22%);
+  --chart-point: #6f42c1;
+  --mask-total: rgb(207 34 46 / 35%);
+  --mask-partial: rgb(227 179 65 / 45%);
+  --mask-total-hatch: #a40e26;
+  --mask-partial-hatch: #b5820c;
   color-scheme: light;
   font-family:
     system-ui,
@@ -34,8 +52,6 @@ body {
 }
 
 .page {
-  max-width: 64rem;
-  margin: 0 auto;
   padding: 2rem 1rem 3rem;
 }
 
@@ -112,13 +128,6 @@ a:focus-visible {
   margin-top: 1rem;
 }
 
-@media (min-width: 52rem) {
-  .workspace {
-    grid-template-columns: minmax(16rem, 20rem) 1fr;
-    align-items: start;
-  }
-}
-
 .site-panel h2,
 .chart-section h2 {
   margin: 0 0 0.75rem;
@@ -158,6 +167,16 @@ a:focus-visible {
 .site-info dd {
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+/* Origem, avisos e qualidade: textos longos, na largura toda do painel (F4.1). */
+.site-info dt.wide,
+.site-info dd.wide {
+  grid-column: 1 / -1;
+}
+
+.site-info dt.wide {
+  margin-top: 0.25rem;
 }
 
 /* Selo dos dados históricos (F2.7) e lista de avisos sobre os dados. */
@@ -210,7 +229,7 @@ a:focus-visible {
 .steps {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .step-panel {
@@ -310,7 +329,7 @@ details.more summary {
 
 .sun-chart .pt-grid circle,
 .sun-chart .pt-grid line {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-opacity: 0.25;
   stroke-width: 0.5;
 }
@@ -331,18 +350,20 @@ details.more summary {
 }
 
 .sun-chart .pt-curve {
-  stroke: #8250df;
+  stroke: var(--chart-protractor);
   stroke-width: 2.25;
 }
 
 .sun-chart .pt-label {
-  fill: #6639ba;
+  fill: var(--chart-protractor-text);
   font-size: 0.06px;
   font-weight: 600;
 }
 
+/* Curvas da sombra parcial: a cor do transferidor, tracejadas e mais finas, com o rótulo em itálico
+   (F4.6). O dourado de antes ficava a ΔE 5 da trajetória do sol, mesmo sem daltonismo. */
 .sun-chart .pt-curve.partial {
-  stroke: #9a6700;
+  stroke: var(--chart-protractor);
   stroke-width: 1.75;
   stroke-dasharray: 6 4;
 }
@@ -356,16 +377,17 @@ details.more summary {
 }
 
 .sun-chart .pt-label.partial {
-  fill: #7d4e00;
+  font-style: italic;
 }
 
-/* Máscara: total vermelha, parcial amarela (decisão 0013; paleta para daltonismo na Fase 4). */
+/* Máscara: total vermelha, parcial amarela (decisão 0013), conferidas para daltonismo (decisão 0030);
+   com dados sobre a carta, hachuras a 45° e 135°. */
 .sun-chart .mask-total {
-  fill: rgb(207 34 46 / 35%);
+  fill: var(--mask-total);
 }
 
 .sun-chart .mask-partial {
-  fill: rgb(227 179 65 / 45%);
+  fill: var(--mask-partial);
 }
 
 .swatch {
@@ -381,11 +403,11 @@ details.more summary {
 }
 
 .swatch.total {
-  background: rgb(207 34 46 / 35%);
+  background: var(--mask-total);
 }
 
 .swatch.partial {
-  background: rgb(227 179 65 / 45%);
+  background: var(--mask-partial);
 }
 
 .legend {
@@ -489,11 +511,20 @@ details.more summary {
 }
 
 .sun-chart .hatch-total {
-  fill: #a40e26;
+  fill: var(--mask-total-hatch);
 }
 
 .sun-chart .hatch-partial {
-  fill: #7d4e00;
+  fill: var(--mask-partial-hatch);
+}
+
+/* Resposta do exercício (F4.5): hachura escura a 135° sobre o desenho do aluno. */
+.sun-chart .hatch-answer {
+  fill: var(--color-text);
+}
+
+.swatch.answer {
+  background: repeating-linear-gradient(135deg, var(--color-text) 0 2px, transparent 2px 6px);
 }
 
 .swatch.no-data {
@@ -501,11 +532,15 @@ details.more summary {
 }
 
 .legend.hatched .swatch.total {
-  background: repeating-linear-gradient(45deg, #a40e26 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(45deg, var(--mask-total-hatch) 0 2px, transparent 2px 6px);
 }
 
 .legend.hatched .swatch.partial {
-  background: repeating-linear-gradient(135deg, #7d4e00 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--mask-partial-hatch) 0 2px,
+    transparent 2px 6px
+  );
 }
 
 .overlay-legend .legend-title {
@@ -570,6 +605,11 @@ details.more summary {
     max-height: 42vh;
     aspect-ratio: 1;
     margin-top: 0.25rem;
+  }
+
+  .chart-section .sun-chart.cylindrical {
+    width: 100%;
+    aspect-ratio: 2.28 / 1.36;
   }
 
   #panel-chart > .note:last-child {
@@ -675,6 +715,52 @@ details.more summary {
   margin-bottom: 0.5rem;
 }
 
+/* Idioma (F4.6) */
+.header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.language {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language select {
+  min-height: 40px;
+  font: inherit;
+}
+
+/* Arquivo de projeto (F4.7) */
+input.manual-link {
+  width: 100%;
+  min-height: 40px;
+  font: inherit;
+  margin-top: 0.25rem;
+}
+
+/* Vento avançado (F4.4) */
+.wind-more {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.wind-more .field {
+  margin: 0.5rem 0;
+}
+
+.field input.wind-height {
+  max-width: 8rem;
+}
+
+.segmented button:disabled {
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
 .wind-rose {
   display: block;
   width: 100%;
@@ -778,6 +864,15 @@ fieldset.plain .check {
   min-height: 36px;
 }
 
+/* Fontes de dados do passo 1 (decisão 0047): o fieldset não alarga a coluna. */
+fieldset.sources {
+  min-width: 0;
+}
+
+fieldset.sources .check {
+  padding: 0.2rem 0;
+}
+
 .print-header,
 .print-ruler {
   display: none;
@@ -797,6 +892,16 @@ fieldset.plain .check {
 .compare-label {
   margin: 0.5rem 0 0;
   font-size: 0.95rem;
+}
+
+.difference-toggle {
+  margin: 0.5rem 0 0;
+}
+
+.difference-sources {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
 }
 
 .cell-table {
@@ -832,7 +937,10 @@ fieldset.plain .check {
   .cell-table,
   .chart-section [role='tabpanel'] > .note,
   .wind-controls,
-  .wind-panel details {
+  .wind-panel details,
+  .difference-toggle,
+  .difference-blocked,
+  .language {
     display: none !important;
   }
 
@@ -862,10 +970,11 @@ fieldset.plain .check {
     font-size: 9pt;
   }
 
-  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura). */
+  /* Escala: o horizonte tem o raio pedido (o viewBox tem 2,64 raios de largura); na cilíndrica,
+     a faixa de 0° a 90° tem a altura pedida (F4.3). */
   .chart-section .sun-chart {
-    width: calc(var(--print-radius) * 2.64cm) !important;
-    height: calc(var(--print-radius) * 2.64cm) !important;
+    width: calc(var(--print-radius) * var(--chart-span-x, 2.64) * 1cm) !important;
+    height: calc(var(--print-radius) * var(--chart-span-y, 2.64) * 1cm) !important;
     max-width: none !important;
     max-height: none !important;
     margin: 0 auto;
@@ -916,7 +1025,1739 @@ fieldset.plain .check {
   .print-protractor-only .sun-chart .sun-paths,
   .print-protractor-only .sun-chart .overlay,
   .print-protractor-only .sun-chart .mask,
+  .print-protractor-only .sun-chart .shading,
   .print-protractor-only .legend {
     display: none !important;
+  }
+}
+
+/* F3.2: curvas de percentual, sombra total e máscara de um ponto na carta (cores da decisão 0030).
+   Curva de 0% tracejada e de 100% grossa: o nível não depende só da cor. O azul-petróleo escuro de
+   antes ficava a ΔE 6 das linhas horárias. */
+.sun-chart .contour {
+  fill: none;
+  stroke: var(--chart-contour);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .contour.level-0 {
+  stroke-dasharray: 6 3;
+}
+
+.sun-chart .contour.level-100 {
+  stroke-width: 2.5;
+}
+
+.sun-chart .contour-label {
+  font-size: 0.045px;
+  font-weight: 600;
+  fill: var(--chart-contour-text);
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.sun-chart .full-shade {
+  fill: var(--chart-contour-fill);
+}
+
+.sun-chart .hatch-full-shade {
+  fill: var(--chart-contour-text);
+}
+
+.sun-chart .hatch-point {
+  fill: var(--chart-point);
+}
+
+/* Curvas da geometria anterior enquanto o worker calcula as novas. */
+.sun-chart .shading .stale {
+  opacity: 0.35;
+}
+
+.swatch.contour-line {
+  background: linear-gradient(var(--chart-contour), var(--chart-contour)) center / 100% 2px
+    no-repeat;
+}
+
+.swatch.full-shade {
+  background: var(--chart-contour-fill);
+}
+
+.legend.hatched .swatch.full-shade {
+  background: repeating-linear-gradient(0deg, var(--chart-contour-text) 0 2px, transparent 2px 6px);
+}
+
+.swatch.point-mask {
+  background: repeating-linear-gradient(90deg, var(--chart-point) 0 2px, transparent 2px 6px);
+}
+
+/* Curvas em cálculo no worker: aviso sobre o canto da carta, sem empurrar o que vem abaixo. */
+.chart-view {
+  position: relative;
+}
+
+.shading-pending {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  margin: 0;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  color: #3d444d;
+  background: rgb(255 255 255 / 90%);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+@media print {
+  .shading-pending {
+    display: none;
+  }
+}
+
+/* F3.3: mapa mês × hora da sombra (1 unidade do SVG = 1 px). */
+.annual-map {
+  position: relative;
+  min-height: 2rem;
+  margin: 0.5rem 0;
+}
+
+.month-hour-map {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.month-hour-map.stale {
+  opacity: 0.35;
+}
+
+.annual-legend {
+  justify-content: flex-start;
+  margin: 0.25rem 0;
+}
+
+.swatch.no-sun {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+.annual-table .data-table td.no-sun {
+  background: repeating-linear-gradient(45deg, #d0d7de 0 1px, #fff 1px 4px);
+}
+
+.export-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+/* F3.4: hipóteses e partes das classes de hora (passo 7). */
+.hypotheses {
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.hypotheses li + li {
+  margin-top: 0.3rem;
+}
+
+.class-results .field-label {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.class-bar {
+  display: block;
+  width: 100%;
+  height: 1.4rem;
+}
+
+.class-legend {
+  justify-content: flex-start;
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.85rem;
+}
+
+.swatch.class-cold {
+  background: #3872bc;
+}
+
+.swatch.class-neutral {
+  background: #e5e4e2;
+}
+
+.swatch.class-hot {
+  background: #b94643;
+}
+
+.swatch.class-none {
+  background: repeating-linear-gradient(45deg, #8c959f 0 1px, #fff 1px 4px);
+}
+
+/* F3.5: indicadores e alternativas (passo 7). */
+.indicator-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.indicator-tile {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.indicator-tile p {
+  margin: 0;
+}
+
+.tile-label,
+.tile-note {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.tile-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.btn.small {
+  min-height: 32px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.note.block {
+  display: block;
+  font-weight: 400;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.indicators .data-table th,
+.indicators .data-table td {
+  padding: 0.25rem 0.35rem;
+  font-size: 0.85rem;
+}
+
+.alternatives-table tr.current th {
+  text-decoration: underline;
+}
+
+.alternatives-plot {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+/* F3.6: período do dimensionamento na carta (verde, como a Figura 13 do tutorial da UFU; o contorno
+   escureceu na decisão 0030 para não se confundir com a trajetória do sol em deuteranopia). */
+.sun-chart .period-area {
+  fill: var(--chart-period-fill);
+  stroke: var(--chart-period);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-mark circle {
+  fill: #1b1f24;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.sun-chart .period-label {
+  font-size: 0.045px;
+  font-weight: 700;
+  fill: #1b1f24;
+  text-anchor: start;
+  stroke: var(--color-bg);
+  stroke-width: 0.012px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.swatch.period-area {
+  background: var(--chart-period-fill);
+  border-color: var(--chart-period);
+}
+
+.swatch.period-mark {
+  border-radius: 50%;
+  background: #1b1f24;
+}
+
+.sizing-fins {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+/* F3.7: vista 3D. */
+.view3d-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: flex-end;
+}
+
+.view3d-controls .field {
+  margin-bottom: 0.25rem;
+}
+
+.view3d-canvas {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.view3d-canvas canvas {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  touch-action: none;
+}
+
+.view3d-status {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Células da sobreposição em cálculo no web worker (achado 9). */
+.overlay-pending {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+/* Fase 3: passos avançados recolhidos (decisão 0023). */
+.steps-group {
+  margin: 0.25rem 0 -0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Passos como acordeão (decisão 0044): o cabeçalho de cada passo é o resumo de um details; um
+   aberto por vez (quem fecha os outros é a aplicação). */
+.step-panel > details > summary {
+  display: block;
+  list-style: none;
+  cursor: pointer;
+}
+
+.step-panel > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.step-panel > details > summary:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.step-panel > details > summary h2 {
+  margin: 0;
+}
+
+/* A seta fica num elemento oculto do leitor de tela: o conteúdo de ::after no título entraria no
+   nome acessível dele ("Proteção ▸"). */
+.step-toggle {
+  margin-left: auto;
+}
+
+.step-toggle::after {
+  content: '▸';
+  color: var(--color-accent);
+}
+
+.step-panel > details[open] > summary .step-toggle::after {
+  content: '▾';
+}
+
+.step-panel > details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+/* Aberto, o passo mostra o próprio conteúdo: o resumo só aparece com ele fechado. */
+.step-panel > details[open] > summary .step-summary {
+  display: none;
+}
+
+.step-panel > details:not([open]) > summary:hover h2 {
+  color: var(--color-accent);
+}
+
+.next-step {
+  margin: 1rem 0 0;
+}
+
+.step-badge {
+  padding: 0 0.45rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.step-summary {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Passos do caminho básico fechados (decisão 0044): o resumo em uma linha; o texto inteiro fica no
+   title. Os avançados mantêm a descrição em mais linhas. */
+.step-panel:not(.advanced-step) .step-summary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.step-panel:has(> details:not([open])) {
+  padding-block: 0.55rem;
+}
+
+fieldset.piece {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+fieldset.piece legend {
+  padding: 0 0.25rem;
+  font-weight: 600;
+}
+
+.piece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: 0 0.6rem;
+}
+
+.piece-grid .field {
+  display: flex;
+  flex-direction: column;
+  /* Rótulos de uma e de duas linhas na mesma fileira: os campos ficam alinhados embaixo. */
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.piece-grid label {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.add-piece {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.add-piece select {
+  min-height: 44px;
+  font: inherit;
+}
+
+.geometry-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.geometry-drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.geometry-drawing path {
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-wall {
+  fill: #eaeef2;
+  stroke: #8c959f;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-glass {
+  fill: #ddf4ff;
+  stroke: #0969da;
+  stroke-width: 1.5;
+}
+
+.geometry-drawing .gd-glass.gd-edge {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.geometry-drawing .gd-piece {
+  fill: #1b1f24;
+  fill-opacity: 0.85;
+  stroke: #1b1f24;
+  stroke-width: 1;
+}
+
+.geometry-drawing .gd-piece.gd-edge {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: square;
+}
+
+.geometry-drawing .gd-beyond {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1.25;
+  stroke-dasharray: 4 3;
+}
+
+.geometry-drawing .gd-angle path {
+  fill: none;
+  stroke: #6639ba;
+  stroke-width: 1.25;
+  stroke-dasharray: 6 4;
+}
+
+.geometry-drawing .gd-angle text {
+  fill: #6639ba;
+  font-weight: 600;
+}
+
+.geometry-drawing .gd-dim path {
+  fill: none;
+  stroke: #57606a;
+  stroke-width: 1;
+}
+
+.geometry-drawing text {
+  fill: var(--color-text);
+  font-family: inherit;
+}
+
+.geometry-drawing .gd-title {
+  font-weight: 600;
+}
+
+/* Ponto da máscara de um ponto (F3.2), na cor da hachura do ponto na carta. */
+.geometry-drawing .gd-point circle,
+.geometry-drawing .gd-point path {
+  fill: none;
+  stroke: #6f42c1;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.geometry-drawing .gd-pick {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.export-only,
+.print-geometry {
+  display: none;
+}
+
+@media print {
+  .print-geometry {
+    display: block;
+    break-before: page;
+  }
+
+  .print-geometry .geometry-drawing {
+    border: 0;
+  }
+}
+
+/* F4.3: legenda das linhas horárias solares e legais. */
+.swatch.solar-hour-line,
+.swatch.legal-hour-line {
+  width: 1.2rem;
+  height: 0;
+  border-top: 2px solid var(--color-accent);
+  background: none;
+}
+
+.swatch.legal-hour-line {
+  border-top: 2px dashed var(--chart-legal);
+}
+
+/* Ajuda e exemplos resolvidos (F4.8) */
+.header-tools {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+/* "Compartilhar" (decisão 0049): o link e o que ele reabre, logo abaixo do botão. */
+.share-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 40;
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0.75rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+}
+
+.share-panel p {
+  margin: 0 0 0.5rem;
+}
+
+/* Altura fixa: o diálogo não muda de tamanho ao trocar de parte. */
+dialog.help {
+  width: min(52rem, calc(100vw - 2rem));
+  max-width: none;
+  height: min(46rem, calc(100dvh - 2rem));
+  max-height: none;
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+}
+
+dialog.help::backdrop {
+  background: rgb(27 31 36 / 45%);
+}
+
+.help-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.help-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+.help-head h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.help-tabs {
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+.help-tabs button {
+  padding: 0.25rem 0.6rem;
+}
+
+.help-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.25rem 1rem 1rem;
+}
+
+.help-body:focus-visible,
+.help-faq summary:focus-visible,
+a.btn:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.help-body h3 {
+  margin: 1.1rem 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--color-accent);
+}
+
+.help-body h4 {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.help-items {
+  margin: 0;
+}
+
+.help-items > div {
+  margin-bottom: 0.6rem;
+}
+
+.help-items dt {
+  font-weight: 600;
+}
+
+.help-items dd {
+  margin: 0.1rem 0 0;
+}
+
+.help-example {
+  margin-top: 1rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.help-faq details {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.help-faq summary {
+  min-height: 32px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-faq p {
+  margin: 0.4rem 0 0.2rem;
+}
+
+/* No celular, a ajuda ocupa a tela inteira. */
+@media (max-width: 40rem) {
+  dialog.help {
+    width: 100vw;
+    height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.example-card {
+  padding: 0.75rem 0.9rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+}
+
+.example-card-label {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.example-card h2 {
+  margin: 0.1rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.example-card ol {
+  padding-left: 1.25rem;
+}
+
+.example-card li {
+  margin-bottom: 0.35rem;
+}
+
+@media print {
+  dialog.help {
+    display: none !important;
+  }
+}
+
+/* Modo didático (F4.5): realce do painel da etapa do tutorial e resultado do exercício. */
+:root[data-tutorial='1'] [data-step='1'],
+:root[data-tutorial='2'] [data-step='2'],
+:root[data-tutorial='3'] [data-step='3'],
+:root[data-tutorial='4'] [data-step='4'],
+:root[data-tutorial='5'] [data-step='5'],
+:root[data-tutorial='carta'] [data-step='carta'] {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+
+.tutorial-done {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #1a7f37;
+}
+
+.exercise-score {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media print {
+  :root[data-tutorial] [data-step] {
+    outline: none;
+  }
+}
+
+/* Catálogo nacional de estações (F4.1) */
+.catalog {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.catalog > summary {
+  min-height: 32px;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.station-list {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.station-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.station-choice[aria-pressed='true'] {
+  border: 2px solid var(--color-accent);
+}
+
+.station-choice:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.station-name {
+  font-weight: 600;
+}
+
+.catalog-map {
+  margin: 0.5rem 0 0;
+}
+
+.catalog-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.catalog-map .ufs path {
+  fill: var(--color-surface);
+  stroke: var(--chart-grid);
+  stroke-width: 0.08;
+}
+
+.catalog-map .stations circle {
+  fill: var(--color-accent);
+}
+
+.catalog-map .stations circle.era5 {
+  fill: var(--color-muted);
+}
+
+.catalog-map .selected {
+  fill: none;
+  stroke: var(--color-sun);
+  stroke-width: 0.25;
+}
+
+.catalog-map .project-point {
+  fill: none;
+  stroke: var(--chart-legal);
+  stroke-width: 0.3;
+}
+
+/* Atalho entre passos (decisão 0040): só com um passo avançado aberto. No computador, fixo no
+   alto da coluna dos passos; no celular, no pé da tela. */
+.step-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+.step-nav-title {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.step-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-nav-n {
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.step-nav-n[aria-current='step'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.step-nav-n:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 51.99rem) {
+  .step-nav {
+    order: 99;
+    top: auto;
+    bottom: 0;
+    justify-content: center;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .step-nav-title {
+    display: none;
+  }
+
+  .step-nav ol {
+    flex-wrap: nowrap;
+  }
+
+  .step-nav-n {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+  }
+}
+
+@media print {
+  .step-nav {
+    display: none;
+  }
+}
+
+/* Com a barra no pé da tela do celular, o que for rolado para a vista para acima dela. */
+@media (max-width: 51.99rem) {
+  html:has(.step-nav) {
+    scroll-padding-bottom: 3.5rem;
+  }
+}
+
+/* Fachada por rumos (decisão 0044, item c): o número e o rumo por extenso lado a lado, e a rosa de
+   botões com a planta da fachada no centro. */
+.orientation-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  align-items: center;
+}
+
+.orientation-row input {
+  width: 5.5rem;
+}
+
+.orientation-name {
+  display: flex;
+  flex: 1 1 8rem;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.orientation-name-main {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+
+.orientation-name-detail {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* A rosa à esquerda e o campo à direita (decisão 0050); a explicação embaixo, sob demanda. */
+.facade {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.25rem 0.75rem;
+  align-items: start;
+}
+
+.facade > .info-text {
+  grid-column: 1 / -1;
+}
+
+.facade-fields .field {
+  margin-bottom: 0.25rem;
+}
+
+.facade-fields .row > label {
+  min-width: 0;
+}
+
+.facade-rose-buttons {
+  display: grid;
+  flex: none;
+  grid-template-columns: repeat(3, 2.75rem);
+  grid-template-rows: repeat(3, 2.6rem);
+  gap: 0.25rem;
+}
+
+.facade-rose-buttons button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.facade-rose-buttons button[aria-checked='true'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.facade-rose-buttons button:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.facade-rose-center {
+  display: grid;
+  place-items: center;
+}
+
+.facade-plan {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.facade-plan-ring {
+  fill: none;
+  stroke: var(--color-border);
+}
+
+.facade-plan-wall {
+  stroke: var(--color-text);
+  stroke-width: 3;
+}
+
+.facade-plan-normal {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.facade-plan-arrow {
+  fill: var(--color-accent);
+}
+
+/* Onde se mede cada ângulo (decisão 0046): corte, planta ou vista de dentro, um por vez. */
+.angle-diagrams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.angle-diagrams .segmented button {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.angle-diagrams figure {
+  margin: 0;
+}
+
+.angle-diagrams svg {
+  display: block;
+  width: 100%;
+  max-width: 13rem;
+  height: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.angle-diagrams .wall {
+  stroke: var(--color-muted);
+  stroke-width: 5;
+}
+
+.angle-diagrams .glass {
+  stroke: #6a9fd4;
+  stroke-width: 1.5;
+}
+
+.angle-diagrams .window {
+  fill: #e6eef7;
+  stroke: var(--color-muted);
+  stroke-width: 1;
+}
+
+.angle-diagrams .device {
+  stroke: var(--color-text);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.angle-diagrams .device.example {
+  stroke: var(--color-muted);
+  stroke-dasharray: 4 2;
+}
+
+.angle-diagrams .ray {
+  stroke: var(--color-text);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.angle-diagrams .sun {
+  fill: #d9a400;
+}
+
+.angle-diagrams .reference {
+  stroke: var(--color-accent);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 2;
+}
+
+.angle-diagrams .angle-arc {
+  fill: rgb(181 101 29 / 25%);
+  stroke: var(--color-sun-text);
+  stroke-width: 1;
+}
+
+.angle-diagrams .angle-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  fill: var(--color-sun-text);
+  dominant-baseline: middle;
+}
+
+.angle-diagrams .angle-label.example {
+  font-weight: 600;
+  fill: var(--color-muted);
+}
+
+.angle-diagrams .side-label {
+  font-size: 7.5px;
+  fill: var(--color-muted);
+}
+
+/* Contorno da cor do fundo: os rótulos continuam legíveis sobre as linhas. */
+.angle-diagrams .angle-label,
+.angle-diagrams .side-label {
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+}
+
+/* Botão "i" (decisão 0050): a explicação de um campo, a um clique, sem alongar o passo. Alvo de
+   24 px, o mínimo da WCAG 2.5.8. */
+.info-btn {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font:
+    italic 700 0.85rem/1 Georgia,
+    'Times New Roman',
+    serif;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.info-btn[aria-expanded='true'] {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.info-btn:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.info-text {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.info-text .note {
+  margin: 0 0 0.3rem;
+}
+
+.info-text .note:last-child {
+  margin-bottom: 0;
+}
+
+/* Rótulo e campo na mesma linha quando couber (decisão 0050); em tela estreita, o campo desce. */
+.field.row,
+.field > .row {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.25rem 0.5rem;
+  align-items: center;
+}
+
+.field.row > label,
+.field > .row > label:not(.btn) {
+  flex: 0 0 auto;
+  min-width: 6.5rem;
+  font-weight: 600;
+}
+
+.field.row > .field-label {
+  flex: 0 0 auto;
+}
+
+.field.row > select,
+.field.row > input,
+.field > .row > select,
+.field > .row > input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+.field > .row > select {
+  min-height: 44px;
+  font: inherit;
+}
+
+.field.row > .segmented button {
+  padding: 0.25rem 0.55rem;
+}
+
+.field input.short {
+  flex: 0 0 4.5rem;
+  width: 4.5rem;
+}
+
+.band-inputs {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.heading-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.75rem 0 0.4rem;
+}
+
+.heading-row .sub-heading {
+  margin: 0;
+}
+
+/* Passo 1: as fontes de dados numa lista; "Abrir arquivo" (o campo de arquivo dentro do botão,
+   oculto à vista, mas no teclado) e "Comparar" na linha de baixo. */
+.field.sources {
+  margin-bottom: 0.5rem;
+}
+
+.field.sources .row > select {
+  flex-basis: 7rem;
+}
+
+.source-actions {
+  margin: 0.4rem 0 0;
+}
+
+.btn.file-btn {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+}
+
+.btn.file-btn:focus-within {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+/* O local numa linha de resumo; coordenadas, origem, período e avisos sob demanda. */
+.site-details > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.site-details > summary:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.site-details[open] > summary {
+  margin-bottom: 0.5rem;
+}
+
+.site-line-notices {
+  font-weight: 600;
+  color: var(--color-sun-text);
+}
+
+/* Passo 2: o rumo por extenso ao lado do número (decisão 0044, item c), na coluna ao lado da
+   rosa. */
+.facade-fields .orientation-row {
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.facade-fields .orientation-row input {
+  flex: none;
+}
+
+.facade-fields .orientation-name {
+  flex: 1 1 auto;
+}
+
+.facade-fields .orientation-name-detail {
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.facade > .facade-show {
+  grid-column: 1 / -1;
+}
+
+/* Passo 3: os ângulos da sombra total ao lado do desenho de onde se mede cada um. */
+.protection-main {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1fr) minmax(8rem, 10rem);
+  gap: 0.25rem 0.75rem;
+  align-items: start;
+}
+
+.angle-grid {
+  grid-template-columns: 1.6rem minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.angle-grid > .muted {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.protection-figure .angle-diagrams {
+  margin: 0;
+}
+
+.protection-figure .angle-diagrams .segmented {
+  width: 100%;
+}
+
+.protection-figure .angle-diagrams .segmented button {
+  flex: 1 1 0;
+  padding: 0 0.25rem;
+  font-size: 1rem;
+}
+
+.protection-figure .angle-diagrams svg {
+  max-width: 100%;
+}
+
+.angle-caption {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  color: var(--color-muted);
+}
+
+/* Passo 5: o que entra na folha recolhido; os formatos da exportação numa linha. */
+details.print-include {
+  margin-bottom: 0.5rem;
+}
+
+.export-row .button-row {
+  margin: 0;
+}
+
+.export-row .btn {
+  padding: 0.25rem 0.6rem;
+}
+
+/* Abas da carta com o "i" da leitura da carta à direita. */
+.tabs-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabs-row .tabs {
+  flex: 1 1 auto;
+  min-width: 0;
+  border-bottom: 0;
+}
+
+@media print {
+  .info-btn,
+  .info-text,
+  .tabs-row {
+    display: none !important;
+  }
+}
+
+/* No celular, o cabeçalho continua como antes: o título e os botões, e a frase embaixo. */
+@media (max-width: 51.99rem) {
+  .header-row .tagline {
+    flex-basis: 100%;
+    order: 3;
+  }
+}
+
+/* Leiaute em colunas (decisão 0050). A partir de 52rem, a página ocupa a janela inteira e não rola:
+   rolam só as colunas. De 52rem a 75rem, duas colunas (passos, carta); a partir de 75rem, três
+   (passos 1 a 3, carta, passos 4 a 7), sem largura máxima. Só na tela: a impressão segue o fluxo. */
+@media screen and (min-width: 52rem) {
+  .page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0 0.75rem;
+    overflow: clip;
+  }
+
+  .header {
+    flex: none;
+  }
+
+  .header-row {
+    flex-wrap: nowrap;
+    min-height: 2.5rem;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header h1 {
+    flex: none;
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .tagline {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    font-size: 0.85rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-tools {
+    flex: none;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+
+  .header .btn,
+  .header .language select {
+    min-height: 32px;
+  }
+
+  main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .workspace {
+    flex: 1 1 auto;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(19rem, 24rem) minmax(0, 1fr);
+    gap: 0 0.75rem;
+    min-height: 0;
+    margin: 0;
+  }
+
+  /* Cada coluna é a caixa dos elementos posicionados dentro dela (os ocultos à vista, como o campo
+     de arquivo): sem isso, eles ficariam presos à página e a fariam rolar. */
+  .steps {
+    position: relative;
+    gap: 0.4rem;
+    min-height: 0;
+    padding: 0.35rem 0.4rem 1rem 0.1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .steps > .status,
+  .steps > .about {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .steps > .status h2,
+  .steps > .about h2 {
+    font-size: 1rem;
+  }
+
+  /* Menor que 18,7 px em negrito, o título precisa de 4,5:1: a cor do sol escurecida. */
+  .steps > .status h2 {
+    color: var(--color-sun-text);
+  }
+
+  .steps > .about-toggle {
+    margin-top: 0.75rem;
+    min-height: 32px;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .steps > .footer {
+    margin-top: 0.75rem;
+  }
+
+  /* A carta do maior tamanho que a coluna permite, com a altura limitada pela da janela menos o
+     cabeçalho, as abas e as legendas (12rem): o tamanho depende só da janela, e não muda quando as
+     legendas mudam (cálculo em andamento, valor da célula sob o mouse). O que passar da altura (a
+     tabela das células, a rosa com os filtros, a vista 3D, a comparação) rola na coluna, com o
+     espaço da barra de rolagem sempre reservado, para a carta não mudar de largura. */
+  .chart-section {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    padding-top: 0.25rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .chart-section .chart-frame > .sun-chart {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: calc(100dvh - 12rem);
+    margin: 0;
+  }
+
+  .chart-section .chart-view > .legend,
+  .chart-section .chart-view > .note,
+  .chart-section .chart-view > .cell-info {
+    margin: 0.15rem 0;
+    font-size: 0.85rem;
+  }
+
+  .chart-section .wind-rose {
+    max-height: calc(100dvh - 22rem);
+  }
+
+  .chart-section .cell-info {
+    margin-bottom: 0;
+  }
+
+  .chart-section .cell-table {
+    margin-top: 0.15rem;
+  }
+
+  .chart-section details.more summary {
+    min-height: 26px;
+  }
+
+  /* Passos: os sempre abertos (decisão 0050) com o título no lugar do resumo; os avançados
+     recolhidos com o cabeçalho numa linha e o resumo em até duas. */
+  .steps .step-panel {
+    padding: 0.35rem 0.7rem 0.45rem;
+  }
+
+  .steps .step-panel h2 {
+    font-size: 0.97rem;
+  }
+
+  .steps .step-panel.fixed > .step-heading {
+    margin: 0 0 0.25rem;
+  }
+
+  .step-panel.fixed > .step-heading:focus {
+    outline: none;
+  }
+
+  .step-panel.fixed > .step-heading:focus-visible {
+    outline: 3px solid var(--color-sun);
+    outline-offset: 2px;
+  }
+
+  .steps .step-n {
+    width: 1.45rem;
+    height: 1.45rem;
+    font-size: 0.8rem;
+  }
+
+  .steps .advanced-step .step-summary {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .steps .steps-group {
+    margin: 0.25rem 0 -0.15rem;
+    font-size: 0.85rem;
+  }
+
+  /* Campos de 30 px com mouse, acima do mínimo de 24 px da WCAG 2.5.8, sem a entrelinha do texto
+     corrido: assim os passos 1 a 3 cabem também na ferramenta dentro da página do teste
+     (1200 × 732 px numa tela de 1366 × 768). */
+  .steps .field {
+    margin-bottom: 0.3rem;
+  }
+
+  .steps .field select,
+  .steps .field input,
+  .steps .field > .row > select,
+  .steps input.angle,
+  .steps .btn,
+  .steps .segmented button {
+    min-height: 30px;
+  }
+
+  .steps input,
+  .steps select,
+  .steps .btn,
+  .steps .segmented button {
+    line-height: 1.2;
+  }
+
+  .steps .angle-grid input.angle {
+    min-height: 28px;
+  }
+
+  .steps .check,
+  .steps fieldset.plain .check {
+    min-height: 28px;
+  }
+
+  .steps .button-row {
+    gap: 0.3rem;
+  }
+
+  .steps .note {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .steps .set-heading {
+    margin: 0.3rem 0 0.2rem;
+    font-size: 0.92rem;
+  }
+
+  .steps .sub-heading {
+    margin: 0.5rem 0 0.3rem;
+    font-size: 0.92rem;
+  }
+
+  .steps details.more summary,
+  .steps details.catalog > summary {
+    min-height: 26px;
+  }
+
+  .steps details.catalog {
+    margin: 0 0 0.4rem;
+  }
+
+  .steps details.catalog > summary {
+    font-size: 0.9rem;
+  }
+
+  .steps .facade-rose-buttons {
+    grid-template-rows: repeat(3, 1.85rem);
+    grid-template-columns: repeat(3, 2.4rem);
+  }
+
+  .steps .facade-plan {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  .steps .orientation-row input {
+    width: 4.5rem;
+  }
+
+  .steps .angle-grid {
+    gap: 0.15rem 0.35rem;
+  }
+}
+
+@media screen and (min-width: 75rem) {
+  /* A coluna do meio tem a largura da carta quadrada que cabe na altura: a da janela menos o
+     cabeçalho, as abas e as legendas dos dados (12rem), sem tirar das laterais menos de 20rem; o que
+     sobrar vai para elas, até 34rem cada, e depois para o meio. */
+  .workspace {
+    grid-template-columns:
+      minmax(20rem, 34rem) minmax(min(calc(100dvh - 12rem), calc(100vw - 43.5rem)), 1fr)
+      minmax(20rem, 34rem);
+  }
+
+  .steps-left {
+    padding-right: 0.25rem;
+  }
+
+  .steps-right {
+    padding-left: 0.1rem;
   }
 }

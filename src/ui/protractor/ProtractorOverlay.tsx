@@ -1,4 +1,6 @@
 import { useId, useMemo } from 'react';
+import { projectDirection, type Projection } from '../../core/chart/projection';
+import { circleLines, protractorPolylines, verticalLines } from '../../core/protractor/projected';
 import {
   protractorCurves,
   protractorGrid,
@@ -7,6 +9,8 @@ import {
   type ProtractorAngles,
   type ProtractorCurve,
 } from '../../core/protractor/protractor';
+import { ChartClip } from '../chart/ChartClip';
+import { pathD, useChartProjection } from '../chart/projectionContext';
 
 const RAD = Math.PI / 180;
 
@@ -34,20 +38,131 @@ interface DrawnCurve extends ProtractorCurve {
   partial: boolean;
 }
 
-export function ProtractorOverlay({
-  orientation,
-  reference,
-  angles,
-  partial,
-  sideLabels,
-}: {
+interface ProtractorProps {
   orientation: number;
   reference: AngleReference;
   angles: ProtractorAngles;
   /** Ângulos da sombra parcial (50%): curvas tracejadas. */
   partial: ProtractorAngles;
   sideLabels: { right: string; left: string };
-}) {
+}
+
+export function ProtractorOverlay(props: ProtractorProps) {
+  const projection = useChartProjection();
+  return projection.kind === 'stereographic' ? (
+    <StereographicProtractor {...props} />
+  ) : (
+    <ProjectedProtractor {...props} projection={projection} />
+  );
+}
+
+const SYMBOL = (c: ProtractorCurve, sideLabels: { right: string; left: string }) =>
+  `${FAMILY_SYMBOL[c.family]}${c.index === 2 ? '2' : ''}${c.side ? sideLabels[c.side] : ''}`;
+
+/**
+ * Transferidor na equidistante e na cilíndrica (spec 03, seção 3.5; decisão 0025): as mesmas curvas,
+ * traçadas ponto a ponto a partir dos círculos máximos.
+ */
+function ProjectedProtractor({
+  orientation,
+  reference,
+  angles,
+  partial,
+  sideLabels,
+  projection,
+}: ProtractorProps & { projection: Projection }) {
+  const clipId = `pt-clip${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const { kind, center } = projection;
+  const grid = useMemo(() => {
+    const g = protractorGrid(orientation);
+    return {
+      alpha: g.alpha.map((a) => ({
+        externalAngle: a.externalAngle,
+        d: pathD(circleLines(projection, a.circle)),
+      })),
+      beta: g.betaAzimuths.map((az) => ({ az, d: pathD(verticalLines(projection, az)) })),
+      facade: g.facadeAzimuths.map((az) => pathD(verticalLines(projection, az))).join(''),
+      normal: pathD(verticalLines(projection, g.normalAzimuth)),
+    };
+    // A projeção é descrita pelo tipo e pelo centro.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orientation, kind, center]);
+  const curves = useMemo(() => {
+    const tag = (isPartial: boolean, a: ProtractorAngles) =>
+      protractorPolylines(projection, orientation, reference, a).map((c) => ({
+        ...c,
+        partial: isPartial,
+        key: `${isPartial ? 'p-' : ''}${c.family}-${c.side ?? ''}-${c.index}`,
+      }));
+    return [...tag(false, angles), ...tag(true, partial)];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orientation, reference, angles, partial, kind, center]);
+  // Ponta da normal fora do horizonte nas azimutais; na cilíndrica, a normal vai do horizonte ao topo.
+  const normalTip = projectDirection(projection, 90, orientation);
+  return (
+    <g className="protractor" data-testid="protractor">
+      <defs>
+        <ChartClip id={clipId} />
+      </defs>
+      <g clipPath={`url(#${clipId})`} className="pt-grid">
+        {grid.alpha.map((a) => (
+          <path
+            key={a.externalAngle}
+            d={a.d}
+            className={a.externalAngle % 10 === 0 ? 'major' : 'minor'}
+          />
+        ))}
+        {grid.beta.map((b) => (
+          <path key={b.az} d={b.d} className="minor" />
+        ))}
+      </g>
+      <path d={grid.facade} className="pt-facade" data-testid="facade-line" />
+      <path d={grid.normal} className="pt-normal" />
+      {kind !== 'cylindrical' && (
+        <line
+          x1={normalTip.x}
+          y1={-normalTip.y}
+          x2={normalTip.x * 1.08}
+          y2={-normalTip.y * 1.08}
+          className="pt-normal"
+        />
+      )}
+      <g clipPath={`url(#${clipId})`}>
+        {curves.map((c) => (
+          <path
+            key={c.key}
+            d={pathD(c.lines)}
+            className={`pt-curve ${c.family}${c.partial ? ' partial' : ''}`}
+            data-testid={`curve-${c.key}`}
+          />
+        ))}
+      </g>
+      <g className="pt-labels">
+        {curves.map(
+          (c) =>
+            c.label && (
+              <text
+                key={c.key}
+                x={c.label.x}
+                y={-c.label.y - 0.02}
+                className={`pt-label ${c.family}${c.partial ? ' partial' : ''}`}
+              >
+                {SYMBOL(c, sideLabels)}
+              </text>
+            ),
+        )}
+      </g>
+    </g>
+  );
+}
+
+function StereographicProtractor({
+  orientation,
+  reference,
+  angles,
+  partial,
+  sideLabels,
+}: ProtractorProps) {
   const grid = useMemo(() => protractorGrid(orientation), [orientation]);
   const clipId = `pt-clip${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const curves = useMemo((): DrawnCurve[] => {

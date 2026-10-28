@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { syntheticEpw } from './fixtures/epw';
+import { loadClimateFile } from './fixtures/steps';
 
 const RECIFE = 'LOCATION,Recife-Guararapes,PE,BRA,SRC-Teste,828990,-8.12600,-34.92300,-3.0,10.0';
 const MADRID = 'LOCATION,Madrid,M,ESP,SRC-Teste,082210,40.41700,-3.70000,1.0,667.0';
@@ -44,7 +45,7 @@ test.describe('carta solar', () => {
 
   test('carrega um EPW e desenha a carta do local do arquivo', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(page, {
       name: 'recife.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(RECIFE)),
@@ -64,7 +65,7 @@ test.describe('carta solar', () => {
 
   test('desenha a carta de um local no hemisfério Norte', async ({ page }) => {
     await page.goto('./');
-    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(page, {
       name: 'madrid.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(syntheticEpw(MADRID)),
@@ -80,7 +81,7 @@ test.describe('carta solar', () => {
   }) => {
     await page.goto('./#local=belem');
     const broken = syntheticEpw(RECIFE).split('\n').slice(0, 5000).join('\n');
-    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(page, {
       name: 'quebrado.epw',
       mimeType: 'text/plain',
       buffer: Buffer.from(broken),
@@ -88,7 +89,7 @@ test.describe('carta solar', () => {
     await expect(page.getByRole('alert')).toContainText('não tem um ano completo');
     await expect(page.getByTestId('sun-chart').locator('title')).toContainText('Belém');
 
-    await page.getByLabel('Ou carregue um arquivo climático (EPW ou CSV do SOL-AR)').setInputFiles({
+    await loadClimateFile(page, {
       name: 'planilha.csv',
       mimeType: 'text/plain',
       buffer: Buffer.from('mes,dia,hora\n1,1,1\n'),

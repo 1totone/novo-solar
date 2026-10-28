@@ -2,10 +2,10 @@ import { useI18n } from '../i18n/useI18n';
 import type { CellView } from './OverlayLayer';
 import { periodLabel } from './periodLabel';
 
-/** Hora legal decimal como "13 h" ou "13h30". */
-function clock(h: number): string {
+/** Hora legal decimal como "13 h" ou, na meia hora, pelo relógio do idioma (13h30, 13:30). */
+function clock(h: number, formatClock: (hours: number, minutes: number) => string): string {
   const hh = Math.floor(h) % 24;
-  return Number.isInteger(h) ? `${hh} h` : `${hh}h30`;
+  return Number.isInteger(h) ? `${hh} h` : formatClock(hh, 30);
 }
 
 /** Legenda das faixas: cores e intervalos, com a unidade. */
@@ -61,11 +61,12 @@ export function CellInfo({
 }: {
   view: CellView | null;
   unit: string;
-  mode: 'mean' | 'frequency';
+  /** "difference": B − A na comparação de climas (F4.2), com as médias de cada um. */
+  mode: 'mean' | 'frequency' | 'difference';
   threshold: number;
   format: (v: number) => string;
 }) {
-  const { t, formatNumber } = useI18n();
+  const { t, formatNumber, formatClock } = useI18n();
   if (!view) {
     return (
       <p className="note cell-info" data-testid="cell-info">
@@ -79,29 +80,36 @@ export function CellInfo({
     <p className="note cell-info" data-testid="cell-info" aria-live="polite">
       <strong>
         {t('cell.where', {
-          period: periodLabel(cell.period),
+          period: periodLabel(cell.period, t),
           hour: String(cell.hour),
-          start: clock(cell.start),
-          end: clock(cell.end),
+          start: clock(cell.start, formatClock),
+          end: clock(cell.end, formatClock),
         })}
       </strong>{' '}
       {!stats
         ? t('cell.noData')
-        : mode === 'frequency'
-          ? t('cell.above', {
-              count: formatNumber(Math.round((stats.above ?? 0) * stats.n)),
-              n: formatNumber(stats.n),
-              threshold: formatNumber(threshold, Number.isInteger(threshold) ? 0 : 1),
+        : mode === 'difference'
+          ? t('cell.difference', {
+              diff: `${stats.mean > 0 ? '+' : ''}${format(stats.mean)}`,
+              a: format((stats as { a?: number }).a ?? NaN),
+              b: format((stats as { b?: number }).b ?? NaN),
               unit,
-              percent: formatNumber(Math.round((stats.above ?? 0) * 100)),
             })
-          : t('cell.mean', {
-              mean: format(stats.mean),
-              min: format(stats.min),
-              max: format(stats.max),
-              unit,
-              n: formatNumber(stats.n),
-            })}
+          : mode === 'frequency'
+            ? t('cell.above', {
+                count: formatNumber(Math.round((stats.above ?? 0) * stats.n)),
+                n: formatNumber(stats.n),
+                threshold: formatNumber(threshold, Number.isInteger(threshold) ? 0 : 1),
+                unit,
+                percent: formatNumber(Math.round((stats.above ?? 0) * 100)),
+              })
+            : t('cell.mean', {
+                mean: format(stats.mean),
+                min: format(stats.min),
+                max: format(stats.max),
+                unit,
+                n: formatNumber(stats.n),
+              })}
     </p>
   );
 }

@@ -15,7 +15,7 @@
 ## 1.2 Fachada e referencial da fachada
 
 - **Orientação da fachada** (A_f): azimute da **normal externa** (a direção para onde a fachada "olha"). Uma fachada norte tem A_f = 0°.
-- Entrada de orientação: qualquer número real, inclusive negativo ou maior que 360; o programa normaliza para [0, 360). Ex.: −30° equivale a 330°. (O SOL-AR 6.2 só aceitava valores positivos.)
+- Entrada de orientação: qualquer número real, inclusive negativo ou maior que 360; o programa normaliza para [0, 360). Ex.: −30° equivale a 330°. (O SOL-AR 6.2 só aceitava valores positivos.) Também um dos 16 rumos da rosa dos ventos, por sigla ou por extenso, em português, espanhol ou inglês (NO, noroeste, NW e northwest valem 315°; decisão 0044, item c), e botões para os 8 rumos principais. A tela mostra o rumo por extenso do valor (o mais próximo, com "≈", quando o valor fica entre dois rumos).
 - Superfícies verticais apenas na v1. Superfícies inclinadas estão em `docs/ideias.md`.
 - **Referencial da fachada** (x, y, z), usado em todas as fórmulas de máscara:
   - y: normal externa (horizontal, apontando para fora);

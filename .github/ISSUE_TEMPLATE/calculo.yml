@@ -1,0 +1,27 @@
+name: Divergência de cálculo
+description: Um resultado (sol, máscara, sombra, indicador, vento) difere de outra referência.
+labels: [física]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cada cálculo do SOL-AR é conferido contra uma referência independente, com a tolerância escrita na especificação (docs/spec e docs/validacao). Ajude a achar a diferença.
+  - type: textarea
+    id: resultado
+    attributes:
+      label: Resultado do SOL-AR
+      description: O valor, a tela ou o arquivo exportado.
+    validations:
+      required: true
+  - type: textarea
+    id: referencia
+    attributes:
+      label: Referência
+      description: O valor esperado e de onde veio (EnergyPlus, pvlib, cálculo à mão, livro, outro programa), com as hipóteses usadas.
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link da página
+      description: O endereço guarda as entradas usadas.

@@ -26,9 +26,14 @@ const STYLE_PROPS = [
 
 /**
  * SVG independente do elemento dado. Com `size`, largura e altura ficam nessa medida (ex.:
- * "15.84cm" para a escala de impressão, ou "2400" para o PNG).
+ * "15.84cm" para a escala de impressão, ou "2400" para o PNG); para desenhos não quadrados, as duas
+ * medidas separadas.
  */
-export function standaloneSvg(svg: SVGSVGElement, description: string, size?: string): string {
+export function standaloneSvg(
+  svg: SVGSVGElement,
+  description: string,
+  size?: string | { width: string; height: string },
+): string {
   const clone = svg.cloneNode(true) as SVGSVGElement;
   const source = [svg, ...Array.from(svg.querySelectorAll('*'))];
   const target = [clone, ...Array.from(clone.querySelectorAll('*'))];
@@ -38,10 +43,12 @@ export function standaloneSvg(svg: SVGSVGElement, description: string, size?: st
     // O style original vem por último e prevalece (cores das máscaras, das células etc.).
     target[i]!.setAttribute('style', `${computed};${el.getAttribute('style') ?? ''}`);
   });
+  // O que só serve na tela (a marca da leitura de um ponto, decisão 0045) fica de fora.
+  for (const el of Array.from(clone.querySelectorAll('[data-export="no"]'))) el.remove();
   clone.setAttribute('xmlns', SVG_NS);
   if (size) {
-    clone.setAttribute('width', size);
-    clone.setAttribute('height', size);
+    clone.setAttribute('width', typeof size === 'string' ? size : size.width);
+    clone.setAttribute('height', typeof size === 'string' ? size : size.height);
   }
   const desc = document.createElementNS(SVG_NS, 'desc');
   desc.textContent = description;
@@ -49,8 +56,8 @@ export function standaloneSvg(svg: SVGSVGElement, description: string, size?: st
   return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}\n`;
 }
 
-/** PNG quadrado de `pixels` de lado, com fundo branco, a partir do texto SVG. */
-export async function svgToPng(svgText: string, pixels: number): Promise<Blob> {
+/** PNG de `pixels` de largura (e `height` de altura, quadrado por padrão), com fundo branco. */
+export async function svgToPng(svgText: string, pixels: number, height = pixels): Promise<Blob> {
   const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
   try {
     const img = new Image();
@@ -61,11 +68,11 @@ export async function svgToPng(svgText: string, pixels: number): Promise<Blob> {
     });
     const canvas = document.createElement('canvas');
     canvas.width = pixels;
-    canvas.height = pixels;
+    canvas.height = height;
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, pixels, pixels);
-    ctx.drawImage(img, 0, 0, pixels, pixels);
+    ctx.fillRect(0, 0, pixels, height);
+    ctx.drawImage(img, 0, 0, pixels, height);
     return await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('png'))), 'image/png'),
     );

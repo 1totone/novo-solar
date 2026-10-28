@@ -1,7 +1,7 @@
 # 0042. Teste do F2.9 sem moderador
 
 - Data: 2026-10-27
-- Status: proposta. Item 26 da issue #65.
+- Status: proposta. Item 26 da issue #65. O item 1 foi alterado pela decisão 0044: depois do piloto (P0), o teste é aplicado na prévia da integração da Fase 4 (`/pr/51/teste/`), com a ferramenta dela no iframe.
 
 ## Contexto
 

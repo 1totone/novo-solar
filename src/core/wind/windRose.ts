@@ -1,10 +1,13 @@
 /**
  * Rosa dos ventos (F2.5): frequência por setor e classe de velocidade, calmarias e velocidade
- * média por setor, com filtros por estação e período do dia.
+ * média por setor, com filtros por estação e período do dia; no F4.4, filtro pela condição térmica
+ * das horas e velocidade corrigida para a altura e o terreno.
  *
- * Especificação: docs/spec/06-vento.md. Validação: tests/referencia/rosaDosVentos.test.ts
- * (cálculo independente em Python) e windRose.test.ts.
+ * Especificação: docs/spec/06-vento.md. Validação: tests/referencia/rosaDosVentos.test.ts e
+ * tests/referencia/ventoAvancado.test.ts (cálculos independentes em Python e o EnergyPlus) e
+ * windRose.test.ts.
  */
+import { HOUR_CLASS } from '../comfort/classification';
 import type { EpwData } from '../epw/parseEpw';
 
 /** Limite inferior de cada classe de velocidade (m/s); abaixo do primeiro é calmaria. */
@@ -28,10 +31,20 @@ export const DAY_PERIOD_HOURS: Record<DayPeriodKey, readonly [number, number]> =
   noite: [19, 24],
 };
 
+/** Condição térmica (seção 6.3): só as linhas do arquivo com a classe dada. */
+export interface ThermalFilter {
+  /** Classe de cada linha do arquivo (HOUR_CLASS), da classificação das horas (spec 08). */
+  classes: ArrayLike<number>;
+  keep: 'hot' | 'cold' | 'neutral';
+}
+
 export interface WindRoseOptions {
   sectors: 8 | 16;
   season?: SeasonKey;
   period?: DayPeriodKey;
+  thermal?: ThermalFilter;
+  /** Fator k da altura e do terreno (seção 6.7), aplicado a todas as velocidades; padrão 1. */
+  speedFactor?: number;
 }
 
 export interface WindRose {
@@ -66,6 +79,13 @@ export function windRose(epw: EpwData, options: WindRoseOptions): WindRose {
   const n = options.sectors;
   const months = options.season ? SEASON_MONTHS[options.season] : undefined;
   const range = options.period ? DAY_PERIOD_HOURS[options.period] : undefined;
+  const thermal = options.thermal;
+  if (thermal && thermal.classes.length !== epw.hours) {
+    throw new RangeError('thermal classes must have one value per hour of the file');
+  }
+  const keep = thermal ? HOUR_CLASS[thermal.keep] : undefined;
+  const factor = options.speedFactor ?? 1;
+  if (!(factor > 0 && Number.isFinite(factor))) throw new RangeError('speedFactor must be > 0');
   const direction = epw.fields.windDirection;
   const speed = epw.fields.windSpeed;
   const counts = Array.from({ length: n }, () => new Array<number>(SPEED_CLASSES.length).fill(0));
@@ -78,9 +98,10 @@ export function windRose(epw: EpwData, options: WindRoseOptions): WindRose {
     if (months && !months.includes(epw.month[i]!)) continue;
     const h = epw.hour[i]!;
     if (range && (h < range[0] || h > range[1])) continue;
+    if (thermal && thermal.classes[i] !== keep) continue;
     hours++;
     const d = direction[i]!;
-    const v = speed[i]!;
+    const v = speed[i]! * factor;
     if (Number.isNaN(d) || Number.isNaN(v)) continue;
     valid++;
     if (v < CALM_LIMIT) {

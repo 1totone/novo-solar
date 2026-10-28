@@ -1,6 +1,7 @@
 import type { AngleReference, ProtractorAngles } from '../../core/protractor/protractor';
 import type { DrawnMask, SkyPolygon } from '../../core/mask/mask';
 import type { HashState } from './hashState';
+import { parseOrientation } from './orientation';
 
 /**
  * Fachada, ângulos e máscara no '#' da URL: o (orientação), tr=0 (transferidor oculto), ref=e
@@ -78,7 +79,9 @@ export function formatPolygons(polygons: SkyPolygon[]): string {
 }
 
 export function protractorFromHash(state: HashState): ProtractorState {
-  const o = parseNumber(state.o);
+  // Graus ou rumo ("NO", "noroeste"), decisão 0044, item c.
+  const blank = state.o === undefined || state.o.trim() === '';
+  const o = blank ? undefined : (parseOrientation(state.o!) ?? NaN);
   const invalid: AngleKey[] = [];
   const value = (k: AngleKey): number | undefined => {
     const v = parseNumber(state[k]);

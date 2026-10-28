@@ -15,7 +15,7 @@ export function CellTable({
 }: {
   cells: OverlayCell[];
   stats: Map<string, CellStats>;
-  mode: 'mean' | 'frequency';
+  mode: 'mean' | 'frequency' | 'difference';
   unit: string;
   format: (v: number) => string;
 }) {
@@ -28,7 +28,8 @@ export function CellTable({
     if (!drawn.has(k)) return '';
     const s = stats.get(k);
     if (!s) return t('legend.noData');
-    return mode === 'frequency' ? formatNumber(Math.round((s.above ?? 0) * 100)) : format(s.mean);
+    if (mode === 'frequency') return formatNumber(Math.round((s.above ?? 0) * 100));
+    return mode === 'difference' && s.mean > 0 ? `+${format(s.mean)}` : format(s.mean);
   };
   return (
     <details className="more cell-table">
@@ -36,7 +37,11 @@ export function CellTable({
       <div className="table-scroll">
         <table className="data-table" data-testid="cell-table">
           <caption>
-            {mode === 'frequency' ? t('cells.captionFrequency') : t('cells.captionMean', { unit })}
+            {mode === 'frequency'
+              ? t('cells.captionFrequency')
+              : mode === 'difference'
+                ? t('cells.captionDifference', { unit })
+                : t('cells.captionMean', { unit })}
           </caption>
           <thead>
             <tr>
@@ -51,7 +56,7 @@ export function CellTable({
           <tbody>
             {periods.map((p) => (
               <tr key={p}>
-                <th scope="row">{periodLabel(p)}</th>
+                <th scope="row">{periodLabel(p, t)}</th>
                 {hours.map((h) => (
                   <td key={h}>{value(p, h)}</td>
                 ))}

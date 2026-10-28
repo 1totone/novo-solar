@@ -72,13 +72,12 @@ export const TASKS: TaskDef[] = [
   {
     id: '6',
     title: 'Dados recentes: carregar e comparar',
-    card: 'Agora use os dados recentes de Recife (o arquivo que você baixou e descompactou na preparação). As horas quentes mudaram?',
+    card: 'Agora use os dados recentes de Recife (o .zip que você baixou na preparação). As horas quentes mudaram?',
     prep: [
       'Esta tarefa precisa do arquivo climático recente de Recife. Faça a preparação antes de clicar em "Comecei" (ela não conta no tempo).',
-      'Baixe o arquivo pelo link abaixo (um .zip de poucos megabytes).',
-      'Descompacte: no Windows, botão direito no arquivo e "Extrair tudo"; no Mac, dois cliques; no celular, abra o .zip no aplicativo de arquivos e toque em "Extrair".',
-      'Dentro da pasta, o arquivo que interessa termina em .epw.',
-      'Se não conseguir baixar ou descompactar, clique em "Comecei" e depois em "Desisti": as outras tarefas não dependem desta.',
+      'Baixe o arquivo pelo link abaixo (um .zip de cerca de 380 kB).',
+      'Não precisa descompactar: a ferramenta abre o .zip direto. Só lembre onde ele foi salvo (em geral, na pasta de downloads).',
+      'Se não conseguir baixar, clique em "Comecei" e depois em "Desisti": as outras tarefas não dependem desta.',
     ],
     fields: [{ id: 'mudaram', label: 'As horas quentes mudaram? Como?', kind: 'long' }],
   },
@@ -90,12 +89,12 @@ export const TASKS: TaskDef[] = [
   },
   {
     id: '8',
-    title: 'Folha para a aula (raio 6 cm, só o transferidor)',
-    card: 'Prepare uma folha para a aula: a carta de Recife em escala, com raio de 6 cm, só com o transferidor. (Se houver impressora, imprima e meça o raio com a régua.)',
+    title: 'Carta em PDF ou imagem para a aula',
+    card: 'Você vai mostrar esta carta de Recife numa aula. Salve-a em PDF ou como imagem.',
     fields: [
       {
-        id: 'raio',
-        label: 'Raio medido com a régua, em cm (se imprimiu)',
+        id: 'como',
+        label: 'Como você salvou? (PDF, imagem ou outro jeito)',
         kind: 'text',
         optional: true,
       },
@@ -104,7 +103,7 @@ export const TASKS: TaskDef[] = [
   {
     id: '9',
     title: 'Link para um colega',
-    card: 'Mande para um colega um link que abra exatamente o que você está vendo.',
+    card: 'Um colega quer ver, no computador dele, esta mesma análise, do jeito que está agora na sua tela. Copie um link que a abra assim e cole abaixo.',
     fields: [{ id: 'link', label: 'Cole aqui o link que você mandaria', kind: 'text' }],
   },
   {
