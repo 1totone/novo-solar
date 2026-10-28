@@ -1058,4 +1058,16 @@ export const en: Catalog = {
   'site.zip.manyEpw': 'The .zip has more than one .epw file: unzip it and load the one you want.',
   'site.zip.corrupt':
     'Could not open the .zip: the file seems incomplete or damaged. Download it again.',
+  // Share (decision 0049).
+  'share.button': 'Share',
+  'share.copied':
+    'Link copied. It reopens this same analysis: the place, the facade, the angles, the chosen data and the chart options.',
+  'share.manual':
+    'The browser did not allow copying: select the link below and copy it. It reopens this same analysis.',
+  'share.how':
+    'Everything is in the address itself, after the "#": nothing is stored on a server, and the link changes with every adjustment.',
+  'share.file':
+    'The loaded weather file does not go in the link: whoever opens it needs to load the same file (or open the project saved in step 5).',
+  'share.label': 'Link to this analysis',
+  'share.close': 'Close',
 };

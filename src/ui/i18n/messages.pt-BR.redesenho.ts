@@ -92,4 +92,16 @@ export const redesenhoPtBR = {
   'site.zip.manyEpw': 'O .zip tem mais de um arquivo .epw: descompacte e carregue o que quiser.',
   'site.zip.corrupt':
     'Não foi possível abrir o .zip: o arquivo parece incompleto ou corrompido. Baixe de novo.',
+  // Compartilhar (decisão 0049, item i da 0044).
+  'share.button': 'Compartilhar',
+  'share.copied':
+    'Link copiado. Ele reabre esta mesma análise: o local, a fachada, os ângulos, os dados escolhidos e as opções da carta.',
+  'share.manual':
+    'O navegador não deixou copiar: selecione o link abaixo e copie. Ele reabre esta mesma análise.',
+  'share.how':
+    'Tudo fica no próprio endereço, depois do "#": nada é guardado num servidor, e o link muda a cada ajuste.',
+  'share.file':
+    'O arquivo climático carregado não vai no link: quem abrir precisa carregar o mesmo arquivo (ou abrir o projeto salvo no passo 5).',
+  'share.label': 'Link desta análise',
+  'share.close': 'Fechar',
 } as const;

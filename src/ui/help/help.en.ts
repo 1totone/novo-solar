@@ -78,7 +78,7 @@ export const helpEn: HelpContent = {
   },
   guide: {
     intro:
-      'SOL-AR draws the sun-path diagram of a place and, over it, the shading protractor and the shading mask of a device. The basic path has five steps, one open at a time: click or tap the title of a step to open it; when closed, it shows on one line what has been chosen. The advanced ones are folded below them. Everything you choose is kept in the page address: copy the link to save or share it.',
+      'SOL-AR draws the sun-path diagram of a place and, over it, the shading protractor and the shading mask of a device. The basic path has five steps, one open at a time: click or tap the title of a step to open it; when closed, it shows on one line what has been chosen. The advanced ones are folded below them. Everything you choose is kept in the page address: the "Share" button, at the top, copies the link, which reopens the same analysis.',
     steps: [
       {
         title: '1. Location',
@@ -430,7 +430,7 @@ export const helpEn: HelpContent = {
     {
       question: 'Where do the weather data come from? Can I use my own file?',
       answer:
-        'The cities in the list have the historical data of SOL-AR 6.2 (TRY or IWEC). The catalogue in step 1 has the 579 Brazilian stations with a TMYx 2011 to 2025 file (Climate.OneBuilding.org), with a map, the quality of each file and the download link. You can load any EPW or SOL-AR CSV file: it is read in your browser and sent nowhere. The source, the period and the quality warnings appear in step 1.',
+        'The cities in the list have the historical data of SOL-AR 6.2 (TRY or IWEC). The catalogue in step 1 has the 579 Brazilian stations with a TMYx 2011 to 2025 file (Climate.OneBuilding.org), with a map, the quality of each file and the download link. You can load any EPW file, the TMYx .zip without unzipping it, or a SOL-AR CSV file: it is read in your browser and sent nowhere. The source, the period and the quality warnings appear in step 1.',
     },
     {
       question: 'How do I compare the climate of the past with today, or with the future?',
@@ -445,7 +445,7 @@ export const helpEn: HelpContent = {
     {
       question: 'How do I keep and share a study?',
       answer:
-        'The page address keeps your choices: copy the link. Loaded weather files do not fit in the link; to keep them too, use "Save project" in step 5, which writes a file to open later with "Open project".',
+        'The page address keeps your choices: the "Share" button, at the top, copies the link. Loaded weather files do not fit in the link; to keep them too, use "Save project" in step 5, which writes a file to open later with "Open project".',
     },
     {
       question: 'Does it work offline? Does any of my data leave the computer?',
